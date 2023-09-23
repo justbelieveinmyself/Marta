@@ -85,3 +85,5 @@ out/
 .vscode/
 .idea/
 
+angular-frontend/node_modules
+angular-frontend/.angular
