@@ -2,10 +2,9 @@ package com.justbelieveinmyself.marta.controllers;
 
 import com.justbelieveinmyself.marta.domain.Product;
 import com.justbelieveinmyself.marta.repositories.ProductRepository;
+import com.justbelieveinmyself.marta.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -13,11 +12,36 @@ import java.util.List;
 @RequestMapping("/product")
 public class ProductController {
     @Autowired
-    private ProductRepository productRepository;
+    private ProductService productService;
     @GetMapping
-    public List<Product> listProducts(){
-        List<Product> all = productRepository.findAll();
-        return all;
+    public List<Product> getListProducts(){
+        return productService.findAll();
+    }
+    @PostMapping
+    public void createProduct(
+            @RequestBody Product product
+    ){
+        productService.save(product);
+    }
+    @DeleteMapping("/{id}")
+    public void deleteProduct(
+            @PathVariable("id") Product product
+    ){
+        productService.delete(product);
+    }
+    @GetMapping("/{id}")
+    public Product getProduct(
+            @PathVariable("id") Product product
+    ){
+        return product;
+    }
+    @PutMapping("/{id}")
+    public Product updateProduct(
+            @PathVariable("id") Product productFromDb,
+            @RequestBody Product product
+    ){
+        Product updatedProduct = productService.update(productFromDb, product);
+        return updatedProduct;
     }
 
 }
