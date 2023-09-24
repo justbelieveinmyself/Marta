@@ -1,12 +1,14 @@
 package com.justbelieveinmyself.marta.controllers;
 
 import com.justbelieveinmyself.marta.domain.Product;
+import com.justbelieveinmyself.marta.exceptions.NotFoundException;
 import com.justbelieveinmyself.marta.repositories.ProductRepository;
 import com.justbelieveinmyself.marta.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/product")
@@ -19,28 +21,33 @@ public class ProductController {
         return productService.findAll();
     }
     @PostMapping
-    public void createProduct(
+    public Product createProduct(
             @RequestBody Product product
     ){
-        productService.save(product);
+        return productService.save(product);
     }
     @DeleteMapping("/{id}")
     public void deleteProduct(
-            @PathVariable("id") Product product
+            @PathVariable(value = "id", required = false) Product product
     ){
+        if(Objects.isNull(product)) throw new NotFoundException("Product with [id] doesn't exists");
         productService.delete(product);
     }
     @GetMapping("/{id}")
     public Product getProduct(
-            @PathVariable("id") Product product
+            @PathVariable(value = "id", required = false) Product product
     ){
+        if(Objects.isNull(product)) throw new NotFoundException("Product with [id] doesn't exists");
         return product;
     }
     @PutMapping("/{id}")
     public Product updateProduct(
-            @PathVariable("id") Product productFromDb,
+            @PathVariable(value = "id", required = false) Product productFromDb,
             @RequestBody Product product
     ){
+        if(Objects.isNull(productFromDb)) {
+            throw new NotFoundException("Product with [id] doesn't exists");
+        }
         Product updatedProduct = productService.update(productFromDb, product);
         return updatedProduct;
     }

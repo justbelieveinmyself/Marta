@@ -9,6 +9,7 @@
             <th>Description</th>
             <th>Manufacturer</th>
             <th>Structure</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -20,6 +21,9 @@
             <td>{{product.description}}</td>
             <td>{{product.manufacturer}}</td>
             <td>{{product.structure}}</td>
+            <td>
+                <button (click)="updateProduct(product.id)" class="btn btn-info">Update</button>
+            </td>
         </tr>
     </tbody>
 </table>

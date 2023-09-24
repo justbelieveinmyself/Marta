@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Product } from './product';
@@ -14,5 +14,11 @@ export class ProductService {
 
   getProductList() : Observable<Product[]>{
     return this.httpClient.get<Product[]>(this.baseUrl);
+  }
+  addProduct(product : Product) : Observable<Object>{
+    return this.httpClient.post(this.baseUrl, product);
+  }
+  updateProduct(product : Product) : Observable<Object>{
+    return this.httpClient.put(this.baseUrl +'/' +product.id, product)
   }
 }
