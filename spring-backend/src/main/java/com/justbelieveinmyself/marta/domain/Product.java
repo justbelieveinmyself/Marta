@@ -14,7 +14,11 @@ public class Product {
     private String name;
     private Long price;
     private Long count;
+    @Lob
+    @Column(length = 16777215)
     private String description;
     private String manufacturer;
+    @Lob
+    @Column(length = 16777215)
     private String structure;
 }

@@ -15,11 +15,13 @@ export class UpdateProductComponent {
     private activatedRoute: ActivatedRoute){}
   ngOnInit(){
     this.product.id = this.activatedRoute.snapshot.params['id'];
+    this.productService.getProductById(this.product.id).subscribe({ 
+      next: (p) =>  this.product = p, 
+      error: (e) => console.log(e)
+    });
   }
   onSubmit(){
     this.productService.updateProduct(this.product).subscribe(data => {
-      console.log(this.product);
-    
     });
     this.redirectToProductList();
   }

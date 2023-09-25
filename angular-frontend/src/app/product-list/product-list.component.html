@@ -1,5 +1,5 @@
-<h2>Product list</h2>
-<table class="table table-striped">
+<h2 >Product list</h2>
+<table class="table table-striped" style="margin-bottom: 70px;">
     <thead>
         <tr>
             <th>ID</th>
@@ -21,8 +21,9 @@
             <td>{{product.description}}</td>
             <td>{{product.manufacturer}}</td>
             <td>{{product.structure}}</td>
-            <td>
+            <td style="min-width: 200px;">
                 <button (click)="updateProduct(product.id)" class="btn btn-info">Update</button>
+                <button (click)="deleteProduct(product.id)" class="btn btn-danger" style="margin-left: 10px;">Delete</button>
             </td>
         </tr>
     </tbody>
