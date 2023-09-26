@@ -2,12 +2,14 @@ package com.justbelieveinmyself.marta.controllers;
 
 import com.justbelieveinmyself.marta.domain.Product;
 import com.justbelieveinmyself.marta.exceptions.NotFoundException;
-import com.justbelieveinmyself.marta.repositories.ProductRepository;
 import com.justbelieveinmyself.marta.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 @RestController
@@ -18,20 +20,24 @@ public class ProductController {
     private ProductService productService;
     @GetMapping
     public List<Product> getListProducts(){
-        return productService.findAll();
+        return productService.getListProducts();
     }
     @PostMapping
     public Product createProduct(
             @RequestBody Product product
     ){
+        product.setId(null);
         return productService.save(product);
     }
     @DeleteMapping("/{id}")
-    public void deleteProduct(
+    public ResponseEntity<Map<String, Boolean>> deleteProduct(
             @PathVariable(value = "id", required = false) Product product
     ){
         if(Objects.isNull(product)) throw new NotFoundException("Product with [id] doesn't exists");
         productService.delete(product);
+        Map<String, Boolean> response = new HashMap<>();
+        response.put("deleted", true);
+        return ResponseEntity.ok(response);
     }
     @GetMapping("/{id}")
     public Product getProduct(
