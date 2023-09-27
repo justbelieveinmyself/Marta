@@ -1,0 +1,65 @@
+<div *ngIf="!isLogged; else xd">
+
+    <div class="container w-50 justify-content-center mb-3">
+        <div class="card">
+          <div class="card-header">
+            <ul class="nav nav-tabs">
+              <li class="nav-item">
+                <a class="nav-link" routerLink="/login">Log In</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link active" routerLink="/register">Register</a>
+              </li>
+            </ul>
+          </div>
+          <div class="card-body">
+            <form class="form-group mx-auto w-75" #f="ngForm" (ngSubmit)="onRegister()" novalidate>
+              <div class="form-group my-3">
+                <label class="test" for="firstName">First Name</label>
+                <input type="text" class="form-control" name="firstname" placeholder="First Name" [(ngModel)]="firstName">
+              </div>
+              <div class="form-group my-3">
+                <label for="lastName">Last Name</label>
+                <input type="text" class="form-control" name="lastName" placeholder="Last Name" [(ngModel)]="lastName">
+              </div>
+              <div class="form-group my-3">
+                <label for="username">Username</label>
+                <input type="text" class="form-control" name="username" placeholder="Username" [(ngModel)]="username">
+              </div>
+              <div class="form-group my-3">
+                <label for="email">Email</label>
+                <input type="text" class="form-control" name="email" placeholder="Email" [(ngModel)]="email">
+              </div>
+              <div class="form-group my-3">
+                <label for="password">Password</label>
+                <input type="password" class="form-control" name="password" placeholder="Password" [(ngModel)]="password">
+              </div>
+              <div class="form-group my-3">
+                <label for="passwordConfirm">Confirm password</label>
+                <input type="password" class="form-control" name="passwordConfirm" placeholder="Password" [(ngModel)]="passwordConfirm">
+              </div>
+              <div class="form-group text-center">
+                <button [disabled]="!f.valid"
+                  class="btn btn-outline-success btn-block btn-lg">Submit</button>
+              </div>
+            </form>
+    
+          </div>
+        </div>
+      </div>
+
+    <div class="col-md-4 mx-auto mb-3">
+        <div class="card">
+            <h5 class="card-header  text-center">Log in via the Social Network</h5>
+            <div class="card-body">
+                <button class="btn btn-outline-primary btn-lg btn-block w-100">
+                    Log In via VK <i class="fa-brands fa-vk fa-xl"></i></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<ng-template #xd>
+    <div> You're already, autheroized</div>
+</ng-template>

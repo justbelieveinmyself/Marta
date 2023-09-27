@@ -1,22 +1,4 @@
-<nav class="navbar navbar-expand-sm bg-dark navbar-dark mb-3">
-    <a class="navbar-brand ms-3" href="#">Marta</a>
-    <ul class="navbar-nav me-auto">
-        <li class="nav-item">
-            <a routerLink="products" routerLinkActive="active" class="nav-link" style="color: #E1E3E6;">Product List</a>
-        </li>
-        <li class="nav-item">
-            <a routerLink="create-product" routerLinkActive="active" class="nav-link" style="color: #E1E3E6;">Add Product</a>
-        </li>
-    </ul>
-    <ul class="navbar-nav" *ngIf="isLogged">
-        <li class="nav-item disabled">
-            <a class="nav-link">{{userLogged.name}}</a>
-        </li>
-    </ul>
-    <img *ngIf="isLogged" src="{{userLogged.photoUrl}}" alt="userlogo" class="rounded-circle me-2" style="width: 50px;">
-    <button *ngIf="!isLogged" class="btn btn-outline-success me-2" type="submit" routerLink="login">Log In</button>
-    <button *ngIf="isLogged" class="btn btn-outline-danger me-2" type="submit" routerLink="login" (click)="logOut()">Log out</button>
-</nav>
+<app-navbar></app-navbar>
 <h1 class="text-center"> {{title}} </h1>
 <div class="container">
     <router-outlet></router-outlet>

@@ -3,20 +3,24 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { ProductListComponent } from './product-list/product-list.component';
+import { ProductListComponent } from './products/product-list/product-list.component';
 import { HttpClientModule } from '@angular/common/http';
-import { CreateProductComponent } from './create-product/create-product.component';
+import { CreateProductComponent } from './products/create-product/create-product.component';
 import { FormsModule } from '@angular/forms';
-import { UpdateProductComponent } from './update-product/update-product.component';
-import { LoginComponent } from './login/login.component'
+import { UpdateProductComponent } from './products/update-product/update-product.component';
+import { LoginComponent } from './auth/login/login.component'
 import { SocialLoginModule, SocialAuthServiceConfig, VKLoginProvider } from '@abacritt/angularx-social-login';
+import { RegisterComponent } from './auth/register/register.component';
+import { NavbarComponent } from './navbar/navbar.component';
 @NgModule({
   declarations: [
     AppComponent,
     ProductListComponent,
     CreateProductComponent,
     UpdateProductComponent,
-    LoginComponent
+    LoginComponent,
+    RegisterComponent,
+    NavbarComponent
   ],
   imports: [
     BrowserModule,

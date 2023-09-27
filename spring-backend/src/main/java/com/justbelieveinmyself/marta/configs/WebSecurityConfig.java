@@ -37,7 +37,6 @@ public class WebSecurityConfig {
                         auth.requestMatchers(new AntPathRequestMatcher("/auth/**")).permitAll()
                                 .anyRequest().authenticated())
                 .csrf(AbstractHttpConfigurer::disable)
-                .cors(AbstractHttpConfigurer::disable)
                 .userDetailsService(userService)
                 .exceptionHandling(ex ->
                         ex.accessDeniedHandler(((request, response, accessDeniedException) ->
