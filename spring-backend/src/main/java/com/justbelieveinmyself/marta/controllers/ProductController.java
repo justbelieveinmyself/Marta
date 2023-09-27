@@ -5,6 +5,7 @@ import com.justbelieveinmyself.marta.exceptions.NotFoundException;
 import com.justbelieveinmyself.marta.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -47,6 +48,7 @@ public class ProductController {
         return product;
     }
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('USER')")
     public Product updateProduct(
             @PathVariable(value = "id", required = false) Product productFromDb,
             @RequestBody Product product

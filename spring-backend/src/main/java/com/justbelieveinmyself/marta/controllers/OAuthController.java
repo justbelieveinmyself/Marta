@@ -33,7 +33,7 @@ public class OAuthController {
         user.setGender( parsedMap.get("gender"));
         user.setFirstName( parsedMap.get("first_name"));
         user.setLastName(parsedMap.get("last_name"));
-        // bdate, gender,
+        // bdate, gender
         return user;
     }
 
