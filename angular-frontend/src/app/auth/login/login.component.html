@@ -23,10 +23,10 @@
             <input type="password" class="form-control" name="password" placeholder="Password" [(ngModel)]="password">
           </div>
           <div class="form-group text-center">
-            <button [disabled]="!f.valid"
-              class="btn btn-outline-success btn-block btn-lg">Submit</button>
+            <button [disabled]="!f.valid" class="btn btn-outline-success btn-block btn-lg">Submit</button>
           </div>
         </form>
+        <div *ngIf="f.submitted && isLoginFail" class="alert alert-danger mt-3">{{errorMessage}}</div>
 
       </div>
     </div>

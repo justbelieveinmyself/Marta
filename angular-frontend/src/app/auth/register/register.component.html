@@ -43,7 +43,7 @@
                   class="btn btn-outline-success btn-block btn-lg">Submit</button>
               </div>
             </form>
-    
+            <div *ngIf="f.submitted && isRegisterFail" class="alert alert-danger mt-3">{{errorMessage}}</div>
           </div>
         </div>
       </div>

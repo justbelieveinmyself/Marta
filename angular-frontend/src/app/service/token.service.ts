@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
 const TOKEN_KEY = 'AuthToken';
@@ -7,10 +7,9 @@ const USERNAME_KEY = 'AuthUsername';
 @Injectable({
   providedIn: 'root'
 })
-export class TokenService {
-
+export class TokenService{
+  loggedIn = new BehaviorSubject<boolean>(this.getToken()? true: false)
   constructor() { }
-  private loggedIn = new BehaviorSubject<boolean>(false);
 
   public setToken(token : string) : void {
     window.sessionStorage.removeItem(TOKEN_KEY);

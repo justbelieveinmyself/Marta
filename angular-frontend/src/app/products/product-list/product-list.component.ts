@@ -18,9 +18,14 @@ export class ProductListComponent {
     this.getProducts();
   }
   private getProducts(){
-    this.productService.getProductList().subscribe(data =>{
+    this.productService.getProductList().subscribe({
+      next: data =>{
       this.products = data;
-    });
+    },
+    error: e => {
+      console.log(e);
+    }
+  });
   }
   updateProduct(id: number){
     this.router.navigate(['update-product/',id]);

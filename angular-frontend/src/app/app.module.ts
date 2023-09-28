@@ -12,6 +12,7 @@ import { LoginComponent } from './auth/login/login.component'
 import { SocialLoginModule, SocialAuthServiceConfig, VKLoginProvider } from '@abacritt/angularx-social-login';
 import { RegisterComponent } from './auth/register/register.component';
 import { NavbarComponent } from './navbar/navbar.component';
+import { interceptorProvider } from './service/prod-intercept.service';
 @NgModule({
   declarations: [
     AppComponent,
@@ -46,7 +47,8 @@ import { NavbarComponent } from './navbar/navbar.component';
           console.error(err);
         }
       } as SocialAuthServiceConfig,
-    }
+    },
+    [interceptorProvider]
   ],
   bootstrap: [AppComponent]
 })
