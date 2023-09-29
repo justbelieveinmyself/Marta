@@ -1,5 +1,7 @@
 package com.justbelieveinmyself.marta.controllers;
 
+import com.fasterxml.jackson.annotation.JsonView;
+import com.justbelieveinmyself.marta.Views;
 import com.justbelieveinmyself.marta.domain.Product;
 import com.justbelieveinmyself.marta.exceptions.NotFoundException;
 import com.justbelieveinmyself.marta.services.ProductService;
@@ -14,7 +16,6 @@ import java.util.Map;
 import java.util.Objects;
 
 @RestController
-@CrossOrigin("http://localhost:4200")
 @RequestMapping("/product")
 public class ProductController {
     @Autowired
@@ -48,7 +49,7 @@ public class ProductController {
         return product;
     }
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public Product updateProduct(
             @PathVariable(value = "id", required = false) Product productFromDb,
             @RequestBody Product product

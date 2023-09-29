@@ -2,6 +2,7 @@ package com.justbelieveinmyself.marta.configs;
 
 import com.justbelieveinmyself.marta.jwt.JwtProvider;
 import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -36,6 +37,9 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                 log.debug("Time token came out");
             } catch (SignatureException e) {
                 log.debug("Incorrect signature");
+            }
+            catch(MalformedJwtException e){
+                log.debug(e.toString());
             }
         }
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {

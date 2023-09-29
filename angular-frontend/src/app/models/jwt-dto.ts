@@ -1,4 +1,6 @@
+import { LocalUser } from "./local-user";
+
 export class JwtDto {
     token!: string;
-    username!: string;
+    user!: LocalUser;
 }

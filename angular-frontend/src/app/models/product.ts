@@ -1,3 +1,5 @@
+import { Seller } from "./seller";
+
 export class Product {
     id!: number;
     name!: string;
@@ -6,4 +8,5 @@ export class Product {
     description!: string;
     manufacturer!: string;
     structure!: string;
+    seller!: Seller;
 }

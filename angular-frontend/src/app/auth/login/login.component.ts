@@ -46,6 +46,7 @@ export class LoginComponent implements OnInit {
         this.isLogged = true;
             this.isLoginFail = false;
             this.tokenService.setToken(n.token);
+            this.tokenService.setUser(n.user);
             this.router.navigate(['products']);
           },
       error: e => {

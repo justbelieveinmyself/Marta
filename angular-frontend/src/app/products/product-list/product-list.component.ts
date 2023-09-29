@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { Product } from '../../models/product';
 import { ProductService } from '../../service/product.service';
 import { Router } from '@angular/router';
+import { TokenService } from 'src/app/service/token.service';
+import { LocalUser } from 'src/app/models/local-user';
 
 @Component({
   selector: 'app-product-list',
@@ -10,20 +12,26 @@ import { Router } from '@angular/router';
 })
 export class ProductListComponent {
   products: Product[] = [];
-  
-  constructor(private productService : ProductService,
-    private router: Router){}
+  user!: LocalUser;
+  constructor(
+    private productService : ProductService,
+    private router: Router,
+    private tokenService: TokenService){}
   
   ngOnInit(): void {
+    this.user = this.tokenService.getUser();
     this.getProducts();
   }
   private getProducts(){
     this.productService.getProductList().subscribe({
       next: data =>{
       this.products = data;
+      console.log(this.user);
     },
     error: e => {
-      console.log(e);
+      if(e.status == 403){
+        this.router.navigate(['/login']);
+      }
     }
   });
   }

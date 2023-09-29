@@ -1,15 +1,17 @@
 package com.justbelieveinmyself.marta.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonView;
+import com.justbelieveinmyself.marta.Views;
+import com.justbelieveinmyself.marta.domain.dto.UserDto;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "users")
@@ -17,18 +19,38 @@ import java.util.stream.Collectors;
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonView(Views.Product.class)
     private Long id;
+
+    @JsonIgnore
     private String firstName;
+
+    @JsonIgnore
     private String lastName;
+
     private String username;
+
+    @JsonIgnore
     private String password;
+
+    @JsonIgnore
     private String email;
+
+    @JsonIgnore
     private Integer age;
+
+    @JsonIgnore
     private String gender;
+
     @Enumerated(EnumType.STRING)
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
+    @JsonIgnore
     private Set<Role> roles;
+
+    @JsonIgnore
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "seller")
+    private List<Product> products;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -59,4 +81,5 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
 }
