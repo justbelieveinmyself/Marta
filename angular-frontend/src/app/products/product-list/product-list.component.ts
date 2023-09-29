@@ -26,7 +26,6 @@ export class ProductListComponent {
     this.productService.getProductList().subscribe({
       next: data =>{
       this.products = data;
-      console.log(this.user);
     },
     error: e => {
       if(e.status == 403){

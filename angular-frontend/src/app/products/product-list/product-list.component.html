@@ -22,8 +22,8 @@
             <td>{{product.manufacturer}}</td>
             <td>{{product.structure}}</td>
             <td style="min-width: 200px;">
-                <button *ngIf="(product.seller != null) && (product.seller.username == this.user.username)" (click)="updateProduct(product.id)" class="btn btn-outline-info">Update</button>
-                <button *ngIf="(product.seller != null) && (product.seller.username == this.user.username)" (click)="deleteProduct(product.id)" class="btn btn-outline-danger" style="margin-left: 10px;">Delete</button>
+                <button *ngIf="(product.seller != null) && (product.seller.id == this.user.id)" (click)="updateProduct(product.id)" class="btn btn-outline-info">Update</button>
+                <button *ngIf="(product.seller != null) && (product.seller.id == this.user.id)" (click)="deleteProduct(product.id)" class="btn btn-outline-danger" style="margin-left: 10px;">Delete</button>
             </td>
         </tr>
     </tbody>

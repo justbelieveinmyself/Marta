@@ -44,10 +44,10 @@ export class LoginComponent implements OnInit {
     this.authService.login(this.loginUser).subscribe({
       next: n => {
         this.isLogged = true;
-            this.isLoginFail = false;
-            this.tokenService.setToken(n.token);
-            this.tokenService.setUser(n.user);
-            this.router.navigate(['products']);
+        this.isLoginFail = false;
+        this.tokenService.setToken(n.token);
+        this.tokenService.setUser(n.user);
+        this.router.navigate(['products']);
           },
       error: e => {
         this.isLogged = false;
