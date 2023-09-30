@@ -1,5 +1,7 @@
+<div *ngIf="hasRights; else noaccess">
 <div class="col-md-6 offset-md-3">
     <h3>Update Product</h3>
+
     <form (ngSubmit)="onSubmit()" class="m-4">
         <div class="form-group">
             <input type="text" class="form-control" name="name" placeholder="name"
@@ -27,4 +29,11 @@
         </div>
         <button type="submit" class="btn btn-success">Submit</button>
     </form>
-    </div>
+    
+</div>
+</div>
+<ng-template #noaccess>
+    <div> You don't have permission to update this product!</div>
+</ng-template>
+
+    

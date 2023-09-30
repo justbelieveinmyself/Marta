@@ -12,18 +12,24 @@ import { TokenService } from 'src/app/service/token.service';
 })
 export class UpdateProductComponent {
   user!: LocalUser;
-  product : Product = new Product;
+  product! : Product;
+  hasRights! : boolean;
+  productId! : number;
   constructor(private productService : ProductService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private tokenService: TokenService){}
   ngOnInit(){
     this.user = this.tokenService.getUser();
-    this.product.id = this.activatedRoute.snapshot.params['id'];
-    this.productService.getProductById(this.product.id).subscribe({ 
-      next: (p) =>  this.product = p, 
+    this.productId = this.activatedRoute.snapshot.params['id'];
+    this.productService.getProductById(this.productId).subscribe({ 
+      next: (p) =>  {
+        this.product = p;
+        this.hasRights = this.user.id == this.product.seller.id;
+      }, 
       error: (e) => console.log(e)
     });
+
   }
   onSubmit(){
     this.product.seller = this.user;
