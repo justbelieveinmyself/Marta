@@ -35,8 +35,9 @@ export class UpdateProductComponent {
     this.product.seller = this.user;
     this.productService.updateProduct(this.product).subscribe(data => {
       console.log(data);
+      this.redirectToProductList();
     });
-    this.redirectToProductList();
+    
   }
   redirectToProductList(){
     this.router.navigate(['products']);

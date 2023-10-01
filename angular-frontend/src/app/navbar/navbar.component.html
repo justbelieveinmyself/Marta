@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-sm bg-dark navbar-dark mb-3">
-    <a class="navbar-brand ms-3" href="#">Marta</a>
+    <a class="navbar-brand ms-3" routerLink="">Marta</a>
     <ul class="navbar-nav me-auto">
         <li class="nav-item">
             <a routerLink="products" routerLinkActive="active" class="nav-link" style="color: #E1E3E6;">Product List</a>
@@ -10,7 +10,7 @@
     </ul>
     <ul class="navbar-nav" *ngIf="isLogged">
         <li class="nav-item disabled">
-            <a class="nav-link">{{username}}</a>
+            <a class="nav-link">{{user.username}}</a>
         </li>
     </ul>
     <!-- <img *ngIf="isLogged" src="{{userLogged.photoUrl}}" alt="userlogo" class="rounded-circle me-2" style="width: 50px;"> -->

@@ -46,7 +46,7 @@ public class ProductController {
             @PathVariable(value = "id", required = false) Product product
     ){
         if(Objects.isNull(product)) throw new NotFoundException("Product with [id] doesn't exists");
-        return product;
+        return product; 
     }
     @PutMapping("/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")

@@ -13,7 +13,6 @@ export class ProductService {
   constructor(private httpClient: HttpClient) { }
 
   getProductList() : Observable<Product[]>{
-    
     return this.httpClient.get<Product[]>(this.baseUrl);
   }
   addProduct(product : Product) : Observable<Object>{

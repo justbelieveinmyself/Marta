@@ -23,12 +23,13 @@ export class CreateProductComponent implements OnInit {
   }
   onSubmit(){
     this.saveProduct();
-    this.redirectToProductList();
+    
   }
   saveProduct(){
     this.product.seller = this.user;
     this.productService.addProduct(this.product).subscribe(data => {
-      console.log(data)
+      console.log(data);
+      this.redirectToProductList();
     });
   }
   redirectToProductList(){
