@@ -13,6 +13,8 @@ import { SocialLoginModule, SocialAuthServiceConfig, VKLoginProvider } from '@ab
 import { RegisterComponent } from './auth/register/register.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { interceptorProvider } from './service/prod-intercept.service';
+import { UserProfileComponent } from './user-profile/user-profile.component';
+import { UserDetailsComponent } from './user-details/user-details.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +24,9 @@ import { interceptorProvider } from './service/prod-intercept.service';
     UpdateProductComponent,
     LoginComponent,
     RegisterComponent,
-    NavbarComponent
+    NavbarComponent,
+    UserProfileComponent,
+    UserDetailsComponent
   ],
   imports: [
     BrowserModule,

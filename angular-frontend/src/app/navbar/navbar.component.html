@@ -9,11 +9,10 @@
         </li>
     </ul>
     <ul class="navbar-nav" *ngIf="isLogged">
-        <li class="nav-item disabled">
-            <a class="nav-link">{{user.username}}</a>
+        <li class="nav-item">
+            <a routerLink="profile/{{user.id}}" routerLinkActive="active" class="nav-link" style="color: #E1E3E6;">{{user.username}}</a>
         </li>
     </ul>
-    <!-- <img *ngIf="isLogged" src="{{userLogged.photoUrl}}" alt="userlogo" class="rounded-circle me-2" style="width: 50px;"> -->
     <button *ngIf="!isLogged" class="btn btn-outline-success me-2" type="submit" routerLink="/login"><i class="fa-solid fa-right-to-bracket"></i> Log In</button>
     <button *ngIf="isLogged" class="btn btn-outline-danger me-2" type="submit" routerLink="/login" (click)="logOut()"><i class="fa-solid fa-arrow-right-from-bracket"></i> Log Out</button>
 </nav>

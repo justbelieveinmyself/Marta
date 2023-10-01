@@ -1,0 +1,21 @@
+.name_card{
+    color: black;
+    font-size: 25px;
+    font-weight: bold;
+}
+.name_card_main{
+    color: black;
+    font-size: 40px;
+    font-weight: bold;
+}
+.card_body_value{
+    color: black;
+}
+.card_with_shadow{
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+    transition: box-shadow 0.4s ease-in-out;
+}
+.card_with_shadow:hover{
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    transition: box-shadow 0.4s ease-in-out;
+}

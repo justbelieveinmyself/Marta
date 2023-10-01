@@ -22,7 +22,7 @@ export class NavbarComponent {
     })
     this.router.events.subscribe(
       (val : any) => {
-        if(sessionStorage.getItem('AuthUser') && val.url.includes('products')){
+        if(sessionStorage.getItem('AuthUser') && !val.url){
           this.updateInfo();
         }
       });

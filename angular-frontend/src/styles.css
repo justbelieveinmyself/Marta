@@ -4,6 +4,9 @@
 body{
     height: 100%;
 }
+a{
+    text-decoration-line: none;
+}
 .footer{
     display: flex;
     width: 100%;
