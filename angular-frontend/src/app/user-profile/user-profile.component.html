@@ -7,15 +7,15 @@
                 <div class="card-body">
                     <div style="padding-left: 30px;">
                         <img src="https://sun28-2.userapi.com/s/v1/ig2/qWC4eloCawKmLvNIMxW8-7llFzURN9lfFOExzD6IJm4UGpOutIJJHST51zSy7gVgS51OecPIIkH_EU1Z08TXiz3W.jpg?size=200x200&quality=95&crop=798,646,810,810&ava=1"
-                            alt="userlogo" class="rounded-circle me-2" style="width: 120px;">
-                        <span class="card-title name_card_main">Vadim</span>
+                            alt="userlogo" class="rounded-circle me-2" style="width: 110px;">
+                        <div class="card-title name_card_main">{{user.firstName}}</div>
                     </div>
                     <p class="card-text my-3">
                         <span class="text-body-secondary me-2">Phone</span>
                         <span class="card_body_value">+79788009324</span>
                     <div>
                         <span class="text-body-secondary me-2">Email</span>
-                        <span class="card_body_value">seakme.vadim11@mail.ru</span>
+                        <span class="card_body_value">{{user.email}}</span>
                         <a routerLink="../../login" (click)="logOut()" routerLinkActive="active"
                             class="btn btn-outline-danger" style="bottom: 25px;right: 20px; position: absolute;">Log
                             Out</a>

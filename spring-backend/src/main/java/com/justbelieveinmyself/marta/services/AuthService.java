@@ -35,8 +35,7 @@ public class AuthService {
         }
         User userDetails = userService.loadUserByUsername(authRequest.getUsername());
         String token = jwtProvider.generateToken(userDetails);
-        JwtResponse jwtResponse = new JwtResponse(token, null);
-        jwtResponse.setUserFromDetails(userDetails);
+        JwtResponse jwtResponse = new JwtResponse(token, userDetails);
         return ResponseEntity.ok(jwtResponse);
     }
 

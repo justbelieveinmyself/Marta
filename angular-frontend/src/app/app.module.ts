@@ -6,7 +6,7 @@ import { AppComponent } from './app.component';
 import { ProductListComponent } from './products/product-list/product-list.component';
 import { HttpClientModule } from '@angular/common/http';
 import { CreateProductComponent } from './products/create-product/create-product.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { UpdateProductComponent } from './products/update-product/update-product.component';
 import { LoginComponent } from './auth/login/login.component'
 import { SocialLoginModule, SocialAuthServiceConfig, VKLoginProvider } from '@abacritt/angularx-social-login';
@@ -15,7 +15,6 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { interceptorProvider } from './service/prod-intercept.service';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { UserDetailsComponent } from './user-details/user-details.component';
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -33,6 +32,7 @@ import { UserDetailsComponent } from './user-details/user-details.component';
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
+    ReactiveFormsModule,
     SocialLoginModule
   ],
   providers: [

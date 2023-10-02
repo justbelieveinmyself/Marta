@@ -5,8 +5,10 @@
 }
 .name_card_main{
     color: black;
-    font-size: 40px;
+    font-size: 25px;
     font-weight: bold;
+    display: inline-block;
+    
 }
 .card_body_value{
     color: black;

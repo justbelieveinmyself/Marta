@@ -5,7 +5,7 @@
             <div style="padding-left: 30px;">
                 <img src="https://sun28-2.userapi.com/s/v1/ig2/qWC4eloCawKmLvNIMxW8-7llFzURN9lfFOExzD6IJm4UGpOutIJJHST51zSy7gVgS51OecPIIkH_EU1Z08TXiz3W.jpg?size=200x200&quality=95&crop=798,646,810,810&ava=1"
                     alt="userlogo" class="rounded-circle me-2" style="width: 120px;">
-                <span class="card-title name_card_main">Vadim</span>
+                <span class="card-title name_card_main">{{user.firstName}} {{user.lastName}}</span>
             </div>
 
             <table class="table table-borderless">
@@ -20,7 +20,7 @@
                     <tr>
                         <td><span class="card_body_value">+7 978 800-93-24</span></td>
                         <td><span class="card_body_value">
-                                seakme.vadim11@mail.ru
+                                {{user.email}}
                                 <a type="button" data-bs-toggle="modal" data-bs-target="#modalEmail">
                                     <i class="fa-solid fa-pencil fa-lg"></i>
                                 </a>
@@ -46,24 +46,25 @@
 </div>
 <div class="card-group mt-3 mb-3 card_with_shadow">
 
-    <div class="card card_with_shadow" style="height: 270px;">
+    <div class="card card_with_shadow" style="min-height: 270px;">
         <h3 class="ms-5 mt-3">Payment Methods</h3>
         <div class="row">
             <div class="card card_with_shadow ms-4 my-4 border-secondary" style="height: 160px; width: 330px;">
                 <a href="#" style="top: 20px; left: 20px; position: relative; color: indigo; width: max-content;">Make
                     it main</a>
                 <button type="button" class="btn-close" style="position: absolute; top: 10px; right: 10px;"></button>
-                <span class="text-secondary" style="bottom: 10px; left: 20px; position: absolute;">Visa ⋅⋅ 4315</span>
+                <span class="text-secondary" style="bottom: 10px; left: 20px; position: absolute;">Visa ⋅⋅
+                    4315</span>
                 <i class="fa-brands fa-cc-visa fa-2xl" style="right: 10px; bottom: 20px; position: absolute;"></i>
             </div>
-
             <div class="card card_with_shadow ms-4 my-4 border-secondary" style="height: 160px; width: 330px;">
                 <a style="top: 20px; left: 20px; position: relative; width: max-content;">
                     <i class="fa-solid fa-check fa-sm"></i>
                     Main method
                 </a>
                 <button type="button" class="btn-close" style="position: absolute; top: 10px; right: 10px;"></button>
-                <span class="text-secondary" style="bottom: 10px; left: 20px; position: absolute;">Mir ⋅⋅ 2314</span>
+                <span class="text-secondary" style="bottom: 10px; left: 20px; position: absolute;">Mir ⋅⋅
+                    2314</span>
                 <i class="fa-brands fa-cc-visa fa-2xl" style="right: 10px; bottom: 20px; position: absolute;"></i>
             </div>
             <a type="button" data-bs-toggle="modal" data-bs-target="#modalCard"
@@ -86,15 +87,21 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h1 class="modal-title fs-5 ms-2">Change email</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                <button type="button" class="btn-close" id="bruh" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body ms-2">
-                <label>New email *</label>
-                <input type="email" class="form-control my-2" name="newemail" [(ngModel)]="newemail">
-                <label>All mailing subscriptions will be saved when the email is changed</label>
+                <form [formGroup]="emailForm">
+                    <label>New email *</label>
+                    <input type="text" formControlName="email" class="form-control"
+                        [ngClass]="{ 'is-invalid': submitted && f['email'].errors }" />
+                    <div *ngIf="submitted && f['email']?.errors" class="invalid-feedback"> 
+                        <div *ngIf="f['email'].errors?['email'] : null">Email must be a valid email address</div>
+                    </div>
+                    <label>All mailing subscriptions will be saved when the email is changed</label>
+                </form>
             </div>
             <div class="modal-footer" style="display: flex; justify-content: center;">
-                <button type="button" class="btn btn-outline-dark">Save changes</button>
+                <button type="button" (click)="changeEmail()" class="btn btn-outline-dark">Save changes</button>
             </div>
         </div>
     </div>
@@ -104,7 +111,7 @@
     <div class="modal-dialog modal-dialog-centered" style="width: 430px;">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5 ms-2">Link card 
+                <h1 class="modal-title fs-5 ms-2">Link card
                     <i class="fa-brands fa-cc-visa fa-xl mx-2"></i>
                     <i class="fa-brands fa-cc-mastercard fa-xl mx-2"></i>
                     <i class="fa-brands fa-cc-paypal fa-xl mx-2"></i>
@@ -115,16 +122,16 @@
             <div class="modal-body" style="display: flex; justify-content: center;">
                 <div class="card card_with_shadow ms-2 my-2 border-secondary" style="height: 150px; width: 350px;">
                     <div class="mx-3 mt-4">
-                <input type="email" class="form-control" name="newemail" placeholder="Card number"
-                    [(ngModel)]="newemail">
-                <div class="input-group mt-3">
-                    <input type="email" class="form-control col" name="newemail" placeholder="MM/GG"
-                        [(ngModel)]="newemail">
-                    <input type="email" class="form-control col" name="newemail" placeholder="CVV/CVC"
-                        [(ngModel)]="newemail">
+                        <input type="text" class="form-control" name="newemail" placeholder="Card number"
+                            [(ngModel)]="newemail">
+                        <div class="input-group mt-3">
+                            <input type="text" class="form-control col" name="newemail" placeholder="MM/GG"
+                                [(ngModel)]="newemail">
+                            <input type="text" class="form-control col" name="newemail" placeholder="CVV/CVC"
+                                [(ngModel)]="newemail">
+                        </div>
+                    </div>
                 </div>
-            </div>
-            </div>
             </div>
             <div class="modal-footer" style="display: flex; justify-content: center;">
                 <button type="button" class="btn btn-outline-dark">Save changes</button>

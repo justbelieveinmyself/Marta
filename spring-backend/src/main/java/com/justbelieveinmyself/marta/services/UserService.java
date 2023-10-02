@@ -61,4 +61,9 @@ public class UserService implements UserDetailsService {
         user.setRoles(Set.of(Role.USER));
         return userRepository.save(user);
     }
+
+    public User updateEmail(User user, String email) {
+        user.setEmail(email);
+        return userRepository.save(user);
+    }
 }

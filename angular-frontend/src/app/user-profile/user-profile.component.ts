@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { TokenService } from '../service/token.service';
+import { LocalUser } from '../models/local-user';
 
 @Component({
   selector: 'app-user-profile',
@@ -7,10 +8,14 @@ import { TokenService } from '../service/token.service';
   styleUrls: ['./user-profile.component.css']
 })
 export class UserProfileComponent {
+  user !:LocalUser;
   constructor(
     private tokenService : TokenService
   ){}
   logOut(){
     this.tokenService.logOut();
+  }
+  ngOnInit(){
+    this.user = this.tokenService.getUser();
   }
 }
