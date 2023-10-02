@@ -19,7 +19,12 @@
                 <tbody>
                     <tr>
                         <td><span class="card_body_value">+7 978 800-93-24</span></td>
-                        <td><span class="card_body_value">seakme.vadim11@mail.ru</span></td>
+                        <td><span class="card_body_value">
+                                seakme.vadim11@mail.ru
+                                <a type="button" data-bs-toggle="modal" data-bs-target="#modalEmail">
+                                    <i class="fa-solid fa-pencil fa-lg"></i>
+                                </a>
+                            </span></td>
                         <td><span class="card_body_value">
                                 <div class="form-check form-check-inline">
                                     <input class="form-check-input" checked type="radio" name="inlineRadioOptions"
@@ -44,30 +49,86 @@
     <div class="card card_with_shadow" style="height: 270px;">
         <h3 class="ms-5 mt-3">Payment Methods</h3>
         <div class="row">
-        <div class="card card_with_shadow ms-4 my-4 border-secondary" style="height: 160px; width: 330px;">
-            <a href="#" style="top: 20px; left: 20px; position: relative; color: indigo;">Make it main</a>
-            <span class="text-secondary" style="bottom: 10px; left: 20px; position: absolute;">Visa ⋅⋅ 4315</span>
-            <i class="fa-brands fa-cc-visa fa-2xl" style="right: 10px; bottom: 20px; position: absolute;"></i>
-        </div>
+            <div class="card card_with_shadow ms-4 my-4 border-secondary" style="height: 160px; width: 330px;">
+                <a href="#" style="top: 20px; left: 20px; position: relative; color: indigo; width: max-content;">Make
+                    it main</a>
+                <button type="button" class="btn-close" style="position: absolute; top: 10px; right: 10px;"></button>
+                <span class="text-secondary" style="bottom: 10px; left: 20px; position: absolute;">Visa ⋅⋅ 4315</span>
+                <i class="fa-brands fa-cc-visa fa-2xl" style="right: 10px; bottom: 20px; position: absolute;"></i>
+            </div>
 
-        <div class="card card_with_shadow ms-4 my-4 border-secondary" style="height: 160px; width: 330px;">
-            <a style="top: 20px; left: 20px; position: relative;">
-                <i class="fa-solid fa-check fa-sm"></i>
-                Main method
+            <div class="card card_with_shadow ms-4 my-4 border-secondary" style="height: 160px; width: 330px;">
+                <a style="top: 20px; left: 20px; position: relative; width: max-content;">
+                    <i class="fa-solid fa-check fa-sm"></i>
+                    Main method
+                </a>
+                <button type="button" class="btn-close" style="position: absolute; top: 10px; right: 10px;"></button>
+                <span class="text-secondary" style="bottom: 10px; left: 20px; position: absolute;">Mir ⋅⋅ 2314</span>
+                <i class="fa-brands fa-cc-visa fa-2xl" style="right: 10px; bottom: 20px; position: absolute;"></i>
+            </div>
+            <a type="button" data-bs-toggle="modal" data-bs-target="#modalCard"
+                class="card card_with_shadow ms-4 my-4 border-secondary" style="height: 160px; width: 330px;">
+                <div class="mx-auto my-auto" style="font-size: 20px;">
+                    <i class="fa-regular fa-credit-card"></i>
+                    Link card
+                </div>
             </a>
-            <span class="text-secondary" style="bottom: 10px; left: 20px; position: absolute;">Mir ⋅⋅ 2314</span>
-            <i class="fa-brands fa-cc-visa fa-2xl" style="right: 10px; bottom: 20px; position: absolute;"></i>
         </div>
+    </div>
 
-        <div class="card card_with_shadow ms-4 my-4 border-secondary" style="height: 160px; width: 330px;">
-            <div class="mx-auto my-auto" style="font-size: 20px;">
-                <i class="fa-regular fa-credit-card"></i>
-                Link card
+</div>
+
+
+
+<!-- Modal for email change -->
+<div class="modal fade" id="modalEmail" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered" style="width: 450px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5 ms-2">Change email</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body ms-2">
+                <label>New email *</label>
+                <input type="email" class="form-control my-2" name="newemail" [(ngModel)]="newemail">
+                <label>All mailing subscriptions will be saved when the email is changed</label>
+            </div>
+            <div class="modal-footer" style="display: flex; justify-content: center;">
+                <button type="button" class="btn btn-outline-dark">Save changes</button>
             </div>
         </div>
-        
     </div>
+</div>
+<!-- Modal for link new card -->
+<div class="modal fade" id="modalCard" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered" style="width: 430px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5 ms-2">Link card 
+                    <i class="fa-brands fa-cc-visa fa-xl mx-2"></i>
+                    <i class="fa-brands fa-cc-mastercard fa-xl mx-2"></i>
+                    <i class="fa-brands fa-cc-paypal fa-xl mx-2"></i>
+                    <i class="fa-brands fa-cc-apple-pay fa-xl mx-2"></i>
+                </h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" style="display: flex; justify-content: center;">
+                <div class="card card_with_shadow ms-2 my-2 border-secondary" style="height: 150px; width: 350px;">
+                    <div class="mx-3 mt-4">
+                <input type="email" class="form-control" name="newemail" placeholder="Card number"
+                    [(ngModel)]="newemail">
+                <div class="input-group mt-3">
+                    <input type="email" class="form-control col" name="newemail" placeholder="MM/GG"
+                        [(ngModel)]="newemail">
+                    <input type="email" class="form-control col" name="newemail" placeholder="CVV/CVC"
+                        [(ngModel)]="newemail">
+                </div>
+            </div>
+            </div>
+            </div>
+            <div class="modal-footer" style="display: flex; justify-content: center;">
+                <button type="button" class="btn btn-outline-dark">Save changes</button>
+            </div>
+        </div>
     </div>
-
-    
 </div>
