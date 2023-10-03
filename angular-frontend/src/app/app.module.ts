@@ -15,6 +15,8 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { interceptorProvider } from './service/prod-intercept.service';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { UserDetailsComponent } from './user-details/user-details.component';
+import { UserDeliveryComponent } from './user-delivery/user-delivery.component';
+import { UserFavouritesComponent } from './user-favourites/user-favourites.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -25,7 +27,9 @@ import { UserDetailsComponent } from './user-details/user-details.component';
     RegisterComponent,
     NavbarComponent,
     UserProfileComponent,
-    UserDetailsComponent
+    UserDetailsComponent,
+    UserDeliveryComponent,
+    UserFavouritesComponent
   ],
   imports: [
     BrowserModule,

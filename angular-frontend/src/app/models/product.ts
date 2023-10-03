@@ -2,7 +2,8 @@ import { Seller } from "./seller";
 
 export class Product {
     id!: number;
-    name!: string;
+    product_code!: string;
+    product_name!: string;
     price!: number;
     count!: number;
     description!: string;

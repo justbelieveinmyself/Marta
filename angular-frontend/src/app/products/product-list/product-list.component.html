@@ -1,30 +1,21 @@
-<h2 >Product list</h2>
-<table class="table table-striped" style="margin-bottom: 70px;">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Price</th>
-            <th>Count</th>
-            <th>Description</th>
-            <th>Manufacturer</th>
-            <th>Structure</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr *ngFor = "let product of products">
-            <td>{{product.id}}</td>
-            <td>{{product.name}}</td>
-            <td>{{product.price}}</td>
-            <td>{{product.count}}</td>
-            <td>{{product.description}}</td>
-            <td>{{product.manufacturer}}</td>
-            <td>{{product.structure}}</td>
-            <td style="min-width: 200px;">
-                <button *ngIf="(product.seller != null) && (product.seller.id == this.user.id)" (click)="updateProduct(product.id)" class="btn btn-outline-info">Update</button>
-                <button *ngIf="(product.seller != null) && (product.seller.id == this.user.id)" (click)="deleteProduct(product.id)" class="btn btn-outline-danger" style="margin-left: 10px;">Delete</button>
-            </td>
-        </tr>
-    </tbody>
-</table>
+<h2>Product list</h2>
+<div class="card-group">
+    <div *ngFor = "let product of products">
+    <a routerLink="{{product.id}}/details"  routerLinkActive="active">
+        <div class="card me-4 mb-4" style="width: 18rem; height: 31rem;">
+            <img src="https://basket-09.wb.ru/vol1302/part130277/130277706/images/c516x688/1.webp" class="card-img-top"
+                alt="...">
+            <div class="card-body">
+                <h5 class="card-title">{{product.price}} 
+                    <span style="text-decoration: line-through; font-size: 15px; 
+                    color: #868695; margin-left: 8px;">700$</span>
+                </h5>
+                <div style="-webkit-line-clamp: 2; display: -webkit-box; -webkit-box-orient: vertical; overflow: hidden;">
+                <div class="card-text">{{product.seller.username}} / {{product.product_name}}
+                </div>
+            </div>
+            </div>
+        </div>
+    </a>
+</div>
+</div>

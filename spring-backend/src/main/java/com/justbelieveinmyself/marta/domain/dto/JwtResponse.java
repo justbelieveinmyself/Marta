@@ -27,6 +27,7 @@ public class JwtResponse {
         this.user.setPostalCode(user.getPostalCode());
         this.user.setCountry(user.getCountry());
         this.user.setPhone(user.getPhone());
+        this.user.setBalance(user.getBalance());
     }
 }
 @Getter
@@ -48,4 +49,5 @@ class User{
     private String city;
     private String postalCode;
     private String country;
+    private Double balance;
 }

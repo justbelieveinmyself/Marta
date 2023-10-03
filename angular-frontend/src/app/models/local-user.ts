@@ -10,7 +10,8 @@ export class LocalUser {
     avatar!: string;
     phone!: string;
     address!: string;
-    city!: string ;
-    postalCode!: string ;
-    country!: string ;
+    city!: string;
+    postalCode!: string;
+    country!: string;
+    balance!: number;
 }

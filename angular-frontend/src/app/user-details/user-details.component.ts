@@ -31,7 +31,8 @@ export class UserDetailsComponent implements OnInit {
     if(this.emailForm.invalid){
       return;
     }
-    // this.userService.updateEmail(this.user.id, this.emailForm.value.email);
+    this.userService.updateEmail(this.user.id, this.emailForm.value.email);
+    this.user.email = this.emailForm.value.email;
     // var modalEmail = document.getElementById('modalEmail');
     // jQuery('#modalEmail').toggle();
     
