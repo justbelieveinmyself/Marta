@@ -1,9 +1,6 @@
 package com.justbelieveinmyself.marta.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonView;
-import com.justbelieveinmyself.marta.Views;
-import com.justbelieveinmyself.marta.domain.dto.UserDto;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
@@ -19,7 +16,6 @@ import java.util.Set;
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonView(Views.Product.class)
     private Long id;
 
     @JsonIgnore
@@ -51,7 +47,13 @@ public class User implements UserDetails {
     @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "seller")
     private List<Product> products;
-
+    private String avatar;
+    private String phone;
+    private String address;
+    private String city;
+    private String postalCode;
+    private String country;
+    private Double balance;
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return getRoles();

@@ -13,4 +13,9 @@ public class RegUserDto {
     private String password;
     private String passwordConfirm;
     private String email;
+    private String phone;
+    private String address;
+    private String city;
+    private String postalCode;
+    private String country;
 }

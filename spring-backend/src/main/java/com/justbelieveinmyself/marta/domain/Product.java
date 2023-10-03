@@ -1,10 +1,10 @@
 package com.justbelieveinmyself.marta.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonView;
-import com.justbelieveinmyself.marta.Views;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Table(name = "products")
 @Entity
@@ -14,21 +14,16 @@ import lombok.*;
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Product {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonView(Views.Product.class)
     private Long id;
-    @JsonView(Views.Product.class)
-    private String name;
-    @JsonView(Views.Product.class)
+    private String product_code;
+    private String product_name;
+    private String category;
     private Long price;
-    @JsonView(Views.Product.class)
     private Long count;
-    @JsonView(Views.Product.class)
     @Lob
     @Column(length = 16777215)
     private String description;
-    @JsonView(Views.Product.class)
     private String manufacturer;
-    @JsonView(Views.Product.class)
     @Lob
     @Column(length = 16777215)
     private String structure;

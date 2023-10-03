@@ -21,6 +21,12 @@ public class JwtResponse {
         this.user.setLastName(user.getLastName());
         this.user.setRoles(user.getRoles());
         this.user.setGender(user.getGender());
+        this.user.setAvatar(user.getAvatar());
+        this.user.setAddress(user.getAddress());
+        this.user.setCity(user.getCity());
+        this.user.setPostalCode(user.getPostalCode());
+        this.user.setCountry(user.getCountry());
+        this.user.setPhone(user.getPhone());
     }
 }
 @Getter
@@ -36,4 +42,10 @@ class User{
     private Integer age;
     private String gender;
     private Set<Role> roles;
+    private String avatar;
+    private String phone;
+    private String address;
+    private String city;
+    private String postalCode;
+    private String country;
 }

@@ -32,11 +32,6 @@ public class UserService implements UserDetailsService {
         return userRepository.save(user);
     }
 
-    public User update(User userFromDB, User user) {
-        BeanUtils.copyProperties(user, userFromDB, "id");
-        return userRepository.save(userFromDB);
-    }
-
     public void delete(User user) {
         userRepository.delete(user);
     }
@@ -57,6 +52,11 @@ public class UserService implements UserDetailsService {
         user.setLastName(registrationUserDto.getLastName());
         user.setEmail(registrationUserDto.getEmail());
         user.setUsername(registrationUserDto.getUsername());
+        user.setPhone(registrationUserDto.getPhone());
+        user.setCountry(registrationUserDto.getCountry());
+        user.setCity(registrationUserDto.getCity());
+        user.setAddress(registrationUserDto.getAddress());
+        user.setPostalCode(registrationUserDto.getPostalCode());
         user.setPassword(passwordEncoder.encode(registrationUserDto.getPassword()));
         user.setRoles(Set.of(Role.USER));
         return userRepository.save(user);

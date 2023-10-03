@@ -1,7 +1,5 @@
 package com.justbelieveinmyself.marta.controllers;
 
-import com.fasterxml.jackson.annotation.JsonView;
-import com.justbelieveinmyself.marta.Views;
 import com.justbelieveinmyself.marta.domain.Product;
 import com.justbelieveinmyself.marta.exceptions.NotFoundException;
 import com.justbelieveinmyself.marta.services.ProductService;
