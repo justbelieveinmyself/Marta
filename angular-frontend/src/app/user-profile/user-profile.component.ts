@@ -10,6 +10,7 @@ import { UserService } from '../service/user.service';
 })
 export class UserProfileComponent {
   user !:LocalUser;
+  path!:String;
   constructor(
     private tokenService : TokenService,
     private userService : UserService
@@ -19,12 +20,11 @@ export class UserProfileComponent {
   }
   ngOnInit(){
     this.user = this.tokenService.getUser();
-    if(this.user != null && this.user.avatar == null){
-      this.userService.getAvatar(this.user.id).subscribe(data => {
-        this.user.avatar = data;
-        console.error(data)
-      }
-      );
+    if(this.user != null && this.path == null){
+      this.userService.getAvatar(this.user.id).subscribe(res => {
+        var url= window.URL.createObjectURL(res);
+        this.path = url;
+      });
     }
   }
 }
