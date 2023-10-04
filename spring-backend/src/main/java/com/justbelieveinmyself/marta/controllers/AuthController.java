@@ -4,8 +4,12 @@ import com.justbelieveinmyself.marta.domain.dto.JwtRequest;
 import com.justbelieveinmyself.marta.domain.dto.RegUserDto;
 import com.justbelieveinmyself.marta.services.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @RestController
 @RequestMapping("/auth")
@@ -13,9 +17,16 @@ public class AuthController {
     @Autowired
     private AuthService authService;
 
-    @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody RegUserDto regUserDto){
-        return authService.createNewUser(regUserDto);
+    @PostMapping(value = "/register", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<?> register(@RequestPart("regUser") RegUserDto regUserDto,
+                                      @RequestPart(name = "file",required = false) MultipartFile file){
+        try {
+            return authService.createNewUser(regUserDto, file);
+        } catch (IOException e) {
+            System.out.println("Failed to save profile image!");
+            System.out.println(e.getMessage());
+        }
+        return ResponseEntity.internalServerError().build();
     }
 
     @PostMapping("/login")

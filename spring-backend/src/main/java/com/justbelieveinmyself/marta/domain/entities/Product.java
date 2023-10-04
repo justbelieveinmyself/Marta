@@ -1,4 +1,4 @@
-package com.justbelieveinmyself.marta.domain;
+package com.justbelieveinmyself.marta.domain.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;

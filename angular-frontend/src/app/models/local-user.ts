@@ -7,7 +7,7 @@ export class LocalUser {
     age!: number;
     gender!: string;
     roles!: string[];
-    avatar!: string;
+    avatar!: File;
     phone!: string;
     address!: string;
     city!: string;

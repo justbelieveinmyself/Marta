@@ -2,7 +2,7 @@ package com.justbelieveinmyself.marta.controllers;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.justbelieveinmyself.marta.domain.User;
+import com.justbelieveinmyself.marta.domain.entities.User;
 import com.justbelieveinmyself.marta.domain.dto.TokenDto;
 import com.justbelieveinmyself.marta.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

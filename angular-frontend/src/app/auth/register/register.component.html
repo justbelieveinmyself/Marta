@@ -38,6 +38,10 @@
                 <label for="passwordConfirm">Confirm password</label>
                 <input type="password" class="form-control" name="passwordConfirm" placeholder="Password" [(ngModel)]="passwordConfirm">
               </div>
+              <div class="form-group mb-3">
+                <label for="avatar" class="form-label">Upload user image</label>
+                <input type="file" (change)="onFileSelected($event)" class="form-control" name="avatar">
+              </div>
               <div class="form-group text-center">
                 <button [disabled]="!f.valid"
                   class="btn btn-outline-success btn-block btn-lg">Submit</button>

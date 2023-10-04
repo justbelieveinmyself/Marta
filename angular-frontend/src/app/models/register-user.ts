@@ -11,7 +11,7 @@ export class RegisterUser {
         username: string,
         password: string,
         passwordConfirm: string,
-        email: string
+        email: string,
         ){
             this.email = email;
             this.firstName = firstName;

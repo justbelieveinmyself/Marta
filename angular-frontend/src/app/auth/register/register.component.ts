@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
+import { FileHandle } from 'src/app/models/file-handle.model';
 import { RegisterUser } from 'src/app/models/register-user';
 import { AuthService } from 'src/app/service/auth.service';
 import { TokenService } from 'src/app/service/token.service';
@@ -13,17 +15,23 @@ export class RegisterComponent implements OnInit{
   constructor(
     private authService: AuthService,
     private tokenService: TokenService,
-    private router: Router
+    private router: Router,
+    private sanitizer: DomSanitizer
   ){}
+
   isLogged! : boolean;
   isRegisterFail: boolean = false;
+
   firstName!: string;
   lastName!: string;
   username!: string;
   password!: string;
   passwordConfirm!: string;
   email!: string;
+  avatar!: File;
+
   errorMessage!: string;
+
   regUser!: RegisterUser;
   ngOnInit(): void {
     if(this.tokenService.getToken()){
@@ -34,7 +42,7 @@ export class RegisterComponent implements OnInit{
 
   onRegister(){
     this.regUser = new RegisterUser(this.firstName, this.lastName, this.username, this.password, this.passwordConfirm, this.email);
-    this.authService.register(this.regUser).subscribe({
+    this.authService.register(this.regUser, this.avatar).subscribe({
       next: n => {
         this.isRegisterFail = false;
         this.router.navigate(["/login"])
@@ -45,5 +53,8 @@ export class RegisterComponent implements OnInit{
       }
     });
   }
-
+  onFileSelected(event : any){
+    this.avatar = event.target.files[0];
+    console.log(this.avatar);
+  }
 }

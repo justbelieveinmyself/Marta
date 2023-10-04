@@ -10,7 +10,7 @@ import java.util.Set;
 public class JwtResponse {
     private String token;
     private User user;
-    public JwtResponse(String token, com.justbelieveinmyself.marta.domain.User user){
+    public JwtResponse(String token, com.justbelieveinmyself.marta.domain.entities.User user){
         this.token = token;
         this.user = new User();
         this.user.setId(user.getId());

@@ -1,20 +1,20 @@
 package com.justbelieveinmyself.marta.services;
 
 import com.justbelieveinmyself.marta.domain.Role;
-import com.justbelieveinmyself.marta.domain.User;
+import com.justbelieveinmyself.marta.domain.entities.User;
 import com.justbelieveinmyself.marta.domain.dto.RegUserDto;
 import com.justbelieveinmyself.marta.repositories.UserRepository;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.*;
 
 @Service
@@ -24,6 +24,8 @@ public class UserService implements UserDetailsService {
     @Autowired
     @Lazy
     private PasswordEncoder passwordEncoder;
+    @Value("${upload.path}")
+    private String uploadPath;
     public List<User> getListUsers(){
         return userRepository.findAll();
     }
@@ -46,7 +48,7 @@ public class UserService implements UserDetailsService {
         return userRepository.findByUsername(username);
     }
 
-    public User createNewUser(RegUserDto registrationUserDto) {
+    public User createNewUser(RegUserDto registrationUserDto, MultipartFile file) throws IOException {
         User user = new User();
         user.setFirstName(registrationUserDto.getFirstName());
         user.setLastName(registrationUserDto.getLastName());
@@ -59,11 +61,28 @@ public class UserService implements UserDetailsService {
         user.setPostalCode(registrationUserDto.getPostalCode());
         user.setPassword(passwordEncoder.encode(registrationUserDto.getPassword()));
         user.setRoles(Set.of(Role.USER));
+        String path = uploadFile(file);
+        user.setAvatar(path);
         return userRepository.save(user);
     }
 
     public User updateEmail(User user, String email) {
         user.setEmail(email);
         return userRepository.save(user);
+    }
+
+
+    public String uploadFile(MultipartFile file) throws IOException {
+        if(file != null && !Objects.requireNonNull(file.getOriginalFilename()).isEmpty()){
+            File uploadDir = new File(uploadPath);
+            if(!uploadDir.exists()){
+                uploadDir.mkdir();
+            }
+            String uuidFile = UUID.randomUUID().toString();
+            String filename = uuidFile + "." + file.getOriginalFilename();
+            file.transferTo(new File(uploadPath + "/"  + filename));
+            return filename;
+        }
+        return null;
     }
 }

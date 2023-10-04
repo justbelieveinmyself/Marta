@@ -1,6 +1,6 @@
 package com.justbelieveinmyself.marta.services;
 
-import com.justbelieveinmyself.marta.domain.Product;
+import com.justbelieveinmyself.marta.domain.entities.Product;
 import com.justbelieveinmyself.marta.repositories.ProductRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;

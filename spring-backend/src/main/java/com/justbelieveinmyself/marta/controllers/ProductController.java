@@ -1,6 +1,6 @@
 package com.justbelieveinmyself.marta.controllers;
 
-import com.justbelieveinmyself.marta.domain.Product;
+import com.justbelieveinmyself.marta.domain.entities.Product;
 import com.justbelieveinmyself.marta.exceptions.NotFoundException;
 import com.justbelieveinmyself.marta.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;

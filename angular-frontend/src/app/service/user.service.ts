@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { TokenService } from './token.service';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -24,4 +25,7 @@ export class UserService {
     this.httpClient.put(`${this.baseUrl}/${userid}/changeEmail`, email).subscribe((data : any) => {
       this.tokenService.setUser(data.user);
     })};
+  getAvatar(userid: number) : Observable<File>{
+    return this.httpClient.get<File>(`${this.baseUrl}/${userid}/avatar`)
+  }
   }
