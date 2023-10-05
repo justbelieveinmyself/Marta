@@ -17,6 +17,7 @@ import { UserProfileComponent } from './user-profile/user-profile.component';
 import { UserDetailsComponent } from './user-details/user-details.component';
 import { UserDeliveryComponent } from './user-delivery/user-delivery.component';
 import { UserFavouritesComponent } from './user-favourites/user-favourites.component';
+import { LogoutComponent } from './logout/logout.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -29,7 +30,8 @@ import { UserFavouritesComponent } from './user-favourites/user-favourites.compo
     UserProfileComponent,
     UserDetailsComponent,
     UserDeliveryComponent,
-    UserFavouritesComponent
+    UserFavouritesComponent,
+    LogoutComponent
   ],
   imports: [
     BrowserModule,

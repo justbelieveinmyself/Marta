@@ -6,7 +6,7 @@
 
                 <div class="card-body">
                     <div style="padding-left: 30px;">
-                        <img src="{{path}}"
+                        <img src="{{user.avatar}}"
                             alt="userlogo" class="rounded-circle me-2" style="object-fit: cover;width: 110px; height: 110px;">
                         <div class="card-title name_card_main">{{user.firstName}}</div>
                     </div>
@@ -16,9 +16,7 @@
                     <div>
                         <span class="text-body-secondary me-2">Email</span>
                         <span class="card_body_value">{{user.email}}</span>
-                        <a routerLink="../../login" (click)="logOut()" routerLinkActive="active"
-                            class="btn btn-outline-danger" style="bottom: 25px;right: 20px; position: absolute;">Log
-                            Out</a>
+                        <app-logout style="bottom: 25px;right: 20px; position: absolute;"></app-logout>
                     </div>
                 </div>
 

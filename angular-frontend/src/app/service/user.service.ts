@@ -30,4 +30,4 @@ export class UserService {
       responseType: 'blob'
     })
   }
-  }
+}

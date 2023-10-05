@@ -31,8 +31,4 @@ export class NavbarComponent {
   updateInfo(){
     this.user = this.tokenService.getUser();
   }
-  logOut(){
-    this.tokenService.logOut();
-    this.router.navigate(['/login']);
-  }
 }

@@ -43,13 +43,8 @@ export class TokenService {
   
   public logOut(): void {
     window.sessionStorage.clear();
+    window.localStorage.clear();
     this.loggedIn.next(false);
   }
   
-  // public isExpired(timeStamp: number){
-  //   if(!timeStamp) return false;
-  //   const now = new Date().getTime();
-  //   const diff = now - timeStamp;
-  //   return diff > TOKEN_TTL_MS; 
-  // }
 }

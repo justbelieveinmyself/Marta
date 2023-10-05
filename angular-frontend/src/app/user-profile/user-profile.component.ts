@@ -1,7 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, SecurityContext } from '@angular/core';
 import { TokenService } from '../service/token.service';
 import { LocalUser } from '../models/local-user';
 import { UserService } from '../service/user.service';
+import { DomSanitizer } from '@angular/platform-browser';
+import { ImageService } from '../service/image.service';
 
 @Component({
   selector: 'app-user-profile',
@@ -10,21 +12,17 @@ import { UserService } from '../service/user.service';
 })
 export class UserProfileComponent {
   user !:LocalUser;
-  path!:String;
   constructor(
     private tokenService : TokenService,
-    private userService : UserService
+    private imageService : ImageService
   ){}
   logOut(){
     this.tokenService.logOut();
   }
   ngOnInit(){
     this.user = this.tokenService.getUser();
-    if(this.user != null && this.path == null){
-      this.userService.getAvatar(this.user.id).subscribe(res => {
-        var url= window.URL.createObjectURL(res);
-        this.path = url;
-      });
+    if(this.user != null){
+      this.imageService.getUserAvatar(this.user.id).then(res => this.user.avatar = res);
     }
   }
 }

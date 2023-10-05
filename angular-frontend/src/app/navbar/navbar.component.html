@@ -14,5 +14,5 @@
         </li>
     </ul>
     <button *ngIf="!isLogged" class="btn btn-outline-success me-2" type="submit" routerLink="/login"><i class="fa-solid fa-right-to-bracket"></i> Log In</button>
-    <button *ngIf="isLogged" class="btn btn-outline-danger me-2" type="submit" routerLink="/login" (click)="logOut()"><i class="fa-solid fa-arrow-right-from-bracket"></i> Log Out</button>
+    <app-logout *ngIf="isLogged"></app-logout>
 </nav>
