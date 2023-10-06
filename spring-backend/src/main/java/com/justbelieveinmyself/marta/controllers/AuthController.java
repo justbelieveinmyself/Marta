@@ -2,8 +2,10 @@ package com.justbelieveinmyself.marta.controllers;
 
 import com.justbelieveinmyself.marta.domain.dto.JwtRequest;
 import com.justbelieveinmyself.marta.domain.dto.RegUserDto;
+import com.justbelieveinmyself.marta.exceptions.AppError;
 import com.justbelieveinmyself.marta.services.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,8 +27,10 @@ public class AuthController {
         } catch (IOException e) {
             System.out.println("Failed to save profile image!");
             System.out.println(e.getMessage());
+            return new ResponseEntity<>(new AppError(HttpStatus.NOT_FOUND.value(), "User not created, cannot save avatar file")
+                    , HttpStatus.NOT_FOUND);
         }
-        return ResponseEntity.internalServerError().build();
+
     }
 
     @PostMapping("/login")

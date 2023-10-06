@@ -27,7 +27,8 @@ export class UserDetailsComponent implements OnInit {
       email: ['', [Validators.required, Validators.email]],
     });
     if(this.user != null){
-      this.imageService.getUserAvatar(this.user.id).then(res => this.user.avatar = res);
+      this.imageService.getUserAvatar(this.user.id).then(res => this.user.avatar = res).
+        catch(error => this.user.avatar = "https://eliaslealblog.files.wordpress.com/2014/03/user-200.png");
     }
   }
   get f() { return this.emailForm.controls; }
@@ -41,5 +42,8 @@ export class UserDetailsComponent implements OnInit {
     // var modalEmail = document.getElementById('modalEmail');
     // jQuery('#modalEmail').toggle();
     
+  }
+  onFileSelected(event : any){
+    this.userService.updateAvatar(this.user.id, event.target.files[0]).subscribe(data => localStorage.removeItem("avatar"));
   }
 }

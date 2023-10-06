@@ -6,7 +6,6 @@ import { DomSanitizer } from '@angular/platform-browser';
   providedIn: 'root'
 })
 export class ImageService {
-
   constructor(
     private userService : UserService,
     private sanitizer : DomSanitizer

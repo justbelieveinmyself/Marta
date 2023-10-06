@@ -3,9 +3,10 @@
 
         <div class="card-body">
             <div style="padding-left: 30px;">
-                <img src="{{user.avatar}}"
-                    alt="userlogo" class="rounded-circle me-2" style="object-fit: cover;width: 120px; height: 120px;">
-                <span class="card-title name_card_main">{{user.firstName}} {{user.lastName}}</span>
+                <img src="{{user.avatar}}" onclick="xd.click()"
+                    alt="userlogo" class="rounded-circle me-2 uploadable" style="object-fit: cover;width: 120px; height: 120px;">
+                    <input id="xd" type="file" (change)="onFileSelected($event)" hidden>
+                    <span class="card-title name_card_main">{{user.firstName}} {{user.lastName}}</span>
             </div>
 
             <table class="table table-borderless">

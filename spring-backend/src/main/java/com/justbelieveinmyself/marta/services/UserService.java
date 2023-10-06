@@ -85,4 +85,10 @@ public class UserService implements UserDetailsService {
         }
         return null;
     }
+
+    public void updateAvatar(User user, MultipartFile file) throws IOException {
+        String path = uploadFile(file);
+        user.setAvatar(path);
+        userRepository.save(user);
+    }
 }

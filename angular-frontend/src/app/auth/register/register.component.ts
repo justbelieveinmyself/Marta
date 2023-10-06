@@ -55,6 +55,5 @@ export class RegisterComponent implements OnInit{
   }
   onFileSelected(event : any){
     this.avatar = event.target.files[0];
-    console.log(this.avatar);
   }
 }

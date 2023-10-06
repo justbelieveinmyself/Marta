@@ -22,7 +22,11 @@ export class UserProfileComponent {
   ngOnInit(){
     this.user = this.tokenService.getUser();
     if(this.user != null){
-      this.imageService.getUserAvatar(this.user.id).then(res => this.user.avatar = res);
+      this.imageService.getUserAvatar(this.user.id).then(
+        res => {
+            this.user.avatar = res;
+        }
+    ).catch(error => this.user.avatar = "https://eliaslealblog.files.wordpress.com/2014/03/user-200.png") 
     }
   }
 }

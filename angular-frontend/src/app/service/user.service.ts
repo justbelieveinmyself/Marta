@@ -13,6 +13,7 @@ export class UserService {
     private httpClient: HttpClient,
     private tokenService: TokenService
     ) { }
+    
   getUserFromDbByOauth(userId: string, token: string){
     const tokenDto = {
       userId, token
@@ -21,13 +22,22 @@ export class UserService {
       console.log(data)
     );
   }
+
   updateEmail(userid: number, email: string){
     this.httpClient.put(`${this.baseUrl}/${userid}/changeEmail`, email).subscribe((data : any) => {
       this.tokenService.setUser(data.user);
-    })};
+    });
+  }
+
   getAvatar(userid: number) : Observable<Blob>{
     return this.httpClient.get(`${this.baseUrl}/${userid}/avatar`, {
       responseType: 'blob'
-    })
+    });
+  }
+
+  updateAvatar(userid: number, avatar: File) : Observable<any> {
+    const fd = new FormData();
+    fd.append("file", avatar);
+    return this.httpClient.put(`${this.baseUrl}/${userid}/avatar`, fd);
   }
 }
