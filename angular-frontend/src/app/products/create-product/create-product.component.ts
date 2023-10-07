@@ -13,6 +13,7 @@ import { LocalUser } from 'src/app/models/local-user';
 export class CreateProductComponent implements OnInit {
   product: Product = new Product();
   user!: LocalUser;
+  previewImg!: File;
   constructor(
     private productService: ProductService,
     private router: Router,
@@ -27,12 +28,15 @@ export class CreateProductComponent implements OnInit {
   }
   saveProduct(){
     this.product.seller = this.user;
-    this.productService.addProduct(this.product).subscribe(data => {
+    this.productService.addProduct(this.product, this.previewImg).subscribe(data => {
       console.log(data);
       this.redirectToProductList();
     });
   }
   redirectToProductList(){
     this.router.navigate(['/products']);
+  }
+  onFileSelected(event: any){
+    this.previewImg = event.target.files[0];
   }
 }

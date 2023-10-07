@@ -1,6 +1,7 @@
 package com.justbelieveinmyself.marta.services;
 
 import com.justbelieveinmyself.marta.domain.Role;
+import com.justbelieveinmyself.marta.domain.UploadTo;
 import com.justbelieveinmyself.marta.domain.entities.User;
 import com.justbelieveinmyself.marta.domain.dto.RegUserDto;
 import com.justbelieveinmyself.marta.repositories.UserRepository;
@@ -61,7 +62,7 @@ public class UserService implements UserDetailsService {
         user.setPostalCode(registrationUserDto.getPostalCode());
         user.setPassword(passwordEncoder.encode(registrationUserDto.getPassword()));
         user.setRoles(Set.of(Role.USER));
-        String path = uploadFile(file);
+        String path = uploadFile(file, UploadTo.AVATARS);
         user.setAvatar(path);
         return userRepository.save(user);
     }
@@ -72,7 +73,7 @@ public class UserService implements UserDetailsService {
     }
 
 
-    public String uploadFile(MultipartFile file) throws IOException {
+    public String uploadFile(MultipartFile file, UploadTo to) throws IOException {
         if(file != null && !Objects.requireNonNull(file.getOriginalFilename()).isEmpty()){
             File uploadDir = new File(uploadPath);
             if(!uploadDir.exists()){
@@ -80,14 +81,14 @@ public class UserService implements UserDetailsService {
             }
             String uuidFile = UUID.randomUUID().toString();
             String filename = uuidFile + "." + file.getOriginalFilename();
-            file.transferTo(new File(uploadPath + "/"  + filename));
+            file.transferTo(new File(uploadPath + "/" + to.getPath() + "/"  + filename));
             return filename;
         }
         return null;
     }
 
     public void updateAvatar(User user, MultipartFile file) throws IOException {
-        String path = uploadFile(file);
+        String path = uploadFile(file, UploadTo.AVATARS);
         user.setAvatar(path);
         userRepository.save(user);
     }

@@ -18,6 +18,7 @@ import { UserDetailsComponent } from './user-details/user-details.component';
 import { UserDeliveryComponent } from './user-delivery/user-delivery.component';
 import { UserFavouritesComponent } from './user-favourites/user-favourites.component';
 import { LogoutComponent } from './logout/logout.component';
+import { ProductDetailsComponent } from './products/product-details/product-details.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -31,7 +32,8 @@ import { LogoutComponent } from './logout/logout.component';
     UserDetailsComponent,
     UserDeliveryComponent,
     UserFavouritesComponent,
-    LogoutComponent
+    LogoutComponent,
+    ProductDetailsComponent
   ],
   imports: [
     BrowserModule,

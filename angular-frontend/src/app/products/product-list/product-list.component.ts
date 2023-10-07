@@ -4,7 +4,6 @@ import { ProductService } from '../../service/product.service';
 import { Router } from '@angular/router';
 import { TokenService } from 'src/app/service/token.service';
 import { LocalUser } from 'src/app/models/local-user';
-import { timeout } from 'rxjs';
 
 @Component({
   selector: 'app-product-list',
@@ -23,6 +22,7 @@ export class ProductListComponent {
     this.user = this.tokenService.getUser();
     this.getProducts();
   }
+
   private getProducts(){
     this.productService.getProductList().subscribe({
       next: data =>{
@@ -32,13 +32,14 @@ export class ProductListComponent {
       if(e.status == 403){
         this.router.navigate(['/login']);
       }
-    },
-    
-  });
+    }
+    });
   }
+
   updateProduct(id: number){
     this.router.navigate(['update-product/',id]);
   }
+
   deleteProduct(id: number){
     this.productService.deleteProduct(id).subscribe(data => {
         this.getProducts();

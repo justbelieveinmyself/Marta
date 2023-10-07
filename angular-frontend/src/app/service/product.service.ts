@@ -15,8 +15,12 @@ export class ProductService {
   getProductList() : Observable<Product[]>{
     return this.httpClient.get<Product[]>(this.baseUrl);
   }
-  addProduct(product : Product) : Observable<Object>{
-    return this.httpClient.post(this.baseUrl, product);
+  addProduct(product : Product, preview : File) : Observable<Object>{
+    const fd = new FormData();
+    fd.append("file", preview);
+    var json = new Blob([JSON.stringify(product)], { type: 'application/json'});
+    fd.append("product", json);
+    return this.httpClient.post(this.baseUrl, fd);
   }
   updateProduct(product : Product) : Observable<Object>{
     return this.httpClient.put(this.baseUrl +'/' +product.id, product);

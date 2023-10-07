@@ -40,7 +40,7 @@ public class UserController {
     @GetMapping("{id}/avatar")
     public ResponseEntity<?> getAvatar(@PathVariable("id") User user) throws IOException {
         if(Objects.isNull(user)) throw new NotFoundException("User with [id] doesn't exists");
-        String uploadPath = "C:/users/shadow/IdeaProjects/Marta/uploads";
+        String uploadPath = "C:/users/shadow/IdeaProjects/Marta/uploads/avatars";
         Path filePath = Paths.get(uploadPath + "/" + user.getAvatar());
         if(!Files.exists(filePath)){
             return new ResponseEntity<>(new AppError(HttpStatus.NOT_FOUND.value(), "Avatar not found!")
