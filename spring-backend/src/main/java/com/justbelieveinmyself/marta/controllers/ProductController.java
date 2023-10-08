@@ -26,7 +26,7 @@ public class ProductController {
     @Value("upload.path")
     private String uploadPath;
     @GetMapping
-    public List<Product> getListProducts(){
+    public ResponseEntity<?> getListProducts(){
         return productService.getListProducts();
     }
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)

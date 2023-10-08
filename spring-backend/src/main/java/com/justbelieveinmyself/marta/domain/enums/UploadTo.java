@@ -1,4 +1,4 @@
-package com.justbelieveinmyself.marta.domain;
+package com.justbelieveinmyself.marta.domain.enums;
 
 public enum UploadTo {
     PRODUCTS("products"), AVATARS("avatars");

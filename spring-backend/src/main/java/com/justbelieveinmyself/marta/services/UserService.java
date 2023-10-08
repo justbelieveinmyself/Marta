@@ -1,13 +1,16 @@
 package com.justbelieveinmyself.marta.services;
 
-import com.justbelieveinmyself.marta.domain.Role;
-import com.justbelieveinmyself.marta.domain.UploadTo;
+import com.justbelieveinmyself.marta.configs.beans.FileHelper;
+import com.justbelieveinmyself.marta.domain.enums.Role;
+import com.justbelieveinmyself.marta.domain.enums.UploadTo;
 import com.justbelieveinmyself.marta.domain.entities.User;
 import com.justbelieveinmyself.marta.domain.dto.RegUserDto;
 import com.justbelieveinmyself.marta.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -16,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.*;
 
 @Service
@@ -25,6 +29,8 @@ public class UserService implements UserDetailsService {
     @Autowired
     @Lazy
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private FileHelper fileHelper;
     @Value("${upload.path}")
     private String uploadPath;
     public List<User> getListUsers(){
@@ -91,5 +97,9 @@ public class UserService implements UserDetailsService {
         String path = uploadFile(file, UploadTo.AVATARS);
         user.setAvatar(path);
         userRepository.save(user);
+    }
+
+    public ResponseEntity<?> getAvatar(String filename) throws IOException {
+        return fileHelper.downloadFile(filename, UploadTo.AVATARS);
     }
 }

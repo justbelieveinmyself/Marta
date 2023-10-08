@@ -1,5 +1,6 @@
 package com.justbelieveinmyself.marta.controllers;
 
+import com.justbelieveinmyself.marta.configs.beans.FileHelper;
 import com.justbelieveinmyself.marta.domain.entities.User;
 import com.justbelieveinmyself.marta.domain.dto.JwtResponse;
 import com.justbelieveinmyself.marta.exceptions.AppError;
@@ -40,21 +41,13 @@ public class UserController {
     @GetMapping("{id}/avatar")
     public ResponseEntity<?> getAvatar(@PathVariable("id") User user) throws IOException {
         if(Objects.isNull(user)) throw new NotFoundException("User with [id] doesn't exists");
-        String uploadPath = "C:/users/shadow/IdeaProjects/Marta/uploads/avatars";
-        Path filePath = Paths.get(uploadPath + "/" + user.getAvatar());
-        if(!Files.exists(filePath)){
-            return new ResponseEntity<>(new AppError(HttpStatus.NOT_FOUND.value(), "Avatar not found!")
-                    , HttpStatus.NOT_FOUND);
-        }
-        Resource resource = new UrlResource(filePath.toUri());
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add("File-Name", user.getAvatar());
-        httpHeaders.add(HttpHeaders.CONTENT_DISPOSITION, "attachment;File-Name="+resource.getFilename());
-        return ResponseEntity.ok().contentType(MediaType.parseMediaType(Files.probeContentType(filePath)))
-                .headers(httpHeaders).body(resource);
+        ResponseEntity<?> response = userService.getAvatar(user.getAvatar());
+        return response;
+
     }
     @PutMapping(value = "{id}/avatar", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<?> updateAvatar(@PathVariable("id") User user, @RequestParam("file") MultipartFile file){
+    public ResponseEntity<?> updateAvatar(@PathVariable("id") User user,
+                                          @RequestParam("file") MultipartFile file){
         if(Objects.isNull(user)) throw new NotFoundException("User with [id] doesn't exists");
         try {
             this.userService.updateAvatar(user, file);

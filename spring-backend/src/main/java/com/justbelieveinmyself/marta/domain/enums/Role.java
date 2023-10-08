@@ -1,4 +1,4 @@
-package com.justbelieveinmyself.marta.domain;
+package com.justbelieveinmyself.marta.domain.enums;
 
 import org.springframework.security.core.GrantedAuthority;
 

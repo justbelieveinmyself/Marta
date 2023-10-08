@@ -12,30 +12,34 @@ export class ImageService {
   ) { }
   getUserAvatar(userId : number) : Promise<string>{
     return new Promise<string>((resolve, reject) => {
-      let result = '';
-  
       if (localStorage.getItem("avatar") == null) {
         this.userService.getAvatar(userId).subscribe(blob => {
           this.blobToBase64(blob).then(base64String => {
             localStorage.setItem("avatar", base64String);
-            result = URL.createObjectURL(blob);
-            resolve(this.sanitizer.sanitize(SecurityContext.RESOURCE_URL, this.sanitizer.bypassSecurityTrustResourceUrl(result))!);
+            resolve(this.createUrlFromBlob(blob))
           }).catch(error => {
             reject(error);
           })
         }, error => reject(error));
-  
       } else {
         const base64String = localStorage.getItem("avatar")!;
   
         this.base64ToBlob(base64String).then(blob => {
-          result = URL.createObjectURL(blob);
-          resolve(this.sanitizer.sanitize(SecurityContext.RESOURCE_URL, this.sanitizer.bypassSecurityTrustResourceUrl(result))!);
-        }).catch(error => {
-          reject(error);
-        });
-      }
-    });
+        resolve(this.createUrlFromBlob(blob))
+      }).catch(error => {
+        reject(error);
+      })
+    }});
+  }
+  createUrlFromBlob(blob : Blob){
+    let result = URL.createObjectURL(blob);
+    return this.sanitizer.sanitize(SecurityContext.RESOURCE_URL, this.sanitizer.bypassSecurityTrustResourceUrl(result))!;
+  }
+  createUrlFromBlobProm(blob : Blob) : Promise<string>{
+    return new Promise<string>((resolve,reject) =>{
+      let result = URL.createObjectURL(blob);
+      resolve(this.sanitizer.sanitize(SecurityContext.RESOURCE_URL, this.sanitizer.bypassSecurityTrustResourceUrl(result))!);
+    })
   }
   blobToBase64(blob : Blob) : Promise<string> {
     return new Promise( (resolve, reject) => {

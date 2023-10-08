@@ -1,8 +1,7 @@
 package com.justbelieveinmyself.marta.domain.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.justbelieveinmyself.marta.domain.Role;
-import com.justbelieveinmyself.marta.domain.entities.Product;
+import com.justbelieveinmyself.marta.domain.enums.Role;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;

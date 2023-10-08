@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Product } from '../models/product';
+import { ProductWithImage } from '../models/product-with-image';
 
 @Injectable({
   providedIn: 'root'
@@ -12,8 +13,8 @@ export class ProductService {
 
   constructor(private httpClient: HttpClient) { }
 
-  getProductList() : Observable<Product[]>{
-    return this.httpClient.get<Product[]>(this.baseUrl);
+  getProductList() : Observable<ProductWithImage[]>{
+    return this.httpClient.get<ProductWithImage[]>(this.baseUrl);
   }
   addProduct(product : Product, preview : File) : Observable<Object>{
     const fd = new FormData();
