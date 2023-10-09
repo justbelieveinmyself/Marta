@@ -1,16 +1,18 @@
 package com.justbelieveinmyself.marta.services;
 
-import com.justbelieveinmyself.marta.domain.entities.User;
 import com.justbelieveinmyself.marta.domain.dto.JwtRequest;
 import com.justbelieveinmyself.marta.domain.dto.JwtResponse;
 import com.justbelieveinmyself.marta.domain.dto.RegUserDto;
 import com.justbelieveinmyself.marta.domain.dto.UserDto;
+import com.justbelieveinmyself.marta.domain.entities.User;
 import com.justbelieveinmyself.marta.exceptions.AppError;
 import com.justbelieveinmyself.marta.jwt.JwtProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.*;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.multipart.MultipartFile;

@@ -2,7 +2,6 @@ package com.justbelieveinmyself.marta.configs.beans;
 
 import com.justbelieveinmyself.marta.domain.enums.UploadTo;
 import com.justbelieveinmyself.marta.exceptions.AppError;
-import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -15,7 +14,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;

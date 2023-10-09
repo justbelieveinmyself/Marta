@@ -15,7 +15,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 @RestController
@@ -32,7 +31,7 @@ public class ProductController {
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> createProduct(
             @RequestPart("product") Product product,
-            @RequestPart("file") MultipartFile file
+            @RequestPart(value = "file", required = false) MultipartFile file
             ){
         product.setId(null);
         try {
@@ -70,8 +69,7 @@ public class ProductController {
         if(Objects.isNull(productFromDb)) {
             throw new NotFoundException("Product with [id] doesn't exists");
         }
-        Product updatedProduct = productService.updateProduct(productFromDb, product);
-        return updatedProduct;
+        return productService.updateProduct(productFromDb, product);
     }
 
 }

@@ -1,15 +1,15 @@
 package com.justbelieveinmyself.marta.services;
 
 import com.justbelieveinmyself.marta.configs.beans.FileHelper;
+import com.justbelieveinmyself.marta.domain.dto.RegUserDto;
+import com.justbelieveinmyself.marta.domain.entities.User;
 import com.justbelieveinmyself.marta.domain.enums.Role;
 import com.justbelieveinmyself.marta.domain.enums.UploadTo;
-import com.justbelieveinmyself.marta.domain.entities.User;
-import com.justbelieveinmyself.marta.domain.dto.RegUserDto;
 import com.justbelieveinmyself.marta.repositories.UserRepository;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -19,8 +19,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.util.*;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
+import java.util.UUID;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -57,18 +59,19 @@ public class UserService implements UserDetailsService {
 
     public User createNewUser(RegUserDto registrationUserDto, MultipartFile file) throws IOException {
         User user = new User();
-        user.setFirstName(registrationUserDto.getFirstName());
-        user.setLastName(registrationUserDto.getLastName());
-        user.setEmail(registrationUserDto.getEmail());
-        user.setUsername(registrationUserDto.getUsername());
-        user.setPhone(registrationUserDto.getPhone());
-        user.setCountry(registrationUserDto.getCountry());
-        user.setCity(registrationUserDto.getCity());
-        user.setAddress(registrationUserDto.getAddress());
-        user.setPostalCode(registrationUserDto.getPostalCode());
+        BeanUtils.copyProperties(registrationUserDto, user, "passwordConfirm", "password");
+//        user.setFirstName(registrationUserDto.getFirstName());
+//        user.setLastName(registrationUserDto.getLastName());
+//        user.setEmail(registrationUserDto.getEmail());
+//        user.setUsername(registrationUserDto.getUsername());
+//        user.setPhone(registrationUserDto.getPhone());
+//        user.setCountry(registrationUserDto.getCountry());
+//        user.setCity(registrationUserDto.getCity());
+//        user.setAddress(registrationUserDto.getAddress());
+//        user.setPostalCode(registrationUserDto.getPostalCode());
         user.setPassword(passwordEncoder.encode(registrationUserDto.getPassword()));
         user.setRoles(Set.of(Role.USER));
-        String path = uploadFile(file, UploadTo.AVATARS);
+        String path = fileHelper.uploadFile(file, UploadTo.AVATARS);
         user.setAvatar(path);
         return userRepository.save(user);
     }
@@ -78,23 +81,8 @@ public class UserService implements UserDetailsService {
         return userRepository.save(user);
     }
 
-
-    public String uploadFile(MultipartFile file, UploadTo to) throws IOException {
-        if(file != null && !Objects.requireNonNull(file.getOriginalFilename()).isEmpty()){
-            File uploadDir = new File(uploadPath);
-            if(!uploadDir.exists()){
-                uploadDir.mkdir();
-            }
-            String uuidFile = UUID.randomUUID().toString();
-            String filename = uuidFile + "." + file.getOriginalFilename();
-            file.transferTo(new File(uploadPath + "/" + to.getPath() + "/"  + filename));
-            return filename;
-        }
-        return null;
-    }
-
     public void updateAvatar(User user, MultipartFile file) throws IOException {
-        String path = uploadFile(file, UploadTo.AVATARS);
+        String path = fileHelper.uploadFile(file, UploadTo.AVATARS);
         user.setAvatar(path);
         userRepository.save(user);
     }

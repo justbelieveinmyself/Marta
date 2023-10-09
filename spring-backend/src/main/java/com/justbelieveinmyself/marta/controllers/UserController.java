@@ -1,26 +1,20 @@
 package com.justbelieveinmyself.marta.controllers;
 
-import com.justbelieveinmyself.marta.configs.beans.FileHelper;
-import com.justbelieveinmyself.marta.domain.entities.User;
 import com.justbelieveinmyself.marta.domain.dto.JwtResponse;
+import com.justbelieveinmyself.marta.domain.entities.User;
 import com.justbelieveinmyself.marta.exceptions.AppError;
 import com.justbelieveinmyself.marta.exceptions.NotFoundException;
 import com.justbelieveinmyself.marta.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
-import org.springframework.http.*;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Objects;
 
 @Controller
@@ -36,13 +30,12 @@ public class UserController {
         if(Objects.isNull(user)) throw new NotFoundException("User with [id] doesn't exists");
         User updatedUser = userService.updateEmail(user, email);
         JwtResponse response = new JwtResponse(null,updatedUser);
-        return new ResponseEntity<>(response,HttpStatusCode.valueOf(200));
+        return new ResponseEntity<>(response, HttpStatusCode.valueOf(200));
     }
     @GetMapping("{id}/avatar")
     public ResponseEntity<?> getAvatar(@PathVariable("id") User user) throws IOException {
         if(Objects.isNull(user)) throw new NotFoundException("User with [id] doesn't exists");
-        ResponseEntity<?> response = userService.getAvatar(user.getAvatar());
-        return response;
+        return userService.getAvatar(user.getAvatar());
 
     }
     @PutMapping(value = "{id}/avatar", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
@@ -53,8 +46,9 @@ public class UserController {
             this.userService.updateAvatar(user, file);
             return ResponseEntity.ok().build();
         } catch (IOException e) {
-            return new ResponseEntity<>(new AppError(HttpStatus.NOT_FOUND.value(), "Cannot update avatar!")
-                    , HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new AppError(HttpStatus.NOT_FOUND.value(),
+                    "Cannot update avatar!"),
+                    HttpStatus.NOT_FOUND);
         }
     }
 }

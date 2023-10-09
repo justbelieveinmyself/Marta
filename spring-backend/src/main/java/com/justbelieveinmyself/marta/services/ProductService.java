@@ -2,8 +2,8 @@ package com.justbelieveinmyself.marta.services;
 
 import com.justbelieveinmyself.marta.configs.beans.FileHelper;
 import com.justbelieveinmyself.marta.domain.dto.ProductDto;
-import com.justbelieveinmyself.marta.domain.enums.UploadTo;
 import com.justbelieveinmyself.marta.domain.entities.Product;
+import com.justbelieveinmyself.marta.domain.enums.UploadTo;
 import com.justbelieveinmyself.marta.repositories.ProductRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +14,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.Base64;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 public class ProductService {
@@ -28,7 +26,8 @@ public class ProductService {
         List<Product> products = productRepository.findAll();
 
         List<ProductDto> productDtoList = products.stream()
-                .map(pro -> new ProductDto(pro, Base64.getEncoder().encodeToString(fileHelper.downloadFileAsByteArray(pro.getPreviewImg(), UploadTo.PRODUCTS))))
+                .map(pro -> new ProductDto(pro, Base64.getEncoder().encodeToString(
+                        fileHelper.downloadFileAsByteArray(pro.getPreviewImg(), UploadTo.PRODUCTS))))
                 .toList();
         return ResponseEntity.ok(productDtoList);
     }
