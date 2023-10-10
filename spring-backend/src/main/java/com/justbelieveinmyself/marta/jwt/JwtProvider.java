@@ -42,7 +42,7 @@ public class JwtProvider {
                 .signWith(SignatureAlgorithm.HS256, secret)
                 .compact();
     }
-
+    
     public String getUsername(String token) {
         return getAllClaimsFromToken(token).getSubject();
     }

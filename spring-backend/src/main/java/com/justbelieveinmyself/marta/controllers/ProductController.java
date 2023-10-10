@@ -1,7 +1,6 @@
 package com.justbelieveinmyself.marta.controllers;
 
 import com.justbelieveinmyself.marta.domain.annotations.CurrentUser;
-import com.justbelieveinmyself.marta.domain.dto.JwtRequest;
 import com.justbelieveinmyself.marta.domain.entities.Product;
 import com.justbelieveinmyself.marta.domain.entities.User;
 import com.justbelieveinmyself.marta.exceptions.AppError;
@@ -13,7 +12,6 @@ import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -41,14 +39,13 @@ public class ProductController {
     }
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    @Parameter(in = ParameterIn.HEADER, schema = @Schema(type = "string", exampleClasses = {JwtRequest.class}, name = "login"))
     public ResponseEntity<?> createProduct(
             @RequestPart("product") Product product,
             @RequestPart(value = "file", required = false) MultipartFile file,
             @CurrentUser User currentUser
     ) {
         try {
-            return productService.saveProduct(product, file, currentUser);
+            return productService.createProduct(product, file, currentUser);
         } catch (IOException e) {
             return new ResponseEntity<>(new AppError(HttpStatus.NOT_FOUND.value(),
                     "Product not created, cannot save preview file"),

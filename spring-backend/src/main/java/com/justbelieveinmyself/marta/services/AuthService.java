@@ -1,8 +1,8 @@
 package com.justbelieveinmyself.marta.services;
 
-import com.justbelieveinmyself.marta.domain.dto.JwtRequest;
-import com.justbelieveinmyself.marta.domain.dto.JwtResponse;
-import com.justbelieveinmyself.marta.domain.dto.RegUserDto;
+import com.justbelieveinmyself.marta.domain.dto.auth.JwtRequestDto;
+import com.justbelieveinmyself.marta.domain.dto.auth.JwtResponseDto;
+import com.justbelieveinmyself.marta.domain.dto.auth.RegisterDto;
 import com.justbelieveinmyself.marta.domain.dto.UserDto;
 import com.justbelieveinmyself.marta.domain.entities.User;
 import com.justbelieveinmyself.marta.exceptions.AppError;
@@ -28,7 +28,7 @@ public class AuthService {
     @Autowired
     private AuthenticationManager authenticationManager;
 
-    public ResponseEntity<?> createAuthToken(@RequestBody JwtRequest authRequest) {
+    public ResponseEntity<?> createAuthToken(@RequestBody JwtRequestDto authRequest) {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken
                     (authRequest.getUsername(), authRequest.getPassword()));
@@ -40,12 +40,12 @@ public class AuthService {
         }
         User userDetails = userService.loadUserByUsername(authRequest.getUsername());
         String token = jwtProvider.generateToken(userDetails);
-        JwtResponse jwtResponse = new JwtResponse(token, userDetails);
-        return ResponseEntity.ok(jwtResponse);
+        JwtResponseDto jwtResponseDTO = new JwtResponseDto(token, userDetails);
+        return ResponseEntity.ok(jwtResponseDTO);
     }
 
 
-    public ResponseEntity<?> createNewUser(RegUserDto registrationUserDto, MultipartFile file) throws IOException {
+    public ResponseEntity<?> createNewUser(RegisterDto registrationUserDto, MultipartFile file) throws IOException {
         if (!registrationUserDto.getPassword().equals(registrationUserDto.getPasswordConfirm())) {
             return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(),
                     "Passwords different"),

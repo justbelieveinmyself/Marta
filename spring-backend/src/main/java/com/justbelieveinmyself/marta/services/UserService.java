@@ -1,15 +1,19 @@
 package com.justbelieveinmyself.marta.services;
 
 import com.justbelieveinmyself.marta.configs.beans.FileHelper;
-import com.justbelieveinmyself.marta.domain.dto.RegUserDto;
+import com.justbelieveinmyself.marta.domain.dto.auth.JwtResponseDto;
+import com.justbelieveinmyself.marta.domain.dto.auth.RegisterDto;
 import com.justbelieveinmyself.marta.domain.entities.User;
 import com.justbelieveinmyself.marta.domain.enums.Role;
-import com.justbelieveinmyself.marta.domain.enums.UploadTo;
+import com.justbelieveinmyself.marta.domain.enums.UploadDirectory;
+import com.justbelieveinmyself.marta.exceptions.AppError;
+import com.justbelieveinmyself.marta.exceptions.ResponseMessage;
 import com.justbelieveinmyself.marta.repositories.UserRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -17,12 +21,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
-import java.util.UUID;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -33,8 +35,6 @@ public class UserService implements UserDetailsService {
     private PasswordEncoder passwordEncoder;
     @Autowired
     private FileHelper fileHelper;
-    @Value("${upload.path}")
-    private String uploadPath;
     public List<User> getListUsers(){
         return userRepository.findAll();
     }
@@ -57,37 +57,49 @@ public class UserService implements UserDetailsService {
         return userRepository.findByUsername(username);
     }
 
-    public User createNewUser(RegUserDto registrationUserDto, MultipartFile file) throws IOException {
+    public User createNewUser(RegisterDto registrationUserDto, MultipartFile file) throws IOException {
         User user = new User();
         BeanUtils.copyProperties(registrationUserDto, user, "passwordConfirm", "password");
-//        user.setFirstName(registrationUserDto.getFirstName());
-//        user.setLastName(registrationUserDto.getLastName());
-//        user.setEmail(registrationUserDto.getEmail());
-//        user.setUsername(registrationUserDto.getUsername());
-//        user.setPhone(registrationUserDto.getPhone());
-//        user.setCountry(registrationUserDto.getCountry());
-//        user.setCity(registrationUserDto.getCity());
-//        user.setAddress(registrationUserDto.getAddress());
-//        user.setPostalCode(registrationUserDto.getPostalCode());
         user.setPassword(passwordEncoder.encode(registrationUserDto.getPassword()));
         user.setRoles(Set.of(Role.USER));
-        String path = fileHelper.uploadFile(file, UploadTo.AVATARS);
+        String path = fileHelper.uploadFile(file, UploadDirectory.AVATARS);
         user.setAvatar(path);
         return userRepository.save(user);
     }
 
-    public User updateEmail(User user, String email) {
+    public ResponseEntity<?> updateEmail(User user, String email, User authUser) {
+        if(!isHasRights(authUser, user)){
+            return new ResponseEntity<>(new AppError(HttpStatus.FORBIDDEN.value(),
+                    "You don't have the rights!"),
+                    HttpStatus.FORBIDDEN);
+        }
         user.setEmail(email);
-        return userRepository.save(user);
+        User savedUser = userRepository.save(user);
+        return ResponseEntity.ok(new JwtResponseDto(null, savedUser));
     }
 
-    public void updateAvatar(User user, MultipartFile file) throws IOException {
-        String path = fileHelper.uploadFile(file, UploadTo.AVATARS);
+    public ResponseEntity<?> updateAvatar(User user, MultipartFile file, User authUser) throws IOException {
+        if(!isHasRights(authUser, user)){
+            return new ResponseEntity<>(new AppError(HttpStatus.FORBIDDEN.value(),
+                    "You don't have the rights!"),
+                    HttpStatus.FORBIDDEN);
+        }
+        String path = fileHelper.uploadFile(file, UploadDirectory.AVATARS);
         user.setAvatar(path);
         userRepository.save(user);
+        return ResponseEntity.ok(new ResponseMessage(201, "Updated"));
     }
 
-    public ResponseEntity<?> getAvatar(String filename) throws IOException {
-        return fileHelper.downloadFile(filename, UploadTo.AVATARS);
+    public ResponseEntity<?> getAvatar(User user, User authUser) {
+        if(!isHasRights(authUser, user)){
+            return new ResponseEntity<>(new AppError(HttpStatus.FORBIDDEN.value(),
+                    "You don't have the rights!"),
+                    HttpStatus.FORBIDDEN);
+        }
+        return fileHelper.downloadFile(user.getAvatar(), UploadDirectory.AVATARS);
+    }
+
+    private boolean isHasRights(User userFromAuthToken, User userToEdit) {
+        return userToEdit.getId().equals(userFromAuthToken.getId());
     }
 }

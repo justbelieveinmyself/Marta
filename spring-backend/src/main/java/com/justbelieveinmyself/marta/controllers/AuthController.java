@@ -1,7 +1,7 @@
 package com.justbelieveinmyself.marta.controllers;
 
-import com.justbelieveinmyself.marta.domain.dto.JwtRequest;
-import com.justbelieveinmyself.marta.domain.dto.RegUserDto;
+import com.justbelieveinmyself.marta.domain.dto.auth.JwtRequestDto;
+import com.justbelieveinmyself.marta.domain.dto.auth.RegisterDto;
 import com.justbelieveinmyself.marta.exceptions.AppError;
 import com.justbelieveinmyself.marta.services.AuthService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -25,10 +25,10 @@ public class AuthController {
     private AuthService authService;
 
     @PostMapping(value = "/register", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<?> register(@RequestPart("regUser") RegUserDto regUserDto,
+    public ResponseEntity<?> register(@RequestPart("regUser") RegisterDto registerDTO,
                                       @RequestPart(name = "file",required = false) MultipartFile file){
         try {
-            return authService.createNewUser(regUserDto, file);
+            return authService.createNewUser(registerDTO, file);
         } catch (IOException e) {
             System.out.println("Failed to save profile image!");
             System.out.println(e.getMessage());
@@ -39,7 +39,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody JwtRequest jwtRequest){
-        return authService.createAuthToken(jwtRequest);
+    public ResponseEntity<?> login(@RequestBody JwtRequestDto jwtRequestDTO){
+        return authService.createAuthToken(jwtRequestDTO);
     }
 }

@@ -4,7 +4,7 @@ import com.justbelieveinmyself.marta.configs.beans.FileHelper;
 import com.justbelieveinmyself.marta.domain.dto.ProductDto;
 import com.justbelieveinmyself.marta.domain.entities.Product;
 import com.justbelieveinmyself.marta.domain.entities.User;
-import com.justbelieveinmyself.marta.domain.enums.UploadTo;
+import com.justbelieveinmyself.marta.domain.enums.UploadDirectory;
 import com.justbelieveinmyself.marta.exceptions.AppError;
 import com.justbelieveinmyself.marta.exceptions.ResponseMessage;
 import com.justbelieveinmyself.marta.repositories.ProductRepository;
@@ -31,12 +31,12 @@ public class ProductService {
 
         List<ProductDto> productDtoList = products.stream()
                 .map(pro -> new ProductDto(pro, Base64.getEncoder().encodeToString(
-                        fileHelper.downloadFileAsByteArray(pro.getPreviewImg(), UploadTo.PRODUCTS))))
+                        fileHelper.downloadFileAsByteArray(pro.getPreviewImg(), UploadDirectory.PRODUCTS))))
                 .toList();
         return ResponseEntity.ok(productDtoList);
     }
 
-    public ResponseEntity<?> saveProduct(Product product, MultipartFile previewImage, User currentUser) throws IOException {
+    public ResponseEntity<?> createProduct(Product product, MultipartFile previewImage, User currentUser) throws IOException {
 
         if(!isHasRights(product, currentUser)){
             return new ResponseEntity<>(new AppError(HttpStatus.FORBIDDEN.value(),
@@ -45,7 +45,7 @@ public class ProductService {
         }
 
         product.setId(null);
-        String imagePath = fileHelper.uploadFile(previewImage, UploadTo.PRODUCTS);
+        String imagePath = fileHelper.uploadFile(previewImage, UploadDirectory.PRODUCTS);
         product.setPreviewImg(imagePath);
         return ResponseEntity.ok(productRepository.save(product));
     }

@@ -1,6 +1,6 @@
 package com.justbelieveinmyself.marta.configs.beans;
 
-import com.justbelieveinmyself.marta.domain.enums.UploadTo;
+import com.justbelieveinmyself.marta.domain.enums.UploadDirectory;
 import com.justbelieveinmyself.marta.exceptions.AppError;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -23,7 +23,7 @@ import java.util.UUID;
 public class FileHelper {
     @Value("${upload.path}")
     private String uploadPath;
-    public String uploadFile(MultipartFile file, UploadTo to) throws IOException {
+    public String uploadFile(MultipartFile file, UploadDirectory to) throws IOException {
         if (file != null && !Objects.requireNonNull(file.getOriginalFilename()).isEmpty()) {
             File uploadDir = new File(uploadPath);
             if (!uploadDir.exists()) {
@@ -36,7 +36,7 @@ public class FileHelper {
         }
         return null;
     }
-    public ResponseEntity<?> downloadFile(String filename, UploadTo from) {
+    public ResponseEntity<?> downloadFile(String filename, UploadDirectory from) {
         String uploadPath = "C:/users/shadow/IdeaProjects/Marta/uploads";
         try {
             Path filePath = Paths.get(uploadPath + "/" + from.getPath() + "/" + filename);
@@ -55,7 +55,7 @@ public class FileHelper {
                     , HttpStatus.NOT_FOUND);
         }
     }
-    public byte[] downloadFileAsByteArray(String filename, UploadTo from) {
+    public byte[] downloadFileAsByteArray(String filename, UploadDirectory from) {
         String uploadPath = "C:/users/shadow/IdeaProjects/Marta/uploads";
         try {
             Path filePath = Paths.get(uploadPath + "/" + from.getPath() + "/" + filename);
@@ -63,7 +63,7 @@ public class FileHelper {
                 throw new FileNotFoundException("File not found");
             }
             Resource resource = new UrlResource(filePath.toUri());
-            if(resource.equals(null)) {
+            if(!resource.exists()) {
                 throw new FileNotFoundException("File not found");
             }
             return resource.getContentAsByteArray();
