@@ -2,6 +2,7 @@ package com.justbelieveinmyself.marta.domain.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.justbelieveinmyself.marta.domain.enums.Role;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
@@ -10,7 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
-
+@Schema(description = "Information about User")
 @Entity
 @Table(name = "users")
 @Data
@@ -19,33 +20,25 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @JsonIgnore
     private String firstName;
 
-    @JsonIgnore
     private String lastName;
 
     private String username;
 
-    @JsonIgnore
     private String password;
 
-    @JsonIgnore
     private String email;
 
-    @JsonIgnore
     private Integer age;
 
-    @JsonIgnore
     private String gender;
 
     @Enumerated(EnumType.STRING)
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
-    @JsonIgnore
     private Set<Role> roles;
 
-    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "seller")
     private List<Product> products;
     private String avatar;
@@ -84,5 +77,65 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+    @JsonIgnore
+    public String getCity() {
+        return city;
+    }
 
+    @JsonIgnore
+    public String getFirstName() {
+        return firstName;
+    }
+    @JsonIgnore
+    public String getLastName() {
+        return lastName;
+    }
+    @JsonIgnore
+    public String getPassword() {
+        return password;
+    }
+    @JsonIgnore
+    public String getEmail() {
+        return email;
+    }
+    @JsonIgnore
+    public Integer getAge() {
+        return age;
+    }
+    @JsonIgnore
+    public String getGender() {
+        return gender;
+    }
+    @JsonIgnore
+    public Set<Role> getRoles() {
+        return roles;
+    }
+    @JsonIgnore
+    public List<Product> getProducts() {
+        return products;
+    }
+    @JsonIgnore
+    public String getAvatar() {
+        return avatar;
+    }
+    @JsonIgnore
+    public String getPhone() {
+        return phone;
+    }
+    @JsonIgnore
+    public String getAddress() {
+        return address;
+    }
+    @JsonIgnore
+    public String getPostalCode() {
+        return postalCode;
+    }
+    @JsonIgnore
+    public String getCountry() {
+        return country;
+    }
+    @JsonIgnore
+    public Double getBalance() {
+        return balance;
+    }
 }

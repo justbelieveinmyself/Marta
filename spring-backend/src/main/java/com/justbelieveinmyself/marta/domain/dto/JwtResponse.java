@@ -1,10 +1,11 @@
 package com.justbelieveinmyself.marta.domain.dto;
 
 import com.justbelieveinmyself.marta.domain.enums.Role;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 import java.util.Set;
-
+@Schema(description = "DTO for response to client with token")
 @Data
 @AllArgsConstructor
 public class JwtResponse {

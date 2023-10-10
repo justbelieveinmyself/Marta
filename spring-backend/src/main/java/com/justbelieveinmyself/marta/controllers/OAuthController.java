@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.justbelieveinmyself.marta.domain.dto.TokenDto;
 import com.justbelieveinmyself.marta.domain.entities.User;
 import com.justbelieveinmyself.marta.services.UserService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,6 +19,10 @@ import java.util.Map;
 @RestController
 @RequestMapping("/oauth")
 @CrossOrigin
+@Tag(
+        name = "OAuth",
+        description = "The OAuth API"
+)
 public class OAuthController {
     @Autowired
     private UserService userService;

@@ -4,6 +4,7 @@ import com.justbelieveinmyself.marta.domain.dto.JwtRequest;
 import com.justbelieveinmyself.marta.domain.dto.RegUserDto;
 import com.justbelieveinmyself.marta.exceptions.AppError;
 import com.justbelieveinmyself.marta.services.AuthService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -15,6 +16,10 @@ import java.io.IOException;
 
 @RestController
 @RequestMapping("/auth")
+@Tag(
+        name = "Auth",
+        description = "The Auth API"
+)
 public class AuthController {
     @Autowired
     private AuthService authService;

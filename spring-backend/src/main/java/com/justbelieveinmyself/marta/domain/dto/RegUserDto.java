@@ -1,9 +1,9 @@
 package com.justbelieveinmyself.marta.domain.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.web.bind.annotation.GetMapping;
-
+@Schema(title = "RegisterDTO", description = "DTO for register new User")
 @Getter
 @Setter
 public class RegUserDto {

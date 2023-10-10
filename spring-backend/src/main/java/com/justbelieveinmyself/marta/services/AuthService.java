@@ -34,8 +34,9 @@ public class AuthService {
                     (authRequest.getUsername(), authRequest.getPassword()));
         } catch (BadCredentialsException e) {
             System.out.println("Bad credentials!");
-            return new ResponseEntity<>(new AppError(HttpStatus.UNAUTHORIZED.value(), "Bad credentials!")
-                    , HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new AppError(HttpStatus.UNAUTHORIZED.value(),
+                    "Bad credentials!"),
+                    HttpStatus.UNAUTHORIZED);
         }
         User userDetails = userService.loadUserByUsername(authRequest.getUsername());
         String token = jwtProvider.generateToken(userDetails);
@@ -46,12 +47,14 @@ public class AuthService {
 
     public ResponseEntity<?> createNewUser(RegUserDto registrationUserDto, MultipartFile file) throws IOException {
         if (!registrationUserDto.getPassword().equals(registrationUserDto.getPasswordConfirm())) {
-            return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(), "Passwords different")
-                    , HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(),
+                    "Passwords different"),
+                    HttpStatus.BAD_REQUEST);
         }
         if (userService.findByUsername(registrationUserDto.getUsername()) != null) {
-            return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(), "User with nickname already exists")
-                    , HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(),
+                    "User with nickname already exists"),
+                    HttpStatus.BAD_REQUEST);
         }
         User user = userService.createNewUser(registrationUserDto, file);
         return ResponseEntity.ok(new UserDto(user.getId(), user.getUsername(), user.getEmail()));

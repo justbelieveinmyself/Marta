@@ -3,10 +3,14 @@ package com.justbelieveinmyself.marta.services;
 import com.justbelieveinmyself.marta.configs.beans.FileHelper;
 import com.justbelieveinmyself.marta.domain.dto.ProductDto;
 import com.justbelieveinmyself.marta.domain.entities.Product;
+import com.justbelieveinmyself.marta.domain.entities.User;
 import com.justbelieveinmyself.marta.domain.enums.UploadTo;
+import com.justbelieveinmyself.marta.exceptions.AppError;
+import com.justbelieveinmyself.marta.exceptions.ResponseMessage;
 import com.justbelieveinmyself.marta.repositories.ProductRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -32,18 +36,41 @@ public class ProductService {
         return ResponseEntity.ok(productDtoList);
     }
 
-    public Product saveProduct(Product product, MultipartFile previewImage) throws IOException {
+    public ResponseEntity<?> saveProduct(Product product, MultipartFile previewImage, User currentUser) throws IOException {
+
+        if(!isHasRights(product, currentUser)){
+            return new ResponseEntity<>(new AppError(HttpStatus.FORBIDDEN.value(),
+                    "You don't have the rights!"),
+                    HttpStatus.FORBIDDEN);
+        }
+
+        product.setId(null);
         String imagePath = fileHelper.uploadFile(previewImage, UploadTo.PRODUCTS);
         product.setPreviewImg(imagePath);
-        return productRepository.save(product);
+        return ResponseEntity.ok(productRepository.save(product));
     }
 
-    public void deleteProduct(Product product) {
+    public ResponseEntity<?> deleteProduct(Product product, User currentUser) {
+        if(!isHasRights(product, currentUser)){
+            return new ResponseEntity<>(new AppError(HttpStatus.FORBIDDEN.value(),
+                    "You don't have the rights!"),
+                    HttpStatus.FORBIDDEN);
+        }
         productRepository.delete(product);
+        return ResponseEntity.ok(new ResponseMessage(200, "deleted"));
     }
 
-    public Product updateProduct(Product productFromDb, Product product) {
+    public ResponseEntity<?> updateProduct(Product productFromDb, Product product, User currentUser) {
+        if(!isHasRights(productFromDb, currentUser)){
+            return new ResponseEntity<>(new AppError(HttpStatus.FORBIDDEN.value(),
+                    "You don't have the rights!"),
+                    HttpStatus.FORBIDDEN);
+        }
         BeanUtils.copyProperties(product, productFromDb, "id");
-        return productRepository.save(productFromDb);
+        return ResponseEntity.ok(productRepository.save(productFromDb));
+    }
+
+    private boolean isHasRights(Product product, User currentUser) {
+        return product.getSeller().getId().equals(currentUser.getId());
     }
 }

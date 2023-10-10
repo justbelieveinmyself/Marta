@@ -8,8 +8,8 @@ import { ProductWithImage } from '../models/product-with-image';
   providedIn: 'root'
 })
 export class ProductService {
-  
-  private baseUrl = "http://localhost:8080/product";
+
+  private baseUrl = "http://localhost:8080/products";
 
   constructor(private httpClient: HttpClient) { }
 

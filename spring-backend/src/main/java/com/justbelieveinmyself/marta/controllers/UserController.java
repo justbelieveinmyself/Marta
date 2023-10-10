@@ -5,6 +5,7 @@ import com.justbelieveinmyself.marta.domain.entities.User;
 import com.justbelieveinmyself.marta.exceptions.AppError;
 import com.justbelieveinmyself.marta.exceptions.NotFoundException;
 import com.justbelieveinmyself.marta.services.UserService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -18,13 +19,17 @@ import java.io.IOException;
 import java.util.Objects;
 
 @Controller
-@RequestMapping("/profile")
+@RequestMapping("/profiles")
+@Tag(
+        name = "User",
+        description = "The User API"
+)
 public class UserController {
     @Autowired
     private UserService userService;
-    @PutMapping("{id}/changeEmail")
+    @PutMapping("{profileId}/email")
     public ResponseEntity<?> updateEmail(
-            @PathVariable("id")User user,
+            @PathVariable("profileId")User user,
             @RequestBody String email
             ){
         if(Objects.isNull(user)) throw new NotFoundException("User with [id] doesn't exists");
@@ -32,15 +37,19 @@ public class UserController {
         JwtResponse response = new JwtResponse(null,updatedUser);
         return new ResponseEntity<>(response, HttpStatusCode.valueOf(200));
     }
-    @GetMapping("{id}/avatar")
-    public ResponseEntity<?> getAvatar(@PathVariable("id") User user) throws IOException {
+    @GetMapping("{profileId}/avatar")
+    public ResponseEntity<?> getAvatar(
+            @PathVariable("profileId") User user
+    ) throws IOException {
         if(Objects.isNull(user)) throw new NotFoundException("User with [id] doesn't exists");
         return userService.getAvatar(user.getAvatar());
 
     }
-    @PutMapping(value = "{id}/avatar", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<?> updateAvatar(@PathVariable("id") User user,
-                                          @RequestParam("file") MultipartFile file){
+    @PutMapping(value = "{profileId}/avatar", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<?> updateAvatar(
+            @PathVariable("profileId") User user,
+            @RequestParam("file") MultipartFile file
+    ){
         if(Objects.isNull(user)) throw new NotFoundException("User with [id] doesn't exists");
         try {
             this.userService.updateAvatar(user, file);

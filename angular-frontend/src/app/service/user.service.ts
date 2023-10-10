@@ -8,12 +8,12 @@ import { Observable } from 'rxjs';
 })
 export class UserService {
   private oauthUrl = "http://localhost:8080/oauth";
-  private baseUrl = "http://localhost:8080/profile";
+  private baseUrl = "http://localhost:8080/profiles";
   constructor(
     private httpClient: HttpClient,
     private tokenService: TokenService
     ) { }
-    
+
   getUserFromDbByOauth(userId: string, token: string){
     const tokenDto = {
       userId, token
@@ -24,7 +24,7 @@ export class UserService {
   }
 
   updateEmail(userid: number, email: string){
-    this.httpClient.put(`${this.baseUrl}/${userid}/changeEmail`, email).subscribe((data : any) => {
+    this.httpClient.put(`${this.baseUrl}/${userid}/email`, email).subscribe((data : any) => {
       this.tokenService.setUser(data.user);
     });
   }

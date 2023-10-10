@@ -5,7 +5,6 @@ import { EncryptionService } from './encryption.service';
 
 const TOKEN_KEY = 'AuthToken';
 const USER_KEY = 'AuthUser';
-const TOKEN_TTL_MS = 1800000;
 @Injectable({
   providedIn: 'root'
 })
@@ -40,11 +39,11 @@ export class TokenService {
   public isLogged() {
     return this.loggedIn.asObservable();
   }
-  
+
   public logOut(): void {
     window.sessionStorage.clear();
     window.localStorage.clear();
     this.loggedIn.next(false);
   }
-  
+
 }
