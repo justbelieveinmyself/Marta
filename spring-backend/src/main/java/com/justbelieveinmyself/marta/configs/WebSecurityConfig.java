@@ -1,6 +1,5 @@
 package com.justbelieveinmyself.marta.configs;
 
-import com.justbelieveinmyself.marta.jwt.JwtRequestFilter;
 import com.justbelieveinmyself.marta.services.UserService;
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;

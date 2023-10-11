@@ -48,6 +48,9 @@ public class User implements UserDetails {
     private String postalCode;
     private String country;
     private Double balance;
+    @OneToOne(mappedBy = "user")
+    private RefreshToken refreshToken;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return getRoles();

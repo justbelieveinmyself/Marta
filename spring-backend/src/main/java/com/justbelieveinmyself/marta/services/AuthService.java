@@ -5,7 +5,7 @@ import com.justbelieveinmyself.marta.domain.dto.auth.JwtResponseDto;
 import com.justbelieveinmyself.marta.domain.dto.auth.RegisterDto;
 import com.justbelieveinmyself.marta.domain.dto.UserDto;
 import com.justbelieveinmyself.marta.domain.entities.User;
-import com.justbelieveinmyself.marta.exceptions.AppError;
+import com.justbelieveinmyself.marta.exceptions.ResponseError;
 import com.justbelieveinmyself.marta.jwt.JwtProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -34,7 +34,7 @@ public class AuthService {
                     (authRequest.getUsername(), authRequest.getPassword()));
         } catch (BadCredentialsException e) {
             System.out.println("Bad credentials!");
-            return new ResponseEntity<>(new AppError(HttpStatus.UNAUTHORIZED.value(),
+            return new ResponseEntity<>(new ResponseError(HttpStatus.UNAUTHORIZED.value(),
                     "Bad credentials!"),
                     HttpStatus.UNAUTHORIZED);
         }
@@ -47,12 +47,12 @@ public class AuthService {
 
     public ResponseEntity<?> createNewUser(RegisterDto registrationUserDto, MultipartFile file) throws IOException {
         if (!registrationUserDto.getPassword().equals(registrationUserDto.getPasswordConfirm())) {
-            return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(),
+            return new ResponseEntity<>(new ResponseError(HttpStatus.BAD_REQUEST.value(),
                     "Passwords different"),
                     HttpStatus.BAD_REQUEST);
         }
         if (userService.findByUsername(registrationUserDto.getUsername()) != null) {
-            return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(),
+            return new ResponseEntity<>(new ResponseError(HttpStatus.BAD_REQUEST.value(),
                     "User with nickname already exists"),
                     HttpStatus.BAD_REQUEST);
         }

@@ -1,7 +1,7 @@
 package com.justbelieveinmyself.marta.configs.beans;
 
 import com.justbelieveinmyself.marta.domain.enums.UploadDirectory;
-import com.justbelieveinmyself.marta.exceptions.AppError;
+import com.justbelieveinmyself.marta.exceptions.ResponseError;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -51,7 +51,7 @@ public class FileHelper {
                     .headers(httpHeaders).body(resource);
         }
         catch (IOException exception){
-            return new ResponseEntity<>(new AppError(HttpStatus.NOT_FOUND.value(), "File not found!")
+            return new ResponseEntity<>(new ResponseError(HttpStatus.NOT_FOUND.value(), "File not found!")
                     , HttpStatus.NOT_FOUND);
         }
     }

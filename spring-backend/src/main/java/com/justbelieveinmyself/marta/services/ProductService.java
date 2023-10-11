@@ -5,7 +5,7 @@ import com.justbelieveinmyself.marta.domain.dto.ProductDto;
 import com.justbelieveinmyself.marta.domain.entities.Product;
 import com.justbelieveinmyself.marta.domain.entities.User;
 import com.justbelieveinmyself.marta.domain.enums.UploadDirectory;
-import com.justbelieveinmyself.marta.exceptions.AppError;
+import com.justbelieveinmyself.marta.exceptions.ResponseError;
 import com.justbelieveinmyself.marta.exceptions.ResponseMessage;
 import com.justbelieveinmyself.marta.repositories.ProductRepository;
 import org.springframework.beans.BeanUtils;
@@ -39,7 +39,7 @@ public class ProductService {
     public ResponseEntity<?> createProduct(Product product, MultipartFile previewImage, User currentUser) throws IOException {
 
         if(!isHasRights(product, currentUser)){
-            return new ResponseEntity<>(new AppError(HttpStatus.FORBIDDEN.value(),
+            return new ResponseEntity<>(new ResponseError(HttpStatus.FORBIDDEN.value(),
                     "You don't have the rights!"),
                     HttpStatus.FORBIDDEN);
         }
@@ -52,7 +52,7 @@ public class ProductService {
 
     public ResponseEntity<?> deleteProduct(Product product, User currentUser) {
         if(!isHasRights(product, currentUser)){
-            return new ResponseEntity<>(new AppError(HttpStatus.FORBIDDEN.value(),
+            return new ResponseEntity<>(new ResponseError(HttpStatus.FORBIDDEN.value(),
                     "You don't have the rights!"),
                     HttpStatus.FORBIDDEN);
         }
@@ -62,7 +62,7 @@ public class ProductService {
 
     public ResponseEntity<?> updateProduct(Product productFromDb, Product product, User currentUser) {
         if(!isHasRights(productFromDb, currentUser)){
-            return new ResponseEntity<>(new AppError(HttpStatus.FORBIDDEN.value(),
+            return new ResponseEntity<>(new ResponseError(HttpStatus.FORBIDDEN.value(),
                     "You don't have the rights!"),
                     HttpStatus.FORBIDDEN);
         }
