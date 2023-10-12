@@ -6,12 +6,11 @@ import com.justbelieveinmyself.marta.domain.dto.auth.RegisterDto;
 import com.justbelieveinmyself.marta.domain.entities.User;
 import com.justbelieveinmyself.marta.domain.enums.Role;
 import com.justbelieveinmyself.marta.domain.enums.UploadDirectory;
-import com.justbelieveinmyself.marta.exceptions.AppError;
+import com.justbelieveinmyself.marta.exceptions.ResponseError;
 import com.justbelieveinmyself.marta.exceptions.ResponseMessage;
 import com.justbelieveinmyself.marta.repositories.UserRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -69,7 +68,7 @@ public class UserService implements UserDetailsService {
 
     public ResponseEntity<?> updateEmail(User user, String email, User authUser) {
         if(!isHasRights(authUser, user)){
-            return new ResponseEntity<>(new AppError(HttpStatus.FORBIDDEN.value(),
+            return new ResponseEntity<>(new ResponseError(HttpStatus.FORBIDDEN.value(),
                     "You don't have the rights!"),
                     HttpStatus.FORBIDDEN);
         }
@@ -80,7 +79,7 @@ public class UserService implements UserDetailsService {
 
     public ResponseEntity<?> updateAvatar(User user, MultipartFile file, User authUser) throws IOException {
         if(!isHasRights(authUser, user)){
-            return new ResponseEntity<>(new AppError(HttpStatus.FORBIDDEN.value(),
+            return new ResponseEntity<>(new ResponseError(HttpStatus.FORBIDDEN.value(),
                     "You don't have the rights!"),
                     HttpStatus.FORBIDDEN);
         }
@@ -92,7 +91,7 @@ public class UserService implements UserDetailsService {
 
     public ResponseEntity<?> getAvatar(User user, User authUser) {
         if(!isHasRights(authUser, user)){
-            return new ResponseEntity<>(new AppError(HttpStatus.FORBIDDEN.value(),
+            return new ResponseEntity<>(new ResponseError(HttpStatus.FORBIDDEN.value(),
                     "You don't have the rights!"),
                     HttpStatus.FORBIDDEN);
         }

@@ -1,5 +1,6 @@
 package com.justbelieveinmyself.marta.domain.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.justbelieveinmyself.marta.domain.enums.Role;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -48,6 +49,9 @@ public class User implements UserDetails {
     private String postalCode;
     private String country;
     private Double balance;
+    @OneToOne(mappedBy = "user")
+    private RefreshToken refreshToken;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return getRoles();
@@ -137,5 +141,9 @@ public class User implements UserDetails {
     @JsonIgnore
     public Double getBalance() {
         return balance;
+    }
+    @JsonIgnore
+    public RefreshToken getRefreshToken() {
+        return refreshToken;
     }
 }

@@ -13,10 +13,10 @@ import { RegisterUser } from 'src/app/models/register-user';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-  
+
   constructor(
-    private socialAuthService : SocialAuthService, 
-    private router: Router, 
+    private socialAuthService : SocialAuthService,
+    private router: Router,
     private userService: UserService,
     private tokenService: TokenService,
     private authService: AuthService ){}
@@ -33,7 +33,7 @@ export class LoginComponent implements OnInit {
   errorMessage!: string;
 
   ngOnInit(): void {
-    if(this.tokenService.getToken()){
+    if(this.tokenService.getRefreshToken()){
       this.isLogged = true;
       this.isLoginFail = false;
     }
@@ -45,9 +45,20 @@ export class LoginComponent implements OnInit {
       next: n => {
         this.isLogged = true;
         this.isLoginFail = false;
-        this.tokenService.setToken(n.token);
         this.tokenService.setUser(n.user);
-        this.router.navigate(['products']);
+        this.authService.getAccessToken(n.token).subscribe({
+          next: n => {
+            this.tokenService.setRefreshToken(n.refreshToken);
+            this.tokenService.setAccessToken(n.accessToken);
+            this.router.navigate(['products']);
+          },
+          error: e => {
+            this.isLogged = false;
+            this.isLoginFail = true;
+            this.errorMessage = e.error.message;
+          }
+        })
+
           },
       error: e => {
         this.isLogged = false;

@@ -2,7 +2,7 @@ package com.justbelieveinmyself.marta.controllers;
 
 import com.justbelieveinmyself.marta.domain.annotations.CurrentUser;
 import com.justbelieveinmyself.marta.domain.entities.User;
-import com.justbelieveinmyself.marta.exceptions.AppError;
+import com.justbelieveinmyself.marta.exceptions.ResponseError;
 import com.justbelieveinmyself.marta.exceptions.NotFoundException;
 import com.justbelieveinmyself.marta.services.UserService;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -63,7 +63,7 @@ public class UserController {
         try {
             return this.userService.updateAvatar(user, file, currentUser);
         } catch (IOException e) {
-            return new ResponseEntity<>(new AppError(HttpStatus.NOT_FOUND.value(),
+            return new ResponseEntity<>(new ResponseError(HttpStatus.NOT_FOUND.value(),
                     "Cannot update avatar!"),
                     HttpStatus.NOT_FOUND);
         }

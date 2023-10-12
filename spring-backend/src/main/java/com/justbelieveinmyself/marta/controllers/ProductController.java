@@ -3,7 +3,7 @@ package com.justbelieveinmyself.marta.controllers;
 import com.justbelieveinmyself.marta.domain.annotations.CurrentUser;
 import com.justbelieveinmyself.marta.domain.entities.Product;
 import com.justbelieveinmyself.marta.domain.entities.User;
-import com.justbelieveinmyself.marta.exceptions.AppError;
+import com.justbelieveinmyself.marta.exceptions.ResponseError;
 import com.justbelieveinmyself.marta.exceptions.NotFoundException;
 import com.justbelieveinmyself.marta.services.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -47,7 +47,7 @@ public class ProductController {
         try {
             return productService.createProduct(product, file, currentUser);
         } catch (IOException e) {
-            return new ResponseEntity<>(new AppError(HttpStatus.NOT_FOUND.value(),
+            return new ResponseEntity<>(new ResponseError(HttpStatus.NOT_FOUND.value(),
                     "Product not created, cannot save preview file"),
                     HttpStatus.NOT_FOUND);
         }
