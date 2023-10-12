@@ -29,13 +29,13 @@ public class AuthController {
     private RefreshTokenService refreshTokenService;
 
     @PostMapping(value = "/register", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<?> register(@RequestPart("regUser") RegisterDto registerDTO,
-                                      @RequestPart(name = "file",required = false) MultipartFile file){
+    public ResponseEntity<?> register(
+            @RequestPart("regUser") RegisterDto registerDTO,
+            @RequestPart(name = "file",required = false) MultipartFile file
+    ){
         try {
-            System.out.println("authcontroller");
             return authService.createNewUser(registerDTO, file);
         } catch (IOException e) {
-            System.out.println("Failed to save profile image!");
             System.out.println(e.getMessage());
             return new ResponseEntity<>(new ResponseError(HttpStatus.NOT_FOUND.value(), "User not created, cannot save avatar file")
                     , HttpStatus.NOT_FOUND);
@@ -49,6 +49,6 @@ public class AuthController {
     }
     @PostMapping("/refresh")
     public ResponseEntity<?> refreshToken(@RequestBody RefreshRequestDto refreshRequestDto){
-        return  ResponseEntity.ok(refreshTokenService.refreshToken(refreshRequestDto));
+        return ResponseEntity.ok(refreshTokenService.refreshToken(refreshRequestDto));
     }
 }

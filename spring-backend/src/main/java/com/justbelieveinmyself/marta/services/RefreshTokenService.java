@@ -26,7 +26,6 @@ public class RefreshTokenService {
     private Duration expiration;
 
     public String createToken(User user){
-        System.out.println("Createtoken");
         if(user.getRefreshToken() != null) {
             refreshTokenRepository.delete(user.getRefreshToken());
             user.setRefreshToken(null);
@@ -40,7 +39,6 @@ public class RefreshTokenService {
     }
 
     public RefreshResponseDto refreshToken(RefreshRequestDto refreshRequestDto){
-        System.out.println("refreshtoken");
         var tokenOptional = refreshTokenRepository.findRefreshTokenByToken(refreshRequestDto.getRefreshToken());
         if(tokenOptional.isEmpty()){
             throw new RuntimeException("Refresh token %s not fount".formatted(refreshRequestDto.getRefreshToken()));

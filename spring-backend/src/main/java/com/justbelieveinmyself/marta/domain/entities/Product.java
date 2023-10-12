@@ -32,7 +32,6 @@ public class Product {
     private String structure;
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "seller_id")
-    @JsonManagedReference
     private User seller;
     @Column(name = "preview_image")
     private String previewImg;

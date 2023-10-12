@@ -3,25 +3,36 @@ import { BehaviorSubject, Subject } from 'rxjs';
 import { LocalUser } from '../models/local-user';
 import { EncryptionService } from './encryption.service';
 
-const TOKEN_KEY = 'AuthToken';
+const ACCESS_TOKEN_KEY = 'AccessToken';
+const REFRESH_TOKEN_KEY = 'RefreshToken';
 const USER_KEY = 'AuthUser';
 @Injectable({
   providedIn: 'root'
 })
 export class TokenService {
-  loggedIn = new BehaviorSubject<boolean>(this.getToken()? true: false)
+  loggedIn = new BehaviorSubject<boolean>(this.getRefreshToken()? true: false)
   constructor(
     private encryptionService : EncryptionService
   ) { }
 
-  public setToken(token : string) : void {
-    window.sessionStorage.removeItem(TOKEN_KEY);
-    window.sessionStorage.setItem(TOKEN_KEY, this.encryptionService.encryptData(token));
+  public setRefreshToken(refreshToken : string) : void {
+    window.localStorage.removeItem(REFRESH_TOKEN_KEY);
+    window.localStorage.setItem(REFRESH_TOKEN_KEY, this.encryptionService.encryptData(refreshToken));
     this.loggedIn.next(true);
   }
 
-  public getToken() : string{
-    var encryptedToken = window.sessionStorage.getItem(TOKEN_KEY) || '';
+  public getRefreshToken() : string{
+    var encryptedToken = window.localStorage.getItem(REFRESH_TOKEN_KEY) || '';
+    return this.encryptionService.decryptData(encryptedToken);
+  }
+  public setAccessToken(accessToken : string) : void {
+    window.sessionStorage.removeItem(ACCESS_TOKEN_KEY);
+    window.sessionStorage.setItem(ACCESS_TOKEN_KEY, this.encryptionService.encryptData(accessToken));
+    this.loggedIn.next(true);
+  }
+
+  public getAccessToken() : string{
+    var encryptedToken = window.sessionStorage.getItem(ACCESS_TOKEN_KEY) || '';
     return this.encryptionService.decryptData(encryptedToken);
   }
 

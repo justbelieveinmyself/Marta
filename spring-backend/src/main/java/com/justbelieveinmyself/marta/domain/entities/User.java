@@ -41,7 +41,6 @@ public class User implements UserDetails {
     private Set<Role> roles;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "seller")
-    @JsonBackReference
     private List<Product> products;
     private String avatar;
     private String phone;
@@ -116,7 +115,6 @@ public class User implements UserDetails {
         return roles;
     }
     @JsonIgnore
-    @JsonBackReference
     public List<Product> getProducts() {
         return products;
     }

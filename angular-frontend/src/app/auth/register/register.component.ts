@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
-import { FileHandle } from 'src/app/models/file-handle.model';
 import { RegisterUser } from 'src/app/models/register-user';
 import { AuthService } from 'src/app/service/auth.service';
 import { TokenService } from 'src/app/service/token.service';
@@ -34,7 +33,7 @@ export class RegisterComponent implements OnInit{
 
   regUser!: RegisterUser;
   ngOnInit(): void {
-    if(this.tokenService.getToken()){
+    if(this.tokenService.getRefreshToken()){
       this.isLogged = true;
       this.isRegisterFail = false;
     }
