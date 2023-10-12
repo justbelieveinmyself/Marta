@@ -1,7 +1,7 @@
 package com.justbelieveinmyself.marta.services;
 
 import com.justbelieveinmyself.marta.configs.beans.FileHelper;
-import com.justbelieveinmyself.marta.domain.dto.auth.JwtResponseDto;
+import com.justbelieveinmyself.marta.domain.dto.auth.LoginResponseDto;
 import com.justbelieveinmyself.marta.domain.dto.auth.RegisterDto;
 import com.justbelieveinmyself.marta.domain.entities.User;
 import com.justbelieveinmyself.marta.domain.enums.Role;
@@ -74,7 +74,7 @@ public class UserService implements UserDetailsService {
         }
         user.setEmail(email);
         User savedUser = userRepository.save(user);
-        return ResponseEntity.ok(new JwtResponseDto(null, savedUser));
+        return ResponseEntity.ok(LoginResponseDto.of(null, savedUser));
     }
 
     public ResponseEntity<?> updateAvatar(User user, MultipartFile file, User authUser) throws IOException {

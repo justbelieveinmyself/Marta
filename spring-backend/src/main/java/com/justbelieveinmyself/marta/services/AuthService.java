@@ -1,12 +1,11 @@
 package com.justbelieveinmyself.marta.services;
 
-import com.justbelieveinmyself.marta.domain.dto.auth.JwtRequestDto;
-import com.justbelieveinmyself.marta.domain.dto.auth.JwtResponseDto;
+import com.justbelieveinmyself.marta.domain.dto.auth.LoginRequestDto;
+import com.justbelieveinmyself.marta.domain.dto.auth.LoginResponseDto;
 import com.justbelieveinmyself.marta.domain.dto.auth.RegisterDto;
 import com.justbelieveinmyself.marta.domain.dto.UserDto;
 import com.justbelieveinmyself.marta.domain.entities.User;
 import com.justbelieveinmyself.marta.exceptions.ResponseError;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +26,7 @@ public class AuthService {
     private AuthenticationManager authenticationManager;
     @Autowired
     private RefreshTokenService refreshTokenService;
-    public ResponseEntity<?> createAuthToken(@RequestBody JwtRequestDto authRequest) {
+    public ResponseEntity<?> createAuthToken(@RequestBody LoginRequestDto authRequest) {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken
                     (authRequest.getUsername(), authRequest.getPassword()));
@@ -39,8 +38,8 @@ public class AuthService {
         }
         User userDetails = userService.loadUserByUsername(authRequest.getUsername());
         String token = refreshTokenService.createToken(userDetails);
-        JwtResponseDto jwtResponseDTO = new JwtResponseDto(token, userDetails);
-        return ResponseEntity.ok(jwtResponseDTO);
+        LoginResponseDto loginResponseDTO = LoginResponseDto.of(token, userDetails);
+        return ResponseEntity.ok(loginResponseDTO);
     }
 
 

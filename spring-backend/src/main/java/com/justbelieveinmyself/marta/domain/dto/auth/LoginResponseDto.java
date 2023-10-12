@@ -9,13 +9,14 @@ import java.util.Set;
 @Schema(description = "DTO for response to client with token")
 @Data
 @AllArgsConstructor
-public class JwtResponseDto {
-    private String token;
+@NoArgsConstructor
+public class LoginResponseDto {
+    private String refreshToken;
     private User user;
-    public JwtResponseDto(String token, com.justbelieveinmyself.marta.domain.entities.User user){
-        this.token = token;
-        this.user = new User();
-        BeanUtils.copyProperties(user, this.user, "password", "products", "avatar");
+    public static LoginResponseDto of(String token, com.justbelieveinmyself.marta.domain.entities.User user){
+        User authUser = new User();
+        BeanUtils.copyProperties(user, authUser, "password", "products", "avatar");
+        return new LoginResponseDto(token, authUser);
     }
 }
 @Getter

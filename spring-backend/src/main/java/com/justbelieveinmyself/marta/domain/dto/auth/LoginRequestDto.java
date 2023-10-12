@@ -6,7 +6,7 @@ import lombok.Setter;
 @Schema(description = "DTO for jwtauth")
 @Getter
 @Setter
-public class JwtRequestDto {
+public class LoginRequestDto {
     private String username;
     private String password;
 }

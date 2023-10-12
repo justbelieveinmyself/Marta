@@ -1,7 +1,7 @@
 package com.justbelieveinmyself.marta.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.justbelieveinmyself.marta.domain.dto.auth.JwtRequestDto;
+import com.justbelieveinmyself.marta.domain.dto.auth.LoginRequestDto;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -22,7 +22,7 @@ public class JsonObjectAuthenticationFilter extends UsernamePasswordAuthenticati
             while((line = reader.readLine()) != null){
                 sb.append(line);
             }
-            JwtRequestDto authRequest = objectMapper.readValue(sb.toString(), JwtRequestDto.class);
+            LoginRequestDto authRequest = objectMapper.readValue(sb.toString(), LoginRequestDto.class);
             UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
                     authRequest.getUsername(), authRequest.getPassword()
             );

@@ -46,7 +46,7 @@ export class LoginComponent implements OnInit {
         this.isLogged = true;
         this.isLoginFail = false;
         this.tokenService.setUser(n.user);
-        this.authService.getAccessToken(n.token).subscribe({
+        this.authService.getAccessToken(n.refreshToken).subscribe({
           next: n => {
             this.tokenService.setRefreshToken(n.refreshToken);
             this.tokenService.setAccessToken(n.accessToken);

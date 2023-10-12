@@ -1,11 +1,13 @@
 package com.justbelieveinmyself.marta.domain.entities;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.justbelieveinmyself.marta.domain.dto.UserDto;
 import com.justbelieveinmyself.marta.domain.enums.Role;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -16,6 +18,9 @@ import java.util.Set;
 @Entity
 @Table(name = "users")
 @Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -81,69 +86,11 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
-    @JsonIgnore
-    public String getCity() {
-        return city;
-    }
-
-    @JsonIgnore
-    public String getFirstName() {
-        return firstName;
-    }
-    @JsonIgnore
-    public String getLastName() {
-        return lastName;
-    }
-    @JsonIgnore
-    public String getPassword() {
-        return password;
-    }
-    @JsonIgnore
-    public String getEmail() {
-        return email;
-    }
-    @JsonIgnore
-    public Integer getAge() {
-        return age;
-    }
-    @JsonIgnore
-    public String getGender() {
-        return gender;
-    }
-    @JsonIgnore
-    public Set<Role> getRoles() {
-        return roles;
-    }
-    @JsonIgnore
-    public List<Product> getProducts() {
-        return products;
-    }
-    @JsonIgnore
-    public String getAvatar() {
-        return avatar;
-    }
-    @JsonIgnore
-    public String getPhone() {
-        return phone;
-    }
-    @JsonIgnore
-    public String getAddress() {
-        return address;
-    }
-    @JsonIgnore
-    public String getPostalCode() {
-        return postalCode;
-    }
-    @JsonIgnore
-    public String getCountry() {
-        return country;
-    }
-    @JsonIgnore
-    public Double getBalance() {
-        return balance;
-    }
-    @JsonIgnore
-    public RefreshToken getRefreshToken() {
-        return refreshToken;
+    public static User of(UserDto userDto){
+        return User.builder()
+                .username(userDto.getUsername())
+                .email(userDto.getEmail())
+                .id(userDto.getId())
+                .build();
     }
 }

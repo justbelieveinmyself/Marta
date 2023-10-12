@@ -1,7 +1,6 @@
 package com.justbelieveinmyself.marta.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.justbelieveinmyself.marta.domain.dto.auth.JwtResponseDto;
 import com.justbelieveinmyself.marta.domain.dto.auth.RefreshResponseDto;
 import com.justbelieveinmyself.marta.services.RefreshTokenService;
 import com.justbelieveinmyself.marta.services.UserService;

@@ -1,15 +1,30 @@
 package com.justbelieveinmyself.marta.domain.dto;
 
 import com.justbelieveinmyself.marta.domain.entities.Product;
-import io.swagger.v3.oas.annotations.media.Schema;
+import com.justbelieveinmyself.marta.domain.entities.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-@Schema(description = "DTO for Product with image")
+import org.springframework.beans.BeanUtils;
+
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
 public class ProductDto {
-    public Product product;
-    public String file;
+    private Long id;
+    private String productName;
+    private String productCode;
+    private String category;
+    private Long price;
+    private Long count;
+    private String description;
+    private String manufacturer;
+    private String structure;
+    private UserDto seller;
+    public static ProductDto of(Product product){
+        ProductDto productDto = new ProductDto();
+        BeanUtils.copyProperties(product, productDto, "previewImg", "seller");
+        productDto.setSeller(UserDto.of(product.getSeller()));
+        return productDto;
+    }
 }

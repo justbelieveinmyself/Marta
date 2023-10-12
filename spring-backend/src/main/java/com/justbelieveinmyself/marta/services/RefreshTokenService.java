@@ -1,6 +1,5 @@
 package com.justbelieveinmyself.marta.services;
 
-import com.justbelieveinmyself.marta.domain.dto.auth.JwtResponseDto;
 import com.justbelieveinmyself.marta.domain.dto.auth.RefreshRequestDto;
 import com.justbelieveinmyself.marta.domain.dto.auth.RefreshResponseDto;
 import com.justbelieveinmyself.marta.domain.entities.RefreshToken;
@@ -41,7 +40,7 @@ public class RefreshTokenService {
     public RefreshResponseDto refreshToken(RefreshRequestDto refreshRequestDto){
         var tokenOptional = refreshTokenRepository.findRefreshTokenByToken(refreshRequestDto.getRefreshToken());
         if(tokenOptional.isEmpty()){
-            throw new RuntimeException("Refresh token %s not fount".formatted(refreshRequestDto.getRefreshToken()));
+            throw new RuntimeException("Refresh token %s not found".formatted(refreshRequestDto.getRefreshToken()));
         }
         var token = tokenOptional.get();
         if(isTokenExpired(token.getExpiration())){

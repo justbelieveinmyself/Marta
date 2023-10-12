@@ -1,6 +1,6 @@
 import { LocalUser } from "./local-user";
 
 export class LoginResponseDto {
-    token!: string;
+    refreshToken!: string;
     user!: LocalUser;
 }

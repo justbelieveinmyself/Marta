@@ -1,12 +1,13 @@
 package com.justbelieveinmyself.marta.domain.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.justbelieveinmyself.marta.domain.dto.ProductDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.beans.BeanUtils;
+
 @Schema(description = "Information about Product")
 @Table(name = "products")
 @Entity
@@ -35,8 +36,10 @@ public class Product {
     private User seller;
     @Column(name = "preview_image")
     private String previewImg;
-    @JsonIgnore
-    public String getPreviewImg() {
-        return previewImg;
+    public static Product of(ProductDto productDto){
+        Product product = new Product();
+        BeanUtils.copyProperties(productDto, product, "id", "seller");
+        product.setSeller(User.of(productDto.getSeller()));
+        return product;
     }
 }
