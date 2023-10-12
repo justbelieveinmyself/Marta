@@ -1,6 +1,8 @@
 package com.justbelieveinmyself.marta.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.justbelieveinmyself.marta.domain.dto.auth.JwtResponseDto;
+import com.justbelieveinmyself.marta.domain.dto.auth.RefreshResponseDto;
 import com.justbelieveinmyself.marta.services.RefreshTokenService;
 import com.justbelieveinmyself.marta.services.UserService;
 import jakarta.servlet.ServletException;
@@ -29,6 +31,10 @@ public class AuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
         UserDetails principal = (UserDetails) authentication.getPrincipal();
         var user = userService.loadUserByUsername(principal.getUsername());
         String token = jwtUtils.createJwt(user.getUsername());
-//        String refreshToken = refreshTokenService.
+        String refreshToken = refreshTokenService.createToken(user);
+        response.addHeader("Authorization", "Bearer " + token);
+        response.addHeader("Content-Type", "application/json");
+        logger.debug("token %s".formatted(token));
+        response.getWriter().write(objectMapper.writeValueAsString(RefreshResponseDto.of(refreshToken, token)));
     }
 }

@@ -1,5 +1,7 @@
 package com.justbelieveinmyself.marta.domain.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -30,7 +32,12 @@ public class Product {
     private String structure;
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "seller_id")
+    @JsonManagedReference
     private User seller;
     @Column(name = "preview_image")
     private String previewImg;
+    @JsonIgnore
+    public String getPreviewImg() {
+        return previewImg;
+    }
 }

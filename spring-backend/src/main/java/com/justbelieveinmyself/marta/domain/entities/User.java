@@ -1,5 +1,6 @@
 package com.justbelieveinmyself.marta.domain.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.justbelieveinmyself.marta.domain.enums.Role;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -40,6 +41,7 @@ public class User implements UserDetails {
     private Set<Role> roles;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "seller")
+    @JsonBackReference
     private List<Product> products;
     private String avatar;
     private String phone;
@@ -114,6 +116,7 @@ public class User implements UserDetails {
         return roles;
     }
     @JsonIgnore
+    @JsonBackReference
     public List<Product> getProducts() {
         return products;
     }
@@ -140,5 +143,9 @@ public class User implements UserDetails {
     @JsonIgnore
     public Double getBalance() {
         return balance;
+    }
+    @JsonIgnore
+    public RefreshToken getRefreshToken() {
+        return refreshToken;
     }
 }

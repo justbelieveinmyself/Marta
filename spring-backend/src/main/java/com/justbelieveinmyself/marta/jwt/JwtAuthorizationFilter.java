@@ -33,6 +33,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         UsernamePasswordAuthenticationToken auth = getAuthentication(request);
         if(auth == null){
             chain.doFilter(request, response);
+            return;
         }
         SecurityContextHolder.getContext().setAuthentication(auth);
         chain.doFilter(request, response);
@@ -43,6 +44,8 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         if(token == null || !token.startsWith(TOKEN_PREFIX)){
             return null;
         }
+        logger.debug("token bearer from header %s".formatted(token));
+        logger.debug("token from header %s".formatted(token.replace(TOKEN_PREFIX, "")));
         String username = JWT.require(Algorithm.HMAC256(secret))
                 .build()
                 .verify(token.replace(TOKEN_PREFIX, ""))

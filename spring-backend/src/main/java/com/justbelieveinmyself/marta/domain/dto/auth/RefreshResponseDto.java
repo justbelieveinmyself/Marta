@@ -10,4 +10,7 @@ import lombok.NoArgsConstructor;
 public class RefreshResponseDto {
     private String refreshToken;
     private String accessToken;
+    public static RefreshResponseDto of(String refreshToken, String accessToken){
+        return new RefreshResponseDto(refreshToken, accessToken);
+    }
 }

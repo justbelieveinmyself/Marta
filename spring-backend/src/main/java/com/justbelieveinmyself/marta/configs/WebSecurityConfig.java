@@ -1,5 +1,8 @@
 package com.justbelieveinmyself.marta.configs;
 
+import com.justbelieveinmyself.marta.jwt.AuthSuccessHandler;
+import com.justbelieveinmyself.marta.jwt.JsonObjectAuthenticationFilter;
+import com.justbelieveinmyself.marta.jwt.JwtAuthorizationFilter;
 import com.justbelieveinmyself.marta.services.UserService;
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
@@ -9,6 +12,7 @@ import io.swagger.v3.oas.models.info.License;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -46,7 +50,11 @@ public class WebSecurityConfig {
     @Autowired
     private UserService userService;
     @Autowired
-    JwtRequestFilter jwtRequestFilter;
+    private AuthSuccessHandler authSuccessHandler;
+    @Value("${jwt.secret}")
+    private String secret;
+    @Autowired
+    private AuthenticationConfiguration authenticationConfiguration;
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -55,9 +63,22 @@ public class WebSecurityConfig {
                                 .anyRequest().authenticated())
                 .csrf(AbstractHttpConfigurer::disable)
                 .userDetailsService(userService)
-                .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(authenticationFilter(), JsonObjectAuthenticationFilter.class)
+                .addFilterBefore(jwtAuthorizationFilter(), JwtAuthorizationFilter.class)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         return http.build();
+    }
+
+    @Bean
+    public JwtAuthorizationFilter jwtAuthorizationFilter() throws Exception {
+        return new JwtAuthorizationFilter(authenticationManager(authenticationConfiguration), userService, secret);
+    }
+    @Bean
+    public JsonObjectAuthenticationFilter authenticationFilter() throws Exception {
+        JsonObjectAuthenticationFilter filter = new JsonObjectAuthenticationFilter();
+        filter.setAuthenticationSuccessHandler(authSuccessHandler);
+        filter.setAuthenticationManager(authenticationManager(authenticationConfiguration));
+        return filter;
     }
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
