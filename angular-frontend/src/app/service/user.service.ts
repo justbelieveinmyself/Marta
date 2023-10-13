@@ -2,6 +2,7 @@ import { HttpClient, HttpEvent } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { TokenService } from './token.service';
 import { Observable } from 'rxjs';
+import {LocalUser} from "../models/local-user";
 
 @Injectable({
   providedIn: 'root'
@@ -39,5 +40,8 @@ export class UserService {
     const fd = new FormData();
     fd.append("file", avatar);
     return this.httpClient.put(`${this.baseUrl}/${userid}/avatar`, fd);
+  }
+  getUser() : Observable<LocalUser>{
+    return this.httpClient.get<LocalUser>(this.baseUrl);
   }
 }

@@ -1,23 +1,19 @@
 package com.justbelieveinmyself.marta.services;
 
+import com.justbelieveinmyself.marta.domain.dto.UserDto;
 import com.justbelieveinmyself.marta.domain.dto.auth.LoginRequestDto;
 import com.justbelieveinmyself.marta.domain.dto.auth.LoginResponseDto;
 import com.justbelieveinmyself.marta.domain.dto.auth.RegisterDto;
-import com.justbelieveinmyself.marta.domain.dto.UserDto;
+import com.justbelieveinmyself.marta.domain.dto.SellerDto;
 import com.justbelieveinmyself.marta.domain.entities.User;
 import com.justbelieveinmyself.marta.exceptions.NotCreatedException;
-import com.justbelieveinmyself.marta.exceptions.ResponseError;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
 
 @Service
 public class AuthService {
@@ -32,7 +28,7 @@ public class AuthService {
                 (authRequest.getUsername(), authRequest.getPassword()));
         User userDetails = userService.loadUserByUsername(authRequest.getUsername());
         String token = refreshTokenService.createToken(userDetails);
-        LoginResponseDto loginResponseDTO = LoginResponseDto.of(token, userDetails);
+        LoginResponseDto loginResponseDTO = new LoginResponseDto(token, UserDto.of(userDetails));
         return ResponseEntity.ok(loginResponseDTO);
     }
 
@@ -45,6 +41,6 @@ public class AuthService {
             throw new NotCreatedException("User with nickname already exists!");
         }
         User user = userService.createNewUser(registrationUserDto, file);
-        return ResponseEntity.ok(new UserDto(user.getId(), user.getUsername(), user.getEmail()));
+        return ResponseEntity.ok(new SellerDto(user.getId(), user.getUsername(), user.getEmail()));
     }
 }

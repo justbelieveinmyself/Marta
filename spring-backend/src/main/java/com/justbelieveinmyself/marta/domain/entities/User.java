@@ -1,6 +1,6 @@
 package com.justbelieveinmyself.marta.domain.entities;
 
-import com.justbelieveinmyself.marta.domain.dto.UserDto;
+import com.justbelieveinmyself.marta.domain.dto.SellerDto;
 import com.justbelieveinmyself.marta.domain.enums.Role;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
@@ -86,11 +86,11 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
-    public static User of(UserDto userDto){
+    public static User of(SellerDto sellerDto){
         return User.builder()
-                .username(userDto.getUsername())
-                .email(userDto.getEmail())
-                .id(userDto.getId())
+                .username(sellerDto.getUsername())
+                .email(sellerDto.getEmail())
+                .id(sellerDto.getId())
                 .build();
     }
 }

@@ -6,6 +6,8 @@ import { TokenService } from 'src/app/service/token.service';
 import { LocalUser } from 'src/app/models/local-user';
 import { ProductWithImage } from 'src/app/models/product-with-image';
 import { ImageService } from 'src/app/service/image.service';
+import {AuthService} from "../../service/auth.service";
+import {UserService} from "../../service/user.service";
 
 @Component({
   selector: 'app-product-list',
@@ -19,19 +21,41 @@ export class ProductListComponent {
     private productService : ProductService,
     private router: Router,
     private tokenService: TokenService,
-    private imageService: ImageService){}
-  
+    private imageService: ImageService,
+    private authService: AuthService,
+    private userService: UserService){}
+
   ngOnInit(): void {
-    this.user = this.tokenService.getUser();
+    try {
+      this.user = this.tokenService.getUser();
+    }
+    catch{
+      if(this.tokenService.getRefreshToken() != null){
+        this.authService.getAccessToken(this.tokenService.getRefreshToken()).subscribe({
+          next: token => {
+            this.tokenService.setAccessToken(token.accessToken);
+            this.tokenService.setRefreshToken(token.refreshToken);
+            this.getProducts();
+            this.userService.getUser().subscribe({
+              next: user => {
+                this.tokenService.setUser(user);
+                this.user = user;
+              }
+            });
+          },
+          error: error => this.tokenService.logOut()
+        })
+      }
+    }
     this.getProducts();
+    console.log("init");
   }
 
   private getProducts(){
     this.productService.getProductList().subscribe({
       next: data =>{
       this.card = data;
-      console.log(data);
-  
+
       this.card.forEach(p => {
         if(p.file == "") {
           p.file = "https://www.webstoresl.com/sellercenter/assets/images/no-product-image.png";
@@ -45,10 +69,11 @@ export class ProductListComponent {
           p.file = url;
         });
       })
-      console.log(this.card)
     },
     error: e => {
+      console.log("1");
       if(e.status == 403){
+        console.log(12);
         this.router.navigate(['/login']);
       }
     }

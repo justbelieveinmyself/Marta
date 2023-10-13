@@ -26,11 +26,11 @@ export class UserDetailsComponent implements OnInit {
   ngOnInit(){
     this.user = this.tokenService.getUser();
     this.emailForm = this.formBuilder.group({
-      email: ['', [Validators.required, Validators.email]],
+      email: [this.user.email, [Validators.required, Validators.email]],
     });
     this.nameForm = this.formBuilder.group({
-      name: ['', [Validators.required, Validators.nullValidator] ],
-      surname: ['', [Validators.required, Validators.nullValidator] ]
+      name: [this.user.firstName, [Validators.required, Validators.nullValidator] ],
+      surname: [this.user.lastName, [Validators.required, Validators.nullValidator] ]
     })
     if(this.user != null){
       this.imageService.getUserAvatar(this.user.id).then(res => this.user.avatar = res).

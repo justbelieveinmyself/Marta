@@ -48,7 +48,7 @@ public class RefreshTokenService {
             refreshTokenRepository.delete(token);
             throw new RefreshTokenException("Refresh token %s is expired".formatted(refreshRequestDto.getRefreshToken()));
         }
-        String jwt = jwtUtils.createJwt(token.getUser().getUsername());
+        String jwt = jwtUtils.createAccessToken(token.getUser().getUsername());
         updateToken(token);
         return RefreshResponseDto.of(token.getToken(), jwt);
     }

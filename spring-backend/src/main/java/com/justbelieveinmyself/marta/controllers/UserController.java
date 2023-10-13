@@ -1,10 +1,10 @@
 package com.justbelieveinmyself.marta.controllers;
 
 import com.justbelieveinmyself.marta.domain.annotations.CurrentUser;
+import com.justbelieveinmyself.marta.domain.dto.UserDto;
 import com.justbelieveinmyself.marta.domain.dto.auth.LoginResponseDto;
 import com.justbelieveinmyself.marta.domain.entities.User;
 import com.justbelieveinmyself.marta.exceptions.ResponseError;
-import com.justbelieveinmyself.marta.exceptions.NotFoundException;
 import com.justbelieveinmyself.marta.exceptions.ResponseMessage;
 import com.justbelieveinmyself.marta.services.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -17,14 +17,10 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
-import java.util.Objects;
 
 @RestController
 @RequestMapping("/profiles")
@@ -81,5 +77,12 @@ public class UserController {
             @CurrentUser User currentUser
     ){
         return this.userService.updateAvatar(user, file, currentUser);
+    }
+
+    @GetMapping
+    public UserDto getUserInfo(
+            @CurrentUser User user
+    ){
+        return UserDto.of(user);
     }
 }

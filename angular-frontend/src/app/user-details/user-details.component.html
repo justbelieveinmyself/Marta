@@ -33,13 +33,13 @@
                             </span></td>
                         <td><span class="card_body_value">
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" [checked]="user.gender == 'Male'? true: false" (change)="onGenderChanged($event)" type="radio" name="inlineRadioOptions"
-                                        id="inlineRadio1" value="option1">
+                                    <input class="form-check-input" [checked]="user.gender == 'Male'" (change)="onGenderChanged($event)" type="radio" name="inlineRadioOptions"
+                                           id="inlineRadio1" value="option1">
                                     <label class="form-check-label" for="inlineRadio1">Male</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" [checked]="user.gender == 'Female'? true: false" (change)="onGenderChanged($event)" name="inlineRadioOptions"
-                                        id="inlineRadio2" value="option2">
+                                    <input class="form-check-input" type="radio" [checked]="user.gender == 'Female'" (change)="onGenderChanged($event)" name="inlineRadioOptions"
+                                           id="inlineRadio2" value="option2">
                                     <label class="form-check-label" for="inlineRadio2">Female</label>
                                 </div>
                             </span></td>

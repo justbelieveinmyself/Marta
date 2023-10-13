@@ -1,7 +1,6 @@
 package com.justbelieveinmyself.marta.domain.dto;
 
 import com.justbelieveinmyself.marta.domain.entities.Product;
-import com.justbelieveinmyself.marta.domain.entities.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,11 +19,11 @@ public class ProductDto {
     private String description;
     private String manufacturer;
     private String structure;
-    private UserDto seller;
+    private SellerDto seller;
     public static ProductDto of(Product product){
         ProductDto productDto = new ProductDto();
         BeanUtils.copyProperties(product, productDto, "previewImg", "seller");
-        productDto.setSeller(UserDto.of(product.getSeller()));
+        productDto.setSeller(SellerDto.of(product.getSeller()));
         return productDto;
     }
 }

@@ -17,7 +17,7 @@ import { UserProfileComponent } from './user-profile/user-profile.component';
 import { UserDetailsComponent } from './user-details/user-details.component';
 import { UserDeliveryComponent } from './user-delivery/user-delivery.component';
 import { UserFavouritesComponent } from './user-favourites/user-favourites.component';
-import { LogoutComponent } from './logout/logout.component';
+import { LogoutComponent } from './auth/logout/logout.component';
 import { ProductDetailsComponent } from './products/product-details/product-details.component';
 @NgModule({
   declarations: [

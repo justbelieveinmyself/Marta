@@ -17,7 +17,7 @@ public class JwtUtils {
     @Value("${jwt.expiration}")
     private Duration jwtLifetime;
 
-    public String createJwt(String username){
+    public String createAccessToken(String username){
         return JWT.create()
                 .withSubject(username)
                 .withExpiresAt(Instant.ofEpochMilli(ZonedDateTime.now(ZoneId.systemDefault()).toInstant().toEpochMilli() + jwtLifetime.toMillis()))

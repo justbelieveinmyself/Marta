@@ -44,8 +44,6 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         if(token == null || !token.startsWith(TOKEN_PREFIX)){
             return null;
         }
-        logger.debug("token bearer from header %s".formatted(token));
-        logger.debug("token from header %s".formatted(token.replace(TOKEN_PREFIX, "")));
         String username = JWT.require(Algorithm.HMAC256(secret))
                 .build()
                 .verify(token.replace(TOKEN_PREFIX, ""))

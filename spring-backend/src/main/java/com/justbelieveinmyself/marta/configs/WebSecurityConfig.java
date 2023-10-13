@@ -1,6 +1,5 @@
 package com.justbelieveinmyself.marta.configs;
 
-import com.justbelieveinmyself.marta.jwt.AuthSuccessHandler;
 import com.justbelieveinmyself.marta.jwt.JsonObjectAuthenticationFilter;
 import com.justbelieveinmyself.marta.jwt.JwtAuthorizationFilter;
 import com.justbelieveinmyself.marta.services.UserService;
@@ -28,7 +27,6 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -49,8 +47,6 @@ public class WebSecurityConfig {
 
     @Autowired
     private UserService userService;
-    @Autowired
-    private AuthSuccessHandler authSuccessHandler;
     @Value("${jwt.secret}")
     private String secret;
     @Autowired
@@ -76,7 +72,6 @@ public class WebSecurityConfig {
     @Bean
     public JsonObjectAuthenticationFilter authenticationFilter() throws Exception {
         JsonObjectAuthenticationFilter filter = new JsonObjectAuthenticationFilter();
-        filter.setAuthenticationSuccessHandler(authSuccessHandler);
         filter.setAuthenticationManager(authenticationManager(authenticationConfiguration));
         return filter;
     }
@@ -133,9 +128,9 @@ public class WebSecurityConfig {
                 .components(new Components().addSecuritySchemes
                         ("Bearer Authentication", createAPIKeyScheme()))
                 .info(new Info().title("MARTA REST API")
-                        .description("Some custom description of API.")
+                        .description("Marta Spring.")
                         .version("1.0").contact(new Contact().name("Karpenko Vadim")
-                                .email( "www.baeldung.com").url("seakme.vadim11@mail.ru"))
+                                .email( "seakme.vadim11@mail.ru").url("https://mail.ru"))
                         .license(new License().name("License of API")
                                 .url("#")));
     }

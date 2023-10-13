@@ -1,6 +1,6 @@
 package com.justbelieveinmyself.marta.controllers;
 
-import com.justbelieveinmyself.marta.domain.dto.UserDto;
+import com.justbelieveinmyself.marta.domain.dto.SellerDto;
 import com.justbelieveinmyself.marta.domain.dto.auth.*;
 import com.justbelieveinmyself.marta.exceptions.ResponseError;
 import com.justbelieveinmyself.marta.services.AuthService;
@@ -11,16 +11,12 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
 
 @RestController
 @RequestMapping("/auth")
@@ -38,7 +34,7 @@ public class AuthController {
     @Operation(summary = "Register", description = "Use this to create user")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success register User.",
-                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = UserDto.class))),
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = SellerDto.class))),
             @ApiResponse(responseCode = "400", description = "1. User with nickname already exists! \n 2. Passwords different!",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ResponseError.class)))
     })
