@@ -91,7 +91,7 @@ public class UserController {
         try {
             return this.userService.updateAvatar(user, file, currentUser);
         } catch (IOException e) {
-            return new ResponseEntity<>(new ResponseError(HttpStatus.NOT_FOUND.value(),
+            return new ResponseEntity<>(new ResponseError(HttpStatus.NOT_FOUND,
                     "Cannot update avatar!"),
                     HttpStatus.NOT_FOUND);
         }

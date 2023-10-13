@@ -66,7 +66,7 @@ public class ProductController {
         try {
             return productService.createProduct(productDto, file, currentUser);
         } catch (IOException e) {
-            return new ResponseEntity<>(new ResponseError(HttpStatus.NOT_FOUND.value(),
+            return new ResponseEntity<>(new ResponseError(HttpStatus.NOT_FOUND,
                     "Product not created, cannot save preview file"),
                     HttpStatus.NOT_FOUND);
         }

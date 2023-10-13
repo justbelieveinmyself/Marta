@@ -50,7 +50,7 @@ public class AuthController {
             return authService.createNewUser(registerDTO, file);
         } catch (IOException e) {
             System.out.println(e.getMessage());
-            return new ResponseEntity<>(new ResponseError(HttpStatus.NOT_FOUND.value(), "User not created, cannot save avatar file")
+            return new ResponseEntity<>(new ResponseError(HttpStatus.NOT_FOUND, "User not created, cannot save avatar file")
                     , HttpStatus.NOT_FOUND);
         }
 

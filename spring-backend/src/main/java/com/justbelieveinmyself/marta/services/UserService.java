@@ -6,6 +6,7 @@ import com.justbelieveinmyself.marta.domain.dto.auth.RegisterDto;
 import com.justbelieveinmyself.marta.domain.entities.User;
 import com.justbelieveinmyself.marta.domain.enums.Role;
 import com.justbelieveinmyself.marta.domain.enums.UploadDirectory;
+import com.justbelieveinmyself.marta.exceptions.ForbiddenException;
 import com.justbelieveinmyself.marta.exceptions.ResponseError;
 import com.justbelieveinmyself.marta.exceptions.ResponseMessage;
 import com.justbelieveinmyself.marta.repositories.UserRepository;
@@ -67,22 +68,14 @@ public class UserService implements UserDetailsService {
     }
 
     public ResponseEntity<?> updateEmail(User user, String email, User authUser) {
-        if(!isHasRights(authUser, user)){
-            return new ResponseEntity<>(new ResponseError(HttpStatus.FORBIDDEN.value(),
-                    "You don't have the rights!"),
-                    HttpStatus.FORBIDDEN);
-        }
+        validateRights(authUser, user);
         user.setEmail(email);
         User savedUser = userRepository.save(user);
         return ResponseEntity.ok(LoginResponseDto.of(null, savedUser));
     }
 
     public ResponseEntity<?> updateAvatar(User user, MultipartFile file, User authUser) throws IOException {
-        if(!isHasRights(authUser, user)){
-            return new ResponseEntity<>(new ResponseError(HttpStatus.FORBIDDEN.value(),
-                    "You don't have the rights!"),
-                    HttpStatus.FORBIDDEN);
-        }
+        validateRights(authUser, user);
         String path = fileHelper.uploadFile(file, UploadDirectory.AVATARS);
         user.setAvatar(path);
         userRepository.save(user);
@@ -90,15 +83,13 @@ public class UserService implements UserDetailsService {
     }
 
     public ResponseEntity<?> getAvatar(User user, User authUser) {
-        if(!isHasRights(authUser, user)){
-            return new ResponseEntity<>(new ResponseError(HttpStatus.FORBIDDEN.value(),
-                    "You don't have the rights!"),
-                    HttpStatus.FORBIDDEN);
-        }
+        validateRights(authUser, user);
         return fileHelper.downloadFile(user.getAvatar(), UploadDirectory.AVATARS);
     }
 
-    private boolean isHasRights(User userFromAuthToken, User userToEdit) {
-        return userToEdit.getId().equals(userFromAuthToken.getId());
+    private void validateRights(User userFromAuthToken, User userToEdit) {
+        if(!userToEdit.getId().equals(userFromAuthToken.getId())){
+            throw new ForbiddenException("You don't have the rights!");
+        }
     }
 }

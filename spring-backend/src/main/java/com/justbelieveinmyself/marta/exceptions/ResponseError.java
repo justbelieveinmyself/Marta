@@ -1,17 +1,24 @@
 package com.justbelieveinmyself.marta.exceptions;
 
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.springframework.http.HttpStatus;
 
 import java.util.Date;
 
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class ResponseError {
-    private int status;
+    private HttpStatus status;
     private String message;
     private Date timestamp;
 
-    public ResponseError(int status, String message) {
-        this.status = status;
+    public ResponseError(HttpStatus httpStatus, String message) {
+        this.status = httpStatus;
         this.message = message;
         this.timestamp = new Date();
     }

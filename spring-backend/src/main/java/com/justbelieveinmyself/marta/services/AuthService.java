@@ -5,6 +5,7 @@ import com.justbelieveinmyself.marta.domain.dto.auth.LoginResponseDto;
 import com.justbelieveinmyself.marta.domain.dto.auth.RegisterDto;
 import com.justbelieveinmyself.marta.domain.dto.UserDto;
 import com.justbelieveinmyself.marta.domain.entities.User;
+import com.justbelieveinmyself.marta.exceptions.NotCreatedException;
 import com.justbelieveinmyself.marta.exceptions.ResponseError;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,15 +28,8 @@ public class AuthService {
     @Autowired
     private RefreshTokenService refreshTokenService;
     public ResponseEntity<?> createAuthToken(@RequestBody LoginRequestDto authRequest) {
-        try {
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken
-                    (authRequest.getUsername(), authRequest.getPassword()));
-        } catch (BadCredentialsException e) {
-            System.out.println("Bad credentials!");
-            return new ResponseEntity<>(new ResponseError(HttpStatus.UNAUTHORIZED.value(),
-                    "Bad credentials!"),
-                    HttpStatus.UNAUTHORIZED);
-        }
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken
+                (authRequest.getUsername(), authRequest.getPassword()));
         User userDetails = userService.loadUserByUsername(authRequest.getUsername());
         String token = refreshTokenService.createToken(userDetails);
         LoginResponseDto loginResponseDTO = LoginResponseDto.of(token, userDetails);
@@ -45,15 +39,10 @@ public class AuthService {
 
     public ResponseEntity<?> createNewUser(RegisterDto registrationUserDto, MultipartFile file) throws IOException {
         if (!registrationUserDto.getPassword().equals(registrationUserDto.getPasswordConfirm())) {
-
-            return new ResponseEntity<>(new ResponseError(HttpStatus.BAD_REQUEST.value(),
-                    "Passwords different"),
-                    HttpStatus.BAD_REQUEST);
+            throw new NotCreatedException("Passwords different!");
         }
         if (userService.findByUsername(registrationUserDto.getUsername()) != null) {
-            return new ResponseEntity<>(new ResponseError(HttpStatus.BAD_REQUEST.value(),
-                    "User with nickname already exists"),
-                    HttpStatus.BAD_REQUEST);
+            throw new NotCreatedException("User with nickname already exists!");
         }
         User user = userService.createNewUser(registrationUserDto, file);
         return ResponseEntity.ok(new UserDto(user.getId(), user.getUsername(), user.getEmail()));

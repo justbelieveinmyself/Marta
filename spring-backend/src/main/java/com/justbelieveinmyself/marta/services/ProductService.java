@@ -6,12 +6,11 @@ import com.justbelieveinmyself.marta.domain.dto.ProductWithImageDto;
 import com.justbelieveinmyself.marta.domain.entities.Product;
 import com.justbelieveinmyself.marta.domain.entities.User;
 import com.justbelieveinmyself.marta.domain.enums.UploadDirectory;
-import com.justbelieveinmyself.marta.exceptions.ResponseError;
+import com.justbelieveinmyself.marta.exceptions.ForbiddenException;
 import com.justbelieveinmyself.marta.exceptions.ResponseMessage;
 import com.justbelieveinmyself.marta.repositories.ProductRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -38,12 +37,7 @@ public class ProductService {
     }
 
     public ResponseEntity<?> createProduct(ProductDto productDto, MultipartFile previewImage, User currentUser) throws IOException {
-
-        if(!isHasRights(productDto, currentUser)){
-            return new ResponseEntity<>(new ResponseError(HttpStatus.FORBIDDEN.value(),
-                    "You don't have the rights!"),
-                    HttpStatus.FORBIDDEN);
-        }
+        validateRights(productDto, currentUser);
         String imagePath = fileHelper.uploadFile(previewImage, UploadDirectory.PRODUCTS);
         Product product = Product.of(productDto);
         product.setPreviewImg(imagePath);
@@ -52,29 +46,25 @@ public class ProductService {
     }
 
     public ResponseEntity<?> deleteProduct(Product product, User currentUser) {
-        if(!isHasRights(product, currentUser)){
-            return new ResponseEntity<>(new ResponseError(HttpStatus.FORBIDDEN.value(),
-                    "You don't have the rights!"),
-                    HttpStatus.FORBIDDEN);
-        }
+        validateRights(product, currentUser);
         productRepository.delete(product);
         return ResponseEntity.ok(new ResponseMessage(200, "deleted"));
     }
 
     public ResponseEntity<?> updateProduct(Product productFromDb, ProductDto productDto, User currentUser) {
-        if(!isHasRights(productFromDb, currentUser)){
-            return new ResponseEntity<>(new ResponseError(HttpStatus.FORBIDDEN.value(),
-                    "You don't have the rights!"),
-                    HttpStatus.FORBIDDEN);
-        }
+        validateRights(productDto, currentUser);
         BeanUtils.copyProperties(productDto, productFromDb, "id", "seller");
         return ResponseEntity.ok(ProductDto.of(productRepository.save(productFromDb)));
     }
 
-    private boolean isHasRights(Product product, User currentUser) {
-        return product.getSeller().getId().equals(currentUser.getId());
+    private void validateRights(Product product, User currentUser) {
+        if(!product.getSeller().getId().equals(currentUser.getId())){
+            throw new ForbiddenException("You don't have rights!");
+        }
     }
-    private boolean isHasRights(ProductDto product, User currentUser) {
-        return product.getSeller().getId().equals(currentUser.getId());
+    private void validateRights(ProductDto product, User currentUser) {
+        if (!product.getSeller().getId().equals(currentUser.getId())){
+            throw new ForbiddenException("You don't have rights!");
+        }
     }
 }
