@@ -2,6 +2,7 @@ package com.justbelieveinmyself.marta.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.justbelieveinmyself.marta.domain.dto.auth.LoginRequestDto;
+import com.justbelieveinmyself.marta.exceptions.RefreshTokenException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -29,7 +30,7 @@ public class JsonObjectAuthenticationFilter extends UsernamePasswordAuthenticati
             setDetails(request, token);
             return this.getAuthenticationManager().authenticate(token);
         }catch (IOException e){
-            throw new RuntimeException(e);
+            throw new RefreshTokenException("Cannot read token from header!");
         }
     }
 }

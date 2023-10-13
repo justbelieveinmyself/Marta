@@ -1,13 +1,12 @@
 package com.justbelieveinmyself.marta.configs.beans;
 
 import com.justbelieveinmyself.marta.domain.enums.UploadDirectory;
+import com.justbelieveinmyself.marta.exceptions.NotCreatedException;
 import com.justbelieveinmyself.marta.exceptions.NotFoundException;
-import com.justbelieveinmyself.marta.exceptions.ResponseError;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,21 +23,24 @@ import java.util.UUID;
 public class FileHelper {
     @Value("${upload.path}")
     private String uploadPath;
-    public String uploadFile(MultipartFile file, UploadDirectory to) throws IOException {
-        if (file != null && !Objects.requireNonNull(file.getOriginalFilename()).isEmpty()) {
-            File uploadDir = new File(uploadPath);
-            if (!uploadDir.exists()) {
-                uploadDir.mkdir();
+    public String uploadFile(MultipartFile file, UploadDirectory to) {
+        try{
+            if (file != null && !Objects.requireNonNull(file.getOriginalFilename()).isEmpty()) {
+                File uploadDir = new File(uploadPath);
+                if (!uploadDir.exists()) {
+                    uploadDir.mkdir();
+                }
+                String uuidFile = UUID.randomUUID().toString();
+                String filename = uuidFile + "." + file.getOriginalFilename();
+                file.transferTo(new File(uploadPath + "/" + to.getPath() + "/" + filename));
+                return filename;
             }
-            String uuidFile = UUID.randomUUID().toString();
-            String filename = uuidFile + "." + file.getOriginalFilename();
-            file.transferTo(new File(uploadPath + "/" + to.getPath() + "/" + filename));
-            return filename;
+            return null;
+        }catch (IOException e) {
+            throw new NotCreatedException("Cannot upload image!");
         }
-        return null;
     }
     public ResponseEntity<?> downloadFile(String filename, UploadDirectory from) {
-        String uploadPath = "C:/users/shadow/IdeaProjects/Marta/uploads";
         try {
             Path filePath = Paths.get(uploadPath + "/" + from.getPath() + "/" + filename);
             if (!Files.exists(filePath)) {
@@ -52,11 +54,10 @@ public class FileHelper {
                     .headers(httpHeaders).body(resource);
         }
         catch (IOException exception){
-            throw new NotFoundException("File not found!");
+            return null;
         }
     }
     public byte[] downloadFileAsByteArray(String filename, UploadDirectory from) {
-        String uploadPath = "C:/users/shadow/IdeaProjects/Marta/uploads";
         try {
             Path filePath = Paths.get(uploadPath + "/" + from.getPath() + "/" + filename);
             if (!Files.exists(filePath)) {

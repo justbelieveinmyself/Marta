@@ -6,7 +6,12 @@
                 <img src="{{user.avatar}}" onclick="xd.click()"
                     alt="userlogo" class="rounded-circle me-2 uploadable" style="object-fit: cover;width: 120px; height: 120px;">
                     <input id="xd" type="file" (change)="onFileSelected($event)" hidden>
-                    <span class="card-title name_card_main">{{user.firstName}} {{user.lastName}}</span>
+                    <span class="card-title name_card_main">
+                        {{user.firstName}} {{user.lastName}}
+                        <a type="button" data-bs-toggle="modal" data-bs-target="#modalName">
+                                    <i class="fa-solid fa-pencil fa-sm"></i>
+                        </a>
+                    </span>
             </div>
 
             <table class="table table-borderless">
@@ -28,12 +33,12 @@
                             </span></td>
                         <td><span class="card_body_value">
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" [checked]="user.gender == 'Male'? true: false" type="radio" name="inlineRadioOptions"
+                                    <input class="form-check-input" [checked]="user.gender == 'Male'? true: false" (change)="onGenderChanged($event)" type="radio" name="inlineRadioOptions"
                                         id="inlineRadio1" value="option1">
                                     <label class="form-check-label" for="inlineRadio1">Male</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" [checked]="user.gender == 'Female'? true: false" name="inlineRadioOptions"
+                                    <input class="form-check-input" type="radio" [checked]="user.gender == 'Female'? true: false" (change)="onGenderChanged($event)" name="inlineRadioOptions"
                                         id="inlineRadio2" value="option2">
                                     <label class="form-check-label" for="inlineRadio2">Female</label>
                                 </div>
@@ -94,9 +99,9 @@
                 <form [formGroup]="emailForm">
                     <label>New email *</label>
                     <input type="text" formControlName="email" class="form-control"
-                        [ngClass]="{ 'is-invalid': submitted && f['email'].errors }" />
-                    <div *ngIf="submitted && f['email']?.errors" class="invalid-feedback"> 
-                        <div *ngIf="f['email'].errors?['email'] : null">Email must be a valid email address</div>
+                        [ngClass]="{ 'is-invalid': submittedEmailForm && fEmail['email'].errors }" />
+                    <div *ngIf="submittedEmailForm && fEmail['email']?.errors" class="invalid-feedback">
+                        <div *ngIf="fEmail['email'].errors?['email'] : null">Email must be a valid email address</div>
                     </div>
                     <label>All mailing subscriptions will be saved when the email is changed</label>
                 </form>
@@ -136,6 +141,35 @@
             </div>
             <div class="modal-footer" style="display: flex; justify-content: center;">
                 <button type="button" class="btn btn-outline-dark">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for change name -->
+<div class="modal fade" id="modalName" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered" style="width: 450px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5 ms-2">Change name and surname</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body ms-2">
+                <form [formGroup]="nameForm">
+                    <label>New name *</label>
+                    <input type="text" formControlName="name" class="form-control" [ngClass]="{ 'is-invalid': submittedNameForm && fName['name'].errors }"/>
+                    <div *ngIf="submittedNameForm && fName['name']?.errors" class="invalid-feedback">
+                        <div *ngIf="fName['name'].errors?['name'] : null">Name field must be not empty</div>
+                    </div>
+                    <label>New surname *</label>
+                    <input type="text" formControlName="surname" class="form-control" [ngClass]="{ 'is-invalid': submittedNameForm && fName['surname'].errors }"/>
+                    <div *ngIf="submittedNameForm && fName['surname']?.errors" class="invalid-feedback">
+                        <div *ngIf="fName['surname'].errors?['surname'] : null">Surname field must be not empty</div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer" style="display: flex; justify-content: center;">
+                <button type="button" (click)="changeName()" class="btn btn-outline-dark">Save changes</button>
             </div>
         </div>
     </div>

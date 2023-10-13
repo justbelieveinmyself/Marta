@@ -7,6 +7,7 @@ import com.justbelieveinmyself.marta.domain.entities.User;
 import com.justbelieveinmyself.marta.domain.enums.Role;
 import com.justbelieveinmyself.marta.domain.enums.UploadDirectory;
 import com.justbelieveinmyself.marta.exceptions.ForbiddenException;
+import com.justbelieveinmyself.marta.exceptions.NotFoundException;
 import com.justbelieveinmyself.marta.exceptions.ResponseError;
 import com.justbelieveinmyself.marta.exceptions.ResponseMessage;
 import com.justbelieveinmyself.marta.repositories.UserRepository;
@@ -57,7 +58,7 @@ public class UserService implements UserDetailsService {
         return userRepository.findByUsername(username);
     }
 
-    public User createNewUser(RegisterDto registrationUserDto, MultipartFile file) throws IOException {
+    public User createNewUser(RegisterDto registrationUserDto, MultipartFile file) {
         User user = new User();
         BeanUtils.copyProperties(registrationUserDto, user, "passwordConfirm", "password");
         user.setPassword(passwordEncoder.encode(registrationUserDto.getPassword()));
@@ -68,13 +69,17 @@ public class UserService implements UserDetailsService {
     }
 
     public ResponseEntity<?> updateEmail(User user, String email, User authUser) {
+        if(Objects.isNull(user))
+            throw new NotFoundException("User with [id] doesn't exists");
         validateRights(authUser, user);
         user.setEmail(email);
         User savedUser = userRepository.save(user);
         return ResponseEntity.ok(LoginResponseDto.of(null, savedUser));
     }
 
-    public ResponseEntity<?> updateAvatar(User user, MultipartFile file, User authUser) throws IOException {
+    public ResponseEntity<?> updateAvatar(User user, MultipartFile file, User authUser) {
+        if(Objects.isNull(user))
+            throw new NotFoundException("User with [id] doesn't exists");
         validateRights(authUser, user);
         String path = fileHelper.uploadFile(file, UploadDirectory.AVATARS);
         user.setAvatar(path);
@@ -83,6 +88,8 @@ public class UserService implements UserDetailsService {
     }
 
     public ResponseEntity<?> getAvatar(User user, User authUser) {
+        if(Objects.isNull(user))
+            throw new NotFoundException("User with [id] doesn't exists");
         validateRights(authUser, user);
         return fileHelper.downloadFile(user.getAvatar(), UploadDirectory.AVATARS);
     }

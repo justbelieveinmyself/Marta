@@ -46,14 +46,7 @@ public class AuthController {
             @RequestPart("regUser") RegisterDto registerDTO,
             @Parameter(description = "Avatar") @RequestPart(name = "file",required = false) MultipartFile file
     ){
-        try {
-            return authService.createNewUser(registerDTO, file);
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-            return new ResponseEntity<>(new ResponseError(HttpStatus.NOT_FOUND, "User not created, cannot save avatar file")
-                    , HttpStatus.NOT_FOUND);
-        }
-
+        return authService.createNewUser(registerDTO, file);
     }
 
     @PostMapping("/login")

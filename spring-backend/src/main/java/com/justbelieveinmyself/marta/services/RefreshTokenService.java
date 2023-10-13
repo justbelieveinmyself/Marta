@@ -4,6 +4,7 @@ import com.justbelieveinmyself.marta.domain.dto.auth.RefreshRequestDto;
 import com.justbelieveinmyself.marta.domain.dto.auth.RefreshResponseDto;
 import com.justbelieveinmyself.marta.domain.entities.RefreshToken;
 import com.justbelieveinmyself.marta.domain.entities.User;
+import com.justbelieveinmyself.marta.exceptions.RefreshTokenException;
 import com.justbelieveinmyself.marta.jwt.JwtUtils;
 import com.justbelieveinmyself.marta.repositories.RefreshTokenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,12 +41,12 @@ public class RefreshTokenService {
     public RefreshResponseDto refreshToken(RefreshRequestDto refreshRequestDto){
         var tokenOptional = refreshTokenRepository.findRefreshTokenByToken(refreshRequestDto.getRefreshToken());
         if(tokenOptional.isEmpty()){
-            throw new RuntimeException("Refresh token %s not found".formatted(refreshRequestDto.getRefreshToken()));
+            throw new RefreshTokenException("Refresh token %s not found".formatted(refreshRequestDto.getRefreshToken()));
         }
         var token = tokenOptional.get();
         if(isTokenExpired(token.getExpiration())){
             refreshTokenRepository.delete(token);
-            throw new RuntimeException("Refresh token %s is expired".formatted(refreshRequestDto.getRefreshToken()));
+            throw new RefreshTokenException("Refresh token %s is expired".formatted(refreshRequestDto.getRefreshToken()));
         }
         String jwt = jwtUtils.createJwt(token.getUser().getUsername());
         updateToken(token);

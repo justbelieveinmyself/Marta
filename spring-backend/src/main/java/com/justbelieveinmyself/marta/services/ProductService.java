@@ -7,6 +7,7 @@ import com.justbelieveinmyself.marta.domain.entities.Product;
 import com.justbelieveinmyself.marta.domain.entities.User;
 import com.justbelieveinmyself.marta.domain.enums.UploadDirectory;
 import com.justbelieveinmyself.marta.exceptions.ForbiddenException;
+import com.justbelieveinmyself.marta.exceptions.NotFoundException;
 import com.justbelieveinmyself.marta.exceptions.ResponseMessage;
 import com.justbelieveinmyself.marta.repositories.ProductRepository;
 import org.springframework.beans.BeanUtils;
@@ -18,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.Base64;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class ProductService {
@@ -36,7 +38,7 @@ public class ProductService {
         return ResponseEntity.ok(productWithImageDtoList);
     }
 
-    public ResponseEntity<?> createProduct(ProductDto productDto, MultipartFile previewImage, User currentUser) throws IOException {
+    public ResponseEntity<?> createProduct(ProductDto productDto, MultipartFile previewImage, User currentUser) {
         validateRights(productDto, currentUser);
         String imagePath = fileHelper.uploadFile(previewImage, UploadDirectory.PRODUCTS);
         Product product = Product.of(productDto);
@@ -46,12 +48,17 @@ public class ProductService {
     }
 
     public ResponseEntity<?> deleteProduct(Product product, User currentUser) {
+        if (Objects.isNull(product))
+            throw new NotFoundException("Product with [id] doesn't exists");
         validateRights(product, currentUser);
         productRepository.delete(product);
         return ResponseEntity.ok(new ResponseMessage(200, "deleted"));
     }
 
     public ResponseEntity<?> updateProduct(Product productFromDb, ProductDto productDto, User currentUser) {
+        if (Objects.isNull(productFromDb)) {
+            throw new NotFoundException("Product with [id] doesn't exists");
+        }
         validateRights(productDto, currentUser);
         BeanUtils.copyProperties(productDto, productFromDb, "id", "seller");
         return ResponseEntity.ok(ProductDto.of(productRepository.save(productFromDb)));
@@ -62,8 +69,8 @@ public class ProductService {
             throw new ForbiddenException("You don't have rights!");
         }
     }
-    private void validateRights(ProductDto product, User currentUser) {
-        if (!product.getSeller().getId().equals(currentUser.getId())){
+    private void validateRights(ProductDto productDto, User currentUser) {
+        if (!productDto.getSeller().getId().equals(currentUser.getId())){
             throw new ForbiddenException("You don't have rights!");
         }
     }

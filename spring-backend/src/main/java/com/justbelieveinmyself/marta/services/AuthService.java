@@ -37,7 +37,7 @@ public class AuthService {
     }
 
 
-    public ResponseEntity<?> createNewUser(RegisterDto registrationUserDto, MultipartFile file) throws IOException {
+    public ResponseEntity<?> createNewUser(RegisterDto registrationUserDto, MultipartFile file) {
         if (!registrationUserDto.getPassword().equals(registrationUserDto.getPasswordConfirm())) {
             throw new NotCreatedException("Passwords different!");
         }

@@ -47,9 +47,6 @@ public class UserController {
             @RequestBody String email,
             @CurrentUser User currentUser
             ){
-        if(Objects.isNull(user))
-            throw new NotFoundException("User with [id] doesn't exists");
-
         return userService.updateEmail(user, email, currentUser);
     }
 
@@ -66,9 +63,6 @@ public class UserController {
             @Parameter(hidden = true) @PathVariable("profileId") User user,
             @CurrentUser User currentUser
     ) {
-        if(Objects.isNull(user))
-            throw new NotFoundException("User with [id] doesn't exists");
-
         return userService.getAvatar(user, currentUser);
     }
 
@@ -86,14 +80,6 @@ public class UserController {
             @RequestParam("file") MultipartFile file,
             @CurrentUser User currentUser
     ){
-        if(Objects.isNull(user))
-            throw new NotFoundException("User with [id] doesn't exists");
-        try {
-            return this.userService.updateAvatar(user, file, currentUser);
-        } catch (IOException e) {
-            return new ResponseEntity<>(new ResponseError(HttpStatus.NOT_FOUND,
-                    "Cannot update avatar!"),
-                    HttpStatus.NOT_FOUND);
-        }
+        return this.userService.updateAvatar(user, file, currentUser);
     }
 }

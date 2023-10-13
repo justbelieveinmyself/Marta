@@ -63,13 +63,7 @@ public class ProductController {
             @RequestPart(value = "file", required = false) MultipartFile file,
             @CurrentUser User currentUser
     ) {
-        try {
-            return productService.createProduct(productDto, file, currentUser);
-        } catch (IOException e) {
-            return new ResponseEntity<>(new ResponseError(HttpStatus.NOT_FOUND,
-                    "Product not created, cannot save preview file"),
-                    HttpStatus.NOT_FOUND);
-        }
+        return productService.createProduct(productDto, file, currentUser);
     }
 
     @DeleteMapping("/{productId}")
@@ -85,8 +79,6 @@ public class ProductController {
             @Parameter(hidden = true) @PathVariable(value = "productId", required = false) Product product,
             @CurrentUser User currentUser
     ) {
-        if (Objects.isNull(product))
-            throw new NotFoundException("Product with [id] doesn't exists");
         return productService.deleteProduct(product, currentUser);
     }
 
@@ -119,13 +111,10 @@ public class ProductController {
     })
     @Parameter(name = "productId", required = true, schema = @Schema(type = "integer", name = "productId"), in = ParameterIn.PATH)
     public ResponseEntity<?> updateProduct(
-            @Parameter(hidden = true) @PathVariable(value = "productId", required = false) Product productFromDb,
+            @Parameter(hidden = true) @PathVariable(value = "productId") Product productFromDb,
             @RequestBody ProductDto productDto,
             @CurrentUser User currentUser
     ) {
-        if (Objects.isNull(productFromDb)) {
-            throw new NotFoundException("Product with [id] doesn't exists");
-        }
         return productService.updateProduct(productFromDb, productDto, currentUser);
     }
 
