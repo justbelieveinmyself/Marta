@@ -2,6 +2,7 @@ package com.justbelieveinmyself.marta.services;
 
 import com.justbelieveinmyself.marta.configs.beans.FileHelper;
 import com.justbelieveinmyself.marta.domain.dto.UserDto;
+import com.justbelieveinmyself.marta.domain.dto.UserNamesDto;
 import com.justbelieveinmyself.marta.domain.dto.auth.LoginResponseDto;
 import com.justbelieveinmyself.marta.domain.dto.auth.RegisterDto;
 import com.justbelieveinmyself.marta.domain.entities.User;
@@ -9,13 +10,11 @@ import com.justbelieveinmyself.marta.domain.enums.Role;
 import com.justbelieveinmyself.marta.domain.enums.UploadDirectory;
 import com.justbelieveinmyself.marta.exceptions.ForbiddenException;
 import com.justbelieveinmyself.marta.exceptions.NotFoundException;
-import com.justbelieveinmyself.marta.exceptions.ResponseError;
 import com.justbelieveinmyself.marta.exceptions.ResponseMessage;
 import com.justbelieveinmyself.marta.repositories.UserRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -23,7 +22,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -99,5 +97,24 @@ public class UserService implements UserDetailsService {
         if(!userToEdit.getId().equals(userFromAuthToken.getId())){
             throw new ForbiddenException("You don't have the rights!");
         }
+    }
+
+    public ResponseEntity<?> updateGender(User user, String gender, User authUser) {
+        if(Objects.isNull(user))
+            throw new NotFoundException("User with [id] doesn't exists");
+        validateRights(authUser, user);
+        user.setGender(gender);
+        User savedUser = userRepository.save(user);
+        return ResponseEntity.ok(UserDto.of(savedUser));
+    }
+
+    public ResponseEntity<?> updateNameAndSurname(User user, UserNamesDto userNamesDto, User authedUser) {
+        if(Objects.isNull(user))
+            throw new NotFoundException("User with [id] doesn't exists");
+        validateRights(authedUser, user);
+        user.setFirstName(userNamesDto.getFirstName());
+        user.setLastName(userNamesDto.getLastName());
+        User savedUser = userRepository.save(user);
+        return ResponseEntity.ok(UserDto.of(savedUser));
     }
 }

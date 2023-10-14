@@ -48,7 +48,6 @@ export class ProductListComponent {
       }
     }
     this.getProducts();
-    console.log("init");
   }
 
   private getProducts(){
@@ -72,10 +71,7 @@ export class ProductListComponent {
     },
     error: e => {
       console.log("1");
-      if(e.status == 403){
-        console.log(12);
-        this.router.navigate(['/login']);
-      }
+      this.router.navigate(['/login']);
     }
     });
   }

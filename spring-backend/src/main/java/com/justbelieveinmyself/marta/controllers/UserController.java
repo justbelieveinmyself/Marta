@@ -2,6 +2,7 @@ package com.justbelieveinmyself.marta.controllers;
 
 import com.justbelieveinmyself.marta.domain.annotations.CurrentUser;
 import com.justbelieveinmyself.marta.domain.dto.UserDto;
+import com.justbelieveinmyself.marta.domain.dto.UserNamesDto;
 import com.justbelieveinmyself.marta.domain.dto.auth.LoginResponseDto;
 import com.justbelieveinmyself.marta.domain.entities.User;
 import com.justbelieveinmyself.marta.exceptions.ResponseError;
@@ -19,6 +20,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -80,9 +82,43 @@ public class UserController {
     }
 
     @GetMapping
-    public UserDto getUserInfo(
+    public ResponseEntity<?> getUserInfo(
             @CurrentUser User user
     ){
-        return UserDto.of(user);
+        return ResponseEntity.ok(UserDto.of(user));
+    }
+
+    @PutMapping("{profileId}/gender")
+    @Operation(summary = "Update gender", description = "Update gender value for user")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Gender  updated and saved",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = UserDto.class))),
+            @ApiResponse(responseCode = "403", description = "You don't have the rights!",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,schema = @Schema(implementation = ResponseError.class)))
+    })
+    @Parameter(name = "profileId", schema = @Schema(name = "profileId", type = "integer"), in = ParameterIn.PATH)
+    public ResponseEntity<?> updateGender(
+            @Parameter(hidden = true) @PathVariable("profileId") User user,
+            @RequestBody String gender,
+            @CurrentUser User authedUser
+    ){
+        return userService.updateGender(user, gender, authedUser);
+    }
+
+    @PutMapping("{profileId}/nameAndSurname")
+    @Operation(summary = "Update name and surname", description = "Update name and surname for user")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Name and surname updated and saved",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = UserDto.class))),
+            @ApiResponse(responseCode = "403", description = "You don't have the rights!",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,schema = @Schema(implementation = ResponseError.class)))
+    })
+    @Parameter(name = "profileId", schema = @Schema(name = "profileId", type = "integer"), in = ParameterIn.PATH)
+    public ResponseEntity<?> updateNameAndSurname(
+            @Parameter(hidden = true) @PathVariable("profileId") User user,
+            @RequestBody UserNamesDto userNamesDto,
+            @CurrentUser User authedUser
+    ){
+        return userService.updateNameAndSurname(user, userNamesDto, authedUser);
     }
 }

@@ -63,19 +63,24 @@ export class UserDetailsComponent implements OnInit {
     );
   }
   onGenderChanged(event : any){
+    var gender;
     if(event.target.id == "inlineRadio1"){
-      console.log("Male");
+      gender = "Male";
     }else{
-      console.log("Female");
+      gender = "Female";
     }
+    console.log(gender);
+    this.userService.updateGender(this.user.id, gender);
   }
   changeName(){
     this.submittedNameForm = true;
     if(this.nameForm.invalid){
       return;
     }
-    console.log(this.nameForm.value.name);
-    console.log(this.nameForm.value.surname);
+    this.userService.updateNames(this.user.id, this.nameForm.value.name, this.nameForm.value.surname);
+    this.user.firstName = this.nameForm.value.name;
+    this.user.lastName = this.nameForm.value.surname;
+
   }
 
 }
