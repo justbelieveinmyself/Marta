@@ -28,6 +28,7 @@ export class ProductListComponent {
   ngOnInit(): void {
     try {
       this.user = this.tokenService.getUser();
+      this.getProducts();
     }
     catch{
       if(this.tokenService.getRefreshToken() != null){
@@ -43,11 +44,14 @@ export class ProductListComponent {
               }
             });
           },
-          error: error => this.tokenService.logOut()
+          error: error => {
+            console.log("error")
+            this.tokenService.logOut()
+          }
         })
       }
     }
-    this.getProducts();
+
   }
 
   private getProducts(){
@@ -71,11 +75,32 @@ export class ProductListComponent {
     },
     error: e => {
       console.log("1");
+      this.updateAccess();
       this.router.navigate(['/login']);
     }
     });
   }
-
+  updateAccess(){
+    if(this.tokenService.getRefreshToken() != null){
+      this.authService.getAccessToken(this.tokenService.getRefreshToken()).subscribe({
+        next: token => {
+          this.tokenService.setAccessToken(token.accessToken);
+          this.tokenService.setRefreshToken(token.refreshToken);
+          this.getProducts();
+          this.userService.getUser().subscribe({
+            next: user => {
+              this.tokenService.setUser(user);
+              this.user = user;
+            }
+          });
+        },
+        error: error => {
+          console.log("error")
+          this.tokenService.logOut()
+        }
+      })
+    }
+  }
   base64ToBlob(base64String: string): Promise<Blob> {
     return new Promise<Blob>((resolve, reject) => {
       const byteCharacters = atob(base64String);

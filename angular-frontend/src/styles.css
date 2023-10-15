@@ -15,7 +15,7 @@ a{
     text-align: center;
     color: #E1E3E6;
     margin-top: auto;
-    line-height: 50px;    
+    line-height: 50px;
 }
 .page{
     overflow: hidden;
@@ -39,3 +39,28 @@ body::-webkit-scrollbar-thumb {
 body::-webkit-scrollbar-thumb:hover{
     background-color: rgb(115, 115, 145);
 }
+
+.name_card{
+  color: black;
+  font-size: 25px;
+  font-weight: bold;
+}
+.name_card_main{
+  color: black;
+  font-size: 25px;
+  font-weight: bold;
+  display: inline-block;
+
+}
+.card_body_value{
+  color: black;
+}
+.card_with_shadow{
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+  transition: box-shadow 0.4s ease-in-out;
+}
+.card_with_shadow:hover{
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  transition: box-shadow 0.4s ease-in-out;
+}
+
