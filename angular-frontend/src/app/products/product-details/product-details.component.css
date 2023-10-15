@@ -1,3 +1,17 @@
 span .ratings{
   border-bottom: 2px dotted rgb(108,117,125);
 }
+.rotatable{
+  transition: .4s;
+}
+.rotatable_mark:hover .rotatable{
+  transition: .4s;
+  rotate: 180deg;
+
+}
+.appearing{
+  opacity: 0.2;
+}
+.w-35{
+  width: 35% !important;
+}
