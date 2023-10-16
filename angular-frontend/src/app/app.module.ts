@@ -20,6 +20,7 @@ import { UserFavouritesComponent } from './user-favourites/user-favourites.compo
 import { LogoutComponent } from './auth/logout/logout.component';
 import { ProductDetailsComponent } from './products/product-details/product-details.component';
 import {PopoverModule} from "ngx-bootstrap/popover";
+import { ProductFeedbackComponent } from './products/product-feedback/product-feedback.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -34,7 +35,8 @@ import {PopoverModule} from "ngx-bootstrap/popover";
     UserDeliveryComponent,
     UserFavouritesComponent,
     LogoutComponent,
-    ProductDetailsComponent
+    ProductDetailsComponent,
+    ProductFeedbackComponent
   ],
   imports: [
     BrowserModule,

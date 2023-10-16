@@ -15,3 +15,6 @@ span .ratings{
 .appearing{
   transition: .8s;
 }
+.nav-link{
+  color: #212529 !important;
+}

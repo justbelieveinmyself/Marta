@@ -10,10 +10,12 @@ import { UserProfileComponent } from './user-profile/user-profile.component';
 import { UserFavouritesComponent } from './user-favourites/user-favourites.component';
 import { UserDeliveryComponent } from './user-delivery/user-delivery.component';
 import {ProductDetailsComponent} from "./products/product-details/product-details.component";
+import {ProductFeedbackComponent} from "./products/product-feedback/product-feedback.component";
 
 const routes: Routes = [
   {path: 'products', component: ProductListComponent},
   {path: 'products/:id/details', component: ProductDetailsComponent},
+  {path: 'products/:id/feedback', component: ProductFeedbackComponent},
   {path: '', redirectTo: 'products', pathMatch: 'full'},
   {path: 'create-product', component: CreateProductComponent},
   {path: 'update-product/:id', component: UpdateProductComponent},

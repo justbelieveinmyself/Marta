@@ -8,7 +8,22 @@ import {Component, OnInit} from '@angular/core';
 export class ProductDetailsComponent implements OnInit{
   isReviews = true;
   isAppearing = false;
+  isNeedLeftButton = false;
   ngOnInit(): void {
   }
   protected readonly Math = Math;
+  rightScroll(){
+    // @ts-ignore
+    scrollReviews.scrollLeft += 440;
+    // @ts-ignore
+    this.isNeedLeftButton = scrollReviews.scrollLeft + 440 > 0;
+  }
+  leftScroll(){
+    let elementById = document.getElementById("scrollReviews");
+    // @ts-ignore
+    elementById.scrollLeft -= 440;
+    // @ts-ignore
+    this.isNeedLeftButton = scrollReviews.scrollLeft - 440 > 0;
+  }
+
 }
