@@ -19,6 +19,7 @@ import { UserDeliveryComponent } from './user-delivery/user-delivery.component';
 import { UserFavouritesComponent } from './user-favourites/user-favourites.component';
 import { LogoutComponent } from './auth/logout/logout.component';
 import { ProductDetailsComponent } from './products/product-details/product-details.component';
+import {PopoverModule} from "ngx-bootstrap/popover";
 @NgModule({
   declarations: [
     AppComponent,
@@ -41,7 +42,8 @@ import { ProductDetailsComponent } from './products/product-details/product-deta
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
-    SocialLoginModule
+    SocialLoginModule,
+    PopoverModule.forRoot()
   ],
   providers: [
     {

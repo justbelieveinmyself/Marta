@@ -6,13 +6,13 @@
 
                 <div class="card-body">
                     <div style="padding-left: 30px;">
-                        <img src="{{user.avatar}}"
-                            alt="userlogo" class="rounded-circle me-2" style="object-fit: cover;width: 110px; height: 110px;">
+                        <img [src]="user.avatar"
+                             alt="userlogo" class="rounded-circle me-2" style="object-fit: cover;width: 110px; height: 110px;">
                         <div class="card-title name_card_main">{{user.firstName}}</div>
                     </div>
                     <p class="card-text my-3">
                         <span class="text-body-secondary me-2">Phone</span>
-                        <span class="card_body_value">{{user.phone}}</span>
+                        <span class="card_body_value">+{{user.phone | slice:1:2}} {{user.phone | slice:2:5}} {{user.phone | slice:5:8}}-{{user.phone | slice:8:10}}-{{user.phone | slice:10:12}}</span>
                     <div>
                         <span class="text-body-secondary me-2">Email</span>
                         <span class="card_body_value">{{user.email}}</span>
@@ -94,7 +94,7 @@
                     <p class="card-text my-3">
                     <div style="bottom: 25px; position: absolute;">
                         <span class="text-body-secondary me-2">Balance</span>
-                        <span class="card_body_value">{{user.balance!= null? user.balance: 0}} $</span>
+                        <span class="card_body_value">{{(user.balance!= null? user.balance : 0) | currency}} </span>
                     </div>
                 </div>
 

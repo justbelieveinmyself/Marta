@@ -3,7 +3,7 @@
 
         <div class="card-body">
             <div style="padding-left: 30px;">
-                <img src="{{user.avatar}}" onclick="xd.click()"
+                <img [src]="user.avatar" onclick="xd.click()"
                     alt="userlogo" class="rounded-circle me-2 uploadable" style="object-fit: cover;width: 120px; height: 120px;">
                     <input id="xd" type="file" (change)="onFileSelected($event)" hidden>
                     <span class="card-title name_card_main">
@@ -24,7 +24,7 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td><span class="card_body_value">{{user.phone}}</span></td>
+                        <td><span class="card_body_value">+{{user.phone | slice:1:2}} {{user.phone | slice:2:5}} {{user.phone | slice:5:8}}-{{user.phone | slice:8:10}}-{{user.phone | slice:10:12}}</span></td>
                         <td><span class="card_body_value">
                                 {{user.email}}
                                 <a type="button" data-bs-toggle="modal" data-bs-target="#modalEmail">
