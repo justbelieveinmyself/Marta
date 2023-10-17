@@ -9,6 +9,8 @@ export class ProductDetailsComponent implements OnInit{
   isReviews = true;
   isAppearing = false;
   isNeedLeftButton = false;
+  isReceivedProduct = true;
+  isWriteQuestion = false;
   ngOnInit(): void {
   }
   protected readonly Math = Math;
@@ -19,11 +21,9 @@ export class ProductDetailsComponent implements OnInit{
     this.isNeedLeftButton = scrollReviews.scrollLeft + 440 > 0;
   }
   leftScroll(){
-    let elementById = document.getElementById("scrollReviews");
     // @ts-ignore
-    elementById.scrollLeft -= 440;
+    scrollReviews.scrollLeft -= 440;
     // @ts-ignore
     this.isNeedLeftButton = scrollReviews.scrollLeft - 440 > 0;
   }
-
 }

@@ -1,6 +1,9 @@
 span .ratings{
   border-bottom: 2px dotted rgb(108,117,125);
 }
+.ratings-router-link{
+  color: #6d7583;
+}
 .rotatable{
   transition: .4s;
 }
@@ -17,4 +20,21 @@ span .ratings{
 }
 .nav-link{
   color: #212529 !important;
+}
+ul.dash{
+  list-style: none;
+}
+ul.dash > li:before{
+  content: '– ';
+}
+.down{
+  transition: 1s;
+  max-height: 40px;
+}
+.down:focus{
+  transition: 1s;
+  min-height: 100px;
+}
+textarea::placeholder{
+  color: #868695;
 }

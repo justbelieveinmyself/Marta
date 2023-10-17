@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import {ExtraOptions, RouterModule, Routes} from '@angular/router';
 import { ProductListComponent } from './products/product-list/product-list.component';
 import { CreateProductComponent } from './products/create-product/create-product.component';
 import { UpdateProductComponent } from './products/update-product/update-product.component';
@@ -28,9 +28,11 @@ const routes: Routes = [
   {path: '**', redirectTo: 'create-product', pathMatch: 'full'},
 
 ];
-
+const routerOptions: ExtraOptions = {
+  anchorScrolling: 'enabled',
+};
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes, routerOptions)],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

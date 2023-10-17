@@ -1,8 +1,8 @@
 <div class="mb-3">
-  <h3>Admin / Большой игровой коврик для мыши</h3>
+  <h3>Admin / Large Gaming Mouse Pad</h3>
   <p>
     4.8<i class="fa-solid fa-star" style="color: #c9cc24;"> &nbsp;</i>
-    <span class="text-secondary"><span class="ratings">699 ratings</span> Art: 140873683</span>
+    <span class="text-secondary"><a class="ratings ratings-router-link" routerLink="../feedback" routerLinkActive="active" type="button">699 ratings</a> Art: 140873683</span>
   </p>
   <div class="row align-items-start mb-3">
     <img src="https://images.alphacoders.com/131/1316829.png" class="col-1 rounded-4"
@@ -20,7 +20,7 @@
         </tr>
         </tbody>
       </table>
-      <a href="#" class="ms-2">All characteristics</a>
+      <a routerLink="./" fragment="about" class="ms-2">All characteristics</a>
     </div>
     <div class="col-auto">
       <div class="card card_with_shadow" style="height: auto; width: 400px; margin-left: auto;">
@@ -49,7 +49,7 @@
                  placement="bottom" style="color: #6d7583;"></a>
             </b> <br>
             4.8<i class="fa-solid fa-star" style="color: #c9cc24;"> &nbsp;</i>
-            <span class="text-secondary rotatable_mark" (mouseover)="isAppearing=true"
+            <span class="text-secondary rotatable_mark" type="button" (mouseover)="isAppearing=true"
                   (mouseout)="isAppearing=false"><span class="ratings">699 ratings</span> &nbsp;<i
               class="fa-solid fa-chevron-down rotatable"></i>
             </span>
@@ -80,7 +80,7 @@
     </div>
   </div>
   <div>
-    <h4>About the product</h4>
+    <h4><a id="about" style="display: flex">About the product</a></h4>
     <div class="row">
       <div class="col">
         <b>Additional information</b>
@@ -119,6 +119,7 @@
         </p>
       </div>
     </div>
+    <span class="text-secondary">All information is based on the latest information from the manufacturer </span>
   </div>
   <div>
     <h5>
@@ -132,18 +133,23 @@
           </button>
         </li>
         <li class="nav-item ms-auto">
-          <button class="nav-link">Publication Rules</button>
+          <button class="nav-link" data-bs-toggle="modal" data-bs-target="#rulesModal" style="color: rgb(108,117,125) !important;">Publication Rules</button>
         </li>
       </ul>
     </h5>
     <div *ngIf="isReviews">
+      <div style="position: relative;;">
       <span style="font-size: 25px; font-weight: bold" class="ms-3">
         4.8 <i class="fa-solid fa-star" *ngFor="let stars of [].constructor(Math.round(4.8))"
                style="color: #c9cc24;"></i>
         <i class="fa-regular fa-star" *ngFor="let nostars of [].constructor(Math.round(5-4.8))"
            style="color: #c9cc24;"></i>
       </span>
-      <sup class="text-secondary" style="font-size: 15px; font-weight: bold"> &nbsp;699 ratings</sup>
+        <sup class="text-secondary" style="font-size: 15px; font-weight: bold"> &nbsp;699 ratings</sup>
+        <button class="btn btn-outline-dark" style="position: absolute; right: 15px" data-bs-toggle="modal"
+                data-bs-target="#reviewWriteModal">Write a review
+        </button>
+      </div>
       <div style="position: relative" class="mt-2">
         <a type="button" class="fa-solid fa-circle-arrow-right fa-2xl" (click)="rightScroll()"
            style="position: absolute; width: 30px; height: 30px; top: 135px; right: 20px; z-index: 100;"></a>
@@ -335,6 +341,8 @@
                 </div>
                 <div style="white-space: pre-wrap;">
                   The mat is cool The mat is coolThe mat is coolThe mat is coolThe mat is coolThe mat is coolThe mat is
+                  coolThe mat is coolThe mat is cool The mat is cool The mat is coolThe mat is coolThe mat is coolThe
+                  mat is coolThe mat is coolThe mat is
                   coolThe mat is coolThe mat is cool
                 </div>
                 <div style="display: flex; ">
@@ -359,6 +367,12 @@
     </div>
 
     <div *ngIf="!isReviews">
+      <textarea placeholder="Ask a question about product" class="form-control mb-2 down" (click)="isWriteQuestion=true"></textarea>
+        <div class="appearing" [style.opacity]="isWriteQuestion? 1 : 0">
+        <button class="btn btn-outline-dark me-2">Ask a question</button>
+        <button class="btn btn-outline-danger" (click)="isWriteQuestion=false">Close</button>
+        </div>
+
       <div style="position: relative" class="mt-2">
         <a type="button" class="fa-solid fa-circle-arrow-right fa-2xl" (click)="rightScroll()"
            style="position: absolute; width: 30px; height: 30px; top: 135px; right: 20px; z-index: 100;"></a>
@@ -377,8 +391,114 @@
             Dmitry <br>
             13 oct, 11:52
             </span>
-                <div class="mt-2">
-                  Hello, when will the Makima mat be available?
+                <div class="mt-2" style="white-space: pre-wrap">
+                  Hello, when will the Makima mat be available? Hello, when will the Makima mat be available? Hello,
+                  when will the Makima mat be available? Hello, when will the Makima mat be available?
+                </div>
+                <div class="mt-2" style="white-space: pre-wrap;">
+                  <b>✓ Brand Representative</b> <br>
+                  Hello, you have great taste, this is one of the most popular prints, it will be on sale soon)
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card card_with_shadow me-3" style="height: 270px; width: 520px; min-width: 430px">
+            <div class="card-body">
+              <div style="padding-left: 12px; padding-top: 12px;">
+            <span style="display: inline-flex"><img class="rounded-4 me-2"
+                                                    style="width: 50px; height: 50px; object-fit: cover;"
+                                                    src="https://eliaslealblog.files.wordpress.com/2014/03/user-200.png"/>
+            Dmitry <br>
+            13 oct, 11:52
+            </span>
+                <div class="mt-2" style="white-space: pre-wrap">
+                  Hello, when will the Makima mat be available? Hello, when will the Makima mat be available? Hello,
+                  when will the Makima mat be available? Hello, when will the Makima mat be available?
+                </div>
+                <div class="mt-2" style="white-space: pre-wrap;">
+                  <b>✓ Brand Representative</b> <br>
+                  Hello, you have great taste, this is one of the most popular prints, it will be on sale soon)
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card card_with_shadow me-3" style="height: 270px; width: 520px; min-width: 430px">
+            <div class="card-body">
+              <div style="padding-left: 12px; padding-top: 12px;">
+            <span style="display: inline-flex"><img class="rounded-4 me-2"
+                                                    style="width: 50px; height: 50px; object-fit: cover;"
+                                                    src="https://eliaslealblog.files.wordpress.com/2014/03/user-200.png"/>
+            Dmitry <br>
+            13 oct, 11:52
+            </span>
+                <div class="mt-2" style="white-space: pre-wrap">
+                  Hello, when will the Makima mat be available? Hello, when will the Makima mat be available? Hello,
+                  when will the Makima mat be available? Hello, when will the Makima mat be available?
+                </div>
+                <div class="mt-2" style="white-space: pre-wrap;">
+                  <b>✓ Brand Representative</b> <br>
+                  Hello, you have great taste, this is one of the most popular prints, it will be on sale soon)
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card card_with_shadow me-3" style="height: 270px; width: 520px; min-width: 430px">
+            <div class="card-body">
+              <div style="padding-left: 12px; padding-top: 12px;">
+            <span style="display: inline-flex"><img class="rounded-4 me-2"
+                                                    style="width: 50px; height: 50px; object-fit: cover;"
+                                                    src="https://eliaslealblog.files.wordpress.com/2014/03/user-200.png"/>
+            Dmitry <br>
+            13 oct, 11:52
+            </span>
+                <div class="mt-2" style="white-space: pre-wrap">
+                  Hello, when will the Makima mat be available? Hello, when will the Makima mat be available? Hello,
+                  when will the Makima mat be available? Hello, when will the Makima mat be available?
+                </div>
+                <div class="mt-2" style="white-space: pre-wrap;">
+                  <b>✓ Brand Representative</b> <br>
+                  Hello, you have great taste, this is one of the most popular prints, it will be on sale soon)
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card card_with_shadow me-3" style="height: 270px; width: 520px; min-width: 430px">
+            <div class="card-body">
+              <div style="padding-left: 12px; padding-top: 12px;">
+            <span style="display: inline-flex"><img class="rounded-4 me-2"
+                                                    style="width: 50px; height: 50px; object-fit: cover;"
+                                                    src="https://eliaslealblog.files.wordpress.com/2014/03/user-200.png"/>
+            Dmitry <br>
+            13 oct, 11:52
+            </span>
+                <div class="mt-2" style="white-space: pre-wrap">
+                  Hello, when will the Makima mat be available? Hello, when will the Makima mat be available? Hello,
+                  when will the Makima mat be available? Hello, when will the Makima mat be available?
+                </div>
+                <div class="mt-2" style="white-space: pre-wrap;">
+                  <b>✓ Brand Representative</b> <br>
+                  Hello, you have great taste, this is one of the most popular prints, it will be on sale soon)
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card card_with_shadow me-3" style="height: 270px; width: 520px; min-width: 430px">
+            <div class="card-body">
+              <div style="padding-left: 12px; padding-top: 12px;">
+            <span style="display: inline-flex"><img class="rounded-4 me-2"
+                                                    style="width: 50px; height: 50px; object-fit: cover;"
+                                                    src="https://eliaslealblog.files.wordpress.com/2014/03/user-200.png"/>
+            Dmitry <br>
+            13 oct, 11:52
+            </span>
+                <div class="mt-2" style="white-space: pre-wrap">
+                  Hello, when will the Makima mat be available? Hello, when will the Makima mat be available? Hello,
+                  when will the Makima mat be available? Hello, when will the Makima mat be available?
                 </div>
                 <div class="mt-2" style="white-space: pre-wrap;">
                   <b>✓ Brand Representative</b> <br>
@@ -399,5 +519,79 @@
     IE Feodocev S. U.<br>
     INN: 583712541296<br>
     OGRNIP: 322583500017524<br>
+  </div>
+</ng-template>
+<!-- For modal with rules -->
+<div class="modal fade " id="rulesModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" style="min-width: 720px">
+    <div class="modal-content">
+      <div class="modal-header mt-2 mx-3">
+        <h1 class="modal-title fs-5"><b>Rules for processing reviews and questions</b></h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body mx-4 mb-3" style="font-size: 17px">
+        <p class="text-secondary">Reviews and questions should contain information only about the product. </p>
+        <p class="text-secondary">Reviews can be left only for the goods ordered and received by the buyer.
+          The buyer can leave no more than one review for one product.
+          You can attach up to 5 photos to the reviews. The product in the photo should be clearly visible. </p>
+
+        <p>The following reviews and questions are not allowed for publication: </p>
+        <ul class="dash">
+          <li>Indicating the purchase of this product in other stores</li>
+          <li>Containing any contact information (phone numbers, addresses, email, links to third-party sites)</li>
+          <li>With profanity that offends the dignity of other customers or the store</li>
+          <li>With an abundance of uppercase characters (capital letters)</li>
+        </ul>
+        Questions are published only after they have been answered.
+
+        We reserve the right to edit or not publish a review and a question that does not comply with the established
+        rules!
+      </div>
+    </div>
+  </div>
+</div>
+<!-- For modal with write review -->
+<div class="modal fade" id="reviewWriteModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" *ngIf="isReceivedProduct else cantLeaveReview"
+       style="min-width: 800px">
+    <div class="modal-content">
+      <div class="modal-header mt-2 mx-3">
+        <h1 class="modal-title fs-5"><b>Product Review «Admin / Large Gaming Mouse Pad»</b></h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body mx-4" style="font-size: 17px">
+        <p style="margin-bottom: 0px">Rate the product</p>
+        <span style="font-size: 30px; font-weight: bold">
+            <i class="fa-solid fa-star" *ngFor="let stars of [].constructor(Math.round(0))"
+               style="color: #c9cc24;"></i>
+            <i class="fa-regular fa-star" *ngFor="let nostars of [].constructor(Math.round(5-0))"
+               style="color: #c9cc24;"></i>
+          </span> <br>
+        <label class="mt-3 mb-1" style="font-weight: bold">Tell us about the product</label>
+        <textarea class="form-control w-100" style="height: 300px" type="text"> </textarea>
+        <label class="mt-3 mb-1" style="font-weight: bold">Load up to 5 photos</label>
+        <input type="file" class="form-control">
+        <div class="mt-3 justify-content-center" style="display: flex">
+          <button class="btn btn-outline-dark w-75">Send</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #cantLeaveReview>
+  <div class="modal-dialog modal-dialog-centered" style="min-width: 500px">
+    <div class="modal-content">
+      <div class="modal-header mt-2 mx-3 ">
+        <h1 class="modal-title fs-5"><b>You can't leave a review</b></h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body mx-4 mb-3 text-secondary" style="font-size: 17px">
+        You can share your opinion about the product only after receiving it
+      </div>
+      <div class="modal-footer justify-content-center">
+        <button type="button" class="btn btn-info" data-bs-dismiss="modal">All rights, thanks</button>
+      </div>
+    </div>
   </div>
 </ng-template>
