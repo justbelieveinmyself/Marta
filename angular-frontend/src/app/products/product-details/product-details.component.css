@@ -16,6 +16,7 @@ span .ratings{
   width: 35% !important;
 }
 .appearing{
+  opacity: 0;
   transition: .8s;
 }
 .nav-link{

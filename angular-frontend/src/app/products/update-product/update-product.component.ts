@@ -22,11 +22,11 @@ export class UpdateProductComponent {
   ngOnInit(){
     this.user = this.tokenService.getUser();
     this.productId = this.activatedRoute.snapshot.params['id'];
-    this.productService.getProductById(this.productId).subscribe({ 
+    this.productService.getProductById(this.productId).subscribe({
       next: (p) =>  {
-        this.product = p;
+        this.product = p.product;
         this.hasRights = this.user.id == this.product.seller.id;
-      }, 
+      },
       error: (e) => console.log(e)
     });
 
@@ -37,7 +37,7 @@ export class UpdateProductComponent {
       console.log(data);
       this.redirectToProductList();
     });
-    
+
   }
   redirectToProductList(){
     this.router.navigate(['products']);

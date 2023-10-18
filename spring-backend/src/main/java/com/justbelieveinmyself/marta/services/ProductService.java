@@ -16,10 +16,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.Base64;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Stream;
 
 @Service
 public class ProductService {
@@ -65,13 +65,24 @@ public class ProductService {
     }
 
     private void validateRights(Product product, User currentUser) {
-        if(!product.getSeller().getId().equals(currentUser.getId())){
+        if (!product.getSeller().getId().equals(currentUser.getId())) {
             throw new ForbiddenException("You don't have rights!");
         }
     }
+
     private void validateRights(ProductDto productDto, User currentUser) {
-        if (!productDto.getSeller().getId().equals(currentUser.getId())){
+        if (!productDto.getSeller().getId().equals(currentUser.getId())) {
             throw new ForbiddenException("You don't have rights!");
         }
+    }
+
+    public ResponseEntity<?> getProduct(Product product) {
+        if (Objects.isNull(product))
+            throw new NotFoundException("Product with [id] doesn't exists");
+        Stream<Product> productStream = Stream.of(product);
+        ProductWithImageDto productWithImageDtoList = productStream
+                .map(pro -> new ProductWithImageDto(ProductDto.of(pro), Base64.getEncoder().encodeToString(
+                        fileHelper.downloadFileAsByteArray(pro.getPreviewImg(), UploadDirectory.PRODUCTS)))).findAny().get();
+        return ResponseEntity.ok(productWithImageDtoList);
     }
 }

@@ -6,6 +6,7 @@ import com.justbelieveinmyself.marta.domain.dto.ProductWithImageDto;
 import com.justbelieveinmyself.marta.domain.dto.auth.RefreshResponseDto;
 import com.justbelieveinmyself.marta.domain.entities.Product;
 import com.justbelieveinmyself.marta.domain.entities.User;
+import com.justbelieveinmyself.marta.domain.enums.UploadDirectory;
 import com.justbelieveinmyself.marta.exceptions.ResponseError;
 import com.justbelieveinmyself.marta.exceptions.NotFoundException;
 import com.justbelieveinmyself.marta.exceptions.ResponseMessage;
@@ -27,7 +28,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Base64;
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("/products")
@@ -95,9 +99,7 @@ public class ProductController {
             @Parameter(hidden = true)
             @PathVariable(value = "productId") Product product
     ) {
-        if (Objects.isNull(product))
-            throw new NotFoundException("Product with [id] doesn't exists");
-        return ResponseEntity.ok(ProductDto.of(product));
+        return productService.getProduct(product);
     }
 
     @PutMapping("/{productId}")
