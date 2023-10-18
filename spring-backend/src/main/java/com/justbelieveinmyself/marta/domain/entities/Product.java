@@ -36,10 +36,4 @@ public class Product {
     private User seller;
     @Column(name = "preview_image")
     private String previewImg;
-    public static Product of(ProductDto productDto){
-        Product product = new Product();
-        BeanUtils.copyProperties(productDto, product, "id", "seller");
-        product.setSeller(User.of(productDto.getSeller()));
-        return product;
-    }
 }

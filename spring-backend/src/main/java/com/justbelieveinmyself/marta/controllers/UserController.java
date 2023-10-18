@@ -5,6 +5,7 @@ import com.justbelieveinmyself.marta.domain.dto.UserDto;
 import com.justbelieveinmyself.marta.domain.dto.UserNamesDto;
 import com.justbelieveinmyself.marta.domain.dto.auth.LoginResponseDto;
 import com.justbelieveinmyself.marta.domain.entities.User;
+import com.justbelieveinmyself.marta.domain.mappers.UserMapper;
 import com.justbelieveinmyself.marta.exceptions.ResponseError;
 import com.justbelieveinmyself.marta.exceptions.ResponseMessage;
 import com.justbelieveinmyself.marta.services.UserService;
@@ -30,7 +31,8 @@ import org.springframework.web.multipart.MultipartFile;
 public class UserController {
     @Autowired
     private UserService userService;
-
+    @Autowired
+    private UserMapper userMapper;
     @PutMapping("{profileId}/email")
     @Operation(summary = "Update email", description = "Use this to update email for user")
     @ApiResponses(value = {
@@ -85,7 +87,7 @@ public class UserController {
     public ResponseEntity<?> getUserInfo(
             @CurrentUser User user
     ){
-        return ResponseEntity.ok(UserDto.of(user));
+        return ResponseEntity.ok(userMapper.modelToDto(user));
     }
 
     @PutMapping("{profileId}/gender")

@@ -1,10 +1,8 @@
 package com.justbelieveinmyself.marta.domain.dto;
 
-import com.justbelieveinmyself.marta.domain.entities.Product;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.beans.BeanUtils;
 
 @Data
 @AllArgsConstructor
@@ -20,10 +18,4 @@ public class ProductDto {
     private String manufacturer;
     private String structure;
     private SellerDto seller;
-    public static ProductDto of(Product product){
-        ProductDto productDto = new ProductDto();
-        BeanUtils.copyProperties(product, productDto, "previewImg", "seller");
-        productDto.setSeller(SellerDto.of(product.getSeller()));
-        return productDto;
-    }
 }

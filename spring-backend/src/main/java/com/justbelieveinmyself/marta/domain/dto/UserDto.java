@@ -28,9 +28,4 @@ public class UserDto {
     private String postalCode;
     private String country;
     private Double balance;
-    public static UserDto of(User user){
-        UserDto userDto = new UserDto();
-        BeanUtils.copyProperties(user, userDto, "password", "products", "avatar");
-        return userDto;
-    }
 }

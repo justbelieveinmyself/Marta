@@ -16,12 +16,4 @@ public class SellerDto {
     private Long id;
     private String username;
     private String email;
-    public static SellerDto of(User user){
-        SellerDto sellerDto = new SellerDto();
-        return SellerDto.builder()
-                .id(user.getId())
-                .username(user.getUsername())
-                .email(user.getEmail())
-                .build();
-    }
 }

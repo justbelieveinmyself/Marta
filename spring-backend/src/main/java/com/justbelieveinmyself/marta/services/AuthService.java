@@ -6,6 +6,7 @@ import com.justbelieveinmyself.marta.domain.dto.auth.LoginResponseDto;
 import com.justbelieveinmyself.marta.domain.dto.auth.RegisterDto;
 import com.justbelieveinmyself.marta.domain.dto.SellerDto;
 import com.justbelieveinmyself.marta.domain.entities.User;
+import com.justbelieveinmyself.marta.domain.mappers.UserMapper;
 import com.justbelieveinmyself.marta.exceptions.NotCreatedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -23,12 +24,14 @@ public class AuthService {
     private AuthenticationManager authenticationManager;
     @Autowired
     private RefreshTokenService refreshTokenService;
+    @Autowired
+    private UserMapper userMapper;
     public ResponseEntity<?> createAuthToken(@RequestBody LoginRequestDto authRequest) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken
                 (authRequest.getUsername(), authRequest.getPassword()));
         User userDetails = userService.loadUserByUsername(authRequest.getUsername());
         String token = refreshTokenService.createToken(userDetails);
-        LoginResponseDto loginResponseDTO = new LoginResponseDto(token, UserDto.of(userDetails));
+        LoginResponseDto loginResponseDTO = new LoginResponseDto(token, userMapper.modelToDto(userDetails));
         return ResponseEntity.ok(loginResponseDTO);
     }
 

@@ -7,7 +7,7 @@
                                         type="button">699 ratings</a> Art: {{this.product.product.productCode}}</span>
     </p>
     <div class="row align-items-start mb-3">
-        <img src="{{product.file}}" class="col-1 rounded-4"
+        <img src="{{product.file}}" alt="photo image" class="col-1 rounded-4"
              style="width: 400px; height: 500px; object-fit: cover; border: solid 3px black; padding: 0"/>
         <div class="col">
             <table class="table table-borderless">
@@ -61,11 +61,11 @@
 
             <div class="card card_with_shadow appearing mt-2" [style.opacity]="isAppearing? 1 : 0"
                  style="height: auto; width: 400px; margin-left: auto; ">
-                <div class="card-body" style="padding: 15px 10px 0px 15px; height: auto">
+                <div class="card-body" style="padding: 15px 10px 0 15px; height: auto">
                     <span style="font-size: 22px">4.8<i class="fa-solid fa-star"
                                                         style="color: #c9cc24;"> &nbsp;</i></span>
                     <span class="ratings text-secondary">699 product ratings</span>
-                    <hr style="margin-top: 8px; margin-bottom: 0px">
+                    <hr style="margin-top: 8px; margin-bottom: 0">
                     <table class="table table-borderless">
                         <tbody>
                         <tr>
@@ -166,7 +166,7 @@
                     <div class="card card_with_shadow me-4" style="height: 270px; width: 430px; min-width: 430px">
                         <div class="card-body">
                             <div style="padding-left: 5px;">
-            <span style="display: inline-flex"><img class="rounded-4 me-2"
+            <span style="display: inline-flex"><img class="rounded-4 me-2" alt="image for review"
                                                     style="width: 50px; height: 50px; object-fit: cover;"
                                                     src="https://eliaslealblog.files.wordpress.com/2014/03/user-200.png"/>
             Elena <br>
@@ -404,7 +404,7 @@
                     <div class="card card_with_shadow me-3" style="height: 270px; width: 520px; min-width: 430px">
                         <div class="card-body">
                             <div style="padding-left: 12px; padding-top: 12px;">
-            <span style="display: inline-flex"><img class="rounded-4 me-2"
+            <span style="display: inline-flex"><img class="rounded-4 me-2" alt="image for question"
                                                     style="width: 50px; height: 50px; object-fit: cover;"
                                                     src="https://eliaslealblog.files.wordpress.com/2014/03/user-200.png"/>
             Dmitry <br>
@@ -598,7 +598,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body mx-4" style="font-size: 17px">
-                <p style="margin-bottom: 0px">Rate the product</p>
+                <p style="margin-bottom: 0">Rate the product</p>
                 <span style="font-size: 30px; font-weight: bold">
             <i class="fa-solid fa-star" *ngFor="let stars of [].constructor(Math.round(0))"
                style="color: #c9cc24;"></i>

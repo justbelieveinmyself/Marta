@@ -3,12 +3,9 @@ package com.justbelieveinmyself.marta.controllers;
 import com.justbelieveinmyself.marta.domain.annotations.CurrentUser;
 import com.justbelieveinmyself.marta.domain.dto.ProductDto;
 import com.justbelieveinmyself.marta.domain.dto.ProductWithImageDto;
-import com.justbelieveinmyself.marta.domain.dto.auth.RefreshResponseDto;
 import com.justbelieveinmyself.marta.domain.entities.Product;
 import com.justbelieveinmyself.marta.domain.entities.User;
-import com.justbelieveinmyself.marta.domain.enums.UploadDirectory;
 import com.justbelieveinmyself.marta.exceptions.ResponseError;
-import com.justbelieveinmyself.marta.exceptions.NotFoundException;
 import com.justbelieveinmyself.marta.exceptions.ResponseMessage;
 import com.justbelieveinmyself.marta.services.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -20,18 +17,11 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
-import java.util.Base64;
-import java.util.List;
-import java.util.Objects;
-import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("/products")
@@ -39,7 +29,6 @@ import java.util.stream.Stream;
         name = "Product",
         description = "The Product API"
 )
-
 public class ProductController {
     @Autowired
     private ProductService productService;

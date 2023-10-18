@@ -14,6 +14,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
+
 @Schema(description = "Information about User")
 @Entity
 @Table(name = "users")
@@ -85,12 +86,5 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
-    }
-    public static User of(SellerDto sellerDto){
-        return User.builder()
-                .username(sellerDto.getUsername())
-                .email(sellerDto.getEmail())
-                .id(sellerDto.getId())
-                .build();
     }
 }

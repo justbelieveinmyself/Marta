@@ -6,6 +6,7 @@ import com.justbelieveinmyself.marta.domain.dto.ProductWithImageDto;
 import com.justbelieveinmyself.marta.domain.entities.Product;
 import com.justbelieveinmyself.marta.domain.entities.User;
 import com.justbelieveinmyself.marta.domain.enums.UploadDirectory;
+import com.justbelieveinmyself.marta.domain.mappers.ProductMapper;
 import com.justbelieveinmyself.marta.exceptions.ForbiddenException;
 import com.justbelieveinmyself.marta.exceptions.NotFoundException;
 import com.justbelieveinmyself.marta.exceptions.ResponseMessage;
@@ -26,13 +27,15 @@ public class ProductService {
     @Autowired
     private ProductRepository productRepository;
     @Autowired
+    private ProductMapper productMapper;
+    @Autowired
     private FileHelper fileHelper;
 
     public ResponseEntity<?> getListProducts() {
         List<Product> products = productRepository.findAll();
 
         List<ProductWithImageDto> productWithImageDtoList = products.stream()
-                .map(pro -> new ProductWithImageDto(ProductDto.of(pro), Base64.getEncoder().encodeToString(
+                .map(pro -> new ProductWithImageDto(productMapper.modelToDto(pro), Base64.getEncoder().encodeToString(
                         fileHelper.downloadFileAsByteArray(pro.getPreviewImg(), UploadDirectory.PRODUCTS))))
                 .toList();
         return ResponseEntity.ok(productWithImageDtoList);
@@ -41,10 +44,10 @@ public class ProductService {
     public ResponseEntity<?> createProduct(ProductDto productDto, MultipartFile previewImage, User currentUser) {
         validateRights(productDto, currentUser);
         String imagePath = fileHelper.uploadFile(previewImage, UploadDirectory.PRODUCTS);
-        Product product = Product.of(productDto);
+        Product product = productMapper.dtoToModel(productDto);
         product.setPreviewImg(imagePath);
         Product savedProduct = productRepository.save(product);
-        return ResponseEntity.ok(ProductDto.of(savedProduct));
+        return ResponseEntity.ok(productMapper.modelToDto(savedProduct));
     }
 
     public ResponseEntity<?> deleteProduct(Product product, User currentUser) {
@@ -61,7 +64,7 @@ public class ProductService {
         }
         validateRights(productDto, currentUser);
         BeanUtils.copyProperties(productDto, productFromDb, "id", "seller");
-        return ResponseEntity.ok(ProductDto.of(productRepository.save(productFromDb)));
+        return ResponseEntity.ok(productMapper.modelToDto(productRepository.save(productFromDb)));
     }
 
     private void validateRights(Product product, User currentUser) {
@@ -81,7 +84,7 @@ public class ProductService {
             throw new NotFoundException("Product with [id] doesn't exists");
         Stream<Product> productStream = Stream.of(product);
         ProductWithImageDto productWithImageDtoList = productStream
-                .map(pro -> new ProductWithImageDto(ProductDto.of(pro), Base64.getEncoder().encodeToString(
+                .map(pro -> new ProductWithImageDto(productMapper.modelToDto(pro), Base64.getEncoder().encodeToString(
                         fileHelper.downloadFileAsByteArray(pro.getPreviewImg(), UploadDirectory.PRODUCTS)))).findAny().get();
         return ResponseEntity.ok(productWithImageDtoList);
     }
