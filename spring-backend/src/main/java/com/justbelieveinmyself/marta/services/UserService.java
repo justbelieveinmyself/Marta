@@ -1,7 +1,6 @@
 package com.justbelieveinmyself.marta.services;
 
 import com.justbelieveinmyself.marta.configs.beans.FileHelper;
-import com.justbelieveinmyself.marta.domain.dto.UserDto;
 import com.justbelieveinmyself.marta.domain.dto.UserNamesDto;
 import com.justbelieveinmyself.marta.domain.dto.auth.LoginResponseDto;
 import com.justbelieveinmyself.marta.domain.dto.auth.RegisterDto;
@@ -93,7 +92,7 @@ public class UserService implements UserDetailsService {
         if(Objects.isNull(user))
             throw new NotFoundException("User with [id] doesn't exists");
         validateRights(authUser, user);
-        return fileHelper.downloadFile(user.getAvatar(), UploadDirectory.AVATARS);
+        return fileHelper.downloadFileAsResponse(user.getAvatar(), UploadDirectory.AVATARS);
     }
 
     private void validateRights(User userFromAuthToken, User userToEdit) {

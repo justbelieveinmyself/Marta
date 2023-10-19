@@ -2,6 +2,9 @@ import {Component, OnInit} from '@angular/core';
 import {ProductService} from "../../service/product.service";
 import {ActivatedRoute} from "@angular/router";
 import {ProductWithImage} from "../../models/product-with-image";
+import {ImageService} from "../../service/image.service";
+import {map} from "rxjs";
+import {HttpClient, HttpResponse} from "@angular/common/http";
 
 @Component({
     selector: 'app-product-details',
@@ -15,8 +18,7 @@ export class ProductDetailsComponent implements OnInit {
     constructor(
         private productService: ProductService,
         private activatedRoute: ActivatedRoute
-    ) {
-    }
+    ) {}
 
     product: ProductWithImage;
     isReviews = true;
@@ -24,7 +26,6 @@ export class ProductDetailsComponent implements OnInit {
     isNeedLeftButton = false;
     isReceivedProduct = true;
     isWriteQuestion = false;
-
     ngOnInit(): void {
         this.productService.getProductById(this.activatedRoute.snapshot.params['id']).subscribe({
             next: product => this.product = product,

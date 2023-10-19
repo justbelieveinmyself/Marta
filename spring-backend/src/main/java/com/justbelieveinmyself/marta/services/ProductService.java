@@ -3,7 +3,9 @@ package com.justbelieveinmyself.marta.services;
 import com.justbelieveinmyself.marta.configs.beans.FileHelper;
 import com.justbelieveinmyself.marta.domain.dto.ProductDto;
 import com.justbelieveinmyself.marta.domain.dto.ProductWithImageDto;
+import com.justbelieveinmyself.marta.domain.dto.ReviewDto;
 import com.justbelieveinmyself.marta.domain.entities.Product;
+import com.justbelieveinmyself.marta.domain.entities.Review;
 import com.justbelieveinmyself.marta.domain.entities.User;
 import com.justbelieveinmyself.marta.domain.enums.UploadDirectory;
 import com.justbelieveinmyself.marta.domain.mappers.ProductMapper;
@@ -17,9 +19,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.ZonedDateTime;
 import java.util.Base64;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 @Service
@@ -87,5 +91,32 @@ public class ProductService {
                 .map(pro -> new ProductWithImageDto(productMapper.modelToDto(pro), Base64.getEncoder().encodeToString(
                         fileHelper.downloadFileAsByteArray(pro.getPreviewImg(), UploadDirectory.PRODUCTS)))).findAny().get();
         return ResponseEntity.ok(productWithImageDtoList);
+    }
+
+    public ResponseEntity<?> getListProductReviews(Product product) {
+        if (Objects.isNull(product))
+            throw new NotFoundException("Product with [id] doesn't exists");
+        List<ReviewDto> reviews = product.getReviews().stream().map(review -> ReviewDto.of(review)).toList();
+        return ResponseEntity.ok(reviews);
+    }
+
+    public ResponseEntity<?> createProductReview(ReviewDto reviewDto, User author) {
+        System.out.println("xdxd");
+        Optional<Product> productOpt = productRepository.findById(reviewDto.getProductId());
+        if(productOpt.isEmpty()){
+            throw new NotFoundException("Product with [id] doesn't exists");
+        }
+        Product product = productOpt.get();
+        Review review = new Review();
+        review.setTime(ZonedDateTime.now());
+        review.setMessage(reviewDto.getMessage());
+        review.setAnswer(reviewDto.getAnswer());
+        review.setProduct(product);
+        review.setRating(reviewDto.getRating());
+        review.setPhotos(reviewDto.getPhotos());
+        review.setAuthor(author);
+        product.getReviews().add(review);
+        productRepository.save(product);
+        return ResponseEntity.ok(ReviewDto.of(review));
     }
 }

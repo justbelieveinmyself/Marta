@@ -2,7 +2,6 @@ package com.justbelieveinmyself.marta.configs.beans;
 
 import com.justbelieveinmyself.marta.domain.enums.UploadDirectory;
 import com.justbelieveinmyself.marta.exceptions.NotCreatedException;
-import com.justbelieveinmyself.marta.exceptions.NotFoundException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -40,23 +39,34 @@ public class FileHelper {
             throw new NotCreatedException("Cannot upload image!");
         }
     }
-    public ResponseEntity<?> downloadFile(String filename, UploadDirectory from) {
+    public ResponseEntity<?> downloadFileAsResponse(String filename, UploadDirectory from) {
         try {
-            Path filePath = Paths.get(uploadPath + "/" + from.getPath() + "/" + filename);
-            if (!Files.exists(filePath)) {
-                throw new IOException("File not found");
-            }
-            Resource resource = new UrlResource(filePath.toUri());
+            UrlResource resource = getFileAsResource(filename, from);
             HttpHeaders httpHeaders = new HttpHeaders();
             httpHeaders.add("File-Name", filename);
             httpHeaders.add(HttpHeaders.CONTENT_DISPOSITION, "attachment;File-Name=" + resource.getFilename());
-            return ResponseEntity.ok().contentType(MediaType.parseMediaType(Files.probeContentType(filePath)))
+            return ResponseEntity.ok().contentType(MediaType.parseMediaType(Files.probeContentType(resource.getFile().toPath())))
                     .headers(httpHeaders).body(resource);
         }
         catch (IOException exception){
             return null;
         }
     }
+
+    public UrlResource getFileAsResource(String filename, UploadDirectory from) {
+        try {
+
+            Path filePath = Paths.get(uploadPath + "/" + from.getPath() + "/" + filename);
+            if (!Files.exists(filePath)) {
+                throw new IOException("File not found");
+            }
+            return new UrlResource(filePath.toUri());
+        }
+        catch (IOException e){
+            return null;
+        }
+    }
+
     public byte[] downloadFileAsByteArray(String filename, UploadDirectory from) {
         try {
             Path filePath = Paths.get(uploadPath + "/" + from.getPath() + "/" + filename);

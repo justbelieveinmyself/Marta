@@ -3,6 +3,7 @@ package com.justbelieveinmyself.marta.controllers;
 import com.justbelieveinmyself.marta.domain.annotations.CurrentUser;
 import com.justbelieveinmyself.marta.domain.dto.ProductDto;
 import com.justbelieveinmyself.marta.domain.dto.ProductWithImageDto;
+import com.justbelieveinmyself.marta.domain.dto.ReviewDto;
 import com.justbelieveinmyself.marta.domain.entities.Product;
 import com.justbelieveinmyself.marta.domain.entities.User;
 import com.justbelieveinmyself.marta.exceptions.ResponseError;
@@ -108,5 +109,33 @@ public class ProductController {
     ) {
         return productService.updateProduct(productFromDb, productDto, currentUser);
     }
-
+    @GetMapping("reviews/{productId}")
+    @Operation(summary = "Get list of product reviews", description = "Use this to get all reviews of specified product")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Product exists",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ReviewDto.class))),
+            @ApiResponse(responseCode = "403", description = "Product doesn't exists!",
+                    content = @Content)
+    })
+    @Parameter(name = "productId", required = true, schema = @Schema(type = "integer", name = "productId"), in = ParameterIn.PATH)
+    public ResponseEntity<?> getProductReviews(
+            @Parameter(hidden = true)
+            @PathVariable(name = "productId") Product product
+    ){
+        return productService.getListProductReviews(product);
+    }
+    @PostMapping("reviews")
+    @Operation(summary = "Create product review", description = "Use this to create review for product")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Review saved",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ReviewDto.class))),
+            @ApiResponse(responseCode = "403", description = "Review doesn't saved",
+                    content = @Content)
+    })
+    public ResponseEntity<?> createProductReview(
+            @RequestBody ReviewDto reviewDto,
+            @CurrentUser User author
+    ){
+        return productService.createProductReview(reviewDto, author);
+    }
 }

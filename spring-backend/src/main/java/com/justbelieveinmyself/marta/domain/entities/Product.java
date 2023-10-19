@@ -8,6 +8,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.BeanUtils;
 
+import java.util.List;
+
 @Schema(description = "Information about Product")
 @Table(name = "products")
 @Entity
@@ -36,4 +38,6 @@ public class Product {
     private User seller;
     @Column(name = "preview_image")
     private String previewImg;
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Review> reviews;
 }

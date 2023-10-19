@@ -15,8 +15,7 @@ export class ProductService {
     constructor(
         private httpClient: HttpClient,
         private imageService: ImageService
-    ) {
-    }
+    ) {}
 
     getProductList(): Observable<ProductWithImage[]> {
         return this.httpClient.get<ProductWithImage[]>(this.baseUrl).pipe(map(products =>
