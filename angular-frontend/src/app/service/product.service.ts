@@ -4,6 +4,7 @@ import {map, Observable} from 'rxjs';
 import {Product} from '../models/product';
 import {ProductWithImage} from '../models/product-with-image';
 import {ImageService} from "./image.service";
+import {Review} from "../models/review";
 
 @Injectable({
     providedIn: 'root'
@@ -22,6 +23,10 @@ export class ProductService {
             products.map(product => this.imageService.createImageInProduct(product))));
     }
 
+    getProductReviews(productId : number) : Observable<Review[]> {
+        return this.httpClient.get<Review[]>(`${this.baseUrl}/reviews/` + productId);
+    }
+
     addProduct(product: Product, preview: File): Observable<Object> {
         const fd = new FormData();
         fd.append("file", preview);
@@ -30,6 +35,9 @@ export class ProductService {
         return this.httpClient.post(this.baseUrl, fd);
     }
 
+    addReview(review: Review): Observable<Review>{
+        return this.httpClient.post<Review>(`${this.baseUrl}/reviews`, review);
+    }
     updateProduct(product: Product): Observable<Object> {
         return this.httpClient.put(this.baseUrl + '/' + product.id, product);
     }

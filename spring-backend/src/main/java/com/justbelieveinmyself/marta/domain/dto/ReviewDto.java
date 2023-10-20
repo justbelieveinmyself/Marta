@@ -9,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.BeanUtils;
 
+import java.time.ZonedDateTime;
 import java.util.List;
 @Data
 @AllArgsConstructor
@@ -19,12 +20,16 @@ public class ReviewDto {
     private String answer;
     @Min(1) @Max(5)
     private Integer rating;
+    private ZonedDateTime time;
     private List<String> photos;
     private Long productId;
+    private SellerDto author;
     public static ReviewDto of(Review review){
         ReviewDto reviewDto = new ReviewDto();
         BeanUtils.copyProperties(review, reviewDto, "product", "id", "author");
         reviewDto.setProductId(review.getProduct().getId());
+        reviewDto.setAuthor(SellerDto.of(review.getAuthor()));
+        reviewDto.setTime(review.getTime());
         return reviewDto;
     }
 }

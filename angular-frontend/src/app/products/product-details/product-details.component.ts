@@ -2,9 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {ProductService} from "../../service/product.service";
 import {ActivatedRoute} from "@angular/router";
 import {ProductWithImage} from "../../models/product-with-image";
-import {ImageService} from "../../service/image.service";
-import {map} from "rxjs";
-import {HttpClient, HttpResponse} from "@angular/common/http";
+import {Review} from "../../models/review";
 
 @Component({
     selector: 'app-product-details',
@@ -21,14 +19,23 @@ export class ProductDetailsComponent implements OnInit {
     ) {}
 
     product: ProductWithImage;
+    reviews: Review[];
     isReviews = true;
     isAppearing = false;
     isNeedLeftButton = false;
     isReceivedProduct = true;
     isWriteQuestion = false;
+    currentRate: number = 0;
+    messageOfReview: string;
     ngOnInit(): void {
         this.productService.getProductById(this.activatedRoute.snapshot.params['id']).subscribe({
-            next: product => this.product = product,
+            next: product => {
+                this.product = product;
+                this.productService.getProductReviews(this.product.product.id).subscribe({
+                    next: reviews => this.reviews = reviews,
+                    error: err => console.log(err)
+                });
+            },
             error: err => console.log(err)
         });
     }
@@ -45,5 +52,17 @@ export class ProductDetailsComponent implements OnInit {
         scrollReviews.scrollLeft -= 440;
         // @ts-ignore
         this.isNeedLeftButton = scrollReviews.scrollLeft - 440 > 0;
+    }
+
+    saveReview(){
+        let review = new Review();
+        review.message = this.messageOfReview;
+        review.rating = this.currentRate;
+        review.productId = this.product.product.id;
+        // review.photos = base64,.......
+        this.productService.addReview(review).subscribe({
+            next: review => this.reviews.push(review),
+            error: err => console.log(err)
+        });
     }
 }

@@ -5,6 +5,7 @@ import com.justbelieveinmyself.marta.domain.dto.ProductDto;
 import com.justbelieveinmyself.marta.domain.dto.ProductWithImageDto;
 import com.justbelieveinmyself.marta.domain.dto.ReviewDto;
 import com.justbelieveinmyself.marta.domain.entities.Product;
+import com.justbelieveinmyself.marta.domain.entities.Review;
 import com.justbelieveinmyself.marta.domain.entities.User;
 import com.justbelieveinmyself.marta.exceptions.ResponseError;
 import com.justbelieveinmyself.marta.exceptions.ResponseMessage;
@@ -137,5 +138,19 @@ public class ProductController {
             @CurrentUser User author
     ){
         return productService.createProductReview(reviewDto, author);
+    }
+    @DeleteMapping("reviews/{reviewId}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @Operation(summary = "Delete review", description = "Use this to delete review for product")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Review successfully deleted",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ResponseMessage.class))),
+            @ApiResponse(responseCode = "403", description = "Review doesn't deleted",
+                    content = @Content)
+    })
+    public ResponseEntity<?> deleteProductReview(
+            @PathVariable(name = "reviewId") Review review
+    ){
+        return productService.deleteProductReview(review);
     }
 }

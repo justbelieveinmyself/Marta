@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import { LoginUser } from '../models/login-user';
 import { LoginResponseDto } from '../models/login-response.dto';
 import {RefreshResponseDto} from "../models/refresh-response.dto";
-import {Dto} from "../models/dto";
+import {RefreshRequestDto} from "../models/refresh-request.dto";
 
 @Injectable({
   providedIn: 'root'
@@ -28,7 +28,7 @@ export class AuthService {
   }
 
   public getAccessToken(refreshToken : string) : Observable<RefreshResponseDto>{
-    const dto = new Dto(refreshToken);
+    const dto = {refreshToken};
     return this.httpClient.post<any>(this.authUrl + 'refresh', dto);
   }
 }

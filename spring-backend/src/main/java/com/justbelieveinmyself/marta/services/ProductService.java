@@ -13,8 +13,10 @@ import com.justbelieveinmyself.marta.exceptions.ForbiddenException;
 import com.justbelieveinmyself.marta.exceptions.NotFoundException;
 import com.justbelieveinmyself.marta.exceptions.ResponseMessage;
 import com.justbelieveinmyself.marta.repositories.ProductRepository;
+import com.justbelieveinmyself.marta.repositories.ReviewRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -32,6 +34,8 @@ public class ProductService {
     private ProductRepository productRepository;
     @Autowired
     private ProductMapper productMapper;
+    @Autowired
+    private ReviewRepository reviewRepository;
     @Autowired
     private FileHelper fileHelper;
 
@@ -101,7 +105,6 @@ public class ProductService {
     }
 
     public ResponseEntity<?> createProductReview(ReviewDto reviewDto, User author) {
-        System.out.println("xdxd");
         Optional<Product> productOpt = productRepository.findById(reviewDto.getProductId());
         if(productOpt.isEmpty()){
             throw new NotFoundException("Product with [id] doesn't exists");
@@ -115,8 +118,17 @@ public class ProductService {
         review.setRating(reviewDto.getRating());
         review.setPhotos(reviewDto.getPhotos());
         review.setAuthor(author);
-        product.getReviews().add(review);
+        Review savedReview = reviewRepository.save(review);
+        product.getReviews().add(savedReview);
         productRepository.save(product);
         return ResponseEntity.ok(ReviewDto.of(review));
+    }
+
+    public ResponseEntity<?> deleteProductReview(Review review) {
+        if (Objects.isNull(review))
+            throw new NotFoundException("Review with [id] doesn't exists");
+        //no need to validate rights cause can be deleted only with authority "admin"
+        reviewRepository.delete(review);
+        return ResponseEntity.ok(new ResponseMessage(HttpStatus.OK.value(), "Successfully deleted"));
     }
 }
