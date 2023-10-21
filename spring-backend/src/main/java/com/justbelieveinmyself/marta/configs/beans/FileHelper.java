@@ -16,8 +16,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 public class FileHelper {
     @Value("${upload.path}")
@@ -38,6 +37,13 @@ public class FileHelper {
         }catch (IOException e) {
             throw new NotCreatedException("Cannot upload image!");
         }
+    }
+    public List<String> uploadFile(MultipartFile[] files, UploadDirectory to) {
+        List<String> paths = new ArrayList<>();
+        Arrays.stream(files).forEach(file -> {
+            paths.add(uploadFile(file, to));
+        });
+        return paths;
     }
     public ResponseEntity<?> downloadFileAsResponse(String filename, UploadDirectory from) {
         try {

@@ -22,10 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.ZonedDateTime;
-import java.util.Base64;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Stream;
 
 @Service
@@ -100,27 +97,36 @@ public class ProductService {
     public ResponseEntity<?> getListProductReviews(Product product) {
         if (Objects.isNull(product))
             throw new NotFoundException("Product with [id] doesn't exists");
+        product.getReviews().forEach(review -> {
+            List<String> base64photos = review.getPhotos().stream().map(photo
+                    -> Base64.getEncoder().encodeToString(fileHelper.downloadFileAsByteArray(photo, UploadDirectory.REVIEWS))).toList();
+            review.setPhotos(base64photos);
+        });
         List<ReviewDto> reviews = product.getReviews().stream().map(review -> ReviewDto.of(review)).toList();
         return ResponseEntity.ok(reviews);
     }
 
-    public ResponseEntity<?> createProductReview(ReviewDto reviewDto, User author) {
+    public ResponseEntity<?> createProductReview(ReviewDto reviewDto, User author, MultipartFile[] photos) {
         Optional<Product> productOpt = productRepository.findById(reviewDto.getProductId());
         if(productOpt.isEmpty()){
             throw new NotFoundException("Product with [id] doesn't exists");
         }
+        List<String> uploadPaths = fileHelper.uploadFile(photos, UploadDirectory.REVIEWS);
         Product product = productOpt.get();
         Review review = new Review();
         review.setTime(ZonedDateTime.now());
         review.setMessage(reviewDto.getMessage());
         review.setAnswer(reviewDto.getAnswer());
-        review.setProduct(product);
         review.setRating(reviewDto.getRating());
-        review.setPhotos(reviewDto.getPhotos());
+        review.setPhotos(uploadPaths);
+        review.setProduct(product);
         review.setAuthor(author);
         Review savedReview = reviewRepository.save(review);
         product.getReviews().add(savedReview);
         productRepository.save(product);
+        List<String> base64photos = review.getPhotos().stream().map(photo
+                -> Base64.getEncoder().encodeToString(fileHelper.downloadFileAsByteArray(photo, UploadDirectory.REVIEWS))).toList();
+        review.setPhotos(base64photos);
         return ResponseEntity.ok(ReviewDto.of(review));
     }
 

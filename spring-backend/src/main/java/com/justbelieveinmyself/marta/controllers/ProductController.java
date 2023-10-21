@@ -125,7 +125,7 @@ public class ProductController {
     ){
         return productService.getListProductReviews(product);
     }
-    @PostMapping("reviews")
+    @PostMapping(value = "reviews", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(summary = "Create product review", description = "Use this to create review for product")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Review saved",
@@ -134,10 +134,11 @@ public class ProductController {
                     content = @Content)
     })
     public ResponseEntity<?> createProductReview(
-            @RequestBody ReviewDto reviewDto,
+            @RequestPart ReviewDto reviewDto,
+            @RequestPart(required = false) MultipartFile[] photos,
             @CurrentUser User author
     ){
-        return productService.createProductReview(reviewDto, author);
+        return productService.createProductReview(reviewDto, author, photos);
     }
     @DeleteMapping("reviews/{reviewId}")
     @PreAuthorize("hasAuthority('ADMIN')")
