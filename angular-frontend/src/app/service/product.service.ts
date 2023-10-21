@@ -16,14 +16,15 @@ export class ProductService {
     constructor(
         private httpClient: HttpClient,
         private imageService: ImageService
-    ) {}
+    ) {
+    }
 
     getProductList(): Observable<ProductWithImage[]> {
         return this.httpClient.get<ProductWithImage[]>(this.baseUrl).pipe(map(products =>
             products.map(product => this.imageService.createImageInProduct(product))));
     }
 
-    getProductReviews(productId : number) : Observable<Review[]> {
+    getProductReviews(productId: number): Observable<Review[]> {
         return this.httpClient.get<Review[]>(`${this.baseUrl}/reviews/` + productId);
     }
 
@@ -35,9 +36,18 @@ export class ProductService {
         return this.httpClient.post(this.baseUrl, fd);
     }
 
-    addReview(review: Review): Observable<Review>{
-        return this.httpClient.post<Review>(`${this.baseUrl}/reviews`, review);
+    addReview(review: Review, photos: File[]): Observable<Review> {
+        var fd = new FormData();
+        var json = new Blob([JSON.stringify(review)], {type: 'application/json'});
+        fd.append("reviewDto", json);
+        if (photos) {
+            for (let i = 0; i < photos.length; i++) {
+                fd.append("photos", photos[i]);
+            }
+        }
+        return this.httpClient.post<Review>(`${this.baseUrl}/reviews`, fd);
     }
+
     updateProduct(product: Product): Observable<Object> {
         return this.httpClient.put(this.baseUrl + '/' + product.id, product);
     }

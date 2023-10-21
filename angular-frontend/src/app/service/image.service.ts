@@ -94,4 +94,12 @@ export class ImageService {
         });
         return product;
     }
+
+    createUrlFromBase64(base64String: string) {
+        return new Promise<string>(resolve => {
+            this.base64ToBlob(base64String).then(blob => {
+                resolve(this.createUrlFromBlob(blob));
+            })
+        })
+    }
 }

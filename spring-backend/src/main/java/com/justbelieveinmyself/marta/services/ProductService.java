@@ -111,22 +111,26 @@ public class ProductService {
         if(productOpt.isEmpty()){
             throw new NotFoundException("Product with [id] doesn't exists");
         }
-        List<String> uploadPaths = fileHelper.uploadFile(photos, UploadDirectory.REVIEWS);
         Product product = productOpt.get();
         Review review = new Review();
         review.setTime(ZonedDateTime.now());
         review.setMessage(reviewDto.getMessage());
         review.setAnswer(reviewDto.getAnswer());
         review.setRating(reviewDto.getRating());
-        review.setPhotos(uploadPaths);
+        if(photos != null) {
+            List<String> uploadPaths = fileHelper.uploadFile(photos, UploadDirectory.REVIEWS);
+            review.setPhotos(uploadPaths);
+        }
         review.setProduct(product);
         review.setAuthor(author);
         Review savedReview = reviewRepository.save(review);
         product.getReviews().add(savedReview);
         productRepository.save(product);
-        List<String> base64photos = review.getPhotos().stream().map(photo
-                -> Base64.getEncoder().encodeToString(fileHelper.downloadFileAsByteArray(photo, UploadDirectory.REVIEWS))).toList();
-        review.setPhotos(base64photos);
+        if(photos != null) {
+            List<String> base64photos = review.getPhotos().stream().map(photo
+                    -> Base64.getEncoder().encodeToString(fileHelper.downloadFileAsByteArray(photo, UploadDirectory.REVIEWS))).toList();
+            review.setPhotos(base64photos);
+        }
         return ResponseEntity.ok(ReviewDto.of(review));
     }
 
