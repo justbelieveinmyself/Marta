@@ -1,7 +1,7 @@
 <div class="mb-3">
     <h3>{{product.product.seller.username | titlecase}} / {{product.product.productName | titlecase}}</h3>
     <p>
-        4.8<i class="fa-solid fa-star" style="color: #c9cc24;"> &nbsp;</i>
+        {{ratingOverall | number:'1.0-1'}}<i class="fa-solid fa-star" style="color: #c9cc24;"> &nbsp;</i>
         <span class="text-secondary"><a class="ratings ratings-router-link" routerLink="../feedback"
                                         routerLinkActive="active"
                                         type="button">{{reviews.length}} ratings</a> Art: {{this.product.product.productCode}}</span>
@@ -144,9 +144,9 @@
         <div *ngIf="isReviews">
             <div style="position: relative;;">
       <span style="font-size: 25px; font-weight: bold" class="ms-3">
-        4.8 <i class="fa-solid fa-star" *ngFor="let stars of [].constructor(Math.round(4.8))"
+        {{ratingOverall | number:'1.0-1'}} <i class="fa-solid fa-star" *ngFor="let stars of [].constructor(Math.round(ratingOverall))"
                style="color: #c9cc24;"></i>
-        <i class="fa-regular fa-star" *ngFor="let nostars of [].constructor(Math.round(5-4.8))"
+        <i class="fa-regular fa-star" *ngFor="let nostars of [].constructor(Math.round(5-ratingOverall))"
            style="color: #c9cc24;"></i>
       </span>
                 <sup class="text-secondary" style="font-size: 15px; font-weight: bold"> &nbsp;{{reviews.length}} ratings</sup>
@@ -155,10 +155,10 @@
                 </button>
             </div>
             <div style="position: relative" class="mt-2">
-                <a type="button" class="fa-solid fa-circle-arrow-right fa-2xl" (click)="rightScroll()"
+                <a type="button" class="fa-solid fa-circle-arrow-right fa-2xl" [hidden]="!isNeedRightButtonForReviews" (click)="rightScrollForReviews()"
                    style="position: absolute; width: 30px; height: 30px; top: 135px; right: 20px; z-index: 100;"></a>
-                <a type="button" class="fa-solid fa-circle-arrow-left fa-2xl" [hidden]="!isNeedLeftButton"
-                   (click)="leftScroll()"
+                <a type="button" class="fa-solid fa-circle-arrow-left fa-2xl" [hidden]="!isNeedLeftButtonForReviews"
+                   (click)="leftScrollForReviews()"
                    style="position: absolute; width: 30px; height: 30px; top: 135px; left: 20px; z-index: 100;"></a>
                 <div id="scrollReviews"
                      style="width: 100%; white-space: nowrap; display: flex; overflow: hidden; scroll-behavior: smooth">
@@ -209,12 +209,12 @@
             </div>
 
             <div style="position: relative" class="mt-2">
-                <a type="button" class="fa-solid fa-circle-arrow-right fa-2xl" (click)="rightScroll()"
+                <a type="button" class="fa-solid fa-circle-arrow-right fa-2xl" [hidden]="!isNeedRightButtonForQuestions" (click)="rightScrollForQuestions()"
                    style="position: absolute; width: 30px; height: 30px; top: 135px; right: 20px; z-index: 100;"></a>
-                <a type="button" class="fa-solid fa-circle-arrow-left fa-2xl" [hidden]="!isNeedLeftButton"
-                   (click)="leftScroll()"
+                <a type="button" class="fa-solid fa-circle-arrow-left fa-2xl" [hidden]="!isNeedLeftButtonForQuestions"
+                   (click)="leftScrollForQuestions()"
                    style="position: absolute; width: 30px; height: 30px; top: 135px; left: 20px; z-index: 100;"></a>
-                <div id="scrollReviews"
+                <div id="scrollQuestions"
                      style="width: 100%; white-space: nowrap; display: flex; overflow: hidden; scroll-behavior: smooth">
 
                     <div class="card card_with_shadow me-3" style="height: 270px; width: 520px; min-width: 430px">
@@ -424,7 +424,7 @@
                 <label class="mt-3 mb-1" style="font-weight: bold">Tell us about the product</label>
                 <textarea [(ngModel)]="messageOfReview" class="form-control w-100" style="height: 300px" type="text"> </textarea>
                 <label class="mt-3 mb-1"  style="font-weight: bold">Load up to 5 photos</label>
-                <input type="file" (change)="onFileAdded($event)"  class="form-control">
+                <input type="file" (change)="onFileAdded($event)" class="form-control">
                 <div class="mt-3 justify-content-center" style="display: flex">
                     <button class="btn btn-outline-dark w-75" (click)="saveReview()">Send</button>
                 </div>

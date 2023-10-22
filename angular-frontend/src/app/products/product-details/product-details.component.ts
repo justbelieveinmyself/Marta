@@ -29,9 +29,13 @@ export class ProductDetailsComponent implements OnInit {
     reviews: Review[];
     isReviews = true;
     isAppearing = false;
-    isNeedLeftButton = false;
+    isNeedLeftButtonForReviews = false;
+    isNeedRightButtonForReviews = false;
+    isNeedLeftButtonForQuestions = false;
+    isNeedRightButtonForQuestions = false;
     isReceivedProduct = true;
     isWriteQuestion = false;
+    ratingOverall: number = 0;
     currentRate: number = 0;
     messageOfReview: string;
     reviewPhotos: ImageModel[] = [];
@@ -42,6 +46,9 @@ export class ProductDetailsComponent implements OnInit {
                 this.productService.getProductReviews(this.product.product.id).subscribe({
                     next: reviews => {
                         this.reviews = reviews;
+                        var sumRate = 0;
+                        reviews.forEach(rev => sumRate += rev.rating );
+                        this.ratingOverall = sumRate/reviews.length;
                         this.reviews.forEach(review => {
                             let urls: string[] = [];
                             review.photos.map(photo => {
@@ -51,6 +58,8 @@ export class ProductDetailsComponent implements OnInit {
                             });
                             review.photos = urls;
                         })
+                        this.isNeedRightButtonForReviews = this.reviews.length > 2;
+                        this.isNeedRightButtonForQuestions = true; //TODO
                     },
                     error: err => console.log(err)
                 });
@@ -59,19 +68,7 @@ export class ProductDetailsComponent implements OnInit {
         });
     }
 
-    rightScroll() {
-        // @ts-ignore
-        scrollReviews.scrollLeft += 440;
-        // @ts-ignore
-        this.isNeedLeftButton = scrollReviews.scrollLeft + 440 > 0;
-    }
 
-    leftScroll() {
-        // @ts-ignore
-        scrollReviews.scrollLeft -= 440;
-        // @ts-ignore
-        this.isNeedLeftButton = scrollReviews.scrollLeft - 440 > 0;
-    }
 
     saveReview() {
         let review = new Review();
@@ -107,5 +104,41 @@ export class ProductDetailsComponent implements OnInit {
             }
             this.reviewPhotos.push(imageModel);
         }
+    }
+
+    rightScrollForReviews() {
+        // @ts-ignore
+        scrollReviews.scrollLeft += 440;
+        // @ts-ignore
+        this.isNeedLeftButtonForReviews = scrollReviews.scrollLeft + 440 > 0;
+        // @ts-ignore
+        this.isNeedRightButtonForReviews = scrollReviews.scrollWidth-1296 > scrollReviews.scrollLeft + 440;
+    }
+
+    leftScrollForReviews() {
+        // @ts-ignore
+        scrollReviews.scrollLeft -= 440;
+        // @ts-ignore
+        this.isNeedLeftButtonForReviews = scrollReviews.scrollLeft - 440 > 0;
+        // @ts-ignore
+        this.isNeedRightButtonForReviews = scrollReviews.scrollWidth-1296 > scrollReviews.scrollLeft - 440;
+    }
+
+    rightScrollForQuestions() {
+        // @ts-ignore
+        scrollQuestions.scrollLeft += 440;
+        // @ts-ignore
+        this.isNeedLeftButtonForQuestions = scrollQuestions.scrollLeft + 440 > 0;
+        // @ts-ignore
+        this.isNeedRightButtonForQuestions = scrollQuestions.scrollWidth-1296 > scrollQuestions.scrollLeft + 440;
+    }
+
+    leftScrollForQuestions() {
+        // @ts-ignore
+        scrollQuestions.scrollLeft -= 440;
+        // @ts-ignore
+        this.isNeedLeftButtonForQuestions = scrollQuestions.scrollLeft - 440 > 0;
+        // @ts-ignore
+        this.isNeedRightButtonForQuestions = scrollQuestions.scrollWidth-1296 > scrollQuestions.scrollLeft - 440;
     }
 }
