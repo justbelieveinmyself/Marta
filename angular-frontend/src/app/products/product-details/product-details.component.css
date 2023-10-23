@@ -28,8 +28,14 @@
 }
 
 .appearing {
+    transition: opacity 1s ease-out;
     opacity: 0;
-    transition: .8s;
+    height: 0;
+    overflow: hidden;
+}
+.appearing-active {
+    opacity: 1;
+    height: auto;
 }
 
 .nav-link {

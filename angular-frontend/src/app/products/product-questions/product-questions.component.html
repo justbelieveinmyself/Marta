@@ -42,7 +42,7 @@
     </h4>
     <textarea placeholder="Ask a question about product" [(ngModel)]="messageOfQuestion" class="form-control mb-2 down"
               (click)="isWriteQuestion=true"></textarea>
-    <div class="appearing" [style.opacity]="isWriteQuestion? 1 : 0">
+    <div class="appearing" [ngClass]="isWriteQuestion?'appearing-active':''">
         <button class="btn btn-outline-dark me-2" (click)="saveQuestion()">Ask a question</button>
         <button class="btn btn-outline-danger" (click)="isWriteQuestion=false">Close</button>
     </div>

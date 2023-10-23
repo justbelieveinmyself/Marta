@@ -113,6 +113,8 @@ export class ProductDetailsComponent implements OnInit {
         })
     }
 
+    reportReview(){}
+
     onFileAdded(event: any) {
         if (event.target.files) {
             const file = event.target.files[0];

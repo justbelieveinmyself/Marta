@@ -34,5 +34,13 @@ export class ProductQuestionsComponent implements OnInit {
         });
     }
 
-    saveQuestion() {}
+    saveQuestion() {
+        const question = new Question();
+        question.message = this.messageOfQuestion;
+        question.productId = this.product.product.id;
+        this.productService.addQuestion(question).subscribe({
+            next: question => console.log("added new unanswered question", question), //need to be answered for display
+            error: err => console.log(err)
+        })
+    }
 }

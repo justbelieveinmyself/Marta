@@ -197,7 +197,9 @@
                                     </div>
                                 </div>
                             </div>
-                            <div style="bottom: 25px;right: 20px; position: absolute;">Report a review</div>
+                            <a type="button" style="bottom: 25px;right: 20px; position: absolute;"
+                               data-bs-toggle="modal"
+                               data-bs-target="#reviewReportModal">Report a review</a>
                         </div>
                     </div>
                 </div>
@@ -211,7 +213,7 @@
             <textarea placeholder="Ask a question about product" [(ngModel)]="messageOfQuestion"
                       class="form-control mb-2 down"
                       (click)="isWriteQuestion=true"></textarea>
-            <div class="appearing" [style.opacity]="isWriteQuestion? 1 : 0">
+            <div class="appearing" [ngClass]="isWriteQuestion?'appearing-active':''">
                 <button class="btn btn-outline-dark me-2" (click)="saveQuestion()">Ask a question</button>
                 <button class="btn btn-outline-danger" (click)="isWriteQuestion=false">Close</button>
             </div>
@@ -322,6 +324,54 @@
                 <input type="file" (change)="onFileAdded($event)" class="form-control">
                 <div class="mt-3 justify-content-center" style="display: flex">
                     <button class="btn btn-outline-dark w-75" (click)="saveReview()">Send</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- For modal with report review -->
+<div class="modal fade" id="reviewReportModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" *ngIf="isReceivedProduct else cantLeaveReview"
+         style="min-width: 300px">
+        <div class="modal-content">
+            <div class="modal-header mt-2 mx-3">
+                <h1 class="modal-title fs-5"><b>Why do you want to complain about the review?</b></h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body mx-4" style="font-size: 17px">
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadio1">
+                    <label class="form-check-label" for="flexRadio1">
+                        The review contains obscene, abusive language
+                    </label>
+                </div>
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadio2">
+                    <label class="form-check-label" for="flexRadio2">
+                        Registered, fictitious
+                    </label>
+                </div>
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadio3">
+                    <label class="form-check-label" for="flexRadio3">
+                        Spam
+                    </label>
+                </div>
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadio4">
+                    <label class="form-check-label" for="flexRadio4">
+                        Incorrect photo, video
+                    </label>
+                </div>
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadio5">
+                    <label class="form-check-label" for="flexRadio5">
+                        The review is not about the product
+                    </label>
+                </div>
+                <div class="mt-3 justify-content-center" style="display: flex">
+                    <button class="btn btn-outline-dark w-75" (click)="reportReview()">Report</button>
                 </div>
             </div>
         </div>
