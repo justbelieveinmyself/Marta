@@ -5,6 +5,7 @@ import {Product} from '../models/product';
 import {ProductWithImage} from '../models/product-with-image';
 import {ImageService} from "./image.service";
 import {Review} from "../models/review";
+import {Question} from "../models/question";
 
 @Injectable({
     providedIn: 'root'
@@ -24,8 +25,17 @@ export class ProductService {
             products.map(product => this.imageService.createImageInProduct(product))));
     }
 
+    getProductById(id: number): Observable<ProductWithImage> {
+        return this.httpClient.get<ProductWithImage>(`${this.baseUrl}/${id}`)
+            .pipe(map(product => this.imageService.createImageInProduct(product)));
+    }
+
     getProductReviews(productId: number): Observable<Review[]> {
         return this.httpClient.get<Review[]>(`${this.baseUrl}/reviews/` + productId);
+    }
+
+    getProductQuestions(productId: number): Observable<Question[]> {
+        return this.httpClient.get<Question[]>(`${this.baseUrl}/questions/` + productId);
     }
 
     addProduct(product: Product, preview: File): Observable<Object> {
@@ -48,13 +58,12 @@ export class ProductService {
         return this.httpClient.post<Review>(`${this.baseUrl}/reviews`, fd);
     }
 
-    updateProduct(product: Product): Observable<Object> {
-        return this.httpClient.put(this.baseUrl + '/' + product.id, product);
+    addQuestion(question : Question) : Observable<Question>{
+        return this.httpClient.post<Question>(`${this.baseUrl}/questions`, question);
     }
 
-    getProductById(id: number): Observable<ProductWithImage> {
-        return this.httpClient.get<ProductWithImage>(`${this.baseUrl}/${id}`)
-            .pipe(map(product => this.imageService.createImageInProduct(product)));
+    updateProduct(product: Product): Observable<Object> {
+        return this.httpClient.put(this.baseUrl + '/' + product.id, product);
     }
 
     deleteProduct(id: number): Observable<Object> {

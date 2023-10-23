@@ -133,7 +133,7 @@
                 </li>
                 <li class="nav-item">
                     <button class="nav-link {{isReviews? '' : 'active'}}" (click)="isReviews=false">Questions
-                        <sup>156</sup>
+                        <sup>{{questions? questions.length : 0}}</sup>
                     </button>
                 </li>
                 <li class="nav-item ms-auto">
@@ -169,7 +169,7 @@
                 <div id="scrollReviews"
                      style="width: 100%; white-space: nowrap; display: flex; overflow: hidden; scroll-behavior: smooth">
 
-                    <div class="card card_with_shadow me-4" *ngFor="let comment of reviews"
+                    <div class="card card_with_shadow me-4" *ngFor="let review of reviews"
                          style="height: 270px; width: 430px; min-width: 430px">
                         <div class="card-body">
                             <div style="padding-left: 5px;">
@@ -178,22 +178,22 @@
                                                     [ngSrc]="'https://eliaslealblog.files.wordpress.com/2014/03/user-200.png'"
                                                     width="1" height="1"
             />
-                {{comment.author.username}} <br>
-                {{comment.time | date}}
+                {{review.author.username}} <br>
+                {{review.time | date: 'dd MMM YYYY, HH:mm'}}
             </span>
                                 <div style="position: absolute; top: 25px; right: 20px">
-                                    {{comment.rating}} <i class="fa-solid fa-star"
-                                                          *ngFor="let stars of [].constructor(Math.round(comment.rating))"
-                                                          style="color: #c9cc24;"></i>
+                                    {{review.rating}} <i class="fa-solid fa-star"
+                                                         *ngFor="let stars of [].constructor(Math.round(review.rating))"
+                                                         style="color: #c9cc24;"></i>
                                     <i class="fa-regular fa-star"
-                                       *ngFor="let nostars of [].constructor(Math.round(5-comment.rating))"
+                                       *ngFor="let nostars of [].constructor(Math.round(5-review.rating))"
                                        style="color: #c9cc24;"></i>
                                 </div>
                                 <div style="white-space: pre-wrap;">
-                                    {{comment.message}}
+                                    {{review.message}}
                                 </div>
                                 <div style="display: flex; ">
-                                    <div style="margin-right: 10px" *ngFor="let photo of comment.photos">
+                                    <div style="margin-right: 10px" *ngFor="let photo of review.photos">
                                         <img alt="review photo" class="rounded-3"
                                              style="width: 80px; height: 80px; object-fit: cover"
                                              [src]="photo" width="80" height="80">
@@ -211,10 +211,10 @@
         </div>
 
         <div *ngIf="!isReviews">
-            <textarea placeholder="Ask a question about product" class="form-control mb-2 down"
+            <textarea placeholder="Ask a question about product" [(ngModel)]="messageOfQuestion" class="form-control mb-2 down"
                       (click)="isWriteQuestion=true"></textarea>
             <div class="appearing" [style.opacity]="isWriteQuestion? 1 : 0">
-                <button class="btn btn-outline-dark me-2">Ask a question</button>
+                <button class="btn btn-outline-dark me-2" (click)="saveQuestion()">Ask a question</button>
                 <button class="btn btn-outline-danger" (click)="isWriteQuestion=false">Close</button>
             </div>
 
@@ -228,139 +228,21 @@
                 <div id="scrollQuestions"
                      style="width: 100%; white-space: nowrap; display: flex; overflow: hidden; scroll-behavior: smooth">
 
-                    <div class="card card_with_shadow me-3" style="height: 270px; width: 520px; min-width: 430px">
+                    <div class="card card_with_shadow me-3" *ngFor="let question of questions" style="height: 270px; width: 520px; min-width: 430px">
                         <div class="card-body">
                             <div style="padding-left: 12px; padding-top: 12px;">
             <span style="display: inline-flex"><img class="rounded-4 me-2" alt="image for question"
                                                     style="width: 50px; height: 50px; object-fit: cover;"
                                                     src="https://eliaslealblog.files.wordpress.com/2014/03/user-200.png"/>
-            Dmitry <br>
-            13 oct, 11:52
+            {{question.author.username}} <br>
+            {{question.time | date: 'dd MMM YYYY, HH:mm'}}
             </span>
                                 <div class="mt-2" style="white-space: pre-wrap">
-                                    Hello, when will the Makima mat be available? Hello, when will the Makima mat be
-                                    available? Hello,
-                                    when will the Makima mat be available? Hello, when will the Makima mat be available?
+                                   {{question.message}}
                                 </div>
                                 <div class="mt-2" style="white-space: pre-wrap;">
                                     <b>✓ Brand Representative</b> <br>
-                                    Hello, you have great taste, this is one of the most popular prints, it will be on
-                                    sale soon)
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="card card_with_shadow me-3" style="height: 270px; width: 520px; min-width: 430px">
-                        <div class="card-body">
-                            <div style="padding-left: 12px; padding-top: 12px;">
-            <span style="display: inline-flex"><img class="rounded-4 me-2"
-                                                    style="width: 50px; height: 50px; object-fit: cover;"
-                                                    src="https://eliaslealblog.files.wordpress.com/2014/03/user-200.png"/>
-            Dmitry <br>
-            13 oct, 11:52
-            </span>
-                                <div class="mt-2" style="white-space: pre-wrap">
-                                    Hello, when will the Makima mat be available? Hello, when will the Makima mat be
-                                    available? Hello,
-                                    when will the Makima mat be available? Hello, when will the Makima mat be available?
-                                </div>
-                                <div class="mt-2" style="white-space: pre-wrap;">
-                                    <b>✓ Brand Representative</b> <br>
-                                    Hello, you have great taste, this is one of the most popular prints, it will be on
-                                    sale soon)
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="card card_with_shadow me-3" style="height: 270px; width: 520px; min-width: 430px">
-                        <div class="card-body">
-                            <div style="padding-left: 12px; padding-top: 12px;">
-            <span style="display: inline-flex"><img class="rounded-4 me-2"
-                                                    style="width: 50px; height: 50px; object-fit: cover;"
-                                                    src="https://eliaslealblog.files.wordpress.com/2014/03/user-200.png"/>
-            Dmitry <br>
-            13 oct, 11:52
-            </span>
-                                <div class="mt-2" style="white-space: pre-wrap">
-                                    Hello, when will the Makima mat be available? Hello, when will the Makima mat be
-                                    available? Hello,
-                                    when will the Makima mat be available? Hello, when will the Makima mat be available?
-                                </div>
-                                <div class="mt-2" style="white-space: pre-wrap;">
-                                    <b>✓ Brand Representative</b> <br>
-                                    Hello, you have great taste, this is one of the most popular prints, it will be on
-                                    sale soon)
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="card card_with_shadow me-3" style="height: 270px; width: 520px; min-width: 430px">
-                        <div class="card-body">
-                            <div style="padding-left: 12px; padding-top: 12px;">
-            <span style="display: inline-flex"><img class="rounded-4 me-2"
-                                                    style="width: 50px; height: 50px; object-fit: cover;"
-                                                    src="https://eliaslealblog.files.wordpress.com/2014/03/user-200.png"/>
-            Dmitry <br>
-            13 oct, 11:52
-            </span>
-                                <div class="mt-2" style="white-space: pre-wrap">
-                                    Hello, when will the Makima mat be available? Hello, when will the Makima mat be
-                                    available? Hello,
-                                    when will the Makima mat be available? Hello, when will the Makima mat be available?
-                                </div>
-                                <div class="mt-2" style="white-space: pre-wrap;">
-                                    <b>✓ Brand Representative</b> <br>
-                                    Hello, you have great taste, this is one of the most popular prints, it will be on
-                                    sale soon)
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="card card_with_shadow me-3" style="height: 270px; width: 520px; min-width: 430px">
-                        <div class="card-body">
-                            <div style="padding-left: 12px; padding-top: 12px;">
-            <span style="display: inline-flex"><img class="rounded-4 me-2"
-                                                    style="width: 50px; height: 50px; object-fit: cover;"
-                                                    src="https://eliaslealblog.files.wordpress.com/2014/03/user-200.png"/>
-            Dmitry <br>
-            13 oct, 11:52
-            </span>
-                                <div class="mt-2" style="white-space: pre-wrap">
-                                    Hello, when will the Makima mat be available? Hello, when will the Makima mat be
-                                    available? Hello,
-                                    when will the Makima mat be available? Hello, when will the Makima mat be available?
-                                </div>
-                                <div class="mt-2" style="white-space: pre-wrap;">
-                                    <b>✓ Brand Representative</b> <br>
-                                    Hello, you have great taste, this is one of the most popular prints, it will be on
-                                    sale soon)
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="card card_with_shadow me-3" style="height: 270px; width: 520px; min-width: 430px">
-                        <div class="card-body">
-                            <div style="padding-left: 12px; padding-top: 12px;">
-            <span style="display: inline-flex"><img class="rounded-4 me-2"
-                                                    style="width: 50px; height: 50px; object-fit: cover;"
-                                                    src="https://eliaslealblog.files.wordpress.com/2014/03/user-200.png"/>
-            Dmitry <br>
-            13 oct, 11:52
-            </span>
-                                <div class="mt-2" style="white-space: pre-wrap">
-                                    Hello, when will the Makima mat be available? Hello, when will the Makima mat be
-                                    available? Hello,
-                                    when will the Makima mat be available? Hello, when will the Makima mat be available?
-                                </div>
-                                <div class="mt-2" style="white-space: pre-wrap;">
-                                    <b>✓ Brand Representative</b> <br>
-                                    Hello, you have great taste, this is one of the most popular prints, it will be on
-                                    sale soon)
+                                    {{question.answer}}
                                 </div>
                             </div>
                         </div>

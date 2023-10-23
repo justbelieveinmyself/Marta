@@ -7,6 +7,7 @@ import {ImageService} from "../../service/image.service";
 import {resolve} from "@angular/compiler-cli";
 import {ImageModel} from "../../models/image-model";
 import {DomSanitizer} from "@angular/platform-browser";
+import {Question} from "../../models/question";
 
 @Component({
     selector: 'app-product-details',
@@ -27,6 +28,7 @@ export class ProductDetailsComponent implements OnInit {
 
     product: ProductWithImage;
     reviews: Review[];
+    questions: Question[];
     isReviews = true;
     isAppearing = false;
     isNeedLeftButtonForReviews = false;
@@ -38,7 +40,9 @@ export class ProductDetailsComponent implements OnInit {
     ratingOverall: number = 0;
     currentRate: number = 0;
     messageOfReview: string;
+    messageOfQuestion: string;
     reviewPhotos: ImageModel[] = [];
+
     ngOnInit(): void {
         this.productService.getProductById(this.activatedRoute.snapshot.params['id']).subscribe({
             next: product => {
@@ -47,8 +51,8 @@ export class ProductDetailsComponent implements OnInit {
                     next: reviews => {
                         this.reviews = reviews;
                         var sumRate = 0;
-                        reviews.forEach(rev => sumRate += rev.rating );
-                        this.ratingOverall = sumRate/reviews.length;
+                        reviews.forEach(rev => sumRate += rev.rating);
+                        this.ratingOverall = sumRate / reviews.length;
                         this.reviews.forEach(review => {
                             let urls: string[] = [];
                             review.photos.map(photo => {
@@ -63,12 +67,16 @@ export class ProductDetailsComponent implements OnInit {
                     },
                     error: err => console.log(err)
                 });
+                this.productService.getProductQuestions(this.product.product.id).subscribe({
+                    next: questions => {
+                        this.questions = questions.filter(question => question.answer != null);
+                    },
+                    error: err => console.log(err)
+                })
             },
             error: err => console.log(err)
         });
     }
-
-
 
     saveReview() {
         let review = new Review();
@@ -82,23 +90,35 @@ export class ProductDetailsComponent implements OnInit {
         // @ts-ignore
         this.productService.addReview(review, files).subscribe({
             next: review => {
-                let urls: string[] = [];
-                review.photos.map(photo => {
-                    this.imageService.createUrlFromBase64(photo).then(url =>
-                        urls.push(url)
-                    )
-                });
-                review.photos = urls;
+                if (review.photos) {
+                    let urls: string[] = [];
+                    review.photos.map(photo => {
+                        this.imageService.createUrlFromBase64(photo).then(url =>
+                            urls.push(url)
+                        )
+                    });
+                    review.photos = urls;
+                }
                 this.reviews.push(review);
             },
             error: err => console.log(err)
         });
     }
 
-    onFileAdded(event : any){
-        if(event.target.files){
+    saveQuestion() {
+        const question = new Question();
+        question.message = this.messageOfQuestion;
+        question.productId = this.product.product.id;
+        this.productService.addQuestion(question).subscribe({
+            next: question => console.log("added new unanswered question", question), //need to be answered for display
+            error: err => console.log(err)
+        })
+    }
+
+    onFileAdded(event: any) {
+        if (event.target.files) {
             const file = event.target.files[0];
-            const imageModel : ImageModel = {
+            const imageModel: ImageModel = {
                 file: file,
                 url: this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(file))
             }
@@ -112,7 +132,7 @@ export class ProductDetailsComponent implements OnInit {
         // @ts-ignore
         this.isNeedLeftButtonForReviews = scrollReviews.scrollLeft + 440 > 0;
         // @ts-ignore
-        this.isNeedRightButtonForReviews = scrollReviews.scrollWidth-1296 > scrollReviews.scrollLeft + 440;
+        this.isNeedRightButtonForReviews = scrollReviews.scrollWidth - 1296 > scrollReviews.scrollLeft + 440;
     }
 
     leftScrollForReviews() {
@@ -121,7 +141,7 @@ export class ProductDetailsComponent implements OnInit {
         // @ts-ignore
         this.isNeedLeftButtonForReviews = scrollReviews.scrollLeft - 440 > 0;
         // @ts-ignore
-        this.isNeedRightButtonForReviews = scrollReviews.scrollWidth-1296 > scrollReviews.scrollLeft - 440;
+        this.isNeedRightButtonForReviews = scrollReviews.scrollWidth - 1296 > scrollReviews.scrollLeft - 440;
     }
 
     rightScrollForQuestions() {
@@ -130,7 +150,7 @@ export class ProductDetailsComponent implements OnInit {
         // @ts-ignore
         this.isNeedLeftButtonForQuestions = scrollQuestions.scrollLeft + 440 > 0;
         // @ts-ignore
-        this.isNeedRightButtonForQuestions = scrollQuestions.scrollWidth-1296 > scrollQuestions.scrollLeft + 440;
+        this.isNeedRightButtonForQuestions = scrollQuestions.scrollWidth - 1296 > scrollQuestions.scrollLeft + 440;
     }
 
     leftScrollForQuestions() {
@@ -139,6 +159,6 @@ export class ProductDetailsComponent implements OnInit {
         // @ts-ignore
         this.isNeedLeftButtonForQuestions = scrollQuestions.scrollLeft - 440 > 0;
         // @ts-ignore
-        this.isNeedRightButtonForQuestions = scrollQuestions.scrollWidth-1296 > scrollQuestions.scrollLeft - 440;
+        this.isNeedRightButtonForQuestions = scrollQuestions.scrollWidth - 1296 > scrollQuestions.scrollLeft - 440;
     }
 }
