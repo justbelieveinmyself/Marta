@@ -3,6 +3,7 @@ package com.justbelieveinmyself.marta.controllers;
 import com.justbelieveinmyself.marta.domain.annotations.CurrentUser;
 import com.justbelieveinmyself.marta.domain.dto.ProductDto;
 import com.justbelieveinmyself.marta.domain.dto.ProductWithImageDto;
+import com.justbelieveinmyself.marta.domain.dto.QuestionDto;
 import com.justbelieveinmyself.marta.domain.dto.ReviewDto;
 import com.justbelieveinmyself.marta.domain.entities.Product;
 import com.justbelieveinmyself.marta.domain.entities.Review;
@@ -153,5 +154,36 @@ public class ProductController {
             @PathVariable(name = "reviewId") Review review
     ){
         return productService.deleteProductReview(review);
+    }
+
+    @GetMapping("questions/{productId}")
+    @Operation(summary = "Get list of product questions", description = "Use this to get all questions of specified product")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Product exists",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = QuestionDto.class))),
+            @ApiResponse(responseCode = "403", description = "Product doesn't exists!",
+                    content = @Content)
+    })
+    @Parameter(name = "productId", required = true, schema = @Schema(type = "integer", name = "productId"), in = ParameterIn.PATH)
+    public ResponseEntity<?> getProductQuestions(
+            @Parameter(hidden = true)
+            @PathVariable(name = "productId") Product product
+    ){
+        return productService.getListProductQuestions(product);
+    }
+
+    @PostMapping(value = "questions")
+    @Operation(summary = "Create product question", description = "Use this to create question for product")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Question saved",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = QuestionDto.class))),
+            @ApiResponse(responseCode = "403", description = "Question doesn't saved",
+                    content = @Content)
+    })
+    public ResponseEntity<?> createProductQuestion(
+            @RequestBody QuestionDto questionDto,
+            @CurrentUser User author
+    ){
+        return productService.createProductQuestion(questionDto, author);
     }
 }

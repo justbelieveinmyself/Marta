@@ -21,6 +21,7 @@ import {LogoutComponent} from './auth/logout/logout.component';
 import {ProductDetailsComponent} from './products/product-details/product-details.component';
 import {PopoverModule} from "ngx-bootstrap/popover";
 import {ProductFeedbackComponent} from './products/product-feedback/product-feedback.component';
+import {NgOptimizedImage} from "@angular/common";
 
 @NgModule({
   declarations: [
@@ -39,15 +40,16 @@ import {ProductFeedbackComponent} from './products/product-feedback/product-feed
     ProductDetailsComponent,
     ProductFeedbackComponent
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    HttpClientModule,
-    FormsModule,
-    ReactiveFormsModule,
-    SocialLoginModule,
-    PopoverModule.forRoot()
-  ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        HttpClientModule,
+        FormsModule,
+        ReactiveFormsModule,
+        SocialLoginModule,
+        PopoverModule.forRoot(),
+        NgOptimizedImage
+    ],
   providers: [
     {
       provide: 'SocialAuthServiceConfig',

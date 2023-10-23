@@ -1,13 +1,15 @@
 <div class="mb-3">
     <h3>{{product.product.seller.username | titlecase}} / {{product.product.productName | titlecase}}</h3>
     <p>
-        {{ratingOverall | number:'1.0-1'}}<i class="fa-solid fa-star" style="color: #c9cc24;"> &nbsp;</i>
+        {{(ratingOverall ? ratingOverall : 0) | number:'1.0-1'}}<i class="fa-solid fa-star" style="color: #c9cc24;">
+        &nbsp;</i>
         <span class="text-secondary"><a class="ratings ratings-router-link" routerLink="../feedback"
                                         routerLinkActive="active"
-                                        type="button">{{reviews.length}} ratings</a> Art: {{this.product.product.productCode}}</span>
+                                        type="button">{{reviews ? reviews.length : 0}}
+            ratings</a> Art: {{this.product.product.productCode}}</span>
     </p>
     <div class="row align-items-start mb-3">
-        <img [src]="product.file" alt="photo image" class="col-1 rounded-4"
+        <img [src]="product.file" width="1" height="1" alt="photo image" class="col-1 rounded-4"
              style="width: 400px; height: 500px; object-fit: cover; border: solid 3px black; padding: 0"/>
         <div class="col">
             <table class="table table-borderless">
@@ -126,7 +128,7 @@
             <ul class="nav nav-underline">
                 <li class="nav-item">
                     <button class="nav-link {{isReviews? 'active' : ''}}" (click)="isReviews=true">Reviews
-                        <sup>{{reviews.length}}</sup>
+                        <sup>{{reviews ? reviews.length : 0}}</sup>
                     </button>
                 </li>
                 <li class="nav-item">
@@ -144,18 +146,22 @@
         <div *ngIf="isReviews">
             <div style="position: relative;;">
       <span style="font-size: 25px; font-weight: bold" class="ms-3">
-        {{ratingOverall | number:'1.0-1'}} <i class="fa-solid fa-star" *ngFor="let stars of [].constructor(Math.round(ratingOverall))"
-               style="color: #c9cc24;"></i>
-        <i class="fa-regular fa-star" *ngFor="let nostars of [].constructor(Math.round(5-ratingOverall))"
+        {{(ratingOverall ? ratingOverall : 0) | number:'1.0-1'}} <i class="fa-solid fa-star"
+                                                                    *ngFor="let stars of [].constructor(Math.round(ratingOverall? ratingOverall : 0))"
+                                                                    style="color: #c9cc24;"></i>
+        <i class="fa-regular fa-star"
+           *ngFor="let nostars of [].constructor(Math.round(5-(ratingOverall? ratingOverall : 0)))"
            style="color: #c9cc24;"></i>
       </span>
-                <sup class="text-secondary" style="font-size: 15px; font-weight: bold"> &nbsp;{{reviews.length}} ratings</sup>
+                <sup class="text-secondary" style="font-size: 15px; font-weight: bold">
+                    &nbsp;{{reviews ? reviews.length : 0}} ratings</sup>
                 <button class="btn btn-outline-dark" style="position: absolute; right: 15px" data-bs-toggle="modal"
                         data-bs-target="#reviewWriteModal">Write a review
                 </button>
             </div>
             <div style="position: relative" class="mt-2">
-                <a type="button" class="fa-solid fa-circle-arrow-right fa-2xl" [hidden]="!isNeedRightButtonForReviews" (click)="rightScrollForReviews()"
+                <a type="button" class="fa-solid fa-circle-arrow-right fa-2xl" [hidden]="!isNeedRightButtonForReviews"
+                   (click)="rightScrollForReviews()"
                    style="position: absolute; width: 30px; height: 30px; top: 135px; right: 20px; z-index: 100;"></a>
                 <a type="button" class="fa-solid fa-circle-arrow-left fa-2xl" [hidden]="!isNeedLeftButtonForReviews"
                    (click)="leftScrollForReviews()"
@@ -163,19 +169,22 @@
                 <div id="scrollReviews"
                      style="width: 100%; white-space: nowrap; display: flex; overflow: hidden; scroll-behavior: smooth">
 
-                    <div class="card card_with_shadow me-4" *ngFor="let comment of reviews" style="height: 270px; width: 430px; min-width: 430px">
+                    <div class="card card_with_shadow me-4" *ngFor="let comment of reviews"
+                         style="height: 270px; width: 430px; min-width: 430px">
                         <div class="card-body">
                             <div style="padding-left: 5px;">
             <span style="display: inline-flex"><img class="rounded-4 me-2" alt="image for review"
                                                     style="width: 50px; height: 50px; object-fit: cover;"
-                                                    src="https://eliaslealblog.files.wordpress.com/2014/03/user-200.png"/>
+                                                    [ngSrc]="'https://eliaslealblog.files.wordpress.com/2014/03/user-200.png'"
+                                                    width="1" height="1"
+            />
                 {{comment.author.username}} <br>
                 {{comment.time | date}}
             </span>
                                 <div style="position: absolute; top: 25px; right: 20px">
                                     {{comment.rating}} <i class="fa-solid fa-star"
-                                                             *ngFor="let stars of [].constructor(Math.round(comment.rating))"
-                                                             style="color: #c9cc24;"></i>
+                                                          *ngFor="let stars of [].constructor(Math.round(comment.rating))"
+                                                          style="color: #c9cc24;"></i>
                                     <i class="fa-regular fa-star"
                                        *ngFor="let nostars of [].constructor(Math.round(5-comment.rating))"
                                        style="color: #c9cc24;"></i>
@@ -185,8 +194,9 @@
                                 </div>
                                 <div style="display: flex; ">
                                     <div style="margin-right: 10px" *ngFor="let photo of comment.photos">
-                                        <img class="rounded-3" style="width: 80px; height: 80px; object-fit: cover"
-                                             [src]="photo">
+                                        <img alt="review photo" class="rounded-3"
+                                             style="width: 80px; height: 80px; object-fit: cover"
+                                             [src]="photo" width="80" height="80">
                                     </div>
                                 </div>
                             </div>
@@ -209,7 +219,8 @@
             </div>
 
             <div style="position: relative" class="mt-2">
-                <a type="button" class="fa-solid fa-circle-arrow-right fa-2xl" [hidden]="!isNeedRightButtonForQuestions" (click)="rightScrollForQuestions()"
+                <a type="button" class="fa-solid fa-circle-arrow-right fa-2xl" [hidden]="!isNeedRightButtonForQuestions"
+                   (click)="rightScrollForQuestions()"
                    style="position: absolute; width: 30px; height: 30px; top: 135px; right: 20px; z-index: 100;"></a>
                 <a type="button" class="fa-solid fa-circle-arrow-left fa-2xl" [hidden]="!isNeedLeftButtonForQuestions"
                    (click)="leftScrollForQuestions()"
@@ -416,14 +427,17 @@
             <div class="modal-body mx-4" style="font-size: 17px">
                 <p style="margin-bottom: 0">Rate the product</p>
                 <span style="font-size: 30px; font-weight: bold">
-            <a type="button" (click)="currentRate=currentRate-1" class="fa-solid fa-star" *ngFor="let stars of [].constructor(Math.round(currentRate))"
+            <a type="button" (click)="currentRate=currentRate-1" class="fa-solid fa-star"
+               *ngFor="let stars of [].constructor(Math.round(currentRate))"
                style="color: #c9cc24;"></a>
-            <a type="button" (click)="currentRate=currentRate+1" class="fa-regular fa-star" *ngFor="let nostars of [].constructor(Math.round(5-currentRate))"
+            <a type="button" (click)="currentRate=currentRate+1" class="fa-regular fa-star"
+               *ngFor="let nostars of [].constructor(Math.round(5-currentRate))"
                style="color: #c9cc24;"></a>
           </span> <br>
                 <label class="mt-3 mb-1" style="font-weight: bold">Tell us about the product</label>
-                <textarea [(ngModel)]="messageOfReview" class="form-control w-100" style="height: 300px" type="text"> </textarea>
-                <label class="mt-3 mb-1"  style="font-weight: bold">Load up to 5 photos</label>
+                <textarea [(ngModel)]="messageOfReview" class="form-control w-100" style="height: 300px"
+                          type="text"> </textarea>
+                <label class="mt-3 mb-1" style="font-weight: bold">Load up to 5 photos</label>
                 <input type="file" (change)="onFileAdded($event)" class="form-control">
                 <div class="mt-3 justify-content-center" style="display: flex">
                     <button class="btn btn-outline-dark w-75" (click)="saveReview()">Send</button>

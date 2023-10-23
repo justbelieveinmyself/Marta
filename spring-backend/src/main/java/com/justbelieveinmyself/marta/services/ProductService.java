@@ -3,16 +3,20 @@ package com.justbelieveinmyself.marta.services;
 import com.justbelieveinmyself.marta.configs.beans.FileHelper;
 import com.justbelieveinmyself.marta.domain.dto.ProductDto;
 import com.justbelieveinmyself.marta.domain.dto.ProductWithImageDto;
+import com.justbelieveinmyself.marta.domain.dto.QuestionDto;
 import com.justbelieveinmyself.marta.domain.dto.ReviewDto;
 import com.justbelieveinmyself.marta.domain.entities.Product;
+import com.justbelieveinmyself.marta.domain.entities.Question;
 import com.justbelieveinmyself.marta.domain.entities.Review;
 import com.justbelieveinmyself.marta.domain.entities.User;
 import com.justbelieveinmyself.marta.domain.enums.UploadDirectory;
 import com.justbelieveinmyself.marta.domain.mappers.ProductMapper;
+import com.justbelieveinmyself.marta.domain.mappers.QuestionMapper;
 import com.justbelieveinmyself.marta.exceptions.ForbiddenException;
 import com.justbelieveinmyself.marta.exceptions.NotFoundException;
 import com.justbelieveinmyself.marta.exceptions.ResponseMessage;
 import com.justbelieveinmyself.marta.repositories.ProductRepository;
+import com.justbelieveinmyself.marta.repositories.QuestionRepository;
 import com.justbelieveinmyself.marta.repositories.ReviewRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,9 +34,13 @@ public class ProductService {
     @Autowired
     private ProductRepository productRepository;
     @Autowired
+    private ReviewRepository reviewRepository;
+    @Autowired
+    private QuestionRepository questionRepository;
+    @Autowired
     private ProductMapper productMapper;
     @Autowired
-    private ReviewRepository reviewRepository;
+    private QuestionMapper questionMapper;
     @Autowired
     private FileHelper fileHelper;
 
@@ -140,5 +148,26 @@ public class ProductService {
         //no need to validate rights cause can be deleted only with authority "admin"
         reviewRepository.delete(review);
         return ResponseEntity.ok(new ResponseMessage(HttpStatus.OK.value(), "Successfully deleted"));
+    }
+
+    public ResponseEntity<?> getListProductQuestions(Product product) {
+        if (Objects.isNull(product))
+            throw new NotFoundException("Product with [id] doesn't exists");
+        List<QuestionDto> questions = product.getQuestions().stream().map(question -> questionMapper.modelToDto(question)).toList();
+        return ResponseEntity.ok(questions);
+    }
+
+    public ResponseEntity<?> createProductQuestion(QuestionDto questionDto, User author) {
+        Optional<Product> productOpt = productRepository.findById(questionDto.getProductId());
+        if(productOpt.isEmpty()){
+            throw new NotFoundException("Product with [id] doesn't exists");
+        }
+        Product product = productOpt.get();
+        Question question = questionMapper.dtoToModel(questionDto, productRepository);
+        question.setAuthor(author);
+        Question savedQuestion = questionRepository.save(question);
+        product.getQuestions().add(savedQuestion);
+        productRepository.save(product);
+        return ResponseEntity.ok(questionMapper.modelToDto(savedQuestion));
     }
 }

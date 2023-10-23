@@ -1,12 +1,10 @@
 package com.justbelieveinmyself.marta.domain.entities;
 
-import com.justbelieveinmyself.marta.domain.dto.ProductDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.beans.BeanUtils;
 
 import java.util.List;
 
@@ -40,4 +38,6 @@ public class Product {
     private String previewImg;
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Review> reviews;
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Question> questions;
 }

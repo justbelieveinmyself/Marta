@@ -20,18 +20,14 @@ public class Review {
     private Long id;
     private String message;
     private String answer;
-    @Min(1) @Max(5)
-    @Column(nullable = false)
+    @Min(1) @Max(5) @Column(nullable = false)
     private Integer rating;
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "author_id", nullable = false)
+    @ManyToOne(fetch = FetchType.EAGER) @JoinColumn(name = "author_id", nullable = false)
     private User author;
     @Column(nullable = false)
     private ZonedDateTime time;
-    @ElementCollection
-    @CollectionTable(name = "product_reviews_photo", joinColumns = @JoinColumn(name = "review_id"))
+    @ElementCollection @CollectionTable(name = "product_reviews_photo", joinColumns = @JoinColumn(name = "review_id"))
     private List<String> photos;
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "product_id")
+    @ManyToOne(fetch = FetchType.EAGER) @JoinColumn(name = "product_id")
     private Product product;
 }
