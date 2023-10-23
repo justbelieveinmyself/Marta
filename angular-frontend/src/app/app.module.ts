@@ -22,6 +22,7 @@ import {ProductDetailsComponent} from './products/product-details/product-detail
 import {PopoverModule} from "ngx-bootstrap/popover";
 import {ProductFeedbackComponent} from './products/product-feedback/product-feedback.component';
 import {NgOptimizedImage} from "@angular/common";
+import { ProductQuestionsComponent } from './products/product-questions/product-questions.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +39,8 @@ import {NgOptimizedImage} from "@angular/common";
     UserFavouritesComponent,
     LogoutComponent,
     ProductDetailsComponent,
-    ProductFeedbackComponent
+    ProductFeedbackComponent,
+    ProductQuestionsComponent
   ],
     imports: [
         BrowserModule,

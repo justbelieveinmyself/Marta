@@ -4,7 +4,6 @@ import {ActivatedRoute} from "@angular/router";
 import {ProductWithImage} from "../../models/product-with-image";
 import {Review} from "../../models/review";
 import {ImageService} from "../../service/image.service";
-import {resolve} from "@angular/compiler-cli";
 import {ImageModel} from "../../models/image-model";
 import {DomSanitizer} from "@angular/platform-browser";
 import {Question} from "../../models/question";
@@ -23,8 +22,7 @@ export class ProductDetailsComponent implements OnInit {
         private activatedRoute: ActivatedRoute,
         private imageService: ImageService,
         private sanitizer: DomSanitizer
-    ) {
-    }
+    ) {}
 
     product: ProductWithImage;
     reviews: Review[];
@@ -50,7 +48,7 @@ export class ProductDetailsComponent implements OnInit {
                 this.productService.getProductReviews(this.product.product.id).subscribe({
                     next: reviews => {
                         this.reviews = reviews;
-                        var sumRate = 0;
+                        let sumRate = 0;
                         reviews.forEach(rev => sumRate += rev.rating);
                         this.ratingOverall = sumRate / reviews.length;
                         this.reviews.forEach(review => {

@@ -11,11 +11,13 @@ import { UserFavouritesComponent } from './user-favourites/user-favourites.compo
 import { UserDeliveryComponent } from './user-delivery/user-delivery.component';
 import {ProductDetailsComponent} from "./products/product-details/product-details.component";
 import {ProductFeedbackComponent} from "./products/product-feedback/product-feedback.component";
+import {ProductQuestionsComponent} from "./products/product-questions/product-questions.component";
 
 const routes: Routes = [
   {path: 'products', component: ProductListComponent},
   {path: 'products/:id/details', component: ProductDetailsComponent},
   {path: 'products/:id/feedback', component: ProductFeedbackComponent},
+  {path: 'products/:id/questions', component: ProductQuestionsComponent},
   {path: '', redirectTo: 'products', pathMatch: 'full'},
   {path: 'create-product', component: CreateProductComponent},
   {path: 'update-product/:id', component: UpdateProductComponent},
