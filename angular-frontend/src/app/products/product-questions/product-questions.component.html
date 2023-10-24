@@ -1,28 +1,30 @@
-<div class="w-100" style="display: inline-flex;">
-    <div class="align-items-center w-75" style="display: inline-flex">
-        <img
+<div style="flex">
+    <div class="w-100" style="display: inline-flex; position: sticky; top: 20px">
+        <div class="align-items-center w-75" style="display: inline-flex;">
+            <img
                 [src]="product.file"
                 width="1" height="1" alt="photo image" class="rounded-2 me-3"
                 style="width: 60px; height: 75px; object-fit: cover; border: solid 1px black; padding: 0"/>
-        <div>
-            <h6>{{product.product.seller.username | titlecase}} / {{product.product.productName | titlecase}}</h6>
-            <i class="fa-solid fa-star fa-xs" style="color: #c9cc24;"></i> 4.5 &nbsp;
-            <span class="text-secondary"><a class="ratings ratings-router-link" routerLink="../feedback"
-                                            routerLinkActive="active"
-                                            type="button">10 ratings</a>
+            <div>
+                <h6>{{product.product.seller.username | titlecase}} / {{product.product.productName | titlecase}}</h6>
+                <i class="fa-solid fa-star fa-xs" style="color: #c9cc24;"></i> 4.5 &nbsp;
+                <span class="text-secondary"><a class="ratings ratings-router-link" routerLink="../feedback"
+                                                routerLinkActive="active"
+                                                type="button">10 ratings</a>
             </span>
-        </div>
-        <div class="mx-auto" style="font-size: 18px">
-            <div class="vertical_line">
-                <b>$500.0</b> <br>
-                <span class="discount">$5535623.0</span>
+            </div>
+            <div class="mx-auto" style="font-size: 18px">
+                <div class="vertical_line">
+                    <b>$500.0</b> <br>
+                    <span class="discount">$5535623.0</span>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="w-25 my-3" style="text-align: center">
-        <button class="btn btn-outline-dark w-40 h-100 me-2">Buy now</button>
-        <button class="btn btn-dark w-40 h-100 me-2">Add to cart</button>
-        <a type="button" style="color: black" class="fa-regular fa-heart fa-xl"></a>
+        <div class="w-25 my-3" style="text-align: center">
+            <button class="btn btn-outline-dark w-40 h-100 me-2">Buy now</button>
+            <button class="btn btn-dark w-40 h-100 me-2">Add to cart</button>
+            <a type="button" style="color: black" class="fa-regular fa-heart fa-xl"></a>
+        </div>
     </div>
 </div>
 <div class="w-75">
@@ -48,11 +50,12 @@
     </div>
     <div *ngFor="let question of questions" class="my-4">
         <div style="display: inline-flex">
-        <img class="rounded-4 me-2" alt="image for review" style="width: 50px; height: 50px; object-fit: cover;"
-             [ngSrc]="'https://eliaslealblog.files.wordpress.com/2014/03/user-200.png'" width="1" height="1"/>
+            <img class="rounded-4 me-2" alt="image for review" style="width: 50px; height: 50px; object-fit: cover;"
+                 [ngSrc]="'https://eliaslealblog.files.wordpress.com/2014/03/user-200.png'" width="1" height="1"/>
             <div>
                 <b>{{question.author.username | titlecase}}</b> <br>
-                <span class="text-secondary" style="font-size: 16px">{{question.time | date: 'dd MMM YYYY, HH:mm'}}</span>
+                <span class="text-secondary"
+                      style="font-size: 16px">{{question.time | date: 'dd MMM YYYY, HH:mm'}}</span>
             </div>
         </div>
         <div style="padding-left: 58px; padding-top: 8px;">

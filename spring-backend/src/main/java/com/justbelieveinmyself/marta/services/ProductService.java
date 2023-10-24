@@ -12,6 +12,7 @@ import com.justbelieveinmyself.marta.domain.entities.User;
 import com.justbelieveinmyself.marta.domain.enums.UploadDirectory;
 import com.justbelieveinmyself.marta.domain.mappers.ProductMapper;
 import com.justbelieveinmyself.marta.domain.mappers.QuestionMapper;
+import com.justbelieveinmyself.marta.domain.mappers.ReviewMapper;
 import com.justbelieveinmyself.marta.exceptions.ForbiddenException;
 import com.justbelieveinmyself.marta.exceptions.NotFoundException;
 import com.justbelieveinmyself.marta.exceptions.ResponseMessage;
@@ -25,8 +26,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.time.ZonedDateTime;
-import java.util.*;
+import java.util.Base64;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 @Service
@@ -41,6 +43,8 @@ public class ProductService {
     private ProductMapper productMapper;
     @Autowired
     private QuestionMapper questionMapper;
+    @Autowired
+    private ReviewMapper reviewMapper;
     @Autowired
     private FileHelper fileHelper;
 
@@ -64,17 +68,12 @@ public class ProductService {
     }
 
     public ResponseEntity<?> deleteProduct(Product product, User currentUser) {
-        if (Objects.isNull(product))
-            throw new NotFoundException("Product with [id] doesn't exists");
         validateRights(product, currentUser);
         productRepository.delete(product);
         return ResponseEntity.ok(new ResponseMessage(200, "deleted"));
     }
 
     public ResponseEntity<?> updateProduct(Product productFromDb, ProductDto productDto, User currentUser) {
-        if (Objects.isNull(productFromDb)) {
-            throw new NotFoundException("Product with [id] doesn't exists");
-        }
         validateRights(productDto, currentUser);
         BeanUtils.copyProperties(productDto, productFromDb, "id", "seller");
         return ResponseEntity.ok(productMapper.modelToDto(productRepository.save(productFromDb)));
@@ -93,8 +92,6 @@ public class ProductService {
     }
 
     public ResponseEntity<?> getProduct(Product product) {
-        if (Objects.isNull(product))
-            throw new NotFoundException("Product with [id] doesn't exists");
         Stream<Product> productStream = Stream.of(product);
         ProductWithImageDto productWithImageDtoList = productStream
                 .map(pro -> new ProductWithImageDto(productMapper.modelToDto(pro), Base64.getEncoder().encodeToString(
@@ -103,8 +100,6 @@ public class ProductService {
     }
 
     public ResponseEntity<?> getListProductReviews(Product product) {
-        if (Objects.isNull(product))
-            throw new NotFoundException("Product with [id] doesn't exists");
         product.getReviews().forEach(review -> {
             List<String> base64photos = review.getPhotos().stream().map(photo
                     -> Base64.getEncoder().encodeToString(fileHelper.downloadFileAsByteArray(photo, UploadDirectory.REVIEWS))).toList();
@@ -117,42 +112,23 @@ public class ProductService {
     public ResponseEntity<?> createProductReview(ReviewDto reviewDto, User author, MultipartFile[] photos) {
         Optional<Product> productOpt = productRepository.findById(reviewDto.getProductId());
         if(productOpt.isEmpty()){
-            throw new NotFoundException("Product with [id] doesn't exists");
+            throw new NotFoundException("Product with [%s] doesn't exists".formatted(reviewDto.getProductId()));
         }
         Product product = productOpt.get();
-        Review review = new Review();
-        review.setTime(ZonedDateTime.now());
-        review.setMessage(reviewDto.getMessage());
-        review.setAnswer(reviewDto.getAnswer());
-        review.setRating(reviewDto.getRating());
-        if(photos != null) {
-            List<String> uploadPaths = fileHelper.uploadFile(photos, UploadDirectory.REVIEWS);
-            review.setPhotos(uploadPaths);
-        }
-        review.setProduct(product);
-        review.setAuthor(author);
+        Review review = reviewMapper.dtoToModel(reviewDto, product, author, photos, fileHelper);
         Review savedReview = reviewRepository.save(review);
         product.getReviews().add(savedReview);
         productRepository.save(product);
-        if(photos != null) {
-            List<String> base64photos = review.getPhotos().stream().map(photo
-                    -> Base64.getEncoder().encodeToString(fileHelper.downloadFileAsByteArray(photo, UploadDirectory.REVIEWS))).toList();
-            review.setPhotos(base64photos);
-        }
-        return ResponseEntity.ok(ReviewDto.of(review));
+        return ResponseEntity.ok(reviewMapper.modelToDto(savedReview, fileHelper));
     }
 
     public ResponseEntity<?> deleteProductReview(Review review) {
-        if (Objects.isNull(review))
-            throw new NotFoundException("Review with [id] doesn't exists");
         //no need to validate rights cause can be deleted only with authority "admin"
         reviewRepository.delete(review);
         return ResponseEntity.ok(new ResponseMessage(HttpStatus.OK.value(), "Successfully deleted"));
     }
 
     public ResponseEntity<?> getListProductQuestions(Product product) {
-        if (Objects.isNull(product))
-            throw new NotFoundException("Product with [id] doesn't exists");
         List<QuestionDto> questions = product.getQuestions().stream().map(question -> questionMapper.modelToDto(question)).toList();
         return ResponseEntity.ok(questions);
     }

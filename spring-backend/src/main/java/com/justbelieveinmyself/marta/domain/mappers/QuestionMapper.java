@@ -3,7 +3,6 @@ package com.justbelieveinmyself.marta.domain.mappers;
 import com.justbelieveinmyself.marta.domain.dto.QuestionDto;
 import com.justbelieveinmyself.marta.domain.entities.Question;
 import com.justbelieveinmyself.marta.repositories.ProductRepository;
-import com.justbelieveinmyself.marta.repositories.QuestionRepository;
 import org.mapstruct.*;
 
 import java.time.ZonedDateTime;
@@ -14,6 +13,7 @@ public interface QuestionMapper {
     QuestionDto modelToDto(Question question);
     @Mapping(target = "product", ignore = true)
     @Mapping(target = "time", ignore = true)
+    @Mapping(target = "author", ignore = true)
     Question dtoToModel(QuestionDto questionDto, @Context ProductRepository productRepository);
     @AfterMapping
     default void modelToDto(@MappingTarget QuestionDto target, Question question){

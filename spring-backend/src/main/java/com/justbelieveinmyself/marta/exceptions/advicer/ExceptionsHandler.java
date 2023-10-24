@@ -5,15 +5,14 @@ import org.apache.tomcat.util.http.fileupload.impl.FileSizeLimitExceededExceptio
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.web.bind.MissingPathVariableException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import java.time.ZonedDateTime;
-
 @ControllerAdvice
 public class ExceptionsHandler {
-    @ExceptionHandler(value = {NotFoundException.class})
-    public ResponseEntity<Object> handleNotFoundException(NotFoundException e){
+    @ExceptionHandler(value = {NotFoundException.class, MissingPathVariableException.class})
+    public ResponseEntity<Object> handleNotFoundException(Exception e){
         ResponseError responseError = new ResponseError(HttpStatus.NOT_FOUND, e.getMessage());
         return new ResponseEntity<>(responseError, HttpStatus.NOT_FOUND);
     }

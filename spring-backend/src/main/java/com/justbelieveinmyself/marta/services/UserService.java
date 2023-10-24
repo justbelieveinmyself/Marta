@@ -9,7 +9,6 @@ import com.justbelieveinmyself.marta.domain.enums.Role;
 import com.justbelieveinmyself.marta.domain.enums.UploadDirectory;
 import com.justbelieveinmyself.marta.domain.mappers.UserMapper;
 import com.justbelieveinmyself.marta.exceptions.ForbiddenException;
-import com.justbelieveinmyself.marta.exceptions.NotFoundException;
 import com.justbelieveinmyself.marta.exceptions.ResponseMessage;
 import com.justbelieveinmyself.marta.repositories.UserRepository;
 import org.springframework.beans.BeanUtils;
@@ -70,8 +69,6 @@ public class UserService implements UserDetailsService {
     }
 
     public ResponseEntity<?> updateEmail(User user, String email, User authUser) {
-        if(Objects.isNull(user))
-            throw new NotFoundException("User with [id] doesn't exists");
         validateRights(authUser, user);
         user.setEmail(email);
         User savedUser = userRepository.save(user);
@@ -79,8 +76,6 @@ public class UserService implements UserDetailsService {
     }
 
     public ResponseEntity<?> updateAvatar(User user, MultipartFile file, User authUser) {
-        if(Objects.isNull(user))
-            throw new NotFoundException("User with [id] doesn't exists");
         validateRights(authUser, user);
         String path = fileHelper.uploadFile(file, UploadDirectory.AVATARS);
         user.setAvatar(path);
@@ -89,8 +84,6 @@ public class UserService implements UserDetailsService {
     }
 
     public ResponseEntity<?> getAvatar(User user, User authUser) {
-        if(Objects.isNull(user))
-            throw new NotFoundException("User with [id] doesn't exists");
         validateRights(authUser, user);
         return fileHelper.downloadFileAsResponse(user.getAvatar(), UploadDirectory.AVATARS);
     }
@@ -102,8 +95,6 @@ public class UserService implements UserDetailsService {
     }
 
     public ResponseEntity<?> updateGender(User user, String gender, User authUser) {
-        if(Objects.isNull(user))
-            throw new NotFoundException("User with [id] doesn't exists");
         validateRights(authUser, user);
         user.setGender(gender);
         User savedUser = userRepository.save(user);
@@ -111,8 +102,6 @@ public class UserService implements UserDetailsService {
     }
 
     public ResponseEntity<?> updateNameAndSurname(User user, UserNamesDto userNamesDto, User authedUser) {
-        if(Objects.isNull(user))
-            throw new NotFoundException("User with [id] doesn't exists");
         validateRights(authedUser, user);
         user.setFirstName(userNamesDto.getFirstName());
         user.setLastName(userNamesDto.getLastName());
