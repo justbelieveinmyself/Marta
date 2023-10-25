@@ -1,1 +1,95 @@
-<p>product-feedback works!</p>
+<div id="sticky" style="background-color: white;">
+    <div class="w-100 mt-2" style="display: inline-flex;">
+        <div class="align-items-center w-75" style="display: inline-flex;">
+            <img
+                [src]="product.file"
+                width="1" height="1" alt="photo image" class="rounded-2 me-3"
+                style="width: 60px; height: 75px; object-fit: cover; border: solid 1px black; padding: 0"/>
+            <div>
+                <h6>{{product.product.seller.username | titlecase}}
+                    / {{product.product.productName | titlecase}}</h6>
+                <i class="fa-solid fa-star fa-xs" style="color: #c9cc24;"></i> 4.5 &nbsp;
+                <span class="text-secondary"><a class="ratings ratings-router-link" routerLink="../feedback"
+                                                routerLinkActive="active"
+                                                type="button">10 ratings</a>
+            </span>
+            </div>
+            <div class="mx-auto" style="font-size: 18px">
+                <div class="vertical_line">
+                    <b>$500.0</b> <br>
+                    <span class="discount">$5535623.0</span>
+                </div>
+            </div>
+        </div>
+        <div class="w-25 my-3" style="text-align: center">
+            <button class="btn btn-outline-dark w-40 h-100 me-2">Buy now</button>
+            <button class="btn btn-dark w-40 h-100 me-2">Add to cart</button>
+            <a type="button" style="color: black" class="fa-regular fa-heart fa-xl"></a>
+        </div>
+    </div>
+</div>
+<div class="w-75">
+    <h4>
+        <ul class="nav">
+            <li class="nav-item">
+                <a class="nav-link" style="color: black !important;">Reviews
+                    <sup>10</sup>
+                </a>
+            </li>
+            <li class="nav-item ms-auto mt-auto">
+                <button class="nav-link ratings" data-bs-toggle="modal" data-bs-target="#rulesModal"
+                        style="color: rgb(108,117,125) !important; font-size: 17px; padding: 0">Publication Rules
+                </button>
+            </li>
+        </ul>
+    </h4>
+    <a type="button" class="fa-solid fa-circle-arrow-right fa-2xl" [hidden]="!isNeedRightButtonForPhotos"
+       (click)="rightScrollForPhotos()"
+       style="position: absolute; width: 30px; height: 30px; top: 320px; right: 375px; z-index: 100;"></a>
+    <a type="button" class="fa-solid fa-circle-arrow-left fa-2xl" [hidden]="!isNeedLeftButtonForPhotos"
+       (click)="leftScrollForPhotos()"
+       style="position: absolute; width: 30px; height: 30px; top: 320px; left: 50px; z-index: 100;"></a>
+    <div id="scrollPhotos"
+         style="position: relative;width: 100%; white-space: nowrap; display: flex; overflow-x: hidden; scroll-behavior: smooth">
+        <ng-container *ngFor="let review of reviews">
+            <img *ngFor="let photo of review.photos" [src]="photo"
+                 width="100px" height="115px" alt="photo image" class="rounded-1 me-1"
+                 style="object-fit: cover; padding: 0"/>
+        </ng-container>
+    </div>
+</div>
+
+<!-- For modal with rules -->
+<div class="modal fade " id="rulesModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="min-width: 720px">
+        <div class="modal-content">
+            <div class="modal-header mt-2 mx-3">
+                <h1 class="modal-title fs-5"><b>Rules for processing reviews and questions</b></h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body mx-4 mb-3" style="font-size: 17px">
+                <p class="text-secondary">Reviews and questions should contain information only about the
+                    product. </p>
+                <p class="text-secondary">Reviews can be left only for the goods ordered and received by the buyer.
+                    The buyer can leave no more than one review for one product.
+                    You can attach up to 5 photos to the reviews. The product in the photo should be clearly
+                    visible. </p>
+
+                <p>The following reviews and questions are not allowed for publication: </p>
+                <ul class="dash">
+                    <li>Indicating the purchase of this product in other stores</li>
+                    <li>Containing any contact information (phone numbers, addresses, email, links to third-party
+                        sites)
+                    </li>
+                    <li>With profanity that offends the dignity of other customers or the store</li>
+                    <li>With an abundance of uppercase characters (capital letters)</li>
+                </ul>
+                Questions are published only after they have been answered.
+
+                We reserve the right to edit or not publish a review and a question that does not comply with the
+                established
+                rules!
+            </div>
+        </div>
+    </div>
+</div>

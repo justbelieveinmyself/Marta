@@ -7,7 +7,7 @@ import {ProductWithImage} from "../../models/product-with-image";
 @Component({
     selector: 'app-product-questions',
     templateUrl: './product-questions.component.html',
-    styleUrls: ['./product-questions.component.css', '../product-details/product-details.component.css']
+    styleUrls: ['../product-details/product-details.component.css']
 })
 export class ProductQuestionsComponent implements OnInit {
     constructor(

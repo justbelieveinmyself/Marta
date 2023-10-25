@@ -19,7 +19,7 @@ a{
     line-height: 50px;
 }
 .page{
-    overflow: hidden;
+    overflow: visible;
     display: flex;
     flex-direction: column;
     min-height: 100vh;

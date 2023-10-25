@@ -146,9 +146,9 @@
         {{(ratingOverall ? ratingOverall : 0) | number:'1.0-1'}} <i class="fa-solid fa-star"
                                                                     *ngFor="let stars of [].constructor(Math.round(ratingOverall? ratingOverall : 0))"
                                                                     style="color: #c9cc24;"></i>
-        <i class="fa-regular fa-star"
+        <i class="fa-solid fa-star"
            *ngFor="let nostars of [].constructor(Math.round(5-(ratingOverall? ratingOverall : 0)))"
-           style="color: #c9cc24;"></i>
+           style="color: #E1E3E6"></i>
       </span>
                 <sup class="text-secondary" style="font-size: 15px; font-weight: bold">
                     &nbsp;{{reviews ? reviews.length : 0}} ratings</sup>
@@ -182,9 +182,9 @@
                                     {{review.rating}} <i class="fa-solid fa-star"
                                                          *ngFor="let stars of [].constructor(Math.round(review.rating))"
                                                          style="color: #c9cc24;"></i>
-                                    <i class="fa-regular fa-star"
+                                    <i class="fa-solid fa-star"
                                        *ngFor="let nostars of [].constructor(Math.round(5-review.rating))"
-                                       style="color: #c9cc24;"></i>
+                                       style="color: #E1E3E6;"></i>
                                 </div>
                                 <div style="white-space: pre-wrap;">
                                     {{review.message}}
@@ -313,9 +313,9 @@
             <a type="button" (click)="currentRate=currentRate-1" class="fa-solid fa-star"
                *ngFor="let stars of [].constructor(Math.round(currentRate))"
                style="color: #c9cc24;"></a>
-            <a type="button" (click)="currentRate=currentRate+1" class="fa-regular fa-star"
+            <a type="button" (click)="currentRate=currentRate+1" class="fa-solid fa-star"
                *ngFor="let nostars of [].constructor(Math.round(5-currentRate))"
-               style="color: #c9cc24;"></a>
+               style="color: #E1E3E6;"></a>
           </span> <br>
                 <label class="mt-3 mb-1" style="font-weight: bold">Tell us about the product</label>
                 <textarea [(ngModel)]="messageOfReview" class="form-control w-100" style="height: 300px"

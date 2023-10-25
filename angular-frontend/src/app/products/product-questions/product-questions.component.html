@@ -1,12 +1,13 @@
-<div style="flex">
-    <div class="w-100" style="display: inline-flex; position: sticky; top: 20px">
+<div id="sticky" style="background-color: white;">
+    <div class="w-100 mt-2" style="display: inline-flex;">
         <div class="align-items-center w-75" style="display: inline-flex;">
             <img
                 [src]="product.file"
                 width="1" height="1" alt="photo image" class="rounded-2 me-3"
                 style="width: 60px; height: 75px; object-fit: cover; border: solid 1px black; padding: 0"/>
             <div>
-                <h6>{{product.product.seller.username | titlecase}} / {{product.product.productName | titlecase}}</h6>
+                <h6>{{product.product.seller.username | titlecase}}
+                    / {{product.product.productName | titlecase}}</h6>
                 <i class="fa-solid fa-star fa-xs" style="color: #c9cc24;"></i> 4.5 &nbsp;
                 <span class="text-secondary"><a class="ratings ratings-router-link" routerLink="../feedback"
                                                 routerLinkActive="active"
@@ -31,7 +32,7 @@
     <h4>
         <ul class="nav">
             <li class="nav-item">
-                <a class="nav-link" style="color: #6d7583 !important;">Questions
+                <a class="nav-link" style="color: black !important;">Questions
                     <sup>10</sup>
                 </a>
             </li>
@@ -42,7 +43,8 @@
             </li>
         </ul>
     </h4>
-    <textarea placeholder="Ask a question about product" [(ngModel)]="messageOfQuestion" class="form-control mb-2 down"
+    <textarea placeholder="Ask a question about product" [(ngModel)]="messageOfQuestion"
+              class="form-control mb-2 down"
               (click)="isWriteQuestion=true"></textarea>
     <div class="appearing" [ngClass]="isWriteQuestion?'appearing-active':''">
         <button class="btn btn-outline-dark me-2" (click)="saveQuestion()">Ask a question</button>
@@ -79,7 +81,8 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body mx-4 mb-3" style="font-size: 17px">
-                <p class="text-secondary">Reviews and questions should contain information only about the product. </p>
+                <p class="text-secondary">Reviews and questions should contain information only about the
+                    product. </p>
                 <p class="text-secondary">Reviews can be left only for the goods ordered and received by the buyer.
                     The buyer can leave no more than one review for one product.
                     You can attach up to 5 photos to the reviews. The product in the photo should be clearly

@@ -73,3 +73,8 @@ span.discount {
     border-left: 2px solid #E1E3E6;
     align-self: stretch;
 }
+#sticky{
+    position: sticky;
+    top: 0px;
+    z-index: 100;
+}
