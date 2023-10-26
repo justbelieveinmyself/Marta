@@ -78,3 +78,12 @@ span.discount {
     top: 0px;
     z-index: 100;
 }
+.sort-not-active{
+    border-bottom: 2px dotted rgb(108, 117, 125);
+    color: #868695;
+}
+.sort-active{
+    font-weight: bold;
+    color: black;
+    border-bottom: 2px dotted rgb(108, 117, 125);
+}

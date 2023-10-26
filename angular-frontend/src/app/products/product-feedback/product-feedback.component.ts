@@ -6,21 +6,24 @@ import {Review} from "../../models/review";
 import {ImageService} from "../../service/image.service";
 
 @Component({
-  selector: 'app-product-feedback',
-  templateUrl: './product-feedback.component.html',
-  styleUrls: ['../product-details/product-details.component.css']
+    selector: 'app-product-feedback',
+    templateUrl: './product-feedback.component.html',
+    styleUrls: ['../product-details/product-details.component.css']
 })
-export class ProductFeedbackComponent implements OnInit{
+export class ProductFeedbackComponent implements OnInit {
     constructor(
         private productService: ProductService,
         private activatedRoute: ActivatedRoute,
         private imageService: ImageService
-    ) {}
+    ) {
+    }
 
     product: ProductWithImage;
     reviews: Review[];
     isNeedLeftButtonForPhotos = false;
     isNeedRightButtonForPhotos = false;
+    countOfPhotos = 0;
+    isNeedReviewsOnlyWithPhotos = false;
     ngOnInit(): void {
         this.productService.getProductById(this.activatedRoute.snapshot.params['id']).subscribe({
             next: product => {
@@ -31,13 +34,17 @@ export class ProductFeedbackComponent implements OnInit{
                         this.reviews.forEach(review => {
                             let urls: string[] = [];
                             review.photos.map(photo => {
-                                this.imageService.createUrlFromBase64(photo).then(url =>
-                                    urls.push(url)
+                                this.imageService.createUrlFromBase64(photo).then(url => {
+                                        urls.push(url);
+
+                                    }
                                 )
                             });
+                            this.countOfPhotos += review.photos.length;
                             review.photos = urls;
+
                         })
-                        this.isNeedRightButtonForPhotos = this.reviews.length > 2; //TODO
+                        this.isNeedRightButtonForPhotos = this.countOfPhotos >11; //TODO
                     },
                     error: err => console.log(err)
                 })
@@ -65,4 +72,10 @@ export class ProductFeedbackComponent implements OnInit{
 
     }
 
+    onChangeFilterReviewsWithPhotos(event:any){
+        this.isNeedReviewsOnlyWithPhotos = event.srcElement.checked;
+        //TODO
+    }
+
+    protected readonly Math = Math;
 }
