@@ -87,3 +87,9 @@ span.discount {
     color: black;
     border-bottom: 2px dotted rgb(108, 117, 125);
 }
+.highlight-hover{
+    color: #868695;
+}
+.highlight-hover:hover{
+    color: black;
+}

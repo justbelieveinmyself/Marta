@@ -11,12 +11,12 @@
                 <i class="fa-solid fa-star fa-xs" style="color: #c9cc24;"></i> 4.5 &nbsp;
                 <span class="text-secondary"><a class="ratings ratings-router-link" routerLink="../feedback"
                                                 routerLinkActive="active"
-                                                type="button">10 ratings</a>
+                                                type="button">{{reviews? reviews.length:0}} ratings</a>
             </span>
             </div>
             <div class="mx-auto" style="font-size: 18px">
                 <div class="vertical_line">
-                    <b>$500.0</b> <br>
+                    <b>{{product.product.price | currency}}</b> <br>
                     <span class="discount">$5535623.0</span>
                 </div>
             </div>
@@ -33,7 +33,7 @@
         <ul class="nav">
             <li class="nav-item">
                 <a class="nav-link" style="color: black !important;">Reviews
-                    <sup>10</sup>
+                    <sup>{{reviews? reviews.length:0}}</sup>
                 </a>
             </li>
             <li class="nav-item ms-auto mt-auto">
@@ -59,17 +59,18 @@
     </div>
     <div class="mt-3" style="font-size: 17px">
         <span class="text-secondary me-4">Sort by:</span>
-        <a type="button" class="me-4"><span class="sort-active">Date</span>&nbsp;<i class="fa-solid fa-arrow-up fa-sm"
-                                                                                    style="color: black"></i></a>
-        <a type="button" class="sort-not-active me-4">Rate</a>
-        <input class="form-check-input" type="checkbox" value="xd" (change)="onChangeFilterReviewsWithPhotos($event)"
-               id="flexCheckChecked" checked>
+        <a type="button" class="me-4" (click)="sortByDate()"><span [ngClass]="isNeedSortByDate?'sort-active':'sort-not-active'">Date</span>&nbsp;
+            <i *ngIf="isNeedSortByDate" class="fa-solid fa-sm" [ngClass]="sortByDateASC?'fa-arrow-up':'fa-arrow-down'" style="color: black"></i></a>
+        <a type="button" class="me-4" (click)="sortByRate()"><span [ngClass]="isNeedSortByRate?'sort-active':'sort-not-active'">Rate</span>&nbsp;
+            <i *ngIf="isNeedSortByRate" class="fa-solid fa-sm" [ngClass]="sortByRateASC?'fa-arrow-up':'fa-arrow-down'" style="color: black"></i></a>
+        <input class="form-check-input" type="checkbox" (change)="onChangeFilterReviewsWithPhotos($event)"
+               id="flexCheckChecked" >
         <label class="form-check-label" for="flexCheckChecked">
-            &nbsp;With a photo <span class="text-secondary">391</span>
+            &nbsp;With a photo <span class="text-secondary">{{countOfReviewsWithPhotos}}</span>
         </label>
     </div>
     <hr>
-    <div *ngFor="let review of reviews" class="my-4">
+    <div *ngFor="let review of filteredReviews; let i=index" class="my-4">
         <div style="display: inline-flex">
             <img class="rounded-4 me-2" alt="image for review" style="width: 50px; height: 50px; object-fit: cover;"
                  [ngSrc]="'https://eliaslealblog.files.wordpress.com/2014/03/user-200.png'" width="1" height="1"/>
@@ -92,6 +93,12 @@
             <img *ngFor="let photo of review.photos" [src]="photo"
                  width="100px" height="115px" alt="photo image" class="rounded-1 me-1"
                  style="object-fit: cover; padding: 0"/>
+            <div class="mt-3">
+                <a type="button" class="highlight-hover" (click)="isNeedOpenAnswer[i] = !isNeedOpenAnswer[i]">Brand Representative</a> <br>
+                <p class="mt-2 appearing" [ngClass]="isNeedOpenAnswer[i]?'appearing-active':''">
+                    {{review.answer}}
+                </p>
+            </div>
         </div>
     </div>
 </div>

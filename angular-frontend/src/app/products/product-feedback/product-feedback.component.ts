@@ -18,12 +18,20 @@ export class ProductFeedbackComponent implements OnInit {
     ) {
     }
 
+    protected readonly Math = Math;
     product: ProductWithImage;
     reviews: Review[];
+    filteredReviews: Review[];
     isNeedLeftButtonForPhotos = false;
     isNeedRightButtonForPhotos = false;
-    countOfPhotos = 0;
     isNeedReviewsOnlyWithPhotos = false;
+    isNeedSortByDate = true;
+    sortByDateASC = true;
+    sortByRateASC = true;
+    isNeedSortByRate = false;
+    isNeedOpenAnswer: boolean[] = [];
+    countOfPhotos = 0;
+    countOfReviewsWithPhotos = 0;
     ngOnInit(): void {
         this.productService.getProductById(this.activatedRoute.snapshot.params['id']).subscribe({
             next: product => {
@@ -41,10 +49,14 @@ export class ProductFeedbackComponent implements OnInit {
                                 )
                             });
                             this.countOfPhotos += review.photos.length;
+                            this.countOfReviewsWithPhotos += review.photos.length > 0? 1 : 0;
                             review.photos = urls;
 
                         })
                         this.isNeedRightButtonForPhotos = this.countOfPhotos >11; //TODO
+                        this.filteredReviews = reviews;
+                        if(this.isNeedSortByDate) this.sortByDate();
+                        this.isNeedOpenAnswer = new Array(this.filteredReviews.length).fill(false);
                     },
                     error: err => console.log(err)
                 })
@@ -73,9 +85,38 @@ export class ProductFeedbackComponent implements OnInit {
     }
 
     onChangeFilterReviewsWithPhotos(event:any){
-        this.isNeedReviewsOnlyWithPhotos = event.srcElement.checked;
-        //TODO
+        this.isNeedReviewsOnlyWithPhotos = event.target.checked;
+        this.isNeedOpenAnswer.fill(false);
+        if(this.isNeedReviewsOnlyWithPhotos){
+            this.filteredReviews = this.reviews.filter(review => review.photos.length > 0)
+        }else{
+            this.filteredReviews = this.reviews;
+        }
+    }
+    sortByDate(){
+        this.isNeedSortByRate = false;
+        this.isNeedSortByDate = true;
+        this.isNeedOpenAnswer.fill(false);
+        this.sortByDateASC = !this.sortByDateASC;
+        if(this.sortByDateASC){
+            this.filteredReviews.sort((review, review2) => new Date(review.time).getTime() - new Date(review2.time).getTime())
+        }else{
+            this.filteredReviews.sort((review, review2) => new Date(review2.time).getTime() - new Date(review.time).getTime())
+        }
+
+
+    }
+    sortByRate(){
+        this.isNeedSortByDate = false;
+        this.isNeedSortByRate = true;
+        this.sortByRateASC = !this.sortByRateASC;
+        this.isNeedOpenAnswer.fill(false);
+        if(this.sortByRateASC){
+            this.filteredReviews.sort((review, review2) => review.rating - review2.rating);
+        }else{
+            this.filteredReviews.sort((review, review2) => review2.rating - review.rating);
+        }
+
     }
 
-    protected readonly Math = Math;
 }
