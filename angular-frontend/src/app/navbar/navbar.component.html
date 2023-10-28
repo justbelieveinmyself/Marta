@@ -13,6 +13,11 @@
             <a routerLink="profile/{{user.id}}" routerLinkActive="active" class="nav-link" style="color: #E1E3E6;">{{user.username}}</a>
         </li>
     </ul>
+    <ul class="navbar-nav" *ngIf="isLogged">
+        <li class="nav-item">
+            <a routerLink="profile/cart" routerLinkActive="active" class="nav-link" style="color: #E1E3E6;">Cart <i class="fa-solid fa-cart-shopping fa-lg"></i></a>
+        </li>
+    </ul>
     <button *ngIf="!isLogged" class="btn btn-outline-success me-2" type="submit" routerLink="/login"><i class="fa-solid fa-right-to-bracket"></i> Log In</button>
     <app-logout *ngIf="isLogged"></app-logout>
 </nav>

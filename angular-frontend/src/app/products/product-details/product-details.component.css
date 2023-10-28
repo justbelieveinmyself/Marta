@@ -15,18 +15,6 @@
     rotate: 180deg;
 
 }
-
-.w-35 {
-    width: 35% !important;
-}
-
-.w-45 {
-    width: 45% !important;
-}
-.w-40 {
-    width: 40% !important;
-}
-
 .appearing {
     transition: opacity 1s ease-out;
     opacity: 0;

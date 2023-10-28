@@ -1,0 +1,58 @@
+<ng-container *ngIf="isLogged; else xd">
+    <div style="display: flex">
+        <div class="card w-75">
+            <div class="card-body" style="display: block">
+                <span class="name_card">Cart<sup> 1</sup></span> <br>
+                <div style="display: flex" class="mt-2">
+                    <img
+                        [src]="'https://papik.pro/uploads/posts/2021-12/1640746910_29-papik-pro-p-anime-risunok-asuni-29.jpg'"
+                        width="1" height="1" alt="photo image" class="rounded-2 me-3"
+                        style="width: 120px; height: 150px; object-fit: cover; border: solid 1px black; padding: 0"/>
+                    <div style="font-size: 17px" class="w-50">
+                        A mixture of nuts almonds hazelnuts cashews walnut raisins peanuts -raw, Nuts Life A mixture of
+                        nuts
+                        almonds hazelnuts cashews walnut raisins peanuts -raw, Nuts Life
+                    </div>
+                    <div style="font-size: 18px" class="ms-3 mt-2">
+                        <i class="fa-solid fa-square-minus fa-2xl"></i>
+                        &nbsp;1&nbsp;
+                        <i class="fa-solid fa-square-plus fa-2xl"></i>
+                    </div>
+                    <div class="ms-auto">
+                        <span class="name_card_main">$550</span> <br>
+                        <span class="discount">$1000</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card ms-4 w-35">
+            <div class="card-body">
+                <b>Delivery to the pick-up point</b> <br>
+                <span class="text-secondary">Simferopol, Zalesskaya Street 81</span> <br>
+                <i class="fa-solid fa-star fa-xs" style="color: #c9cc24;"></i> 4.5 <br>
+                <b>Payment by card</b> <br>
+                <span class="text-secondary">We will write off the payment upon receipt </span> <br>
+                <input class="form-check-input" type="checkbox"
+                       id="flexCheckChecked" >
+                <label class="form-check-label" for="flexCheckChecked">
+                    &nbsp;Pay now
+                </label> <br>
+                <span class="text-secondary">Products, 2 pcs.</span> <br>
+                <span class="name_card_main">Total $250</span> <br>
+                <div class="btn btn-outline-dark w-100 py-3">Order</div>
+            </div>
+        </div>
+    </div>
+</ng-container>
+<ng-template #xd>
+    <div class="card card_with_shadow">
+        <div class="card-body mx-auto">
+            <div class="name_card my-3">The basket is still empty</div>
+            <div class="text-secondary my-3">Take a look at the main page to select products <br> or find what you need
+                in the search
+            </div>
+            <a type="button" routerLink="/products" routerLinkActive="active"
+               class="btn btn-outline-dark w-75 my-3 ms-4">Go to the main page</a>
+        </div>
+    </div>
+</ng-template>
