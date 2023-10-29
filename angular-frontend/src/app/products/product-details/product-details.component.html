@@ -1,5 +1,8 @@
 <div class="mb-3">
-    <h3>{{product.product.seller.username | titlecase}} / {{product.product.productName | titlecase}}</h3>
+    <div style="display: flex">
+        <h3>{{product.product.seller.username | titlecase}} / {{product.product.productName | titlecase}}</h3>
+        <i type="button" data-bs-toggle="modal" data-bs-target="#productReportModal" class="fa-regular fa-flag fa-xl ms-auto"></i>
+    </div>
     <p class="mb-2">
         <i class="fa-solid fa-star" style="color: #c9cc24;"></i>{{(ratingOverall ? ratingOverall : 0) | number:'1.0-1'}}&nbsp;
         <span class="text-secondary"><a class="ratings ratings-router-link" routerLink="../feedback"
@@ -332,8 +335,7 @@
 
 <!-- For modal with report review -->
 <div class="modal fade" id="reviewReportModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" *ngIf="isReceivedProduct else cantLeaveReview"
-         style="min-width: 300px">
+    <div class="modal-dialog modal-dialog-centered" style="min-width: 300px">
         <div class="modal-content">
             <div class="modal-header mt-2 mx-3">
                 <h1 class="modal-title fs-5"><b>Why do you want to complain about the review?</b></h1>
@@ -368,6 +370,53 @@
                     <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadio5">
                     <label class="form-check-label" for="flexRadio5">
                         The review is not about the product
+                    </label>
+                </div>
+                <div class="mt-3 justify-content-center" style="display: flex">
+                    <button class="btn btn-outline-dark w-75" (click)="reportReview()">Report</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- For modal with report review -->
+<div class="modal fade" id="productReportModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="min-width: 300px">
+        <div class="modal-content">
+            <div class="modal-header mt-2 mx-3">
+                <h1 class="modal-title fs-5"><b>What's wrong with the product?</b></h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body mx-4" style="font-size: 17px">
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadio1R">
+                    <label class="form-check-label" for="flexRadio1R">
+                        Incorrect description/photo
+                    </label>
+                </div>
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadio2R">
+                    <label class="form-check-label" for="flexRadio2R">
+                        Counterfeit/forgery
+                    </label>
+                </div>
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadio3R">
+                    <label class="form-check-label" for="flexRadio3R">
+                        Fraud
+                    </label>
+                </div>
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadio4R">
+                    <label class="form-check-label" for="flexRadio4R">
+                        Fake product reviews
+                    </label>
+                </div>
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadio5R">
+                    <label class="form-check-label" for="flexRadio5R">
+                        Prohibited goods: alcohol, tobacco, medicines
                     </label>
                 </div>
                 <div class="mt-3 justify-content-center" style="display: flex">

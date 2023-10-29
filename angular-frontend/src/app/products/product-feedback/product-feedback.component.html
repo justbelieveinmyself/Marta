@@ -86,6 +86,7 @@
                    style="color: #c9cc24;"></i>
                 <i class="fa-solid fa-star" *ngFor="let nostars of [].constructor(Math.round(5-review.rating))"
                    style="color: #E1E3E6;"></i>
+                <i type="button" data-bs-toggle="modal" data-bs-target="#reviewReportModal" class="fa-regular fa-flag ms-3"></i>
             </div>
         </span>
         <div style="padding-left: 58px; padding-top: 9px;">
@@ -134,6 +135,53 @@
                 We reserve the right to edit or not publish a review and a question that does not comply with the
                 established
                 rules!
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- For modal with report review -->
+<div class="modal fade" id="reviewReportModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="min-width: 300px">
+        <div class="modal-content">
+            <div class="modal-header mt-2 mx-3">
+                <h1 class="modal-title fs-5"><b>Why do you want to complain about the review?</b></h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body mx-4" style="font-size: 17px">
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadio1">
+                    <label class="form-check-label" for="flexRadio1">
+                        The review contains obscene, abusive language
+                    </label>
+                </div>
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadio2">
+                    <label class="form-check-label" for="flexRadio2">
+                        Registered, fictitious
+                    </label>
+                </div>
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadio3">
+                    <label class="form-check-label" for="flexRadio3">
+                        Spam
+                    </label>
+                </div>
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadio4">
+                    <label class="form-check-label" for="flexRadio4">
+                        Incorrect photo, video
+                    </label>
+                </div>
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadio5">
+                    <label class="form-check-label" for="flexRadio5">
+                        The review is not about the product
+                    </label>
+                </div>
+                <div class="mt-3 justify-content-center" style="display: flex">
+                    <button class="btn btn-outline-dark w-75" (click)="reportReview()">Report</button>
+                </div>
             </div>
         </div>
     </div>

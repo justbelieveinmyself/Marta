@@ -22,6 +22,7 @@ export class ProductFeedbackComponent implements OnInit {
     product: ProductWithImage;
     reviews: Review[];
     filteredReviews: Review[];
+    isReceivedProduct = true;
     isNeedLeftButtonForPhotos = false;
     isNeedRightButtonForPhotos = false;
     isNeedReviewsOnlyWithPhotos = false;
@@ -93,6 +94,7 @@ export class ProductFeedbackComponent implements OnInit {
             this.filteredReviews = this.reviews;
         }
     }
+
     sortByDate(){
         this.isNeedSortByRate = false;
         this.isNeedSortByDate = true;
@@ -106,6 +108,7 @@ export class ProductFeedbackComponent implements OnInit {
 
 
     }
+
     sortByRate(){
         this.isNeedSortByDate = false;
         this.isNeedSortByRate = true;
@@ -119,4 +122,5 @@ export class ProductFeedbackComponent implements OnInit {
 
     }
 
+    reportReview(){}
 }
