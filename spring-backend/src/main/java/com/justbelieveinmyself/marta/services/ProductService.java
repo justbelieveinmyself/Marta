@@ -19,6 +19,7 @@ import com.justbelieveinmyself.marta.exceptions.ResponseMessage;
 import com.justbelieveinmyself.marta.repositories.ProductRepository;
 import com.justbelieveinmyself.marta.repositories.QuestionRepository;
 import com.justbelieveinmyself.marta.repositories.ReviewRepository;
+import com.justbelieveinmyself.marta.repositories.UserRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,6 +30,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Stream;
 
 @Service
@@ -39,6 +41,8 @@ public class ProductService {
     private ReviewRepository reviewRepository;
     @Autowired
     private QuestionRepository questionRepository;
+    @Autowired
+    private UserRepository userRepository;
     @Autowired
     private ProductMapper productMapper;
     @Autowired
@@ -145,5 +149,28 @@ public class ProductService {
         product.getQuestions().add(savedQuestion);
         productRepository.save(product);
         return ResponseEntity.ok(questionMapper.modelToDto(savedQuestion));
+    }
+
+    public ResponseEntity<?> getProductsFromCart(User user) {
+        List<ProductDto> productDtos = user.getCartProducts().stream().map(product -> productMapper.modelToDto(product)).toList();
+        return ResponseEntity.ok(productDtos);
+    }
+
+    public ResponseEntity<?> addProductToCart(Long productId, User customer) {
+        Optional<Product> productOpt = productRepository.findById(productId);
+        if(productOpt.isEmpty()){
+            throw new NotFoundException("Product with [id] doesn't exists");
+        }
+        Product product = productOpt.get();
+        customer.getCartProducts().add(product);
+        User savedUser = userRepository.save(customer);
+        List<ProductDto> productDtos = savedUser.getCartProducts().stream().map(prod -> productMapper.modelToDto(prod)).toList();
+        return ResponseEntity.ok(productDtos);
+    }
+
+    public ResponseEntity<?> deleteAllProductsInCart(User customer) {
+        customer.setCartProducts(null);
+        userRepository.save(customer);
+        return ResponseEntity.ok(new ResponseMessage(200, "Deleted"));
     }
 }

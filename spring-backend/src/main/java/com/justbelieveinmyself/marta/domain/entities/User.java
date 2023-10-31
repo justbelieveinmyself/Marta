@@ -3,10 +3,7 @@ package com.justbelieveinmyself.marta.domain.entities;
 import com.justbelieveinmyself.marta.domain.enums.Role;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -18,9 +15,11 @@ import java.util.Set;
 @Entity
 @Table(name = "users")
 @Data
+@ToString(exclude = "cartProducts")
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode(exclude = "cartProducts")
 public class User implements UserDetails {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -43,6 +42,9 @@ public class User implements UserDetails {
     private String postalCode;
     private String country;
     private Double balance;
+    @ManyToMany
+    @JoinTable(name = "product_cart", joinColumns = @JoinColumn(name = "customer_id"), inverseJoinColumns = @JoinColumn(name = "product_id"))
+    private Set<Product> cartProducts;
     @OneToOne(mappedBy = "user")
     private RefreshToken refreshToken;
 

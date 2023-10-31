@@ -28,6 +28,6 @@ public class Review {
     private ZonedDateTime time;
     @ElementCollection @CollectionTable(name = "product_reviews_photo", joinColumns = @JoinColumn(name = "review_id"))
     private List<String> photos;
-    @ManyToOne(fetch = FetchType.EAGER) @JoinColumn(name = "product_id")
+    @ManyToOne(fetch = FetchType.EAGER) @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 }

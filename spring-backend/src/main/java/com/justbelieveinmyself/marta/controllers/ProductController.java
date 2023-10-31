@@ -186,4 +186,49 @@ public class ProductController {
     ){
         return productService.createProductQuestion(questionDto, author);
     }
+
+    @GetMapping("cart")
+    @Operation(summary = "Get products from personal cart", description = "Use this to get product from his cart")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Success",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProductDto.class))),
+            @ApiResponse(responseCode = "403", description = "Unauthorized",
+                    content = @Content)
+    })
+    public ResponseEntity<?> getProductsFromCart(
+            @CurrentUser User user
+    ){
+        return productService.getProductsFromCart(user);
+    }
+
+    @PostMapping(value = "cart/{productId}")
+    @Operation(summary = "Add product to personal cart", description = "Use this to add product into cart")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Product added",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProductDto.class))),
+            @ApiResponse(responseCode = "403", description = "Product doesn't added to cart",
+                    content = @Content)
+    })
+    @Parameter(name = "productId", required = true, schema = @Schema(type = "integer", name = "productId"), in = ParameterIn.PATH)
+    public ResponseEntity<?> addProductToCart(
+            @Parameter(hidden = true)
+            @PathVariable("productId") Long productId,
+            @CurrentUser User customer
+    ){
+        return productService.addProductToCart(productId, customer);
+    }
+
+    @DeleteMapping("cart")
+    @Operation(summary = "Delete All products in cart", description = "Use this to delete all products from cart")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "All products in Cart successfully deleted",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ResponseMessage.class))),
+            @ApiResponse(responseCode = "403", description = "Cart doesn't deleted",
+                    content = @Content)
+    })
+    public ResponseEntity<?> deleteAllProductsInCart(
+            @CurrentUser User user
+    ){
+        return productService.deleteAllProductsInCart(user);
+    }
 }
