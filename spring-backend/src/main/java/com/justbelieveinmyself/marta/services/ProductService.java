@@ -15,6 +15,7 @@ import com.justbelieveinmyself.marta.domain.mappers.QuestionMapper;
 import com.justbelieveinmyself.marta.domain.mappers.ReviewMapper;
 import com.justbelieveinmyself.marta.exceptions.ForbiddenException;
 import com.justbelieveinmyself.marta.exceptions.NotFoundException;
+import com.justbelieveinmyself.marta.exceptions.ResponseError;
 import com.justbelieveinmyself.marta.exceptions.ResponseMessage;
 import com.justbelieveinmyself.marta.repositories.ProductRepository;
 import com.justbelieveinmyself.marta.repositories.QuestionRepository;
@@ -152,7 +153,10 @@ public class ProductService {
     }
 
     public ResponseEntity<?> getProductsFromCart(User user) {
-        List<ProductDto> productDtos = user.getCartProducts().stream().map(product -> productMapper.modelToDto(product)).toList();
+        List<ProductWithImageDto> productDtos = user.getCartProducts().stream()
+                .map(pro -> new ProductWithImageDto(productMapper.modelToDto(pro), Base64.getEncoder().encodeToString(
+                        fileHelper.downloadFileAsByteArray(pro.getPreviewImg(), UploadDirectory.PRODUCTS))))
+                .toList();
         return ResponseEntity.ok(productDtos);
     }
 
@@ -162,15 +166,29 @@ public class ProductService {
             throw new NotFoundException("Product with [id] doesn't exists");
         }
         Product product = productOpt.get();
-        customer.getCartProducts().add(product);
-        User savedUser = userRepository.save(customer);
-        List<ProductDto> productDtos = savedUser.getCartProducts().stream().map(prod -> productMapper.modelToDto(prod)).toList();
-        return ResponseEntity.ok(productDtos);
+        if(customer.getCartProducts().add(product)){
+            User savedUser = userRepository.save(customer);
+            return ResponseEntity.ok(productMapper.modelToDto(product));
+        }else{
+            ResponseError responseError = new ResponseError(HttpStatus.FORBIDDEN, "Already added to cart!");
+            return new ResponseEntity<>(responseError, HttpStatus.FORBIDDEN);
+        }
+
     }
 
     public ResponseEntity<?> deleteAllProductsInCart(User customer) {
         customer.setCartProducts(null);
         userRepository.save(customer);
         return ResponseEntity.ok(new ResponseMessage(200, "Deleted"));
+    }
+
+    public ResponseEntity<?> deleteProductInCart(User customer, Product product) {
+        if(customer.getCartProducts().remove(product)){
+            userRepository.save(customer);
+            return ResponseEntity.ok(new ResponseMessage(200, "Deleted"));
+        }else{
+            ResponseError responseError = new ResponseError(HttpStatus.NOT_FOUND, "Not found");
+            return new ResponseEntity<>(responseError, HttpStatus.NOT_FOUND);
+        }
     }
 }

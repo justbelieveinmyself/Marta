@@ -231,4 +231,20 @@ public class ProductController {
     ){
         return productService.deleteAllProductsInCart(user);
     }
+
+    @DeleteMapping("cart/{productId}")
+    @Operation(summary = "Delete one product in cart", description = "Use this to delete one product from cart")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Product in Cart successfully deleted",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ResponseMessage.class))),
+            @ApiResponse(responseCode = "403", description = "Product from cart doesn't deleted",
+                    content = @Content)
+    })
+    @Parameter(name = "productId", required = true, schema = @Schema(type = "integer", name = "productId"), in = ParameterIn.PATH)
+    public ResponseEntity<?> deleteProductInCart(
+            @CurrentUser User user,
+            @Parameter(hidden = true) @PathVariable("productId") Product product
+    ) {
+        return productService.deleteProductInCart(user, product);
+    }
 }

@@ -34,6 +34,11 @@ export class ProductService {
         return this.httpClient.get<Review[]>(`${this.baseUrl}/reviews/` + productId);
     }
 
+    getProductsFromCart(): Observable<ProductWithImage[]> {
+        return this.httpClient.get<ProductWithImage[]>(`${this.baseUrl}/cart`).pipe(map(products =>
+            products.map(product => this.imageService.createImageInProduct(product))));
+    }
+
     getProductQuestions(productId: number): Observable<Question[]> {
         return this.httpClient.get<Question[]>(`${this.baseUrl}/questions/` + productId);
     }
@@ -44,6 +49,10 @@ export class ProductService {
         var json = new Blob([JSON.stringify(product)], {type: 'application/json'});
         fd.append("product", json);
         return this.httpClient.post(this.baseUrl, fd);
+    }
+
+    addProductToCart(product: Product): Observable<Product>{
+        return this.httpClient.post<Product>(`${this.baseUrl}/cart/` + product.id, null);
     }
 
     addReview(review: Review, photos: File[]): Observable<Review> {
@@ -68,6 +77,14 @@ export class ProductService {
 
     deleteProduct(id: number): Observable<Object> {
         return this.httpClient.delete(`${this.baseUrl}/${id}`);
+    }
+
+    deleteAllProductsInCart(): Observable<Object> {
+        return this.httpClient.delete(`${this.baseUrl}/cart`);
+    }
+
+    deleteProductInCart(product: Product): Observable<Object> {
+        return this.httpClient.delete(`${this.baseUrl}/cart/${product.id}`);
     }
 
 }

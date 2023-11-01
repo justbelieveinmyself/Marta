@@ -3,109 +3,22 @@
         <div class="col mb-2">
             <div class="card">
                 <div class="card-body" style="display: block">
-                    <span class="name_card">Cart<sup> 1</sup></span> <br>
-                    <div style="display: flex" class="mt-2">
+                    <span class="name_card">Cart<sup> {{products? products.length: 0}}</sup></span> <br>
+                    <div style="display: flex" class="mt-2" *ngFor="let card of products">
                         <img
-                            [src]="'https://papik.pro/uploads/posts/2021-12/1640746910_29-papik-pro-p-anime-risunok-asuni-29.jpg'"
+                            [src]="card.file"
                             width="1" height="1" alt="photo image" class="rounded-2 me-3"
                             style="width: 120px; height: 150px; object-fit: cover; border: solid 1px black; padding: 0"/>
                         <div style="font-size: 17px" class="w-50">
-                            A mixture of nuts almonds hazelnuts cashews walnut raisins peanuts -raw, Nuts Life A mixture
-                            of
-                            nuts
-                            almonds hazelnuts cashews walnut raisins peanuts -raw, Nuts Life
+                            {{card.product.productName}}, {{card.product.seller.username | titlecase}}
                         </div>
                         <div style="font-size: 18px" class="ms-3 mt-2">
-                            <i class="fa-solid fa-square-minus fa-2xl"></i>
+                            <i type="button" class="fa-solid fa-square-minus fa-2xl"></i>
                             &nbsp;1&nbsp;
-                            <i class="fa-solid fa-square-plus fa-2xl"></i>
+                            <i type="button" class="fa-solid fa-square-plus fa-2xl"></i>
                         </div>
                         <div class="ms-auto">
-                            <span class="name_card_main">$550</span> <br>
-                            <span class="discount">$1000</span>
-                        </div>
-                    </div>
-                    <div style="display: flex" class="mt-2">
-                        <img
-                            [src]="'https://papik.pro/uploads/posts/2021-12/1640746910_29-papik-pro-p-anime-risunok-asuni-29.jpg'"
-                            width="1" height="1" alt="photo image" class="rounded-2 me-3"
-                            style="width: 120px; height: 150px; object-fit: cover; border: solid 1px black; padding: 0"/>
-                        <div style="font-size: 17px" class="w-50">
-                            A mixture of nuts almonds hazelnuts cashews walnut raisins peanuts -raw, Nuts Life A mixture
-                            of
-                            nuts
-                            almonds hazelnuts cashews walnut raisins peanuts -raw, Nuts Life
-                        </div>
-                        <div style="font-size: 18px" class="ms-3 mt-2">
-                            <i class="fa-solid fa-square-minus fa-2xl"></i>
-                            &nbsp;1&nbsp;
-                            <i class="fa-solid fa-square-plus fa-2xl"></i>
-                        </div>
-                        <div class="ms-auto">
-                            <span class="name_card_main">$550</span> <br>
-                            <span class="discount">$1000</span>
-                        </div>
-                    </div>
-                    <div style="display: flex" class="mt-2">
-                        <img
-                            [src]="'https://papik.pro/uploads/posts/2021-12/1640746910_29-papik-pro-p-anime-risunok-asuni-29.jpg'"
-                            width="1" height="1" alt="photo image" class="rounded-2 me-3"
-                            style="width: 120px; height: 150px; object-fit: cover; border: solid 1px black; padding: 0"/>
-                        <div style="font-size: 17px" class="w-50">
-                            A mixture of nuts almonds hazelnuts cashews walnut raisins peanuts -raw, Nuts Life A mixture
-                            of
-                            nuts
-                            almonds hazelnuts cashews walnut raisins peanuts -raw, Nuts Life
-                        </div>
-                        <div style="font-size: 18px" class="ms-3 mt-2">
-                            <i class="fa-solid fa-square-minus fa-2xl"></i>
-                            &nbsp;1&nbsp;
-                            <i class="fa-solid fa-square-plus fa-2xl"></i>
-                        </div>
-                        <div class="ms-auto">
-                            <span class="name_card_main">$550</span> <br>
-                            <span class="discount">$1000</span>
-                        </div>
-                    </div>
-                    <div style="display: flex" class="mt-2">
-                        <img
-                            [src]="'https://papik.pro/uploads/posts/2021-12/1640746910_29-papik-pro-p-anime-risunok-asuni-29.jpg'"
-                            width="1" height="1" alt="photo image" class="rounded-2 me-3"
-                            style="width: 120px; height: 150px; object-fit: cover; border: solid 1px black; padding: 0"/>
-                        <div style="font-size: 17px" class="w-50">
-                            A mixture of nuts almonds hazelnuts cashews walnut raisins peanuts -raw, Nuts Life A mixture
-                            of
-                            nuts
-                            almonds hazelnuts cashews walnut raisins peanuts -raw, Nuts Life
-                        </div>
-                        <div style="font-size: 18px" class="ms-3 mt-2">
-                            <i class="fa-solid fa-square-minus fa-2xl"></i>
-                            &nbsp;1&nbsp;
-                            <i class="fa-solid fa-square-plus fa-2xl"></i>
-                        </div>
-                        <div class="ms-auto">
-                            <span class="name_card_main">$550</span> <br>
-                            <span class="discount">$1000</span>
-                        </div>
-                    </div>
-                    <div style="display: flex" class="mt-2">
-                        <img
-                            [src]="'https://papik.pro/uploads/posts/2021-12/1640746910_29-papik-pro-p-anime-risunok-asuni-29.jpg'"
-                            width="1" height="1" alt="photo image" class="rounded-2 me-3"
-                            style="width: 120px; height: 150px; object-fit: cover; border: solid 1px black; padding: 0"/>
-                        <div style="font-size: 17px" class="w-50">
-                            A mixture of nuts almonds hazelnuts cashews walnut raisins peanuts -raw, Nuts Life A mixture
-                            of
-                            nuts
-                            almonds hazelnuts cashews walnut raisins peanuts -raw, Nuts Life
-                        </div>
-                        <div style="font-size: 18px" class="ms-3 mt-2">
-                            <i class="fa-solid fa-square-minus fa-2xl"></i>
-                            &nbsp;1&nbsp;
-                            <i class="fa-solid fa-square-plus fa-2xl"></i>
-                        </div>
-                        <div class="ms-auto">
-                            <span class="name_card_main">$550</span> <br>
+                            <span class="name_card_main">{{(card? card.product.price : 0) | currency}}</span> <br>
                             <span class="discount">$1000</span>
                         </div>
                     </div>
@@ -171,10 +84,10 @@
                     <div style="display: flex; flex-wrap: wrap">
                         <div class="w-100" style="display: flex">
                             <span class="text-secondary">Products, 2 pcs.</span>
-                            <span class="text-secondary ms-auto">$250</span>
+                            <span class="text-secondary ms-auto">{{totalPrice| currency}}</span>
                         </div>
                         <span class="name_card_main">Total</span>
-                        <span class="name_card_main ms-auto">$250</span>
+                        <span class="name_card_main ms-auto">{{totalPrice| currency}}</span>
                     </div>
                     <div style="display: flex" class="my-2">
                         <div class="btn btn-outline-dark mx-auto w-100 py-2" style="font-size: 20px">Order</div>
