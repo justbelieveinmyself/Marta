@@ -4,18 +4,20 @@
             <div class="card">
                 <div class="card-body" style="display: block">
                     <span class="name_card">Cart<sup> {{products? products.length: 0}}</sup></span> <br>
-                    <div style="display: flex" class="mt-2" *ngFor="let card of products">
-                        <img
+                    <div style="display: flex" class="mt-2" *ngFor="let card of products; let i = index">
+                        <img type="button" routerLinkActive="active" routerLink="/products/{{card.product.id}}/details"
                             [src]="card.file"
                             width="1" height="1" alt="photo image" class="rounded-2 me-3"
                             style="width: 120px; height: 150px; object-fit: cover; border: solid 1px black; padding: 0"/>
-                        <div style="font-size: 17px" class="w-50">
-                            {{card.product.productName}}, {{card.product.seller.username | titlecase}}
+                        <div style="font-size: 17px;" class="w-50"  >
+                            <span type="button" routerLinkActive="active" routerLink="/products/{{card.product.id}}/details">
+                            {{card.product.productName | titlecase}}, {{card.product.seller.username | titlecase}}
+                                </span>
                         </div>
                         <div style="font-size: 18px" class="ms-3 mt-2">
-                            <i type="button" class="fa-solid fa-square-minus fa-2xl"></i>
-                            &nbsp;1&nbsp;
-                            <i type="button" class="fa-solid fa-square-plus fa-2xl"></i>
+                            <i type="button" (click)="removeNumberOfProduct($event)" id="{{i}}" class="fa-solid fa-square-minus fa-2xl"></i>
+                            &nbsp;{{this.countOfProduct[i]}}&nbsp;
+                            <i type="button" (click)="addNumberOfProduct($event)" id="{{i}}" class="fa-solid fa-square-plus fa-2xl"></i>
                         </div>
                         <div class="ms-auto">
                             <span class="name_card_main">{{(card? card.product.price : 0) | currency}}</span> <br>
@@ -31,7 +33,7 @@
                             <div style="display: flex; flex-wrap: wrap;">
                                 <div class="w-100 mb-2" style="display: flex">
                                     <span class="name_card_main">Payment method</span>
-                                    <i type="button" class="fa-solid fa-pencil fa-lg ms-auto mt-3"></i>
+                                    <i type="button" routerLinkActive="active" routerLink="/profile/{{user.id}}/details" class="fa-solid fa-pencil fa-lg ms-auto mt-3"></i>
                                 </div>
                                 <i class="fa-brands fa-cc-visa fa-2xl" style="margin-top: 12px"></i>
                                 <span class="ms-3">Visa ⋅⋅ 4315</span>
@@ -45,13 +47,13 @@
                             <div style="display: flex; flex-wrap: wrap;">
                                 <div class="w-100 mb-2" style="display: flex">
                                     <span class="name_card_main">My data</span>
-                                    <i type="button" class="fa-solid fa-pencil fa-lg ms-auto mt-3"></i>
+                                    <i type="button" routerLinkActive="active" routerLink="/profile/{{user.id}}/details" class="fa-solid fa-pencil fa-lg ms-auto mt-3"></i>
                                 </div>
                                 <img class="rounded-2 me-2" alt="image for review"
                                      style="width: 23px; height: 23px; object-fit: cover;"
                                      [ngSrc]="'https://eliaslealblog.files.wordpress.com/2014/03/user-200.png'"
                                      width="1" height="1"/>
-                                <span class="ms-2">Vadim +7 978 800-93-24</span>
+                                <span class="ms-2">{{user.firstName}} +{{user.phone | slice:1:2}} {{user.phone | slice:2:5}} {{user.phone | slice:5:8}}-{{user.phone | slice:8:10}}-{{user.phone | slice:10:12}}</span>
                             </div>
                         </div>
                     </div>
@@ -83,7 +85,7 @@
                     </div>
                     <div style="display: flex; flex-wrap: wrap">
                         <div class="w-100" style="display: flex">
-                            <span class="text-secondary">Products, 2 pcs.</span>
+                            <span class="text-secondary">Products, {{totalCountOfProduct}} pcs.</span>
                             <span class="text-secondary ms-auto">{{totalPrice| currency}}</span>
                         </div>
                         <span class="name_card_main">Total</span>
