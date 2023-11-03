@@ -35,18 +35,27 @@ export class ProductCartComponent implements OnInit{
         this.user = this.tokenService.getUser();
     }
 
-    addNumberOfProduct(event : any){
-        const id = event.target.id;
-        this.countOfProduct[id]++;
-        this.totalPrice+=this.products[id].product.price;
+    addNumberOfProduct(product: Product, index: number){
+        this.countOfProduct[index]++;
+        this.totalPrice += product.price;
         this.totalCountOfProduct++;
     }
-    removeNumberOfProduct(event : any){
-        const id = event.target.id;
-        if(this.countOfProduct[id] > 1) {
-            this.countOfProduct[id]--;
-            this.totalPrice -= this.products[id].product.price;
+    removeNumberOfProduct(product: Product, index: number){
+        if(this.countOfProduct[index] > 1) {
+            this.countOfProduct[index]--;
+            this.totalPrice -= product.price;
             this.totalCountOfProduct--;
         }
+    }
+    deleteProductInCart(product: Product){
+        this.productService.deleteProductInCart(product).subscribe({
+            next: result => {
+                this.products = this.products.filter(prod => prod.product != product);
+                this.countOfProduct = new Array(this.products.length).fill(1);
+                this.totalCountOfProduct = this.products.length;
+            },
+            error: err => console.log(err)
+        })
+        console.log(product);
     }
 }

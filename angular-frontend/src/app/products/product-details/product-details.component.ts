@@ -76,6 +76,15 @@ export class ProductDetailsComponent implements OnInit {
         });
     }
 
+    addToCart(){
+        this.productService.addProductToCart(this.product.product).subscribe({
+            next: result => console.log(123),
+            error: err => console.log(err)
+        });
+        // @ts-ignore
+        document.getElementById('liveToast').classList.add("show");
+    }
+
     saveReview() {
         let review = new Review();
         review.message = this.messageOfReview;
