@@ -43,4 +43,12 @@ export class ProductQuestionsComponent implements OnInit {
             error: err => console.log(err)
         })
     }
+
+    addToCart(){
+        this.productService.addProductToCart(this.product.product).subscribe({
+            error: err => console.log(err)
+        });
+        // @ts-ignore
+        document.getElementById('liveToast').classList.add("show");
+    }
 }

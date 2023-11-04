@@ -47,15 +47,15 @@ export class ProductCartComponent implements OnInit{
             this.totalCountOfProduct--;
         }
     }
-    deleteProductInCart(product: Product){
+    deleteProductInCart(product: Product, index: number){
         this.productService.deleteProductInCart(product).subscribe({
             next: result => {
+                this.totalPrice -= product.price * this.countOfProduct[index];
+                this.totalCountOfProduct -= this.countOfProduct[index];
                 this.products = this.products.filter(prod => prod.product != product);
-                this.countOfProduct = new Array(this.products.length).fill(1);
-                this.totalCountOfProduct = this.products.length;
+                this.countOfProduct.splice(index, 1);
             },
             error: err => console.log(err)
         })
-        console.log(product);
     }
 }

@@ -33,6 +33,7 @@ export class ProductFeedbackComponent implements OnInit {
     isNeedOpenAnswer: boolean[] = [];
     countOfPhotos = 0;
     countOfReviewsWithPhotos = 0;
+
     ngOnInit(): void {
         this.productService.getProductById(this.activatedRoute.snapshot.params['id']).subscribe({
             next: product => {
@@ -50,13 +51,13 @@ export class ProductFeedbackComponent implements OnInit {
                                 )
                             });
                             this.countOfPhotos += review.photos.length;
-                            this.countOfReviewsWithPhotos += review.photos.length > 0? 1 : 0;
+                            this.countOfReviewsWithPhotos += review.photos.length > 0 ? 1 : 0;
                             review.photos = urls;
 
                         })
-                        this.isNeedRightButtonForPhotos = this.countOfPhotos >11; //TODO
+                        this.isNeedRightButtonForPhotos = this.countOfPhotos > 11; //TODO
                         this.filteredReviews = reviews;
-                        if(this.isNeedSortByDate) this.sortByDate();
+                        if (this.isNeedSortByDate) this.sortByDate();
                         this.isNeedOpenAnswer = new Array(this.filteredReviews.length).fill(false);
                     },
                     error: err => console.log(err)
@@ -85,42 +86,51 @@ export class ProductFeedbackComponent implements OnInit {
 
     }
 
-    onChangeFilterReviewsWithPhotos(event:any){
+    onChangeFilterReviewsWithPhotos(event: any) {
         this.isNeedReviewsOnlyWithPhotos = event.target.checked;
         this.isNeedOpenAnswer.fill(false);
-        if(this.isNeedReviewsOnlyWithPhotos){
+        if (this.isNeedReviewsOnlyWithPhotos) {
             this.filteredReviews = this.reviews.filter(review => review.photos.length > 0)
-        }else{
+        } else {
             this.filteredReviews = this.reviews;
         }
     }
 
-    sortByDate(){
+    sortByDate() {
         this.isNeedSortByRate = false;
         this.isNeedSortByDate = true;
         this.isNeedOpenAnswer.fill(false);
         this.sortByDateASC = !this.sortByDateASC;
-        if(this.sortByDateASC){
+        if (this.sortByDateASC) {
             this.filteredReviews.sort((review, review2) => new Date(review.time).getTime() - new Date(review2.time).getTime())
-        }else{
+        } else {
             this.filteredReviews.sort((review, review2) => new Date(review2.time).getTime() - new Date(review.time).getTime())
         }
 
 
     }
 
-    sortByRate(){
+    sortByRate() {
         this.isNeedSortByDate = false;
         this.isNeedSortByRate = true;
         this.sortByRateASC = !this.sortByRateASC;
         this.isNeedOpenAnswer.fill(false);
-        if(this.sortByRateASC){
+        if (this.sortByRateASC) {
             this.filteredReviews.sort((review, review2) => review.rating - review2.rating);
-        }else{
+        } else {
             this.filteredReviews.sort((review, review2) => review2.rating - review.rating);
         }
 
     }
 
-    reportReview(){}
+    reportReview() {
+    }
+
+    addToCart(){
+        this.productService.addProductToCart(this.product.product).subscribe({
+            error: err => console.log(err)
+        });
+        // @ts-ignore
+        document.getElementById('liveToast').classList.add("show");
+    }
 }

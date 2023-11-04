@@ -23,7 +23,18 @@
         </div>
         <div class="w-25 my-3" style="text-align: center">
             <button class="btn btn-outline-dark w-40 h-100 me-2">Buy now</button>
-            <button class="btn btn-dark w-40 h-100 me-2">Add to cart</button>
+            <button (click)="addToCart()" class="btn btn-dark w-40 h-100 me-2">Add to cart</button>
+            <div class="toast-container position-fixed bottom-0 end-0 p-3">
+                <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="toast-header">
+                        <strong class="me-auto">Cart</strong>
+                        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                    <div class="toast-body">
+                        '{{product.product.productName}}' has added to cart!
+                    </div>
+                </div>
+            </div>
             <a type="button" style="color: black" class="fa-regular fa-heart fa-xl"></a>
         </div>
     </div>
