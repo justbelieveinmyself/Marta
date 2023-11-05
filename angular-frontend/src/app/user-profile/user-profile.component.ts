@@ -1,9 +1,7 @@
-import { Component, SecurityContext } from '@angular/core';
-import { TokenService } from '../service/token.service';
-import { LocalUser } from '../models/local-user';
-import { UserService } from '../service/user.service';
-import { DomSanitizer } from '@angular/platform-browser';
-import { ImageService } from '../service/image.service';
+import {Component} from '@angular/core';
+import {TokenService} from '../service/token.service';
+import {LocalUser} from '../models/local-user';
+import {ImageService} from '../service/image.service';
 
 @Component({
   selector: 'app-user-profile',
@@ -27,7 +25,7 @@ export class UserProfileComponent {
             this.user.avatar = res;
             console.log(res)
         }
-    ).catch(error => this.user.avatar = "https://eliaslealblog.files.wordpress.com/2014/03/user-200.png") 
+    ).catch(error => this.user.avatar = "https://eliaslealblog.files.wordpress.com/2014/03/user-200.png")
     }
   }
 }

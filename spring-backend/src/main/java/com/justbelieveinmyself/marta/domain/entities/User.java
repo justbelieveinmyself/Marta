@@ -15,11 +15,11 @@ import java.util.Set;
 @Entity
 @Table(name = "users")
 @Data
-@ToString(exclude = "cartProducts")
+@ToString(exclude = {"cartProducts", "favouriteProducts"})
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode(exclude = "cartProducts")
+@EqualsAndHashCode(exclude = {"cartProducts", "favouriteProducts"})
 public class User implements UserDetails {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -45,6 +45,9 @@ public class User implements UserDetails {
     @ManyToMany
     @JoinTable(name = "product_cart", joinColumns = @JoinColumn(name = "customer_id"), inverseJoinColumns = @JoinColumn(name = "product_id"))
     private Set<Product> cartProducts;
+    @ManyToMany
+    @JoinTable(name = "product_favourites", joinColumns = @JoinColumn(name = "follower_id"), inverseJoinColumns = @JoinColumn(name = "product_id"))
+    private Set<Product> favouriteProducts;
     @OneToOne(mappedBy = "user")
     private RefreshToken refreshToken;
 

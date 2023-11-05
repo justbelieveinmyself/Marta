@@ -1,11 +1,13 @@
 package com.justbelieveinmyself.marta.services;
 
+import com.justbelieveinmyself.marta.configs.beans.FileHelper;
 import com.justbelieveinmyself.marta.domain.dto.UserDto;
 import com.justbelieveinmyself.marta.domain.dto.auth.LoginRequestDto;
 import com.justbelieveinmyself.marta.domain.dto.auth.LoginResponseDto;
 import com.justbelieveinmyself.marta.domain.dto.auth.RegisterDto;
 import com.justbelieveinmyself.marta.domain.dto.SellerDto;
 import com.justbelieveinmyself.marta.domain.entities.User;
+import com.justbelieveinmyself.marta.domain.mappers.ProductMapper;
 import com.justbelieveinmyself.marta.domain.mappers.UserMapper;
 import com.justbelieveinmyself.marta.exceptions.NotCreatedException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,17 +23,21 @@ public class AuthService {
     @Autowired
     private UserService userService;
     @Autowired
+    private ProductMapper productMapper;
+    @Autowired
     private AuthenticationManager authenticationManager;
     @Autowired
     private RefreshTokenService refreshTokenService;
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private FileHelper fileHelper;
     public ResponseEntity<?> createAuthToken(@RequestBody LoginRequestDto authRequest) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken
                 (authRequest.getUsername(), authRequest.getPassword()));
         User userDetails = userService.loadUserByUsername(authRequest.getUsername());
         String token = refreshTokenService.createToken(userDetails);
-        LoginResponseDto loginResponseDTO = new LoginResponseDto(token, userMapper.modelToDto(userDetails));
+        LoginResponseDto loginResponseDTO = new LoginResponseDto(token, userMapper.modelToDto(userDetails, fileHelper, productMapper));
         return ResponseEntity.ok(loginResponseDTO);
     }
 

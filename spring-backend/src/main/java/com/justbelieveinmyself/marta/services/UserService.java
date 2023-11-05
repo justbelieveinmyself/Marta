@@ -7,6 +7,7 @@ import com.justbelieveinmyself.marta.domain.dto.auth.RegisterDto;
 import com.justbelieveinmyself.marta.domain.entities.User;
 import com.justbelieveinmyself.marta.domain.enums.Role;
 import com.justbelieveinmyself.marta.domain.enums.UploadDirectory;
+import com.justbelieveinmyself.marta.domain.mappers.ProductMapper;
 import com.justbelieveinmyself.marta.domain.mappers.UserMapper;
 import com.justbelieveinmyself.marta.exceptions.ForbiddenException;
 import com.justbelieveinmyself.marta.exceptions.ResponseMessage;
@@ -32,6 +33,8 @@ public class UserService implements UserDetailsService {
     @Autowired
     @Lazy
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private ProductMapper productMapper;
     @Autowired
     private FileHelper fileHelper;
     @Autowired
@@ -72,7 +75,7 @@ public class UserService implements UserDetailsService {
         validateRights(authUser, user);
         user.setEmail(email);
         User savedUser = userRepository.save(user);
-        return ResponseEntity.ok(new LoginResponseDto(null, userMapper.modelToDto(savedUser)));
+        return ResponseEntity.ok(new LoginResponseDto(null, userMapper.modelToDto(savedUser, fileHelper,productMapper)));
     }
 
     public ResponseEntity<?> updateAvatar(User user, MultipartFile file, User authUser) {
@@ -98,7 +101,7 @@ public class UserService implements UserDetailsService {
         validateRights(authUser, user);
         user.setGender(gender);
         User savedUser = userRepository.save(user);
-        return ResponseEntity.ok(userMapper.modelToDto(savedUser));
+        return ResponseEntity.ok(userMapper.modelToDto(savedUser, fileHelper, productMapper));
     }
 
     public ResponseEntity<?> updateNameAndSurname(User user, UserNamesDto userNamesDto, User authedUser) {
@@ -106,6 +109,10 @@ public class UserService implements UserDetailsService {
         user.setFirstName(userNamesDto.getFirstName());
         user.setLastName(userNamesDto.getLastName());
         User savedUser = userRepository.save(user);
-        return ResponseEntity.ok(userMapper.modelToDto(savedUser));
+        return ResponseEntity.ok(userMapper.modelToDto(savedUser, fileHelper, productMapper));
+    }
+
+    public ResponseEntity<?> getUser(User user) {
+        return ResponseEntity.ok(userMapper.modelToDto(user, fileHelper, productMapper));
     }
 }

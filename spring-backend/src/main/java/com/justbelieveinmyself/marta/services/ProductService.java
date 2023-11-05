@@ -191,4 +191,20 @@ public class ProductService {
             return new ResponseEntity<>(responseError, HttpStatus.NOT_FOUND);
         }
     }
+
+    public ResponseEntity<?> addProductToFavourites(Product product, User customer) {
+        if(customer.getFavouriteProducts().add(product)){
+            userRepository.save(customer);
+            return ResponseEntity.ok(productMapper.modelToDto(product));
+        }else{
+            ResponseError responseError = new ResponseError(HttpStatus.FORBIDDEN, "Already added to favourites!");
+            return new ResponseEntity<>(responseError, HttpStatus.FORBIDDEN);
+        }
+    }
+
+    public ResponseEntity<?> getProductsFromFavourites(User user) {
+        Set<Product> favouriteProducts = user.getFavouriteProducts();
+        List<ProductDto> productDtos = favouriteProducts.stream().map(product -> productMapper.modelToDto(product)).toList();
+        return ResponseEntity.ok(productDtos);
+    }
 }

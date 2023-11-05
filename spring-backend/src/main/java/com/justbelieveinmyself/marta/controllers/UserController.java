@@ -87,7 +87,7 @@ public class UserController {
     public ResponseEntity<?> getUserInfo(
             @CurrentUser User user
     ){
-        return ResponseEntity.ok(userMapper.modelToDto(user));
+        return userService.getUser(user);
     }
 
     @PutMapping("{profileId}/gender")

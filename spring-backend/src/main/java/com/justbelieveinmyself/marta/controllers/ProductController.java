@@ -247,4 +247,35 @@ public class ProductController {
     ) {
         return productService.deleteProductInCart(user, product);
     }
+
+    @PostMapping(value = "favourite/{productId}")
+    @Operation(summary = "Add product to favourites", description = "Use this to add product into favourites")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Product added",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProductDto.class))),
+            @ApiResponse(responseCode = "403", description = "Product doesn't added to favourites",
+                    content = @Content)
+    })
+    @Parameter(name = "productId", required = true, schema = @Schema(type = "integer", name = "productId"), in = ParameterIn.PATH)
+    public ResponseEntity<?> addProductToFavourites(
+            @Parameter(hidden = true)
+            @PathVariable("productId") Product product,
+            @CurrentUser User customer
+    ){
+        return productService.addProductToFavourites(product, customer);
+    }
+
+    @GetMapping("favourite")
+    @Operation(summary = "Get products from favourites", description = "Use this to get product from his favourites")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Success",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProductDto.class))),
+            @ApiResponse(responseCode = "403", description = "Unauthorized",
+                    content = @Content)
+    })
+    public ResponseEntity<?> getProductsFromFavourites(
+            @CurrentUser User user
+    ){
+        return productService.getProductsFromFavourites(user);
+    }
 }

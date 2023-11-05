@@ -1,18 +1,14 @@
 package com.justbelieveinmyself.marta.domain.dto;
 
-import com.justbelieveinmyself.marta.domain.entities.User;
+import com.justbelieveinmyself.marta.domain.entities.Product;
 import com.justbelieveinmyself.marta.domain.enums.Role;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.springframework.beans.BeanUtils;
-
+import lombok.*;
 import java.util.Set;
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode(exclude = {"favouriteProducts"})
+@ToString(exclude = {"favouriteProducts"})
 public class UserDto {
     private Long id;
     private String firstName;
@@ -28,4 +24,5 @@ public class UserDto {
     private String postalCode;
     private String country;
     private Double balance;
+    private Set<ProductWithImageDto> favouriteProducts;
 }

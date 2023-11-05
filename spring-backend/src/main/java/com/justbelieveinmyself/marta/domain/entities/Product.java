@@ -2,10 +2,7 @@ package com.justbelieveinmyself.marta.domain.entities;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 import java.util.Set;
@@ -16,7 +13,8 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@EqualsAndHashCode(exclude = "customers")
+@ToString(exclude = {"customers", "followers"})
+@EqualsAndHashCode(exclude = {"customers", "followers"})
 public class Product {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -38,6 +36,8 @@ public class Product {
     private String previewImg;
     @ManyToMany(mappedBy = "cartProducts")
     private Set<User> customers;
+    @ManyToMany(mappedBy = "favouriteProducts")
+    private Set<User> followers;
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Review> reviews;
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL)

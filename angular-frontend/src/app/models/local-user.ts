@@ -1,3 +1,5 @@
+import {Product} from "./product";
+
 export class LocalUser {
     id!: number;
     firstName!: string;
@@ -14,4 +16,5 @@ export class LocalUser {
     postalCode!: string;
     country!: string;
     balance!: number;
+    favouriteProducts!: Product[];
 }
