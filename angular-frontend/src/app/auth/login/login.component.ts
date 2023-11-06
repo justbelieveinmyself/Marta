@@ -48,16 +48,15 @@ export class LoginComponent implements OnInit {
 
     onLogin(): void {
         this.loginUser = new LoginUser(this.username, this.password);
-        this.authService.login(this.loginUser).then(
-            n => {
+        this.authService.login(this.loginUser).subscribe({
+            next: n => {
                 this.isLogged = true;
                 this.isLoginFail = false;
-                console.log("before", n.user)
                 this.tokenService.setUser(n.user);
                 this.authService.getAccessToken(n.refreshToken).subscribe({
-                    next: n => {
-                        this.tokenService.setRefreshToken(n.refreshToken);
-                        this.tokenService.setAccessToken(n.accessToken);
+                    next: response => {
+                        this.tokenService.setRefreshToken(response.refreshToken);
+                        this.tokenService.setAccessToken(response.accessToken);
                         this.router.navigate(['products']);
                     },
                     error: e => {
@@ -67,11 +66,12 @@ export class LoginComponent implements OnInit {
                     }
                 })
 
-            }).catch(e => {
+            },
+            error : e => {
             this.isLogged = false;
             this.isLoginFail = true;
             this.errorMessage = e.error.message;
-        })
+        }})
     }
 
     signInWithVK(): void {

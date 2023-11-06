@@ -16,10 +16,8 @@ export class AuthService {
     private authUrl = "http://localhost:8080/auth/";
 
     constructor(
-        private httpClient: HttpClient,
-        private imageService: ImageService
-    ) {
-    }
+        private httpClient: HttpClient
+    ) {}
 
 
     public register(regUser: RegisterUser, avatar: File): Observable<any> {
@@ -30,13 +28,12 @@ export class AuthService {
         return this.httpClient.post<any>(this.authUrl + 'register', fd);
     }
 
-    public async login(logUser: LoginUser): Promise<LoginResponseDto> {
-        const dto = await firstValueFrom(this.httpClient.post<LoginResponseDto>(this.authUrl + 'login', logUser));
-        dto.user.favouriteProducts = await Promise.all(dto.user.favouriteProducts.map(async (product) => {
-            return await this.imageService.createImageInProduct(product);
-        }));
-        console.log(dto.user.favouriteProducts);
-        return dto;
+    public login(logUser: LoginUser): Observable<LoginResponseDto> {
+        // const dto = await firstValueFrom();
+        // dto.user.favouriteProducts = await Promise.all(dto.user.favouriteProducts.map(async (product) => {
+        //     return await this.imageService.createImageInProduct(product);
+        // }));
+        return this.httpClient.post<LoginResponseDto>(this.authUrl + 'login', logUser);
     }
 
     public getAccessToken(refreshToken: string): Observable<RefreshResponseDto> {
