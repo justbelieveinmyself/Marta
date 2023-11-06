@@ -24,6 +24,7 @@ import {ProductFeedbackComponent} from './products/product-feedback/product-feed
 import {NgOptimizedImage} from "@angular/common";
 import { ProductQuestionsComponent } from './products/product-questions/product-questions.component';
 import { ProductCartComponent } from './products/product-cart/product-cart.component';
+import { MainPageComponent } from './main-page/main-page.component';
 
 @NgModule({
   declarations: [
@@ -42,7 +43,8 @@ import { ProductCartComponent } from './products/product-cart/product-cart.compo
     ProductDetailsComponent,
     ProductFeedbackComponent,
     ProductQuestionsComponent,
-    ProductCartComponent
+    ProductCartComponent,
+    MainPageComponent
   ],
     imports: [
         BrowserModule,

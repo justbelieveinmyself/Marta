@@ -13,9 +13,10 @@ import {ProductDetailsComponent} from "./products/product-details/product-detail
 import {ProductFeedbackComponent} from "./products/product-feedback/product-feedback.component";
 import {ProductQuestionsComponent} from "./products/product-questions/product-questions.component";
 import {ProductCartComponent} from "./products/product-cart/product-cart.component";
+import {MainPageComponent} from "./main-page/main-page.component";
 
 const routes: Routes = [
-    {path: 'products', component: ProductListComponent},
+    {path: 'products', component: MainPageComponent},
     {path: 'products/:id/details', component: ProductDetailsComponent},
     {path: 'products/:id/feedback', component: ProductFeedbackComponent},
     {path: 'products/:id/questions', component: ProductQuestionsComponent},

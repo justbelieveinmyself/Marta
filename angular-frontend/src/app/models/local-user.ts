@@ -1,4 +1,5 @@
 import {Product} from "./product";
+import {ProductWithImage} from "./product-with-image";
 
 export class LocalUser {
     id!: number;
@@ -16,5 +17,5 @@ export class LocalUser {
     postalCode!: string;
     country!: string;
     balance!: number;
-    favouriteProducts!: Product[];
+    favouriteProducts!: ProductWithImage[];
 }

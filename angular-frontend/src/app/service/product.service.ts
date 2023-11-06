@@ -1,6 +1,6 @@
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
-import {map, Observable} from 'rxjs';
+import {map, Observable, tap} from 'rxjs';
 import {Product} from '../models/product';
 import {ProductWithImage} from '../models/product-with-image';
 import {ImageService} from "./image.service";
@@ -21,13 +21,13 @@ export class ProductService {
     }
 
     getProductList(): Observable<ProductWithImage[]> {
-        return this.httpClient.get<ProductWithImage[]>(this.baseUrl).pipe(map(products =>
+        return this.httpClient.get<ProductWithImage[]>(this.baseUrl).pipe(tap(products =>
             products.map(product => this.imageService.createImageInProduct(product))));
     }
 
     getProductById(id: number): Observable<ProductWithImage> {
         return this.httpClient.get<ProductWithImage>(`${this.baseUrl}/${id}`)
-            .pipe(map(product => this.imageService.createImageInProduct(product)));
+            .pipe(tap(product => this.imageService.createImageInProduct(product)));
     }
 
     getProductReviews(productId: number): Observable<Review[]> {
@@ -35,8 +35,11 @@ export class ProductService {
     }
 
     getProductsFromCart(): Observable<ProductWithImage[]> {
-        return this.httpClient.get<ProductWithImage[]>(`${this.baseUrl}/cart`).pipe(map(products =>
-            products.map(product => this.imageService.createImageInProduct(product))));
+        return this.httpClient.get<ProductWithImage[]>(`${this.baseUrl}/cart`).pipe(tap(products =>
+            products.map(
+                product => this.imageService.createImageInProduct(product))
+            )
+        );
     }
 
     getProductQuestions(productId: number): Observable<Question[]> {

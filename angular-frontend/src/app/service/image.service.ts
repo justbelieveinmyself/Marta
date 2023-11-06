@@ -80,7 +80,6 @@ export class ImageService {
     }
 
     createImageInProduct(product: ProductWithImage): ProductWithImage {
-
         if (product.file == "") {
             product.file = "https://www.webstoresl.com/sellercenter/assets/images/no-product-image.png";
             return product;
