@@ -2,6 +2,7 @@ import {Component} from '@angular/core';
 import {TokenService} from '../service/token.service';
 import {LocalUser} from '../models/local-user';
 import {ImageService} from '../service/image.service';
+import {UserService} from "../service/user.service";
 
 @Component({
   selector: 'app-user-profile',
@@ -12,7 +13,7 @@ export class UserProfileComponent {
   user !:LocalUser;
   constructor(
     private tokenService : TokenService,
-    private imageService : ImageService
+    private userService: UserService
   ){}
   logOut(){
     this.tokenService.logOut();
@@ -20,7 +21,7 @@ export class UserProfileComponent {
   ngOnInit(){
     this.user = this.tokenService.getUser();
     if(this.user != null){
-      this.imageService.getUserAvatar(this.user.id).then(
+      this.userService.getUserAvatar(this.user.id).then(
         res => {
             this.user.avatar = res;
             console.log(res)

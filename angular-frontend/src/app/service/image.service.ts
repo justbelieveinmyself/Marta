@@ -8,32 +8,8 @@ import {ProductWithImage} from "../models/product-with-image";
 })
 export class ImageService {
     constructor(
-        private userService: UserService,
         private sanitizer: DomSanitizer
     ) {
-    }
-
-    getUserAvatar(userId: number): Promise<string> {
-        return new Promise<string>((resolve, reject) => {
-            if (localStorage.getItem("avatar") == null) {
-                this.userService.getAvatar(userId).subscribe(blob => {
-                    this.blobToBase64(blob).then(base64String => {
-                        localStorage.setItem("avatar", base64String);
-                        resolve(this.createUrlFromBlob(blob))
-                    }).catch(error => {
-                        reject(error);
-                    })
-                }, error => reject(error));
-            } else {
-                const base64String = localStorage.getItem("avatar")!;
-
-                this.base64ToBlobFromUrl(base64String).then(blob => {
-                    resolve(this.createUrlFromBlob(blob))
-                }).catch(error => {
-                    reject(error);
-                })
-            }
-        });
     }
 
     createUrlFromBlob(blob: Blob) {

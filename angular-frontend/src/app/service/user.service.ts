@@ -16,7 +16,8 @@ export class UserService {
 
     constructor(
         private httpClient: HttpClient,
-        private tokenService: TokenService
+        private tokenService: TokenService,
+        private imageService: ImageService
     ) {}
 
     getUserFromDbByOauth(userId: string, token: string) {
@@ -31,6 +32,28 @@ export class UserService {
     getAvatar(userid: number): Observable<Blob> {
         return this.httpClient.get(`${this.baseUrl}/${userid}/avatar`, {
             responseType: 'blob'
+        });
+    }
+    getUserAvatar(userId: number): Promise<string> {
+        return new Promise<string>((resolve, reject) => {
+            if (localStorage.getItem("avatar") == null) {
+                this.getAvatar(userId).subscribe(blob => {
+                    this.imageService.blobToBase64(blob).then(base64String => {
+                        localStorage.setItem("avatar", base64String);
+                        resolve(this.imageService.createUrlFromBlob(blob))
+                    }).catch(error => {
+                        reject(error);
+                    })
+                }, error => reject(error));
+            } else {
+                const base64String = localStorage.getItem("avatar")!;
+
+                this.imageService.base64ToBlobFromUrl(base64String).then(blob => {
+                    resolve(this.imageService.createUrlFromBlob(blob))
+                }).catch(error => {
+                    reject(error);
+                })
+            }
         });
     }
 

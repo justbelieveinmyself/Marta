@@ -20,9 +20,8 @@ export class TokenService {
 
     constructor(
         private encryptionService: EncryptionService,
-        private sanitizer: DomSanitizer
+        private imageService: ImageService
     ) {}
-    isImagesCreated = false;
     user: LocalUser;
     public setRefreshToken(refreshToken: string): void {
         window.localStorage.removeItem(REFRESH_TOKEN_KEY);
@@ -53,50 +52,17 @@ export class TokenService {
     }
 
     public getUser(): LocalUser {
+        console.log(this.user);
+
         if(this.user == null) {
+            console.log("null:",this.user);
             var encryptedUser = sessionStorage.getItem(USER_KEY) || '';
             this.user = JSON.parse(this.encryptionService.decryptData(encryptedUser));
-            this.user.favouriteProducts.map((product: ProductWithImage) => this.createImageInProduct(product));
+            this.user.favouriteProducts.map((product: ProductWithImage) => this.imageService.createImageInProduct(product));
         }
         return this.user;
     }
-    createImageInProduct(product: ProductWithImage): ProductWithImage { //TODO: Remove circular dependency iamgeservice and userserivce.
-        if (product.file == "") {
-            product.file = "https://www.webstoresl.com/sellercenter/assets/images/no-product-image.png";
-            return product;
-        }
-        var image;
-        this.base64ToBlob(product.file).then(blob => {
-            image = this.createUrlFromBlobProm(blob);
-            return image;
-        }).then(url => {
-            product.file = url;
-        });
-        return product;
-    }
-    base64ToBlob(base64String: string): Promise<Blob> {
-        return new Promise<Blob>((resolve, reject) => {
-            const byteCharacters = atob(base64String);
-            const byteArrays = [];
-            for (let offset = 0; offset < byteCharacters.length; offset += 512) {
-                const slice = byteCharacters.slice(offset, offset + 512);
-                const byteNumbers = new Array(slice.length);
-                for (let i = 0; i < slice.length; i++) {
-                    byteNumbers[i] = slice.charCodeAt(i);
-                }
-                const byteArray = new Uint8Array(byteNumbers);
-                byteArrays.push(byteArray);
-            }
-            const blob = new Blob(byteArrays, {type: 'image/jpeg'});
-            resolve(blob);
-        });
-    }
-    createUrlFromBlobProm(blob: Blob): Promise<string> {
-        return new Promise<string>((resolve, reject) => {
-            let result = URL.createObjectURL(blob);
-            resolve(this.sanitizer.sanitize(SecurityContext.RESOURCE_URL, this.sanitizer.bypassSecurityTrustResourceUrl(result))!);
-        })
-    }
+
     public isLogged() {
         return this.loggedIn.asObservable();
     }
@@ -104,6 +70,7 @@ export class TokenService {
     public logOut(): void {
         window.sessionStorage.clear();
         window.localStorage.clear();
+        this.user = null;
         this.loggedIn.next(false);
     }
 

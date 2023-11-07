@@ -33,7 +33,7 @@ export class UserDetailsComponent implements OnInit {
       surname: [this.user.lastName, [Validators.required, Validators.nullValidator] ]
     })
     if(this.user != null){
-      this.imageService.getUserAvatar(this.user.id).then(res => this.user.avatar = res).
+      this.userService.getUserAvatar(this.user.id).then(res => this.user.avatar = res).
         catch(error => this.user.avatar = "https://eliaslealblog.files.wordpress.com/2014/03/user-200.png");
     }
   }
@@ -57,7 +57,7 @@ export class UserDetailsComponent implements OnInit {
       this.user.id,
       event.target.files[0]).subscribe(data => {
         localStorage.removeItem("avatar");
-        this.imageService.getUserAvatar(this.user.id).then(data => this.user.avatar = data);
+        this.userService.getUserAvatar(this.user.id).then(data => this.user.avatar = data);
         console.log(data);
       }
     );
