@@ -34,6 +34,8 @@ public class Product {
     private User seller;
     @Column(name = "preview_image")
     private String previewImg;
+    @ManyToMany(mappedBy = "products")
+    private List<Order> orders;
     @ManyToMany(mappedBy = "cartProducts")
     private Set<User> customers;
     @ManyToMany(mappedBy = "favouriteProducts")

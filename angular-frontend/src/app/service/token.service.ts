@@ -52,10 +52,7 @@ export class TokenService {
     }
 
     public getUser(): LocalUser {
-        console.log(this.user);
-
         if(this.user == null) {
-            console.log("null:",this.user);
             var encryptedUser = sessionStorage.getItem(USER_KEY) || '';
             this.user = JSON.parse(this.encryptionService.decryptData(encryptedUser));
             this.user.favouriteProducts.map((product: ProductWithImage) => this.imageService.createImageInProduct(product));

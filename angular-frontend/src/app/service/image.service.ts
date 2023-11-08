@@ -9,8 +9,7 @@ import {ProductWithImage} from "../models/product-with-image";
 export class ImageService {
     constructor(
         private sanitizer: DomSanitizer
-    ) {
-    }
+    ) {}
 
     createUrlFromBlob(blob: Blob) {
         let result = URL.createObjectURL(blob);
