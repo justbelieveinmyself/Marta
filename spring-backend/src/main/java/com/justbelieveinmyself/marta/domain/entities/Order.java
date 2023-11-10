@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import org.springframework.data.annotation.CreatedDate;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.ZonedDateTime;
 import java.util.Set;
@@ -20,7 +20,7 @@ public class Order {
     private Long id;
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private Set<OrderProduct> orderProduct;
-    @CreatedDate
+    @CreationTimestamp
     private ZonedDateTime orderedAt;
     private Boolean isPaid;
     @Enumerated(EnumType.STRING)

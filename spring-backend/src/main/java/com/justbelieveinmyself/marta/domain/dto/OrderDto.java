@@ -1,5 +1,6 @@
 package com.justbelieveinmyself.marta.domain.dto;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.justbelieveinmyself.marta.domain.entities.Order;
 import com.justbelieveinmyself.marta.domain.entities.OrderProduct;
 import com.justbelieveinmyself.marta.domain.entities.Product;
@@ -16,17 +17,17 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @NoArgsConstructor
 public class OrderDto {
-    private Map<ProductDto, Integer> productAndQuantity;
+    private Map<Long, Integer> productIdAndQuantity;
     private ZonedDateTime orderedAt;
     private DeliveryStatus status;
     private Boolean isPaid;
     private SellerDto customer;
-    public OrderDto of(Order order){
+    public static OrderDto of(Order order){
         OrderDto orderDto = new OrderDto();
         orderDto.setStatus(order.getStatus());
         orderDto.setIsPaid(order.getIsPaid());
-        Map<ProductDto, Integer> productAndQuantity = order.getOrderProduct().stream().collect(Collectors.toMap(orderItem -> ProductDto.of(orderItem.getProduct()), OrderProduct::getQuantity));
-        orderDto.setProductAndQuantity(productAndQuantity);
+        Map<Long, Integer> productAndQuantity = order.getOrderProduct().stream().collect(Collectors.toMap(orderItem -> orderItem.getProduct().getId(), OrderProduct::getQuantity));
+        orderDto.setProductIdAndQuantity(productAndQuantity);
         orderDto.setOrderedAt(order.getOrderedAt());
         orderDto.setCustomer(SellerDto.of(order.getCustomer()));
         return orderDto;

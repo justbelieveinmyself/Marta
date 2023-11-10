@@ -36,8 +36,12 @@ public class OrderController {
     @PostMapping
     public ResponseEntity<?> createOrder(
             @CurrentUser User user,
-            @RequestBody OrderDto orderDto
+            @RequestBody(required = false) OrderDto orderDto
     ) {
+        if(orderDto == null){
+            System.out.println("XDDDDDDDDDDDDDDDDDDDDDDDDDD");
+            return ResponseEntity.noContent().build();
+        }
         return orderService.createOrder(user, orderDto);
     }
 }

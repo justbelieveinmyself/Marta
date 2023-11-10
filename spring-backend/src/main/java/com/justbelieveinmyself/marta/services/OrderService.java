@@ -1,7 +1,6 @@
 package com.justbelieveinmyself.marta.services;
 
 import com.justbelieveinmyself.marta.domain.dto.OrderDto;
-import com.justbelieveinmyself.marta.domain.dto.ProductDto;
 import com.justbelieveinmyself.marta.domain.entities.Order;
 import com.justbelieveinmyself.marta.domain.entities.OrderProduct;
 import com.justbelieveinmyself.marta.domain.entities.Product;
@@ -15,9 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class OrderService {
@@ -29,6 +26,7 @@ public class OrderService {
     private ProductRepository productRepository;
     @Autowired
     private ProductMapper productMapper;
+
     public ResponseEntity<?> getListOrders(User user) {
         return ResponseEntity.ok(user.getOrders());
     }
@@ -38,20 +36,21 @@ public class OrderService {
         order.setCustomer(user);
         order.setStatus(DeliveryStatus.AWAITING_CONFIRMATION);
         order.setIsPaid(orderDto.getIsPaid());
-        Map<ProductDto, Integer> productAndQuantity = orderDto.getProductAndQuantity();
-        Set<OrderProduct> orderProduct = new HashSet<>();
-        for (ProductDto pd: productAndQuantity.keySet()) {
-            Product product = productMapper.dtoToModel(pd);
+        Set<OrderProduct> orderProductSet = new HashSet<>();
+        Map<Long, Integer> productAndQuantity = orderDto.getProductIdAndQuantity();
+        for (Long productId: productAndQuantity.keySet()) {
+            Product product = productRepository.findById(productId).get();
             OrderProduct op = new OrderProduct();
             op.setProduct(product);
-            op.setQuantity(productAndQuantity.get(pd));
+            op.setQuantity(productAndQuantity.get(productId));
             op.setOrder(order);
-            orderProduct.add(op);
+            orderProductSet.add(op);
         }
-        order.setOrderProduct(orderProduct);
-        user.getOrders().add(order);
-        orderRepository.save(order);
+        order.setOrderProduct(orderProductSet);
+
+        Order savedOrder = orderRepository.save(order);
+        user.getOrders().add(savedOrder);
         userRepository.save(user);
-        return ResponseEntity.ok(user.getOrders());
+        return ResponseEntity.ok(OrderDto.of(savedOrder));
     }
 }
