@@ -28,7 +28,7 @@ public class OrderService {
     private ProductMapper productMapper;
 
     public ResponseEntity<?> getListOrders(User user) {
-        return ResponseEntity.ok(user.getOrders());
+        return ResponseEntity.ok(user.getOrders().stream().map(OrderDto::of).toList());
     }
 
     public ResponseEntity<?> createOrder(User user, OrderDto orderDto) {

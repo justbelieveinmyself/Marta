@@ -4,7 +4,7 @@ export class Product {
     id!: number;
     productName!: string;
     productCode!: string;
-    category!: string
+    category!: string;
     price!: number;
     count!: number;
     description!: string;

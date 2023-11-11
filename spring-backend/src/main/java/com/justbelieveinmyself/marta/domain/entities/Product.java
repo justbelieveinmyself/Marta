@@ -13,8 +13,8 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@ToString(exclude = {"customers", "followers"})
-@EqualsAndHashCode(exclude = {"customers", "followers"})
+@ToString(exclude = {"customers", "followers", "orderProduct"})
+@EqualsAndHashCode(exclude = {"customers", "followers", "orderProduct"})
 public class Product {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
