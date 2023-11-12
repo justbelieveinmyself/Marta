@@ -9,8 +9,7 @@ import {delay} from "rxjs";
 })
 export class ProductListComponent implements OnInit{
     @Input() card: ProductWithImage[];
+    @Input() isOrders: boolean;
     ngOnInit() {
-        // setTimeout(()=> console.log(this.card), 5000);
-
     }
 }

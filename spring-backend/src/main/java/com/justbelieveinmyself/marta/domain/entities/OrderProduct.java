@@ -7,7 +7,7 @@ import lombok.ToString;
 
 @Entity
 @Table(name = "order_product")
-@EqualsAndHashCode(exclude = {"product", "quantity"})
+@EqualsAndHashCode
 @ToString(exclude = {"product", "quantity"})
 @Data
 public class OrderProduct {

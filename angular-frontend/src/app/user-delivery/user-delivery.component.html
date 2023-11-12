@@ -10,6 +10,6 @@
             </div>
         </div>
         xd
-<!--        <app-product-list [card]="order"></app-product-list>-->
+        <app-product-list *ngFor="let order of orders" [isOrders]="true" [card]="Array.from(order.productsAndQuantity.keys())"></app-product-list>
     </div>
 </div>

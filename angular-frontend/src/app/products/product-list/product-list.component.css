@@ -1,0 +1,20 @@
+.object-with-hidden-item:hover .hidden-item{
+    display: block;
+    position: absolute;
+    bottom: -30px;
+    padding-left: 10px;
+}
+.bottom-wrap{
+    background-color: #FFF !important;
+    position: absolute;
+    bottom: -30px !important;
+    left: 0;
+    height: auto;
+    width: 286.4px;
+    z-index: 100;
+}
+.object-with-hidden-item:hover{
+}
+.hidden-item{
+    display: none;
+}

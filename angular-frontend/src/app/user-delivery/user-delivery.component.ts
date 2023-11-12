@@ -21,4 +21,5 @@ export class UserDeliveryComponent implements OnInit{
 
     }
 
+    protected readonly Array = Array;
 }
