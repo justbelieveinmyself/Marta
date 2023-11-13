@@ -15,7 +15,7 @@ export class UserDeliveryComponent implements OnInit{
 
     ngOnInit(): void {
         this.orderService.getCurrentUserOrders().subscribe(next => {
-            this.orders = next
+            this.orders = next.sort((order, order2) => new Date(order.orderedAt).getTime() - new Date(order2.orderedAt).getTime())
             console.log(this.orders)
         });
 

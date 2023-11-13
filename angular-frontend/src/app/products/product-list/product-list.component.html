@@ -1,26 +1,65 @@
-<div style="display: grid; grid-auto-flow: row dense; grid-template-columns: repeat(4,calc(100%/4 ));">
-    <div *ngFor="let card of card" class="me-4 mb-4">
-        <a routerLink="{{card.product.id}}/details" routerLinkActive="active">
-            <div class="card object-with-hidden-item" style="width: 18rem; height: 31rem;">
-                <img [src]="card.file" style="object-fit: cover;" height="381.86" width="286.4" class="card-img-top"
+<div class="card-group">
+    <ng-container *ngIf="isOrders == true; else itemsOfCard">
+        <ng-container *ngFor="let order of orders;">
+            <div *ngFor="let item of Array.from(order.productsAndQuantity.keys())" class="me-4 mb-4">
+                <a routerLink="{{item.product.id}}/details" routerLinkActive="active">
+                    <div class="card object-with-hidden-item" style="width: 18rem; height: 520px;">
+                        <img [src]="item.file" style="object-fit: cover;" height="381.86" width="286.4"
+                             class="card-img-top"
+                             alt="product image">
+                        <div class="card-body ">
+                            <h5 class="card-title">{{item.product.price | currency}}
+                                <span style="text-decoration: line-through; font-size: 15px;
+                    color: #868695; margin-left: 8px;">700$</span>
+                            </h5>
+                            <div class="hidden-text-1">
+                                <div class="card-text">{{item.product.seller.username | titlecase}}
+                                    / {{item.product.productName | titlecase}}
+                                </div>
+                            </div>
+                            <div>
+                                <span class="text-info">{{order.status.replace("_", " ") | titlecase }}</span> <br>
+                                <span class="text-secondary">Order date: {{order.orderedAt | date: 'dd MMM YYYY, HH:mm'}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </ng-container>
+    </ng-container>
+    <ng-template #itemsOfCard>
+    <div *ngFor="let item of card" class="me-4 mb-4">
+        <a routerLink="{{item.product.id}}/details" routerLinkActive="active">
+            <div class="card object-with-hidden-item" style="width: 18rem; height: 31rem">
+                <img [src]="item.file" style="object-fit: cover;" height="381.86" width="286.4" class="card-img-top"
                      alt="product image">
                 <div class="card-body ">
-                    <h5 class="card-title">{{card.product.price | currency}}
+                    <h5 class="card-title">{{item.product.price | currency}}
                         <span style="text-decoration: line-through; font-size: 15px;
                     color: #868695; margin-left: 8px;">700$</span>
                     </h5>
-                    <div
-                        style="-webkit-line-clamp: 2; display: -webkit-box; -webkit-box-orient: vertical; overflow: hidden;">
-                        <div class="card-text">{{card.product.seller.username | titlecase}}
-                            / {{card.product.productName | titlecase}}
+                    <div class="hidden-text-2">
+                        <div class="card-text">{{item.product.seller.username | titlecase}}
+                            / {{item.product.productName | titlecase}}
                         </div>
-
                     </div>
-                    <div class="bottom-wrap hidden-item">
-                        <div class="btn btn-outline-dark">Add to cart</div>
+                    <div class="card bottom-wrap hidden-item ">
+                        <div class="btn btn-outline-dark" (click)="addToCart(item.product)">Add to cart</div>
+                        <div class="toast-container position-fixed bottom-0 end-0 p-3">
+                            <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                                <div class="toast-header">
+                                    <strong class="me-auto">Cart</strong>
+                                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                                </div>
+                                <div class="toast-body">
+                                    '{{item.product.productName}}' has added to cart!
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </a>
     </div>
+    </ng-template>
 </div>
