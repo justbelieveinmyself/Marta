@@ -15,7 +15,8 @@ export class OrderService {
     constructor(
         private httpClient: HttpClient,
         private productService: ProductService
-    ) {}
+    ) {
+    }
 
     getCurrentUserOrders(): Observable<Order[]> {
         return this.httpClient.get<Order[]>(this.baseUrl)
