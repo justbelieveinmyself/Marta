@@ -204,7 +204,10 @@ public class ProductService {
 
     public ResponseEntity<?> getProductsFromFavourites(User user) {
         Set<Product> favouriteProducts = user.getFavouriteProducts();
-        List<ProductDto> productDtos = favouriteProducts.stream().map(product -> productMapper.modelToDto(product)).toList();
+        List<ProductWithImageDto> productDtos = favouriteProducts.stream()
+                .map(pro -> new ProductWithImageDto(productMapper.modelToDto(pro), Base64.getEncoder().encodeToString(
+                        fileHelper.downloadFileAsByteArray(pro.getPreviewImg(), UploadDirectory.PRODUCTS))))
+                .toList();;
         return ResponseEntity.ok(productDtos);
     }
 }

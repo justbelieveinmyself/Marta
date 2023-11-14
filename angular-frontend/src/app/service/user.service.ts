@@ -34,6 +34,7 @@ export class UserService {
             responseType: 'blob'
         });
     }
+
     getUserAvatar(userId: number): Promise<string> {
         return new Promise<string>((resolve, reject) => {
             if (localStorage.getItem("avatar") == null) {
@@ -59,6 +60,12 @@ export class UserService {
 
     getUser(): Observable<LocalUser> {
         return this.httpClient.get<LocalUser>(this.baseUrl);
+    }
+
+    getFavourites(): Observable<ProductWithImage[]> {
+        return this.httpClient.get<ProductWithImage[]>(`http://localhost:8080/products/favourite`).pipe(tap(products =>
+                products.map(product => this.imageService.createImageInProduct(product)))
+        );
     }
 
     updateEmail(userid: number, email: string) {

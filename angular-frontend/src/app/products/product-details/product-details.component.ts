@@ -7,6 +7,7 @@ import {ImageService} from "../../service/image.service";
 import {ImageModel} from "../../models/image-model";
 import {DomSanitizer} from "@angular/platform-browser";
 import {Question} from "../../models/question";
+import {TokenService} from "../../service/token.service";
 
 @Component({
     selector: 'app-product-details',
@@ -21,7 +22,8 @@ export class ProductDetailsComponent implements OnInit {
         private productService: ProductService,
         private activatedRoute: ActivatedRoute,
         private imageService: ImageService,
-        private sanitizer: DomSanitizer
+        private sanitizer: DomSanitizer,
+        private tokenService: TokenService
     ) {}
 
     product: ProductWithImage;
@@ -83,6 +85,12 @@ export class ProductDetailsComponent implements OnInit {
         });
         // @ts-ignore
         document.getElementById('liveToast').classList.add("show");
+    }
+
+    addToFavourite() {
+        this.productService.addProductToFavourite(this.product.product).subscribe({
+            error: err => console.log(err)
+        });
     }
 
     saveReview() {
@@ -170,4 +178,5 @@ export class ProductDetailsComponent implements OnInit {
         // @ts-ignore
         this.isNeedRightButtonForQuestions = scrollQuestions.scrollWidth - 1296 > scrollQuestions.scrollLeft - 440;
     }
+
 }

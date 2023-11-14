@@ -1,16 +1,13 @@
-import {Injectable, OnInit, SecurityContext} from '@angular/core';
-import {BehaviorSubject, Subject} from 'rxjs';
+import {Injectable} from '@angular/core';
+import {BehaviorSubject} from 'rxjs';
 import {LocalUser} from '../models/local-user';
 import {EncryptionService} from './encryption.service';
-import {Product} from "../models/product";
 import {ProductWithImage} from "../models/product-with-image";
 import {ImageService} from "./image.service";
-import {DomSanitizer} from "@angular/platform-browser";
 
 const ACCESS_TOKEN_KEY = 'AccessToken';
 const REFRESH_TOKEN_KEY = 'RefreshToken';
 const USER_KEY = 'AuthUser';
-const PRODUCT_FAVOURITES_KEY = 'FavouritesImages';
 
 @Injectable({
     providedIn: 'root'
@@ -22,7 +19,7 @@ export class TokenService {
         private encryptionService: EncryptionService,
         private imageService: ImageService
     ) {}
-    user: LocalUser;
+    private user: LocalUser;
     public setRefreshToken(refreshToken: string): void {
         window.localStorage.removeItem(REFRESH_TOKEN_KEY);
         window.localStorage.setItem(REFRESH_TOKEN_KEY, this.encryptionService.encryptData(refreshToken));

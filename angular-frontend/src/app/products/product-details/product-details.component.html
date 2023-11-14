@@ -1,6 +1,6 @@
 <div class="mb-3">
     <div style="display: flex">
-        <h3>{{product.product.seller.username | titlecase}} / {{product.product.productName | titlecase}}</h3>
+        <h3 style="word-break: break-all">{{product.product.seller.username | titlecase}} / {{product.product.productName | titlecase}}</h3>
         <i type="button" data-bs-toggle="modal" data-bs-target="#productReportModal" class="fa-regular fa-flag fa-xl ms-auto"></i>
     </div>
     <p class="mb-2">
@@ -33,7 +33,7 @@
                 <div class="card-body">
                     <h2 class="card-title">{{product.product.price | currency}}
                         <span class="discount" style="font-size: 17px; margin-left: 8px;">700$</span>
-                        <a type="button" style="color: black" class="fa-regular fa-heart float-end"></a>
+                        <a type="button" style="color: black" (click)="addToFavourite()" class="fa-regular fa-heart float-end"></a>
                     </h2>
                     <button (click)="addToCart()" class="btn btn-dark w-100 mb-2" style="justify-content: center;">Add to cart</button>
                     <div class="toast-container position-fixed bottom-0 end-0 p-3">

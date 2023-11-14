@@ -1,6 +1,6 @@
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
-import {map, Observable, tap} from 'rxjs';
+import {Observable, tap} from 'rxjs';
 import {Product} from '../models/product';
 import {ProductWithImage} from '../models/product-with-image';
 import {ImageService} from "./image.service";
@@ -56,6 +56,10 @@ export class ProductService {
 
     addProductToCart(product: Product): Observable<Product>{
         return this.httpClient.post<Product>(`${this.baseUrl}/cart/` + product.id, null);
+    }
+
+    addProductToFavourite(product: Product){
+        return this.httpClient.post<Product>(`${this.baseUrl}/favourite/` + product.id, null);
     }
 
     addReview(review: Review, photos: File[]): Observable<Review> {

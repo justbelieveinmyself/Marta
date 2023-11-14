@@ -18,10 +18,13 @@ export class ProductListComponent implements OnInit{
     @Input() orders: Order[];
     ngOnInit() {
     }
+    productInToast: Product;
     addToCart(product: Product){
         this.productService.addProductToCart(product).subscribe({
             error: err => console.log(err)
         });
+        this.productInToast = product;
+        console.log(this.productInToast)
         // @ts-ignore
         document.getElementById('liveToast').classList.add("show");
     }
