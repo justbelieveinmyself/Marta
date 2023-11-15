@@ -33,13 +33,11 @@
                         </div>
                     </div>
                 </div>
-
             </div>
         </ng-container>
     </ng-container>
     <ng-template #itemsOfCard>
         <div *ngFor="let item of card" class="me-4 mb-4">
-
             <div class="card object-with-hidden-item" style="width: 18rem; height: 31rem">
                 <img type="button" routerLink="/products/{{item.product.id}}/details" routerLinkActive="active"
                      [src]="item.file" style="object-fit: cover;" height="381.86" width="286.4" class="card-img-top"
@@ -56,16 +54,11 @@
                             / {{item.product.productName | titlecase}}
                         </div>
                     </div>
-
                 </div>
-
                 <div class="card bottom-wrap hidden-item">
                     <div class="btn btn-outline-dark" (click)="addToCart(item.product)">Add to cart</div>
-
                 </div>
-
             </div>
-
         </div>
     </ng-template>
 </div>

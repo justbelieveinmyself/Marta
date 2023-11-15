@@ -33,7 +33,7 @@
                 <div class="card-body">
                     <h2 class="card-title">{{product.product.price | currency}}
                         <span class="discount" style="font-size: 17px; margin-left: 8px;">700$</span>
-                        <a type="button" style="color: black" (click)="addToFavourite()" class="fa-regular fa-heart float-end"></a>
+                        <a type="button" class="fa-regular fa-heart float-end" [ngClass]="isFavourite? 'fa-solid' : 'fa-regular'" style="color: black" (click)="addOrRemoveFavourite()"></a>
                     </h2>
                     <button (click)="addToCart()" class="btn btn-dark w-100 mb-2" style="justify-content: center;">Add to cart</button>
                     <div class="toast-container position-fixed bottom-0 end-0 p-3">

@@ -182,13 +182,13 @@ public class ProductService {
         return ResponseEntity.ok(new ResponseMessage(200, "Deleted"));
     }
 
-    public ResponseEntity<?> deleteProductInCart(User customer, Product product) {
+    public ResponseEntity<?> deleteProductFromCart(User customer, Product product) {
         if(customer.getCartProducts().remove(product)){
             userRepository.save(customer);
-            return ResponseEntity.ok(new ResponseMessage(200, "Deleted"));
+            return ResponseEntity.ok(new ResponseMessage(200, "Product in Cart successfully deleted"));
         }else{
-            ResponseError responseError = new ResponseError(HttpStatus.NOT_FOUND, "Not found");
-            return new ResponseEntity<>(responseError, HttpStatus.NOT_FOUND);
+            ResponseError responseError = new ResponseError(HttpStatus.FORBIDDEN, "Already removed from cart!");
+            return new ResponseEntity<>(responseError, HttpStatus.FORBIDDEN);
         }
     }
 
@@ -209,5 +209,15 @@ public class ProductService {
                         fileHelper.downloadFileAsByteArray(pro.getPreviewImg(), UploadDirectory.PRODUCTS))))
                 .toList();;
         return ResponseEntity.ok(productDtos);
+    }
+
+    public ResponseEntity<?> deleteProductFromFavourites(User user, Product product) {
+        if (user.getFavouriteProducts().remove(product)) {
+            userRepository.save(user);
+            return ResponseEntity.ok(new ResponseMessage(200, "Product in Favourites successfully deleted"));
+        } else {
+            ResponseError responseError = new ResponseError(HttpStatus.FORBIDDEN, "Already removed from favourites!");
+            return new ResponseEntity<>(responseError, HttpStatus.FORBIDDEN);
+        }
     }
 }

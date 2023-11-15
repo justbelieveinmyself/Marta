@@ -94,4 +94,8 @@ export class ProductService {
         return this.httpClient.delete(`${this.baseUrl}/cart/${product.id}`);
     }
 
+    deleteProductFromFavourite(product: Product): Observable<Object>{
+        return this.httpClient.delete(`${this.baseUrl}/favourite/` + product.id)
+    }
+
 }

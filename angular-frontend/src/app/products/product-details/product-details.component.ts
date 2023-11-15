@@ -8,6 +8,7 @@ import {ImageModel} from "../../models/image-model";
 import {DomSanitizer} from "@angular/platform-browser";
 import {Question} from "../../models/question";
 import {TokenService} from "../../service/token.service";
+import {UserService} from "../../service/user.service";
 
 @Component({
     selector: 'app-product-details',
@@ -23,7 +24,7 @@ export class ProductDetailsComponent implements OnInit {
         private activatedRoute: ActivatedRoute,
         private imageService: ImageService,
         private sanitizer: DomSanitizer,
-        private tokenService: TokenService
+        private userService: UserService
     ) {}
 
     product: ProductWithImage;
@@ -31,6 +32,7 @@ export class ProductDetailsComponent implements OnInit {
     questions: Question[];
     isReviews = true;
     isAppearing = false;
+    isFavourite = false;
     isNeedLeftButtonForReviews = false;
     isNeedRightButtonForReviews = false;
     isNeedLeftButtonForQuestions = false;
@@ -64,6 +66,11 @@ export class ProductDetailsComponent implements OnInit {
                         })
                         this.isNeedRightButtonForReviews = this.reviews.length > 2;
                         this.isNeedRightButtonForQuestions = true; //TODO
+                        this.userService.getFavourites().subscribe(favourites => {
+                            this.isFavourite = favourites.filter(prod => prod.product.id == this.product.product.id).length != 0;
+                            console.log(this.isFavourite)
+                        })
+
                     },
                     error: err => console.log(err)
                 });
@@ -87,10 +94,17 @@ export class ProductDetailsComponent implements OnInit {
         document.getElementById('liveToast').classList.add("show");
     }
 
-    addToFavourite() {
-        this.productService.addProductToFavourite(this.product.product).subscribe({
-            error: err => console.log(err)
-        });
+    addOrRemoveFavourite() {
+        if(this.isFavourite){
+            this.productService.deleteProductFromFavourite(this.product.product).subscribe({
+                error: err => console.log(err)
+            })
+        }else {
+            this.productService.addProductToFavourite(this.product.product).subscribe({
+                error: err => console.log(err)
+            });
+        }
+        this.isFavourite = !this.isFavourite;
     }
 
     saveReview() {

@@ -35,7 +35,7 @@
                     </div>
                 </div>
             </div>
-            <a type="button" style="color: black" class="fa-regular fa-heart fa-xl"></a>
+            <a type="button" style="color: black" (click)="addOrRemoveFavourite()" [ngClass]="isFavourite? 'fa-solid' : 'fa-regular'" class="fa-regular fa-heart fa-xl"></a>
         </div>
     </div>
 </div>
@@ -56,10 +56,10 @@
     </h4>
     <a type="button" class="fa-solid fa-circle-arrow-right fa-2xl" [hidden]="!isNeedRightButtonForPhotos"
        (click)="rightScrollForPhotos()"
-       style="position: absolute; width: 30px; height: 30px; top: 320px; right: 375px; z-index: 100;"></a>
+       style="position: absolute; width: 30px; height: 30px; top: 270px; right: 375px; z-index: 100;"></a>
     <a type="button" class="fa-solid fa-circle-arrow-left fa-2xl" [hidden]="!isNeedLeftButtonForPhotos"
        (click)="leftScrollForPhotos()"
-       style="position: absolute; width: 30px; height: 30px; top: 320px; left: 50px; z-index: 100;"></a>
+       style="position: absolute; width: 30px; height: 30px; top: 270px; left: 50px; z-index: 100;"></a>
     <div id="scrollPhotos"
          style="position: relative;width: 100%; white-space: nowrap; display: flex; overflow-x: hidden; scroll-behavior: smooth">
         <ng-container *ngFor="let review of reviews">
