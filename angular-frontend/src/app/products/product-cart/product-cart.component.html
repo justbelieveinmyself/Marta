@@ -3,38 +3,38 @@
         <div class="col mb-2">
             <div class="card">
                 <div class="card-body w-100 justify-content-center" style="display: block;">
-                    <span class="name_card">Cart<sup> {{products ? products.length : 0}}</sup></span> <br>
-                    <div style="display: flex" class="mt-2" *ngFor="let card of products; let i = index">
+                    <span class="name_card">Cart<sup> {{productAndQuantity ? productAndQuantity.size : 0}}</sup></span> <br>
+                    <div style="display: flex" class="mt-2" *ngFor="let item of productAndQuantity | keyvalue; let i = index">
                         <div class="w-15">
                             <img type="button" routerLinkActive="active"
-                                 routerLink="/products/{{card.product.id}}/details"
-                                 [src]="card.file"
+                                 routerLink="/products/{{item.key.product.id}}/details"
+                                 [src]="item.key.file"
                                  width="1" height="1" alt="photo image" class="rounded-2 me-3"
                                  style="width: 120px; height: 150px; object-fit: cover; border: solid 1px black; padding: 0"/>
                         </div>
                         <div class="w-50">
                             <div style="font-size: 17px;" class="w-50">
                             <span type="button" routerLinkActive="active" style="word-break: break-all"
-                                  routerLink="/products/{{card.product.id}}/details">
-                            {{card.product.productName | titlecase}}, {{card.product.seller.username | titlecase}}
+                                  routerLink="/products/{{item.key.product.id}}/details">
+                            {{item.key.product.productName | titlecase}}, {{item.key.product.seller.username | titlecase}}
                                 </span>
                             </div>
                         </div>
                         <div class="w-15">
                             <div style="font-size: 18px" class="mt-2">
-                                <i type="button" (click)="removeNumberOfProduct(card.product, i)"
+                                <i type="button" (click)="removeNumberOfProduct(item.key)"
                                    class="fa-solid fa-square-minus fa-2xl"></i>
-                                &nbsp;{{this.countOfProduct[i]}}&nbsp;
-                                <i type="button" (click)="addNumberOfProduct(card.product, i)"
+                                &nbsp;{{item.value}}&nbsp;
+                                <i type="button" (click)="addNumberOfProduct(item.key)"
                                    class="fa-solid fa-square-plus fa-2xl"></i>
                             </div>
                         </div>
                         <div class="w-15 mx-auto">
                             <div style="display: flex; flex-wrap: wrap">
                                 <div class="name_card_main"
-                                     style="overflow: hidden">{{(card ? card.product.price : 0) | currency}}</div>
+                                     style="overflow: hidden">{{(item ? item.key.product.price : 0) | currency}}</div>
                                 <span class="discount w-100">$1000</span>
-                                <i (click)="deleteProductInCart(card.product, i)" type="button"
+                                <i (click)="deleteProductInCart(item.key, i)" type="button"
                                    class="fa-solid fa-trash fa-lg highlight-hover ms-auto"></i>
                             </div>
                         </div>
@@ -96,7 +96,7 @@
                             <i type="button" data-bs-toggle="modal" data-bs-target="#choosePayMethodModal" class="fa-solid fa-pencil fa-lg ms-auto mt-4"></i>
                         </div>
                         <span class="text-secondary">We will write off the payment upon receipt </span> <br>
-                        <input class="form-check-input" type="checkbox"
+                        <input class="form-check-input" type="checkbox" (change)="isPayNow = !isPayNow"
                                id="flexCheck">
                         <label class="form-check-label" for="flexCheck">
                             &nbsp;Pay now
@@ -111,7 +111,7 @@
                         <span class="name_card_main ms-auto">{{totalPrice| currency}}</span>
                     </div>
                     <div style="display: flex" class="my-2">
-                        <div class="btn btn-outline-dark mx-auto w-100 py-2" style="font-size: 20px">Order</div>
+                        <div class="btn btn-outline-dark mx-auto w-100 py-2" (click)="orderProducts()" style="font-size: 20px">Order</div>
                     </div>
                     <div style="display: flex">
                         <input class="form-check-input" type="checkbox"

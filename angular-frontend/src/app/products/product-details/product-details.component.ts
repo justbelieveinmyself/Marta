@@ -7,7 +7,6 @@ import {ImageService} from "../../service/image.service";
 import {ImageModel} from "../../models/image-model";
 import {DomSanitizer} from "@angular/platform-browser";
 import {Question} from "../../models/question";
-import {TokenService} from "../../service/token.service";
 import {UserService} from "../../service/user.service";
 
 @Component({

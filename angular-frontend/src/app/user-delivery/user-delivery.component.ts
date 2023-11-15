@@ -28,6 +28,7 @@ export class UserDeliveryComponent implements OnInit {
                         return sum;
                     }, 0);
             }, 400)
+            console.log(this.orders)
         });
 
     }

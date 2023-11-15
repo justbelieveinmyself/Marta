@@ -6,6 +6,7 @@ import {ProductWithImage} from '../models/product-with-image';
 import {ImageService} from "./image.service";
 import {Review} from "../models/review";
 import {Question} from "../models/question";
+import {Order} from "../models/order";
 
 @Injectable({
     providedIn: 'root'
@@ -52,6 +53,15 @@ export class ProductService {
         var json = new Blob([JSON.stringify(product)], {type: 'application/json'});
         fd.append("product", json);
         return this.httpClient.post(this.baseUrl, fd);
+    }
+
+    createOrder(productAndQuantity : Map<ProductWithImage, number>, isPaid: boolean): Observable<Order> {
+        const productIdAndQuantity: {[id: string]: number} = {};
+        productAndQuantity.forEach((value, key) => productIdAndQuantity[key.product.id.toString()]=value);
+        const order = new Order();
+        order.productIdAndQuantity = productIdAndQuantity;
+        order.isPaid = isPaid;
+        return this.httpClient.post<Order>(`http://localhost:8080/orders`, order);
     }
 
     addProductToCart(product: Product): Observable<Product>{

@@ -4,6 +4,7 @@ import {ProductService} from "../../service/product.service";
 import {Product} from "../../models/product";
 import {ProductWithImage} from "../../models/product-with-image";
 import {LocalUser} from "../../models/local-user";
+import {compareSegments} from "@angular/compiler-cli/src/ngtsc/sourcemaps/src/segment_marker";
 
 @Component({
   selector: 'app-product-cart',
@@ -16,46 +17,62 @@ export class ProductCartComponent implements OnInit{
         private productService: ProductService,
     ) {}
     isLogged = false;
+    isPayNow = false;
     user: LocalUser;
-    products: ProductWithImage[];
-    countOfProduct: number[];
+    productAndQuantity = new Map<ProductWithImage, number>;
     totalCountOfProduct = 0;
     totalPrice = 0;
     ngOnInit(): void {
         this.tokenService.isLogged().subscribe(data => this.isLogged = data);
         this.productService.getProductsFromCart().subscribe({
             next: products => {
-                this.products = products;
-                this.products.forEach(product => this.totalPrice+=product.product.price);
-                this.countOfProduct = new Array(this.products.length).fill(1);
-                this.totalCountOfProduct = this.products.length;
+                products.forEach(product => this.productAndQuantity.set(product, 1));
+                products.forEach(product => this.totalPrice += product.product.price);
+                this.totalCountOfProduct = products.length;
             },
             error: err => console.log(err)
         })
         this.user = this.tokenService.getUser();
     }
 
-    addNumberOfProduct(product: Product, index: number){
-        this.countOfProduct[index]++;
-        this.totalPrice += product.price;
+    addNumberOfProduct(product: ProductWithImage){
+        let quantity = this.productAndQuantity.get(product);
+        this.productAndQuantity.set(product, ++quantity);
+        this.totalPrice += product.product.price;
         this.totalCountOfProduct++;
     }
-    removeNumberOfProduct(product: Product, index: number){
-        if(this.countOfProduct[index] > 1) {
-            this.countOfProduct[index]--;
-            this.totalPrice -= product.price;
+
+    removeNumberOfProduct(product: ProductWithImage){
+        let quantity = this.productAndQuantity.get(product);
+        if(quantity > 1) {
+            quantity--;
+            this.productAndQuantity.set(product, quantity);
+            this.totalPrice -= product.product.price;
             this.totalCountOfProduct--;
         }
     }
-    deleteProductInCart(product: Product, index: number){
-        this.productService.deleteProductInCart(product).subscribe({
+    deleteProductInCart(product: ProductWithImage, index: number){
+        this.productService.deleteProductInCart(product.product).subscribe({
             next: result => {
-                this.totalPrice -= product.price * this.countOfProduct[index];
-                this.totalCountOfProduct -= this.countOfProduct[index];
-                this.products = this.products.filter(prod => prod.product != product);
-                this.countOfProduct.splice(index, 1);
+                let quantity = this.productAndQuantity.get(product);
+                this.totalPrice -= product.product.price * quantity;
+                this.totalCountOfProduct -= quantity;
+                this.productAndQuantity.delete(product);
             },
             error: err => console.log(err)
         })
     }
+
+    orderProducts() {
+        this.productService.createOrder(this.productAndQuantity, this.isPayNow).subscribe({
+            next: result => {
+                this.productService.deleteAllProductsInCart().subscribe({
+                    next: res => this.productAndQuantity.clear(),
+                    error: err => console.log()
+                })
+            },
+            error: err => console.log(err)
+        });
+    }
 }
+
