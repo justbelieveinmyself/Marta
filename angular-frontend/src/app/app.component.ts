@@ -9,5 +9,4 @@ import { TokenService } from './service/token.service';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent{
-  title = "Marta";
 }

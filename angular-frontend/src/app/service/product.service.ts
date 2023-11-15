@@ -1,6 +1,6 @@
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
-import {map, Observable, tap} from 'rxjs';
+import {Observable, tap} from 'rxjs';
 import {Product} from '../models/product';
 import {ProductWithImage} from '../models/product-with-image';
 import {ImageService} from "./image.service";
@@ -58,6 +58,10 @@ export class ProductService {
         return this.httpClient.post<Product>(`${this.baseUrl}/cart/` + product.id, null);
     }
 
+    addProductToFavourite(product: Product){
+        return this.httpClient.post<Product>(`${this.baseUrl}/favourite/` + product.id, null);
+    }
+
     addReview(review: Review, photos: File[]): Observable<Review> {
         var fd = new FormData();
         var json = new Blob([JSON.stringify(review)], {type: 'application/json'});
@@ -88,6 +92,10 @@ export class ProductService {
 
     deleteProductInCart(product: Product): Observable<Object> {
         return this.httpClient.delete(`${this.baseUrl}/cart/${product.id}`);
+    }
+
+    deleteProductFromFavourite(product: Product): Observable<Object>{
+        return this.httpClient.delete(`${this.baseUrl}/favourite/` + product.id)
     }
 
 }

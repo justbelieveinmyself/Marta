@@ -50,6 +50,8 @@ public class User implements UserDetails {
     private Set<Product> favouriteProducts;
     @OneToOne(mappedBy = "user")
     private RefreshToken refreshToken;
+    @OneToMany(mappedBy = "customer")
+    private List<Order> orders;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

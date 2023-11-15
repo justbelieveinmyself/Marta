@@ -241,11 +241,11 @@ public class ProductController {
                     content = @Content)
     })
     @Parameter(name = "productId", required = true, schema = @Schema(type = "integer", name = "productId"), in = ParameterIn.PATH)
-    public ResponseEntity<?> deleteProductInCart(
+    public ResponseEntity<?> deleteProductFromCart(
             @CurrentUser User user,
             @Parameter(hidden = true) @PathVariable("productId") Product product
     ) {
-        return productService.deleteProductInCart(user, product);
+        return productService.deleteProductFromCart(user, product);
     }
 
     @PostMapping(value = "favourite/{productId}")
@@ -278,4 +278,21 @@ public class ProductController {
     ){
         return productService.getProductsFromFavourites(user);
     }
+
+    @DeleteMapping("favourite/{productId}")
+    @Operation(summary = "Delete one product in favourites", description = "Use this to delete one product from favourites")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Product in Favourites successfully deleted",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ResponseMessage.class))),
+            @ApiResponse(responseCode = "403", description = "Product from favourites doesn't deleted",
+                    content = @Content)
+    })
+    @Parameter(name = "productId", required = true, schema = @Schema(type = "integer", name = "productId"), in = ParameterIn.PATH)
+    public ResponseEntity<?> deleteProductFromFavourites(
+            @CurrentUser User user,
+            @Parameter(hidden = true) @PathVariable("productId") Product product
+    ) {
+        return productService.deleteProductFromFavourites(user, product);
+    }
+
 }

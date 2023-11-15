@@ -3,6 +3,7 @@ import {Question} from "../../models/question";
 import {ProductService} from "../../service/product.service";
 import {ActivatedRoute} from "@angular/router";
 import {ProductWithImage} from "../../models/product-with-image";
+import {UserService} from "../../service/user.service";
 
 @Component({
     selector: 'app-product-questions',
@@ -12,9 +13,10 @@ import {ProductWithImage} from "../../models/product-with-image";
 export class ProductQuestionsComponent implements OnInit {
     constructor(
         private productService: ProductService,
-        private activatedRoute: ActivatedRoute
+        private activatedRoute: ActivatedRoute,
+        private userService: UserService
     ) {}
-
+    isFavourite = false;
     isWriteQuestion = false;
     messageOfQuestion: string;
     questions: Question[];
@@ -23,6 +25,10 @@ export class ProductQuestionsComponent implements OnInit {
         this.productService.getProductById(this.activatedRoute.snapshot.params['id']).subscribe({
             next: product => {
                 this.product = product;
+                this.userService.getFavourites().subscribe(favourites => {
+                    this.isFavourite = favourites.filter(prod => prod.product.id == this.product.product.id).length != 0;
+                    console.log(this.isFavourite)
+                })
                 this.productService.getProductQuestions(this.product.product.id).subscribe({
                     next: questions => {
                         this.questions = questions.filter(question => question.answer != null);
@@ -50,5 +56,18 @@ export class ProductQuestionsComponent implements OnInit {
         });
         // @ts-ignore
         document.getElementById('liveToast').classList.add("show");
+    }
+
+    addOrRemoveFavourite() {
+        if(this.isFavourite){
+            this.productService.deleteProductFromFavourite(this.product.product).subscribe({
+                error: err => console.log(err)
+            })
+        }else {
+            this.productService.addProductToFavourite(this.product.product).subscribe({
+                error: err => console.log(err)
+            });
+        }
+        this.isFavourite = !this.isFavourite;
     }
 }

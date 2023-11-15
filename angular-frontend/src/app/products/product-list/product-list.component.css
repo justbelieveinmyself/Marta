@@ -1,0 +1,46 @@
+.object-with-hidden-item:hover .hidden-item {
+    display: block;
+    position: absolute;
+    bottom: -30px;
+    padding-left: 10px;
+}
+
+.bottom-wrap {
+    background-color: #FFF !important;
+    position: absolute;
+    bottom: -40px !important;
+    height: auto;
+    left: -1px;
+    width: 288px;
+    z-index: 100;
+    padding: 8px;
+    /*border-radius: 0 0 10px 10px;*/
+    /*outline: 1px solid #D2D2D2;*/
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    transition: box-shadow 0.4s ease-in-out;
+}
+
+.hidden-text-1 {
+    -webkit-line-clamp: 1;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+.hidden-text-2 {
+    -webkit-line-clamp: 2;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+.hidden-text-2:hover, .hidden-text-1:hover{
+    -webkit-line-clamp: initial;
+}
+
+.object-with-hidden-item:hover {
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    transition: box-shadow 0.4s ease-in-out;
+}
+
+.hidden-item {
+    display: none;
+}

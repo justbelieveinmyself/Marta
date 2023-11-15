@@ -13,8 +13,8 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@ToString(exclude = {"customers", "followers"})
-@EqualsAndHashCode(exclude = {"customers", "followers"})
+@ToString(exclude = {"customers", "followers", "orderProduct"})
+@EqualsAndHashCode(exclude = {"customers", "followers", "orderProduct"})
 public class Product {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -34,8 +34,8 @@ public class Product {
     private User seller;
     @Column(name = "preview_image")
     private String previewImg;
-    @ManyToMany(mappedBy = "products")
-    private List<Order> orders;
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    private Set<OrderProduct> orderProduct;
     @ManyToMany(mappedBy = "cartProducts")
     private Set<User> customers;
     @ManyToMany(mappedBy = "favouriteProducts")

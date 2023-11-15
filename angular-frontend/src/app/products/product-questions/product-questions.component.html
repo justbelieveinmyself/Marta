@@ -35,7 +35,7 @@
                     </div>
                 </div>
             </div>
-            <a type="button" style="color: black" class="fa-regular fa-heart fa-xl"></a>
+            <a type="button" style="color: black" (click)="addOrRemoveFavourite()" [ngClass]="isFavourite? 'fa-solid' : 'fa-regular'" class="fa-regular fa-heart fa-xl"></a>
         </div>
     </div>
 </div>
