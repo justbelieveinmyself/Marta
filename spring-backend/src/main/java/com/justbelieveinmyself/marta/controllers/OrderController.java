@@ -3,10 +3,14 @@ package com.justbelieveinmyself.marta.controllers;
 import com.justbelieveinmyself.marta.domain.annotations.CurrentUser;
 import com.justbelieveinmyself.marta.domain.dto.OrderDto;
 import com.justbelieveinmyself.marta.domain.dto.ProductDto;
+import com.justbelieveinmyself.marta.domain.dto.UserDto;
 import com.justbelieveinmyself.marta.domain.entities.Order;
 import com.justbelieveinmyself.marta.domain.entities.User;
+import com.justbelieveinmyself.marta.exceptions.ResponseError;
 import com.justbelieveinmyself.marta.services.OrderService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -44,4 +48,22 @@ public class OrderController {
         }
         return orderService.createOrder(user, orderDto);
     }
+
+    @PutMapping("{orderId}/status")
+    @Operation(summary = "Update order-status", description = "Update status value for order")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Order status updated and saved",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = OrderDto.class))),
+            @ApiResponse(responseCode = "403", description = "You don't have the rights!",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,schema = @Schema(implementation = ResponseError.class)))
+    })
+    @Parameter(name = "orderId", schema = @Schema(name = "orderId", type = "integer"), in = ParameterIn.PATH)
+    public ResponseEntity<?> updateOrderStatus(
+            @Parameter(hidden = true) @PathVariable("orderId") Order order,
+            @RequestBody String status,
+            @CurrentUser User authedUser
+    ){
+        return orderService.changeOrderStatus(order, status, authedUser);
+    }
+
 }

@@ -7,6 +7,7 @@ import com.justbelieveinmyself.marta.domain.entities.Product;
 import com.justbelieveinmyself.marta.domain.entities.User;
 import com.justbelieveinmyself.marta.domain.enums.DeliveryStatus;
 import com.justbelieveinmyself.marta.domain.mappers.ProductMapper;
+import com.justbelieveinmyself.marta.exceptions.ForbiddenException;
 import com.justbelieveinmyself.marta.repositories.OrderRepository;
 import com.justbelieveinmyself.marta.repositories.ProductRepository;
 import com.justbelieveinmyself.marta.repositories.UserRepository;
@@ -52,5 +53,18 @@ public class OrderService {
         user.getOrders().add(savedOrder);
         userRepository.save(user);
         return ResponseEntity.ok(OrderDto.of(savedOrder));
+    }
+
+    public ResponseEntity<?> changeOrderStatus(Order order, String status, User authedUser) {
+        validateRights(authedUser, order.getCustomer());
+        order.setStatus(DeliveryStatus.valueOf(status));
+        orderRepository.save(order);
+        return ResponseEntity.ok(OrderDto.of(order));
+    }
+
+    private void validateRights(User userFromAuthToken, User userToEdit) { //TODO: refactor this to bean
+        if(!userToEdit.getId().equals(userFromAuthToken.getId())){
+            throw new ForbiddenException("You don't have the rights!");
+        }
     }
 }

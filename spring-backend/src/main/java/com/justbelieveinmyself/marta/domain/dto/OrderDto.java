@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @EqualsAndHashCode
 public class OrderDto {
+    private Long id;
     private Map<Long, Integer> productIdAndQuantity;
     private ZonedDateTime orderedAt;
     private DeliveryStatus status;
@@ -26,6 +27,7 @@ public class OrderDto {
     private SellerDto customer;
     public static OrderDto of(Order order){
         OrderDto orderDto = new OrderDto();
+        orderDto.setId(order.getId());
         orderDto.setStatus(order.getStatus());
         orderDto.setIsPaid(order.getIsPaid());
         Map<Long, Integer> productAndQuantity = order.getOrderProduct().stream().collect(Collectors.toMap(orderItem -> orderItem.getProduct().getId(), OrderProduct::getQuantity));

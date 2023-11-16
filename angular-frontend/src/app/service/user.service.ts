@@ -59,7 +59,17 @@ export class UserService {
     }
 
     getUser(): Observable<LocalUser> {
-        return this.httpClient.get<LocalUser>(this.baseUrl);
+        return this.httpClient.get<LocalUser>(`${this.baseUrl}/details`);
+    }
+
+    getUsers(): Observable<LocalUser[]> {
+        return this.httpClient.get<LocalUser[]>(this.baseUrl).pipe(tap(users =>{
+            users.forEach(user => {
+                console.log(user)
+                this.imageService.base64ToBlob(user.avatar).then(blob => {
+                    this.imageService.createUrlFromBlobProm(blob).then(res => user.avatar = res);
+            })
+            })}));
     }
 
     getFavourites(): Observable<ProductWithImage[]> {

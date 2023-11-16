@@ -14,9 +14,12 @@ import {ProductFeedbackComponent} from "./products/product-feedback/product-feed
 import {ProductQuestionsComponent} from "./products/product-questions/product-questions.component";
 import {ProductCartComponent} from "./products/product-cart/product-cart.component";
 import {MainPageComponent} from "./main-page/main-page.component";
+import {AdminPageComponent} from "./admin-page/admin-page.component";
+import {AdminGuard} from "./AdminGuard";
 
 const routes: Routes = [
     {path: 'products', component: MainPageComponent},
+    {path: 'adminPanel', component: AdminPageComponent, canActivate: [AdminGuard]},
     {path: 'products/:id/details', component: ProductDetailsComponent},
     {path: 'products/:id/feedback', component: ProductFeedbackComponent},
     {path: 'products/:id/questions', component: ProductQuestionsComponent},
@@ -26,10 +29,10 @@ const routes: Routes = [
     {path: 'login', component: LoginComponent},
     {path: 'register', component: RegisterComponent},
     {path: 'profile/cart', component: ProductCartComponent},
-    {path: 'profile/:id', component: UserProfileComponent},
-    {path: 'profile/:id/details', component: UserDetailsComponent},
-    {path: 'profile/:id/favourites', component: UserFavouritesComponent},
-    {path: 'profile/:id/delivery', component: UserDeliveryComponent},
+    {path: 'profile', component: UserProfileComponent},
+    {path: 'profile/details', component: UserDetailsComponent},
+    {path: 'profile/favourites', component: UserFavouritesComponent},
+    {path: 'profile/delivery', component: UserDeliveryComponent},
     {path: '**', redirectTo: 'create-product', pathMatch: 'full'},
 
 ];

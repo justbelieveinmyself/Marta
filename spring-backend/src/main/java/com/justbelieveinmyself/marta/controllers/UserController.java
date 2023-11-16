@@ -83,11 +83,24 @@ public class UserController {
         return this.userService.updateAvatar(user, file, currentUser);
     }
 
-    @GetMapping
+    @GetMapping("details")
     public ResponseEntity<?> getUserInfo(
             @CurrentUser User user
     ){
         return userService.getUser(user);
+    }
+
+    @GetMapping
+    @Operation(summary = "Get all users", description = "Get all users")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Success",
+                    content = @Content(mediaType = MediaType.APPLICATION_OCTET_STREAM_VALUE, array = @ArraySchema(arraySchema = @Schema(implementation = Byte.class)))),
+            @ApiResponse(responseCode = "403", description = "Unauthorized",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,schema = @Schema(implementation = ResponseError.class)))
+    })
+    public ResponseEntity<?> getAllUsers(
+    ) {
+        return userService.getAllUsers();
     }
 
     @PutMapping("{profileId}/gender")

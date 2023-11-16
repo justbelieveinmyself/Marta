@@ -1,6 +1,7 @@
 package com.justbelieveinmyself.marta.services;
 
 import com.justbelieveinmyself.marta.configs.beans.FileHelper;
+import com.justbelieveinmyself.marta.domain.dto.UserDto;
 import com.justbelieveinmyself.marta.domain.dto.UserNamesDto;
 import com.justbelieveinmyself.marta.domain.dto.auth.LoginResponseDto;
 import com.justbelieveinmyself.marta.domain.dto.auth.RegisterDto;
@@ -25,6 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Stream;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -114,5 +116,11 @@ public class UserService implements UserDetailsService {
 
     public ResponseEntity<?> getUser(User user) {
         return ResponseEntity.ok(userMapper.modelToDto(user, fileHelper, productMapper));
+    }
+
+    public ResponseEntity<?> getAllUsers() {
+        List<User> users = userRepository.findAll();
+        List<UserDto> userDtos = users.stream().map(user -> userMapper.modelToDto(user, fileHelper, productMapper)).toList();
+        return ResponseEntity.ok(userDtos);
     }
 }

@@ -1,0 +1,22 @@
+import {Observable} from "rxjs";
+import {Router, UrlTree} from "@angular/router";
+import {TokenService} from "./service/token.service";
+import {Injectable} from "@angular/core";
+
+@Injectable({
+    providedIn: 'root'
+})
+export class AdminGuard {
+
+    constructor(
+        private router: Router,
+        private tokenService: TokenService
+    ) {}
+    canActivate(): | Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
+        if (this.tokenService.getUser().roles.indexOf("ADMIN") != -1) {
+            return true;
+        }
+        this.router.navigate(['profile']);
+        return false;
+    }
+}
