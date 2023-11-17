@@ -8,14 +8,13 @@ import com.justbelieveinmyself.marta.domain.enums.UploadDirectory;
 import org.mapstruct.*;
 
 import java.util.Base64;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Mapper(componentModel = "spring")
 public interface UserMapper {
     @Mapping(target = "favouriteProducts", ignore = true)
+    @Mapping(target = "avatar", ignore = true)
     UserDto modelToDto(User user, @Context FileHelper fileHelper, @Context ProductMapper productMapper);
     @Mapping(target = "favouriteProducts", ignore = true)
     User dtoToModel(UserDto userDto);
@@ -28,6 +27,10 @@ public interface UserMapper {
                             fileHelper.downloadFileAsByteArray(product.getPreviewImg(), UploadDirectory.PRODUCTS)))))
                     .collect(Collectors.toSet());
             target.setFavouriteProducts(dtos);
+        }
+        if (user.getAvatar() != null){
+            String base64Image = Base64.getEncoder().encodeToString(fileHelper.downloadFileAsByteArray(user.getAvatar(), UploadDirectory.AVATARS));
+            target.setAvatar(base64Image);
         }
     }
 }

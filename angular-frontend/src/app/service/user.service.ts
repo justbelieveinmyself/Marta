@@ -65,10 +65,7 @@ export class UserService {
     getUsers(): Observable<LocalUser[]> {
         return this.httpClient.get<LocalUser[]>(this.baseUrl).pipe(tap(users =>{
             users.forEach(user => {
-                console.log(user)
-                this.imageService.base64ToBlob(user.avatar).then(blob => {
-                    this.imageService.createUrlFromBlobProm(blob).then(res => user.avatar = res);
-            })
+                this.imageService.createAvatarInUser(user)
             })}));
     }
 
@@ -102,5 +99,9 @@ export class UserService {
         this.httpClient.put(`${this.baseUrl}/${userId}/gender`, gender).subscribe((data: any) => {
             this.tokenService.setUser(data);
         });
+    }
+
+    deleteUser(userId: number): Observable<any> {
+        return this.httpClient.delete(this.baseUrl + "/" + userId);
     }
 }

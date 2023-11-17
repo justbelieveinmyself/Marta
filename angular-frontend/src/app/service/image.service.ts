@@ -2,6 +2,7 @@ import {Injectable, SecurityContext} from '@angular/core';
 import {UserService} from './user.service';
 import {DomSanitizer} from '@angular/platform-browser';
 import {ProductWithImage} from "../models/product-with-image";
+import {LocalUser} from "../models/local-user";
 
 @Injectable({
     providedIn: 'root'
@@ -67,6 +68,21 @@ export class ImageService {
             product.file = url;
         });
         return product;
+    }
+
+    createAvatarInUser(user: LocalUser): LocalUser {
+        if (!user.avatar) {
+            user.avatar = "https://www.webstoresl.com/sellercenter/assets/images/no-product-image.png";
+            return user;
+        }
+        var image;
+        this.base64ToBlob(user.avatar).then(blob => {
+            image = this.createUrlFromBlobProm(blob);
+            return image;
+        }).then(url => {
+            user.avatar = url;
+        });
+        return user;
     }
 
     createUrlFromBase64(base64String: string) {

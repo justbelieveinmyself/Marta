@@ -49,8 +49,9 @@ public class UserService implements UserDetailsService {
         return userRepository.save(user);
     }
 
-    public void delete(User user) {
+    public ResponseEntity<?> deleteUser(User user) {
         userRepository.delete(user);
+        return ResponseEntity.ok(new ResponseMessage(200, "User successfully deleted!"));
     }
     @Override
     public User loadUserByUsername(String username) throws UsernameNotFoundException {

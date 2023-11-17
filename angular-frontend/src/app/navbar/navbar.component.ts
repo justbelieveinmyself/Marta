@@ -11,9 +11,9 @@ import { LocalUser } from '../models/local-user';
 export class NavbarComponent {
   user! : LocalUser;
   isLogged: boolean = false;
-  
+
   constructor(
-    private router : Router, 
+    private router : Router,
     private tokenService: TokenService
     ){}
   ngOnInit(){

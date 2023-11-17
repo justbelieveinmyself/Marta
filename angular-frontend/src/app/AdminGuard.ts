@@ -13,7 +13,7 @@ export class AdminGuard {
         private tokenService: TokenService
     ) {}
     canActivate(): | Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-        if (this.tokenService.getUser().roles.indexOf("ADMIN") != -1) {
+        if (this.tokenService.getUser().roles.includes("ADMIN")) {
             return true;
         }
         this.router.navigate(['profile']);

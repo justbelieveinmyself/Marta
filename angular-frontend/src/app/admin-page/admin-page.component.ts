@@ -16,10 +16,17 @@ export class AdminPageComponent implements OnInit {
         this.userService.getUsers().subscribe({
             next: users => {
                 this.users = users;
-                console.log(this.users[9].avatar)
-
             },
             error: err => console.log(err)
         });
+    }
+
+    deleteUser(user: LocalUser) {
+        this.userService.deleteUser(user.id).subscribe({
+            next: result => {
+                this.users.splice(this.users.indexOf(user), 1)
+            },
+            error: err => console.log(err)
+        })
     }
 }

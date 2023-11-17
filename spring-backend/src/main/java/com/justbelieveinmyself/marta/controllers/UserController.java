@@ -21,7 +21,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.parameters.P;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -94,13 +94,30 @@ public class UserController {
     @Operation(summary = "Get all users", description = "Get all users")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
-                    content = @Content(mediaType = MediaType.APPLICATION_OCTET_STREAM_VALUE, array = @ArraySchema(arraySchema = @Schema(implementation = Byte.class)))),
-            @ApiResponse(responseCode = "403", description = "Unauthorized",
-                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,schema = @Schema(implementation = ResponseError.class)))
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = UserDto.class))),
+            @ApiResponse(responseCode = "403", description = "Unauthorized or has no rights",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ResponseError.class)))
     })
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> getAllUsers(
     ) {
         return userService.getAllUsers();
+    }
+
+    @DeleteMapping("{profileId}")
+    @Operation(summary = "Delete user by id", description = "Delete user by id. Only by Admin/")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "User successfully deleted",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ResponseMessage.class))),
+            @ApiResponse(responseCode = "403", description = "Unauthorized or has no rights",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ResponseError.class)))
+    })
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @Parameter(name = "profileId", schema = @Schema(name = "profileId", type = "integer"), in = ParameterIn.PATH)
+    public ResponseEntity<?> deleteUser(
+            @Parameter(hidden = true) @PathVariable("profileId") User user
+    ) {
+        return userService.deleteUser(user);
     }
 
     @PutMapping("{profileId}/gender")

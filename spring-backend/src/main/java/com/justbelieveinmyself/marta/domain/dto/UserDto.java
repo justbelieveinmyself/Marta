@@ -24,5 +24,6 @@ public class UserDto {
     private String postalCode;
     private String country;
     private Double balance;
+    private String avatar;
     private Set<ProductWithImageDto> favouriteProducts;
 }

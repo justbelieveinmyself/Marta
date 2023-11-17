@@ -6,6 +6,7 @@
         <th scope="col">Last</th>
         <th scope="col">Username</th>
         <th scope="col">Email</th>
+        <th scope="col">Balance</th>
         <th scope="col">Age</th>
         <th scope="col">Phone</th>
         <th scope="col">Avatar</th>
@@ -14,15 +15,22 @@
     <tbody>
     <tr *ngFor="let user of users">
         <th scope="row">{{user.id}}</th>
-        <td>{{user.firstName}}</td>
-        <td>{{user.lastName}}</td>
-        <td>{{user.username}}</td>
-        <td>{{user.email}}</td>
-        <td>{{user.age}}</td>
-        <td>{{user.phone}}</td>
+        <td>{{user.firstName? user.firstName : "---"}}</td>
+        <td>{{user.lastName? user.lastName: "---"}}</td>
+        <td>{{user.username? user.username: "---"}}</td>
+        <td>{{user.email? user.email: "---"}}</td>
+        <td>{{user.balance? (user.balance| currency): "---"}}</td>
+        <td>{{user.age? user.age: "---"}}</td>
+        <td>{{user.phone? user.phone: "---"}}</td>
         <td>
-            <img [src]="user.avatar"/>
+            <img [src]="user.avatar" alt="user avatar" height="200" width="200" style="object-fit: cover"/>
         </td>
+        <div class="pb-5 text-center align-middle" style="outline: #DEDEDE solid 1px">
+            <div class="btn btn-success">Profile page</div> <br>
+            <div class="btn btn-warning mt-2">Change roles</div> <br>
+            <div class="btn btn-info mt-2">Activity page</div> <br>
+            <div class="btn btn-danger mt-2" (click)="deleteUser(user)">Delete user</div> <br>
+        </div>
     </tr>
     </tbody>
 </table>
