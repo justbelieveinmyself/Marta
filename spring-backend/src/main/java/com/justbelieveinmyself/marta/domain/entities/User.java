@@ -48,7 +48,7 @@ public class User implements UserDetails {
     @ManyToMany
     @JoinTable(name = "product_favourites", joinColumns = @JoinColumn(name = "follower_id"), inverseJoinColumns = @JoinColumn(name = "product_id"))
     private Set<Product> favouriteProducts;
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "user", cascade = CascadeType.DETACH)
     private RefreshToken refreshToken;
     @OneToMany(mappedBy = "customer")
     private List<Order> orders;

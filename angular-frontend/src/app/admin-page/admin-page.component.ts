@@ -12,6 +12,7 @@ export class AdminPageComponent implements OnInit {
         private userService: UserService
     ) {}
     users: LocalUser[];
+    indexItemInModal: number = null;
     ngOnInit(): void {
         this.userService.getUsers().subscribe({
             next: users => {
@@ -28,5 +29,14 @@ export class AdminPageComponent implements OnInit {
             },
             error: err => console.log(err)
         })
+    }
+
+    changeRole(role: string) {
+        const user = this.users.at(this.indexItemInModal);
+        if (user.roles.includes(role)) {
+            user.roles.splice(user.roles.indexOf(role), 1)
+        } else {
+            user.roles.push(role)
+        }
     }
 }
