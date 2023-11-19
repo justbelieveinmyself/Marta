@@ -8,7 +8,7 @@
             <a routerLink="create-product" routerLinkActive="active" class="nav-link" style="color: #E1E3E6;">Add Product</a>
         </li>
     </ul>
-    <ul class="navbar-nav" *ngIf="isLogged && user.roles.includes('ADMIN')">
+    <ul class="navbar-nav" *ngIf="isLogged && user.roles!.includes('ADMIN')">
         <li class="nav-item">
             <a routerLink="adminPanel" routerLinkActive="active" class="nav-link" style="color: #E1E3E6;">AdminPanel</a>
         </li>

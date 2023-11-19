@@ -15,16 +15,13 @@ export class UserProfileComponent {
     private tokenService : TokenService,
     private userService: UserService
   ){}
-  logOut(){
-    this.tokenService.logOut();
-  }
+
   ngOnInit(){
     this.user = this.tokenService.getUser();
     if(this.user != null){
       this.userService.getUserAvatar(this.user.id).then(
         res => {
             this.user.avatar = res;
-            console.log(res)
         }
     ).catch(error => this.user.avatar = "https://eliaslealblog.files.wordpress.com/2014/03/user-200.png")
     }

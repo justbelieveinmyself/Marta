@@ -124,4 +124,10 @@ public class UserService implements UserDetailsService {
         List<UserDto> userDtos = users.stream().map(user -> userMapper.modelToDto(user, fileHelper, productMapper)).toList();
         return ResponseEntity.ok(userDtos);
     }
+
+    public ResponseEntity<?> updateRoles(User user, Set<Role> roles) {
+        user.setRoles(roles);
+        User savedUser = userRepository.save(user);
+        return ResponseEntity.ok(userMapper.modelToDto(savedUser, fileHelper, productMapper));
+    }
 }

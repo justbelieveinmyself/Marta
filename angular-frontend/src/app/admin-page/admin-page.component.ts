@@ -13,6 +13,7 @@ export class AdminPageComponent implements OnInit {
     ) {}
     users: LocalUser[];
     indexItemInModal: number = null;
+    newRoles : string[] = [];
     ngOnInit(): void {
         this.userService.getUsers().subscribe({
             next: users => {
@@ -31,12 +32,24 @@ export class AdminPageComponent implements OnInit {
         })
     }
 
-    changeRole(role: string) {
-        const user = this.users.at(this.indexItemInModal);
-        if (user.roles.includes(role)) {
-            user.roles.splice(user.roles.indexOf(role), 1)
+    changeStateRole(role: string) {
+        if (this.newRoles.includes(role)) {
+            this.newRoles.splice(this.newRoles.indexOf(role), 1)
         } else {
-            user.roles.push(role)
+            this.newRoles.push(role);
         }
+    }
+
+    saveRolesChanges() {
+        let localUser = this.users.at(this.indexItemInModal);
+        this.userService.updateRolesById(localUser.id, this.newRoles).subscribe({
+            next: success => {
+                this.users.at(this.indexItemInModal).roles = this.newRoles;
+                console.log(localUser)
+            },
+            error: err => {
+                this.newRoles = localUser.roles;
+            }
+        } );
     }
 }

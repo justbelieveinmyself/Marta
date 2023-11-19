@@ -18,4 +18,8 @@ export class LocalUser {
     country!: string;
     balance!: number;
     favouriteProducts!: ProductWithImage[];
+
+    constructor(roles: string[]) {
+        this.roles = roles;
+    }
 }

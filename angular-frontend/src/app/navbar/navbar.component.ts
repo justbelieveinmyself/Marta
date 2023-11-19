@@ -9,13 +9,13 @@ import { LocalUser } from '../models/local-user';
   styleUrls: ['./navbar.component.scss']
 })
 export class NavbarComponent {
-  user! : LocalUser;
+  user : LocalUser = new LocalUser([]);
   isLogged: boolean = false;
 
   constructor(
     private router : Router,
     private tokenService: TokenService
-    ){}
+  ){}
   ngOnInit(){
     this.tokenService.isLogged().subscribe(data => {
       this.isLogged = data;

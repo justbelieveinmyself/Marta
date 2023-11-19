@@ -5,6 +5,7 @@ import com.justbelieveinmyself.marta.domain.dto.UserDto;
 import com.justbelieveinmyself.marta.domain.dto.UserNamesDto;
 import com.justbelieveinmyself.marta.domain.dto.auth.LoginResponseDto;
 import com.justbelieveinmyself.marta.domain.entities.User;
+import com.justbelieveinmyself.marta.domain.enums.Role;
 import com.justbelieveinmyself.marta.domain.mappers.UserMapper;
 import com.justbelieveinmyself.marta.exceptions.ResponseError;
 import com.justbelieveinmyself.marta.exceptions.ResponseMessage;
@@ -24,6 +25,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/profiles")
@@ -135,6 +139,23 @@ public class UserController {
             @CurrentUser User authedUser
     ){
         return userService.updateGender(user, gender, authedUser);
+    }
+
+    @PutMapping("roles/{profileId}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @Operation(summary = "Update roles", description = "Update roles for user")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Roles updated and saved",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = UserDto.class))),
+            @ApiResponse(responseCode = "403", description = "You don't have the rights!",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,schema = @Schema(implementation = ResponseError.class)))
+    })
+    @Parameter(name = "profileId", schema = @Schema(name = "profileId", type = "integer"), in = ParameterIn.PATH)
+    public ResponseEntity<?> updateRoles(
+            @Parameter(hidden = true) @PathVariable("profileId") User user,
+            @RequestBody Set<Role> roles
+    ){
+        return userService.updateRoles(user, roles);
     }
 
     @PutMapping("{profileId}/nameAndSurname")

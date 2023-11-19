@@ -104,4 +104,8 @@ export class UserService {
     deleteUser(userId: number): Observable<any> {
         return this.httpClient.delete(this.baseUrl + "/" + userId);
     }
+
+    updateRolesById(userId: number, roles: string[]) : Observable<Object> {
+        return this.httpClient.put(this.baseUrl + "/roles/" + userId, roles);
+    }
 }

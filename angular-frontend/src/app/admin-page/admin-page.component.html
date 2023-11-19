@@ -27,7 +27,7 @@
         </td>
         <div class="pb-5 text-center align-middle" style="outline: #DEDEDE solid 1px">
             <div class="btn btn-success">Manage page</div> <br>
-            <div class="btn btn-warning mt-2" data-bs-toggle="modal" data-bs-target="#choosePayMethodModal" (click)="indexItemInModal = i">Change roles</div> <br>
+            <div class="btn btn-warning mt-2" data-bs-toggle="modal" data-bs-target="#chooseRolesModal" (click)="indexItemInModal = i; newRoles = user.roles.slice(0)">Change roles</div> <br>
             <div class="btn btn-info mt-2">Activity page</div> <br>
             <div class="btn btn-danger mt-2" (click)="deleteUser(user)">Delete user</div> <br>
         </div>
@@ -36,8 +36,8 @@
 </table>
 
 
-<!-- For modal with report product -->
-<div class="modal fade" id="choosePayMethodModal" tabindex="-1" aria-hidden="true">
+<!-- For modal with choose role -->
+<div class="modal fade" id="chooseRolesModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" style="min-width: 300px">
         <div class="modal-content">
             <div class="modal-header mt-2 mx-3">
@@ -45,16 +45,16 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body mx-4" style="font-size: 19px">
-                <input class="form-check-input" [checked]="users.at(indexItemInModal).roles.includes('USER')" (change)="changeRole('USER')" type="checkbox" id="userFlexCheck">
+                <input class="form-check-input" [checked]="newRoles.includes('USER')" (change)="changeStateRole('USER')" type="checkbox" id="userFlexCheck">
                 <label class="form-check-label" for="userFlexCheck">
                     &nbsp;User
                 </label> <br>
-                <input class="form-check-input" [checked]="users.at(indexItemInModal).roles.includes('ADMIN')" (change)="changeRole('ADMIN')" type="checkbox" id="adminFlexCheck">
+                <input class="form-check-input" [checked]="newRoles.includes('ADMIN')" (change)="changeStateRole('ADMIN')" type="checkbox" id="adminFlexCheck">
                 <label class="form-check-label" for="adminFlexCheck">
                     &nbsp;Admin
                 </label>
                 <div class="mt-3 justify-content-center" style="display: flex">
-                    <button class="btn btn-outline-dark w-75" >Save</button>
+                    <button class="btn btn-outline-dark w-75" (click)="saveRolesChanges()" data-bs-dismiss="modal" aria-label="Close">Save</button>
                 </div>
             </div>
         </div>
