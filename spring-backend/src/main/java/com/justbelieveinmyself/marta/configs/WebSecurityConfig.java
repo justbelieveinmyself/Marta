@@ -1,6 +1,7 @@
 package com.justbelieveinmyself.marta.configs;
 
 import com.justbelieveinmyself.marta.jwt.JsonObjectAuthenticationFilter;
+import com.justbelieveinmyself.marta.jwt.JwtAuthenticationEntryPoint;
 import com.justbelieveinmyself.marta.jwt.JwtAuthorizationFilter;
 import com.justbelieveinmyself.marta.services.UserService;
 import io.swagger.v3.oas.models.Components;
@@ -49,11 +50,13 @@ public class WebSecurityConfig {
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationConfiguration authenticationConfiguration;
+    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
-    public WebSecurityConfig(UserService userService, PasswordEncoder passwordEncoder, AuthenticationConfiguration authenticationConfiguration) {
+    public WebSecurityConfig(UserService userService, PasswordEncoder passwordEncoder, AuthenticationConfiguration authenticationConfiguration, JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint) {
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;
         this.authenticationConfiguration = authenticationConfiguration;
+        this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
     }
 
     @Bean
@@ -66,6 +69,7 @@ public class WebSecurityConfig {
                 .userDetailsService(userService)
                 .addFilterBefore(authenticationFilter(), JsonObjectAuthenticationFilter.class)
                 .addFilterBefore(jwtAuthorizationFilter(), JwtAuthorizationFilter.class)
+                .exceptionHandling(h -> h.authenticationEntryPoint(jwtAuthenticationEntryPoint))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         return http.build();
     }

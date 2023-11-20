@@ -26,7 +26,7 @@ import { ProductQuestionsComponent } from './products/product-questions/product-
 import { ProductCartComponent } from './products/product-cart/product-cart.component';
 import { MainPageComponent } from './main-page/main-page.component';
 import { AdminPageComponent } from './admin-page/admin-page.component';
-import {responseInterceptorProvider} from "./service/response-intercept.service";
+import {responseInterceptorProvider} from "./service/error-intercept.service";
 
 @NgModule({
   declarations: [

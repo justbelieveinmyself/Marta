@@ -15,20 +15,15 @@ import {ProductWithImage} from "../models/product-with-image";
 export class MainPageComponent {
     constructor(
         private productService: ProductService,
-        private router: Router,
         private tokenService: TokenService,
-        private authService: AuthService,
-        private userService: UserService) {
-    }
+    ){}
+
     user!: LocalUser;
     products: ProductWithImage[];
+
     ngOnInit(): void {
-        try {
-            this.user = this.tokenService.getUser();
-            this.getProducts();
-        } catch {
-            this.updateAccess();
-        }
+        this.user = this.tokenService.getUser();
+        this.getProducts();
 
     }
 
@@ -36,34 +31,8 @@ export class MainPageComponent {
         this.productService.getProductList().subscribe({
             next: data => {
                 this.products = data;
-            },
-            error: e => {
-                console.log("1");
-                this.updateAccess();
             }
         });
     }
 
-    updateAccess() {
-        if (this.tokenService.getRefreshToken() != null) {
-            this.authService.getAccessToken(this.tokenService.getRefreshToken()).subscribe({
-                next: token => {
-                    this.tokenService.setAccessToken(token.accessToken);
-                    this.tokenService.setRefreshToken(token.refreshToken);
-                    this.getProducts();
-                    this.userService.getUser().subscribe({
-                        next: user => {
-                            this.tokenService.setUser(user);
-                            this.user = user;
-                        }
-                    });
-                },
-                error: error => {
-                    console.log("error")
-                    this.tokenService.logOut()
-                    this.router.navigate(['/login']);
-                }
-            })
-        }
-    }
 }
