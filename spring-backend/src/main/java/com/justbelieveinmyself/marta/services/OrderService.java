@@ -6,12 +6,10 @@ import com.justbelieveinmyself.marta.domain.entities.OrderProduct;
 import com.justbelieveinmyself.marta.domain.entities.Product;
 import com.justbelieveinmyself.marta.domain.entities.User;
 import com.justbelieveinmyself.marta.domain.enums.DeliveryStatus;
-import com.justbelieveinmyself.marta.domain.mappers.ProductMapper;
 import com.justbelieveinmyself.marta.exceptions.ForbiddenException;
 import com.justbelieveinmyself.marta.repositories.OrderRepository;
 import com.justbelieveinmyself.marta.repositories.ProductRepository;
 import com.justbelieveinmyself.marta.repositories.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -19,14 +17,15 @@ import java.util.*;
 
 @Service
 public class OrderService {
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private OrderRepository orderRepository;
-    @Autowired
-    private ProductRepository productRepository;
-    @Autowired
-    private ProductMapper productMapper;
+    private final UserRepository userRepository;
+    private final OrderRepository orderRepository;
+    private final ProductRepository productRepository;
+
+    public OrderService(UserRepository userRepository, OrderRepository orderRepository, ProductRepository productRepository) {
+        this.userRepository = userRepository;
+        this.orderRepository = orderRepository;
+        this.productRepository = productRepository;
+    }
 
     public ResponseEntity<?> getListOrders(User user) {
         return ResponseEntity.ok(user.getOrders().stream().map(OrderDto::of).toList());

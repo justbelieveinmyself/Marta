@@ -22,7 +22,6 @@ import com.justbelieveinmyself.marta.repositories.QuestionRepository;
 import com.justbelieveinmyself.marta.repositories.ReviewRepository;
 import com.justbelieveinmyself.marta.repositories.UserRepository;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -36,22 +35,25 @@ import java.util.stream.Stream;
 
 @Service
 public class ProductService {
-    @Autowired
-    private ProductRepository productRepository;
-    @Autowired
-    private ReviewRepository reviewRepository;
-    @Autowired
-    private QuestionRepository questionRepository;
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private ProductMapper productMapper;
-    @Autowired
-    private QuestionMapper questionMapper;
-    @Autowired
-    private ReviewMapper reviewMapper;
-    @Autowired
-    private FileHelper fileHelper;
+    private final ProductRepository productRepository;
+    private final ReviewRepository reviewRepository;
+    private final QuestionRepository questionRepository;
+    private final UserRepository userRepository;
+    private final ProductMapper productMapper;
+    private final QuestionMapper questionMapper;
+    private final ReviewMapper reviewMapper;
+    private final FileHelper fileHelper;
+
+    public ProductService(ProductRepository productRepository, ReviewRepository reviewRepository, QuestionRepository questionRepository, UserRepository userRepository, ProductMapper productMapper, QuestionMapper questionMapper, ReviewMapper reviewMapper, FileHelper fileHelper) {
+        this.productRepository = productRepository;
+        this.reviewRepository = reviewRepository;
+        this.questionRepository = questionRepository;
+        this.userRepository = userRepository;
+        this.productMapper = productMapper;
+        this.questionMapper = questionMapper;
+        this.reviewMapper = reviewMapper;
+        this.fileHelper = fileHelper;
+    }
 
     public ResponseEntity<?> getListProducts() {
         List<Product> products = productRepository.findAll();

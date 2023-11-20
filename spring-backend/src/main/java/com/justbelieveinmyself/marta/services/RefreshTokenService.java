@@ -7,7 +7,6 @@ import com.justbelieveinmyself.marta.domain.entities.User;
 import com.justbelieveinmyself.marta.exceptions.RefreshTokenException;
 import com.justbelieveinmyself.marta.jwt.JwtUtils;
 import com.justbelieveinmyself.marta.repositories.RefreshTokenRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -18,12 +17,15 @@ import java.util.UUID;
 
 @Service
 public class RefreshTokenService {
-    @Autowired
-    private RefreshTokenRepository refreshTokenRepository;
-    @Autowired
-    private JwtUtils jwtUtils;
     @Value("${jwt.refreshToken.expiration}")
     private Duration expiration;
+    private final RefreshTokenRepository refreshTokenRepository;
+    private final JwtUtils jwtUtils;
+
+    public RefreshTokenService(RefreshTokenRepository refreshTokenRepository, JwtUtils jwtUtils) {
+        this.refreshTokenRepository = refreshTokenRepository;
+        this.jwtUtils = jwtUtils;
+    }
 
     public String createToken(User user){
         if(user.getRefreshToken() != null) {

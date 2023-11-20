@@ -3,7 +3,6 @@ package com.justbelieveinmyself.marta.controllers;
 import com.justbelieveinmyself.marta.domain.annotations.CurrentUser;
 import com.justbelieveinmyself.marta.domain.dto.OrderDto;
 import com.justbelieveinmyself.marta.domain.dto.ProductDto;
-import com.justbelieveinmyself.marta.domain.dto.UserDto;
 import com.justbelieveinmyself.marta.domain.entities.Order;
 import com.justbelieveinmyself.marta.domain.entities.User;
 import com.justbelieveinmyself.marta.exceptions.ResponseError;
@@ -16,17 +15,19 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/orders")
+@RequestMapping("api/v1/orders")
 @Tag(name = "Order", description = "The Order API")
 public class OrderController {
-    @Autowired
-    private OrderService orderService;
+    private final OrderService orderService;
+
+    public OrderController(OrderService orderService) {
+        this.orderService = orderService;
+    }
 
     @GetMapping
     @Operation(summary = "Get orders of current user", description = "Returns orders of current user")
@@ -40,12 +41,8 @@ public class OrderController {
     @PostMapping
     public ResponseEntity<?> createOrder(
             @CurrentUser User user,
-            @RequestBody(required = false) OrderDto orderDto
+            @RequestBody OrderDto orderDto
     ) {
-        if(orderDto == null){
-            System.out.println("XDDDDDDDDDDDDDDDDDDDDDDDDDD");
-            return ResponseEntity.noContent().build();
-        }
         return orderService.createOrder(user, orderDto);
     }
 

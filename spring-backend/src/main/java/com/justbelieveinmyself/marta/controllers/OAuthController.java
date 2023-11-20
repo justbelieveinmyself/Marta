@@ -7,7 +7,6 @@ import com.justbelieveinmyself.marta.domain.entities.User;
 import com.justbelieveinmyself.marta.services.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.BufferedReader;
@@ -18,7 +17,7 @@ import java.net.URLConnection;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/oauth")
+@RequestMapping("api/v1/oauth")
 @CrossOrigin
 @Tag(
         name = "OAuth",
@@ -26,8 +25,12 @@ import java.util.Map;
 )
 
 public class OAuthController {
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
+
+    public OAuthController(UserService userService) {
+        this.userService = userService;
+    }
+
     @PostMapping
     @Operation(description = "OAuth vkontakte login", deprecated = true)
     public User vk(@RequestBody OAuthTokenDto OAuthTokenDto) throws IOException {

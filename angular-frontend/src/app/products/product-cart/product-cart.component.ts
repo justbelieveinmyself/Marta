@@ -67,7 +67,11 @@ export class ProductCartComponent implements OnInit{
         this.productService.createOrder(this.productAndQuantity, this.isPayNow).subscribe({
             next: result => {
                 this.productService.deleteAllProductsInCart().subscribe({
-                    next: res => this.productAndQuantity.clear(),
+                    next: res => {
+                        this.productAndQuantity.clear();
+                        this.totalPrice = 0;
+                        this.totalCountOfProduct = 0;
+                    },
                     error: err => console.log()
                 })
             },

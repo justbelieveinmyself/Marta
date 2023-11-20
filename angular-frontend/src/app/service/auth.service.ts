@@ -13,7 +13,7 @@ import {ImageService} from "./image.service";
     providedIn: 'root'
 })
 export class AuthService {
-    private authUrl = "http://localhost:8080/auth/";
+    private authUrl = "http://localhost:8080/api/v1/auth/";
 
     constructor(
         private httpClient: HttpClient

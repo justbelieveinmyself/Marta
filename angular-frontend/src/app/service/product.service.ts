@@ -13,7 +13,7 @@ import {Order} from "../models/order";
 })
 export class ProductService {
 
-    private baseUrl = "http://localhost:8080/products";
+    private baseUrl = "http://localhost:8080/api/v1/products";
 
     constructor(
         private httpClient: HttpClient,
@@ -61,7 +61,7 @@ export class ProductService {
         const order = new Order();
         order.productIdAndQuantity = productIdAndQuantity;
         order.isPaid = isPaid;
-        return this.httpClient.post<Order>(`http://localhost:8080/orders`, order);
+        return this.httpClient.post<Order>(`http://localhost:8080/api/v1/orders`, order);
     }
 
     addProductToCart(product: Product): Observable<Product>{

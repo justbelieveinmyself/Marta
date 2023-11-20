@@ -1,7 +1,6 @@
 package com.justbelieveinmyself.marta.services;
 
 import com.justbelieveinmyself.marta.configs.beans.FileHelper;
-import com.justbelieveinmyself.marta.domain.dto.UserDto;
 import com.justbelieveinmyself.marta.domain.dto.auth.LoginRequestDto;
 import com.justbelieveinmyself.marta.domain.dto.auth.LoginResponseDto;
 import com.justbelieveinmyself.marta.domain.dto.auth.RegisterDto;
@@ -10,7 +9,6 @@ import com.justbelieveinmyself.marta.domain.entities.User;
 import com.justbelieveinmyself.marta.domain.mappers.ProductMapper;
 import com.justbelieveinmyself.marta.domain.mappers.UserMapper;
 import com.justbelieveinmyself.marta.exceptions.NotCreatedException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -20,18 +18,22 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class AuthService {
-    @Autowired
-    private UserService userService;
-    @Autowired
-    private ProductMapper productMapper;
-    @Autowired
-    private AuthenticationManager authenticationManager;
-    @Autowired
-    private RefreshTokenService refreshTokenService;
-    @Autowired
-    private UserMapper userMapper;
-    @Autowired
-    private FileHelper fileHelper;
+    private final UserService userService;
+    private final ProductMapper productMapper;
+    private final AuthenticationManager authenticationManager;
+    private final RefreshTokenService refreshTokenService;
+    private final UserMapper userMapper;
+    private final FileHelper fileHelper;
+
+    public AuthService(UserService userService, ProductMapper productMapper, AuthenticationManager authenticationManager, RefreshTokenService refreshTokenService, UserMapper userMapper, FileHelper fileHelper) {
+        this.userService = userService;
+        this.productMapper = productMapper;
+        this.authenticationManager = authenticationManager;
+        this.refreshTokenService = refreshTokenService;
+        this.userMapper = userMapper;
+        this.fileHelper = fileHelper;
+    }
+
     public ResponseEntity<?> createAuthToken(@RequestBody LoginRequestDto authRequest) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken
                 (authRequest.getUsername(), authRequest.getPassword()));

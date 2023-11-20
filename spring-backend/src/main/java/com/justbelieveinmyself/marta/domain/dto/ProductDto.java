@@ -1,14 +1,12 @@
 package com.justbelieveinmyself.marta.domain.dto;
 
 import com.justbelieveinmyself.marta.domain.entities.Product;
-import com.justbelieveinmyself.marta.domain.entities.Review;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.springframework.security.core.parameters.P;
 
-import java.util.List;
+import java.math.BigDecimal;
 
 @Data
 @AllArgsConstructor
@@ -19,7 +17,7 @@ public class ProductDto {
     private String productName;
     private String productCode;
     private String category;
-    private Long price;
+    private BigDecimal price;
     private Long count;
     private String description;
     private String manufacturer;

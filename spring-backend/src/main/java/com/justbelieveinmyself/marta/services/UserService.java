@@ -14,8 +14,6 @@ import com.justbelieveinmyself.marta.exceptions.ForbiddenException;
 import com.justbelieveinmyself.marta.exceptions.ResponseMessage;
 import com.justbelieveinmyself.marta.repositories.UserRepository;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -26,28 +24,27 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
-import java.util.stream.Stream;
 
 @Service
 public class UserService implements UserDetailsService {
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    @Lazy
-    private PasswordEncoder passwordEncoder;
-    @Autowired
-    private ProductMapper productMapper;
-    @Autowired
-    private FileHelper fileHelper;
-    @Autowired
-    private UserMapper userMapper;
-    public List<User> getListUsers(){
-        return userRepository.findAll();
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final ProductMapper productMapper;
+    private final FileHelper fileHelper;
+    private final UserMapper userMapper;
+
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, ProductMapper productMapper, FileHelper fileHelper, UserMapper userMapper) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.productMapper = productMapper;
+        this.fileHelper = fileHelper;
+        this.userMapper = userMapper;
     }
 
     public User save(User user) {
         return userRepository.save(user);
     }
+
 
     public ResponseEntity<?> deleteUser(User user) {
         userRepository.delete(user);

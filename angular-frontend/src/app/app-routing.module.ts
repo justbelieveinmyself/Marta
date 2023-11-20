@@ -15,7 +15,7 @@ import {ProductQuestionsComponent} from "./products/product-questions/product-qu
 import {ProductCartComponent} from "./products/product-cart/product-cart.component";
 import {MainPageComponent} from "./main-page/main-page.component";
 import {AdminPageComponent} from "./admin-page/admin-page.component";
-import {AdminGuard} from "./AdminGuard";
+import {AdminGuard} from "./admin-guard";
 
 const routes: Routes = [
     {path: 'products', component: MainPageComponent},

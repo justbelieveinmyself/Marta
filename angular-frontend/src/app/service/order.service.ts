@@ -3,14 +3,13 @@ import {HttpClient} from "@angular/common/http";
 import {Order} from "../models/order";
 import {Observable, tap} from "rxjs";
 import {ProductService} from "./product.service";
-import {Product} from "../models/product";
 import {ProductWithImage} from "../models/product-with-image";
 
 @Injectable({
     providedIn: 'root'
 })
 export class OrderService {
-    private baseUrl = "http://localhost:8080/orders";
+    private baseUrl = "http://localhost:8080/api/v1/orders";
 
     constructor(
         private httpClient: HttpClient,

@@ -10,7 +10,6 @@ import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -25,7 +24,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
@@ -40,17 +39,23 @@ import java.util.List;
 @EnableMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig {
     private final AntPathRequestMatcher[] whiteList = new AntPathRequestMatcher[]{
-            AntPathRequestMatcher.antMatcher("/auth/**"),
-            AntPathRequestMatcher.antMatcher("/swagger-ui/**"),
-            AntPathRequestMatcher.antMatcher("/v3/api-docs/**")
+            AntPathRequestMatcher.antMatcher("/api/v1/auth/**"),
+            AntPathRequestMatcher.antMatcher("/api/v1/swagger-ui/**"),
+            AntPathRequestMatcher.antMatcher("/api/v1/v3/api-docs/**")
     };
 
-    @Autowired
-    private UserService userService;
     @Value("${jwt.secret}")
     private String secret;
-    @Autowired
-    private AuthenticationConfiguration authenticationConfiguration;
+    private final UserService userService;
+    private final PasswordEncoder passwordEncoder;
+    private final AuthenticationConfiguration authenticationConfiguration;
+
+    public WebSecurityConfig(UserService userService, PasswordEncoder passwordEncoder, AuthenticationConfiguration authenticationConfiguration) {
+        this.userService = userService;
+        this.passwordEncoder = passwordEncoder;
+        this.authenticationConfiguration = authenticationConfiguration;
+    }
+
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -79,14 +84,11 @@ public class WebSecurityConfig {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
-    @Bean
-    public BCryptPasswordEncoder passwordEncoder(){
-        return new BCryptPasswordEncoder();
-    }
+
     @Bean
     public DaoAuthenticationProvider daoAuthenticationProvider() {
         DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
-        daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
+        daoAuthenticationProvider.setPasswordEncoder(passwordEncoder);
         daoAuthenticationProvider.setUserDetailsService(userService);
         return daoAuthenticationProvider;
     }

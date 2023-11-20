@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Set;
 
@@ -23,7 +24,7 @@ public class Product {
     @Column(name = "product_code")
     private String productCode;
     private String category;
-    private Long price;
+    private BigDecimal price;
     private Long count;
     @Lob @Column(length = 16777215)
     private String description;

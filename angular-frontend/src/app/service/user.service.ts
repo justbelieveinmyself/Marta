@@ -1,18 +1,17 @@
-import {HttpClient, HttpEvent} from '@angular/common/http';
-import {Injectable, SecurityContext} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {Injectable} from '@angular/core';
 import {TokenService} from './token.service';
-import {map, Observable, tap} from 'rxjs';
+import {Observable, tap} from 'rxjs';
 import {LocalUser} from "../models/local-user";
 import {ImageService} from "./image.service";
 import {ProductWithImage} from "../models/product-with-image";
-import {DomSanitizer} from "@angular/platform-browser";
 
 @Injectable({
     providedIn: 'root'
 })
 export class UserService {
-    private oauthUrl = "http://localhost:8080/oauth";
-    private baseUrl = "http://localhost:8080/profiles";
+    private oauthUrl = "http://localhost:8080/api/v1/oauth";
+    private baseUrl = "http://localhost:8080/api/v1/profiles";
 
     constructor(
         private httpClient: HttpClient,
@@ -70,7 +69,7 @@ export class UserService {
     }
 
     getFavourites(): Observable<ProductWithImage[]> {
-        return this.httpClient.get<ProductWithImage[]>(`http://localhost:8080/products/favourite`).pipe(tap(products =>
+        return this.httpClient.get<ProductWithImage[]>(`http://localhost:8080/api/v1/products/favourite`).pipe(tap(products =>
                 products.map(product => this.imageService.createImageInProduct(product)))
         );
     }

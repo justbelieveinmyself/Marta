@@ -12,23 +12,22 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
-@RequestMapping("/auth")
-@Tag(
-        name = "Auth",
-        description = "The Auth API"
-)
+@RequestMapping("api/v1/auth")
+@Tag(name = "Auth", description = "The Auth API")
 public class AuthController {
-    @Autowired
-    private AuthService authService;
-    @Autowired
-    private RefreshTokenService refreshTokenService;
+    private final AuthService authService;
+    private final RefreshTokenService refreshTokenService;
+
+    public AuthController(AuthService authService, RefreshTokenService refreshTokenService) {
+        this.authService = authService;
+        this.refreshTokenService = refreshTokenService;
+    }
 
     @PostMapping(value = "/register", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     @Operation(summary = "Register", description = "Use this to create user")
@@ -53,8 +52,8 @@ public class AuthController {
             @ApiResponse(responseCode = "401", description = "Bad credentials!",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ResponseError.class)))
     })
-    public ResponseEntity<?> login(@RequestBody LoginRequestDto loginRequestDTO){
-        return authService.createAuthToken(loginRequestDTO);
+    public ResponseEntity<?> login(@RequestBody LoginRequestDto loginRequestDto){
+        return authService.createAuthToken(loginRequestDto);
     }
 
     @PostMapping("/refresh")

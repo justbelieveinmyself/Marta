@@ -70,7 +70,7 @@ export class LoginComponent implements OnInit {
             error : e => {
             this.isLogged = false;
             this.isLoginFail = true;
-            this.errorMessage = e.error.message;
+            this.errorMessage = e.error? e.error.message: "Server error! Please, wait.";
         }})
     }
 

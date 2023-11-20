@@ -12,7 +12,7 @@ import {LoginComponent} from './auth/login/login.component'
 import {SocialAuthServiceConfig, SocialLoginModule, VKLoginProvider} from '@abacritt/angularx-social-login';
 import {RegisterComponent} from './auth/register/register.component';
 import {NavbarComponent} from './navbar/navbar.component';
-import {interceptorProvider} from './service/prod-intercept.service';
+import {requestInterceptorProvider} from './service/request-intercept.service';
 import {UserProfileComponent} from './user-profile/user-profile.component';
 import {UserDetailsComponent} from './user-details/user-details.component';
 import {UserDeliveryComponent} from './user-delivery/user-delivery.component';
@@ -26,6 +26,7 @@ import { ProductQuestionsComponent } from './products/product-questions/product-
 import { ProductCartComponent } from './products/product-cart/product-cart.component';
 import { MainPageComponent } from './main-page/main-page.component';
 import { AdminPageComponent } from './admin-page/admin-page.component';
+import {responseInterceptorProvider} from "./service/response-intercept.service";
 
 @NgModule({
   declarations: [
@@ -76,7 +77,7 @@ import { AdminPageComponent } from './admin-page/admin-page.component';
         }
       } as SocialAuthServiceConfig,
     },
-    [interceptorProvider]
+    [requestInterceptorProvider, responseInterceptorProvider]
   ],
   bootstrap: [AppComponent]
 })
