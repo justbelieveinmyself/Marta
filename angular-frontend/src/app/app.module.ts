@@ -26,7 +26,7 @@ import { ProductQuestionsComponent } from './products/product-questions/product-
 import { ProductCartComponent } from './products/product-cart/product-cart.component';
 import { MainPageComponent } from './main-page/main-page.component';
 import { AdminPageComponent } from './admin-page/admin-page.component';
-import {responseInterceptorProvider} from "./service/error-intercept.service";
+import {errorInterceptorProvider} from "./service/error-intercept.service";
 
 @NgModule({
   declarations: [
@@ -77,7 +77,7 @@ import {responseInterceptorProvider} from "./service/error-intercept.service";
         }
       } as SocialAuthServiceConfig,
     },
-    [requestInterceptorProvider, responseInterceptorProvider]
+    [requestInterceptorProvider, errorInterceptorProvider]
   ],
   bootstrap: [AppComponent]
 })

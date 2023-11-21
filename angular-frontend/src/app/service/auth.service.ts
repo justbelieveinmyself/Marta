@@ -8,6 +8,9 @@ import {RefreshResponseDto} from "../models/refresh-response.dto";
 import {RefreshRequestDto} from "../models/refresh-request.dto";
 import {daysToMonths} from "ngx-bootstrap/chronos/duration/bubble";
 import {ImageService} from "./image.service";
+import {UserService} from "./user.service";
+import {TokenService} from "./token.service";
+import {Router} from "@angular/router";
 
 @Injectable({
     providedIn: 'root'
@@ -19,7 +22,6 @@ export class AuthService {
         private httpClient: HttpClient
     ) {}
 
-
     public register(regUser: RegisterUser, avatar: File): Observable<any> {
         var fd = new FormData();
         var json = new Blob([JSON.stringify(regUser)], {type: 'application/json'});
@@ -29,10 +31,6 @@ export class AuthService {
     }
 
     public login(logUser: LoginUser): Observable<LoginResponseDto> {
-        // const dto = await firstValueFrom();
-        // dto.user.favouriteProducts = await Promise.all(dto.user.favouriteProducts.map(async (product) => {
-        //     return await this.imageService.createImageInProduct(product);
-        // }));
         return this.httpClient.post<LoginResponseDto>(this.authUrl + 'login', logUser);
     }
 
@@ -40,4 +38,5 @@ export class AuthService {
         const dto = {refreshToken};
         return this.httpClient.post<any>(this.authUrl + 'refresh', dto);
     }
+
 }

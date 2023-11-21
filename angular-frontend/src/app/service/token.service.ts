@@ -51,8 +51,12 @@ export class TokenService {
     public getUser(): LocalUser {
         if(this.user == null) {
             var encryptedUser = sessionStorage.getItem(USER_KEY) || '';
-            this.user = JSON.parse(this.encryptionService.decryptData(encryptedUser));
-            this.user.favouriteProducts.map((product: ProductWithImage) => this.imageService.createImageInProduct(product));
+            if(encryptedUser){
+                this.user = JSON.parse(this.encryptionService.decryptData(encryptedUser));
+                this.user.favouriteProducts.map((product: ProductWithImage) => this.imageService.createImageInProduct(product));
+            }else{
+                return null;
+            }
         }
         return this.user;
     }
@@ -67,5 +71,4 @@ export class TokenService {
         this.user = null;
         this.loggedIn.next(false);
     }
-
 }

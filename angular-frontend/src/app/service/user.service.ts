@@ -16,7 +16,7 @@ export class UserService {
     constructor(
         private httpClient: HttpClient,
         private tokenService: TokenService,
-        private imageService: ImageService
+        private imageService: ImageService,
     ) {}
 
     getUserFromDbByOauth(userId: string, token: string) {

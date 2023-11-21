@@ -21,8 +21,8 @@ export class ProductService {
     ) {
     }
 
-    getProductList(): Observable<ProductWithImage[]> {
-        return this.httpClient.get<ProductWithImage[]>(this.baseUrl).pipe(tap(products =>
+    getProductList(page: number, size: number): Observable<ProductWithImage[]> {
+        return this.httpClient.get<ProductWithImage[]>(this.baseUrl + "?page=" + page+"&size=" + size).pipe(tap(products =>
             products.map(product => this.imageService.createImageInProduct(product))));
     }
 

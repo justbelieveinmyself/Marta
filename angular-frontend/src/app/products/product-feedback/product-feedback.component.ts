@@ -5,6 +5,7 @@ import {ActivatedRoute} from "@angular/router";
 import {Review} from "../../models/review";
 import {ImageService} from "../../service/image.service";
 import {UserService} from "../../service/user.service";
+import {OrderService} from "../../service/order.service";
 
 @Component({
     selector: 'app-product-feedback',
@@ -16,7 +17,8 @@ export class ProductFeedbackComponent implements OnInit {
         private productService: ProductService,
         private activatedRoute: ActivatedRoute,
         private imageService: ImageService,
-        private userService: UserService
+        private userService: UserService,
+        private orderService: OrderService
     ) {}
 
     protected readonly Math = Math;
@@ -35,6 +37,8 @@ export class ProductFeedbackComponent implements OnInit {
     isNeedOpenAnswer: boolean[] = [];
     countOfPhotos = 0;
     countOfReviewsWithPhotos = 0;
+    countOfProductInOrder = 1;
+    isPaid = false;
 
     ngOnInit(): void {
         this.productService.getProductById(this.activatedRoute.snapshot.params['id']).subscribe({
@@ -150,5 +154,21 @@ export class ProductFeedbackComponent implements OnInit {
             });
         }
         this.isFavourite = !this.isFavourite;
+    }
+
+    orderNow() {
+        // const map = new Map<ProductWithImage, number>;
+        // map.set(this.product, 1);
+        // this.productService.createOrder(map, true).subscribe({
+        //     next: result => {
+        //         this.productService.deleteAllProductsInCart().subscribe({
+        //             next: res => {
+        //             },
+        //             error: err => console.log()
+        //         })
+        //     },
+        //     error: err => console.log(err)
+        // })
+        console.log("buy now")
     }
 }
