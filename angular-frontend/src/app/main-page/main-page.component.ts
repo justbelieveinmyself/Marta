@@ -1,10 +1,7 @@
 import {Component} from '@angular/core';
 import {TokenService} from "../service/token.service";
-import {AuthService} from "../service/auth.service";
-import {UserService} from "../service/user.service";
 import {LocalUser} from "../models/local-user";
 import {ProductService} from "../service/product.service";
-import {Router} from "@angular/router";
 import {ProductWithImage} from "../models/product-with-image";
 import {ErrorInterceptService} from "../service/error-intercept.service";
 
@@ -29,6 +26,7 @@ export class MainPageComponent {
         this.user = this.tokenService.getUser();
         if(!this.user){
             this.errorIntercept.updateAccess();
+            return;
         }
         this.getProducts();
     }

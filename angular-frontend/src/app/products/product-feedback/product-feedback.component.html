@@ -203,19 +203,29 @@
     <div class="modal-dialog modal-dialog-centered" style="min-width: 300px">
         <div class="modal-content">
             <div class="modal-header mt-2 mx-3">
-                <h1 class="modal-title fs-5"><b>{{product.product.seller.username | titlecase}}/{{product.product.productName | titlecase}}</b></h1>
+                <h1 class="modal-title fs-5"><b>Order: {{product.product.seller.username | titlecase}}/{{product.product.productName | titlecase}}</b></h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
+
             <div class="modal-body mx-4" style="font-size: 19px">
+                <span *ngIf="!isPaid" style="font-size: 12px; position: absolute" class="text-secondary">We will write off the payment upon receipt </span> <br>
+                <input class="form-check-input" type="checkbox" (change)="isPaid = !isPaid"
+                       id="flexCheck">
+                <label class="form-check-label" for="flexCheck">
+                    &nbsp;Pay now
+                </label>
                 <div style="font-size: 18px" class="mt-2">
-                    <i type="button" (click)="countOfProductInOrder=countOfProductInOrder-1"
-                       class="fa-solid fa-square-minus fa-2xl"></i>
-                    &nbsp;{{countOfProductInOrder}}&nbsp;
-                    <i type="button" (click)="countOfProductInOrder=countOfProductInOrder+1"
-                       class="fa-solid fa-square-plus fa-2xl"></i>
+                    <i type="button" (click)="removeNumberOfProduct()"
+                       class="fa-solid fa-square-minus fa-xl"></i>
+                    {{countOfProductInOrder}}
+                    <i type="button" (click)="addNumberOfProduct()"
+                       class="fa-solid fa-square-plus fa-xl"></i>
+                </div>
+                <div class="name_card_main mt-2">
+                    Total: {{totalPrice}}
                 </div>
                 <div class="mt-3 justify-content-center" style="display: flex">
-                    <button class="btn btn-outline-dark w-75" (click)="orderNow()">Buy now</button>
+                    <button class="btn btn-outline-dark w-75" data-bs-dismiss="modal" (click)="orderNow()">Buy now</button>
                 </div>
             </div>
         </div>

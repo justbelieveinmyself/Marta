@@ -1,6 +1,4 @@
 import {Component, OnInit} from '@angular/core';
-import {LocalUser} from "../models/local-user";
-import {TokenService} from "../service/token.service";
 import {UserService} from "../service/user.service";
 import {ProductWithImage} from "../models/product-with-image";
 
@@ -11,7 +9,6 @@ import {ProductWithImage} from "../models/product-with-image";
 })
 export class UserFavouritesComponent implements OnInit{
     constructor(
-        private tokenService: TokenService,
         private userService: UserService
     ) {}
     favouriteProducts: ProductWithImage[];
@@ -19,7 +16,6 @@ export class UserFavouritesComponent implements OnInit{
         this.userService.getFavourites().subscribe({
             next: products => {
                 this.favouriteProducts = products
-                console.log(this.favouriteProducts)
             },
             error: err => console.log(err)
         });

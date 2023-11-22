@@ -38,12 +38,14 @@ export class ProductFeedbackComponent implements OnInit {
     countOfPhotos = 0;
     countOfReviewsWithPhotos = 0;
     countOfProductInOrder = 1;
+    totalPrice: number;
     isPaid = false;
 
     ngOnInit(): void {
         this.productService.getProductById(this.activatedRoute.snapshot.params['id']).subscribe({
             next: product => {
                 this.product = product;
+                this.totalPrice = this.product.product.price;
                 this.userService.getFavourites().subscribe(favourites => {
                     this.isFavourite = favourites.filter(prod => prod.product.id == this.product.product.id).length != 0;
                     console.log(this.isFavourite)
@@ -56,7 +58,6 @@ export class ProductFeedbackComponent implements OnInit {
                             review.photos.map(photo => {
                                 this.imageService.createUrlFromBase64(photo).then(url => {
                                         urls.push(url);
-
                                     }
                                 )
                             });
@@ -157,18 +158,26 @@ export class ProductFeedbackComponent implements OnInit {
     }
 
     orderNow() {
-        // const map = new Map<ProductWithImage, number>;
-        // map.set(this.product, 1);
-        // this.productService.createOrder(map, true).subscribe({
-        //     next: result => {
-        //         this.productService.deleteAllProductsInCart().subscribe({
-        //             next: res => {
-        //             },
-        //             error: err => console.log()
-        //         })
-        //     },
-        //     error: err => console.log(err)
-        // })
-        console.log("buy now")
+        const map = new Map<ProductWithImage, number>;
+        map.set(this.product, this.countOfProductInOrder);
+        this.productService.createOrder(map, this.isPaid).subscribe({
+            next: result => {
+                this.totalPrice = this.product.product.price;
+                this.countOfProductInOrder = 1;
+            },
+            error: err => console.log(err)
+        })
+    }
+
+    addNumberOfProduct() {
+        this.countOfProductInOrder++;
+        this.totalPrice += this.product.product.price;
+    }
+
+    removeNumberOfProduct() {
+        if(this.countOfProductInOrder > 1){
+            this.countOfProductInOrder--;
+            this.totalPrice -= this.product.product.price;
+        }
     }
 }

@@ -1,16 +1,10 @@
-import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {RegisterUser} from '../models/register-user';
-import {firstValueFrom, Observable, of, switchMap, tap} from 'rxjs';
+import {Observable} from 'rxjs';
 import {LoginUser} from '../models/login-user';
 import {LoginResponseDto} from '../models/login-response.dto';
 import {RefreshResponseDto} from "../models/refresh-response.dto";
-import {RefreshRequestDto} from "../models/refresh-request.dto";
-import {daysToMonths} from "ngx-bootstrap/chronos/duration/bubble";
-import {ImageService} from "./image.service";
-import {UserService} from "./user.service";
-import {TokenService} from "./token.service";
-import {Router} from "@angular/router";
 
 @Injectable({
     providedIn: 'root'

@@ -22,7 +22,7 @@ public interface UserMapper {
     @AfterMapping
     default void modelToDto(@MappingTarget UserDto target, User user, @Context FileHelper fileHelper, @Context ProductMapper productMapper) {
         if (user.getFavouriteProducts() != null) {
-            Set<ProductWithImageDto> dtos = user.getCartProducts().stream().map(product -> new ProductWithImageDto
+            Set<ProductWithImageDto> dtos = user.getFavouriteProducts().stream().map(product -> new ProductWithImageDto
                     (productMapper.modelToDto(product), (Base64.getEncoder().encodeToString(
                             fileHelper.downloadFileAsByteArray(product.getPreviewImg(), UploadDirectory.PRODUCTS)))))
                     .collect(Collectors.toSet());

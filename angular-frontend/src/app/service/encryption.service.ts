@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import * as CryptoJS from 'crypto-js';
-import { AES } from 'crypto-js';
+import {AES} from 'crypto-js';
 
 @Injectable({
   providedIn: 'root'

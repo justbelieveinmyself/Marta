@@ -9,15 +9,13 @@ import {Product} from "../../models/product";
     templateUrl: './product-list.component.html',
     styleUrls: ['./product-list.component.css']
 })
-export class ProductListComponent implements OnInit{
+export class ProductListComponent {
     constructor(
         private productService: ProductService
     ) {}
     @Input() card: ProductWithImage[];
     @Input() isOrders: boolean;
     @Input() orders: Order[];
-    ngOnInit() {
-    }
     productInToast: Product;
     addToCart(product: Product){
         this.productService.addProductToCart(product).subscribe({

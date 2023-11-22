@@ -3,7 +3,6 @@ import {TokenService} from '../service/token.service';
 import {LocalUser} from '../models/local-user';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {UserService} from '../service/user.service';
-import {ImageService} from '../service/image.service';
 
 @Component({
     selector: 'app-user-details',

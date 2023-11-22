@@ -43,6 +43,7 @@ export class TokenService {
     }
 
     public setUser(user: LocalUser) {
+        console.log("set", user)
         window.sessionStorage.removeItem(USER_KEY);
         var json = JSON.stringify(user);
         window.sessionStorage.setItem(USER_KEY, this.encryptionService.encryptData(json));

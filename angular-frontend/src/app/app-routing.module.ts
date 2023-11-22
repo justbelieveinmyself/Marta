@@ -1,6 +1,5 @@
 import {NgModule} from '@angular/core';
 import {ExtraOptions, RouterModule, Routes} from '@angular/router';
-import {ProductListComponent} from './products/product-list/product-list.component';
 import {CreateProductComponent} from './products/create-product/create-product.component';
 import {UpdateProductComponent} from './products/update-product/update-product.component';
 import {LoginComponent} from './auth/login/login.component';

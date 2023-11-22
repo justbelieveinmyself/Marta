@@ -21,8 +21,8 @@ export class ErrorInterceptService implements HttpInterceptor {
         private router: Router,
         private tokenService: TokenService,
         private authService: AuthService,
-        private userService: UserService) {
-    }
+        private userService: UserService
+    ) {}
 
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         return next.handle(req).pipe(
@@ -40,7 +40,6 @@ export class ErrorInterceptService implements HttpInterceptor {
         if (this.tokenService.getRefreshToken() != null) {
             this.authService.getAccessToken(this.tokenService.getRefreshToken()).subscribe({
                 next: token => {
-                    console.log(token.accessToken)
                     this.tokenService.setAccessToken(token.accessToken);
                     this.tokenService.setRefreshToken(token.refreshToken);
                     this.userService.getUser().subscribe({

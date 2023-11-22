@@ -1,6 +1,6 @@
 import {Seller} from "./seller";
 
-export class Question{
+export class Question {
     message: string;
     answer: string;
     time: string;

@@ -1,9 +1,7 @@
 package com.justbelieveinmyself.marta.domain.dto;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.justbelieveinmyself.marta.domain.entities.Order;
 import com.justbelieveinmyself.marta.domain.entities.OrderProduct;
-import com.justbelieveinmyself.marta.domain.entities.Product;
 import com.justbelieveinmyself.marta.domain.enums.DeliveryStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;

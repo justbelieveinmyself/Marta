@@ -21,10 +21,14 @@ export class ProductQuestionsComponent implements OnInit {
     messageOfQuestion: string;
     questions: Question[];
     product: ProductWithImage;
+    countOfProductInOrder = 1;
+    totalPrice: number;
+    isPaid = false;
     ngOnInit(): void {
         this.productService.getProductById(this.activatedRoute.snapshot.params['id']).subscribe({
             next: product => {
                 this.product = product;
+                this.totalPrice = product.product.price;
                 this.userService.getFavourites().subscribe(favourites => {
                     this.isFavourite = favourites.filter(prod => prod.product.id == this.product.product.id).length != 0;
                     console.log(this.isFavourite)
@@ -70,4 +74,29 @@ export class ProductQuestionsComponent implements OnInit {
         }
         this.isFavourite = !this.isFavourite;
     }
+
+    orderNow() {
+        const map = new Map<ProductWithImage, number>;
+        map.set(this.product, this.countOfProductInOrder);
+        this.productService.createOrder(map, this.isPaid).subscribe({
+            next: result => {
+                this.totalPrice = this.product.product.price;
+                this.countOfProductInOrder = 1;
+            },
+            error: err => console.log(err)
+        })
+    }
+
+    addNumberOfProduct() {
+        this.countOfProductInOrder++;
+        this.totalPrice += this.product.product.price;
+    }
+
+    removeNumberOfProduct() {
+        if(this.countOfProductInOrder > 1){
+            this.countOfProductInOrder--;
+            this.totalPrice -= this.product.product.price;
+        }
+    }
+
 }
