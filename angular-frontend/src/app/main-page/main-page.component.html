@@ -1,1 +1,15 @@
 <app-product-list [card]="products" [isOrders]="false"></app-product-list>
+<ng-container *ngIf="page && page.totalPages > 1">
+    <nav aria-label="...">
+        <ul class="pagination">
+            <li class="page-item" [ngClass]="currentPage != 1? 'disabled': ''">
+                <span class="page-link" (click)="getProducts(currentPage - 1)">Previous</span>
+            </li>
+            <li class="page-item " [ngClass]="currentPage == i? 'active':''"  *ngFor="let item of Array(page.totalPages); let i=index"><a type="button" class="page-link"
+                                                                                 (click)="getProducts(i)">{{i+1}}</a></li>
+            <li class="page-item">
+                <a class="page-link" [ngClass]="page.last? 'disabled': ''" (click)="getProducts(currentPage + 1)">Next</a>
+            </li>
+        </ul>
+    </nav>
+</ng-container>

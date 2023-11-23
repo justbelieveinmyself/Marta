@@ -7,6 +7,7 @@ import {ImageService} from "./image.service";
 import {Review} from "../models/review";
 import {Question} from "../models/question";
 import {Order} from "../models/order";
+import {Page} from "../models/page";
 
 @Injectable({
     providedIn: 'root'
@@ -21,9 +22,9 @@ export class ProductService {
     ) {
     }
 
-    getProductList(page: number, size: number): Observable<ProductWithImage[]> {
-        return this.httpClient.get<ProductWithImage[]>(this.baseUrl + "?page=" + page+"&size=" + size).pipe(tap(products =>
-            products.map(product => this.imageService.createImageInProduct(product))));
+    getProductList(page: number, size: number): Observable<Page> {
+        return this.httpClient.get<Page>(this.baseUrl + "?page=" + page+"&size=" + size)
+        .pipe(tap(page => page.content.map(product => this.imageService.createImageInProduct(product))));
     }
 
     getProductById(id: number): Observable<ProductWithImage> {

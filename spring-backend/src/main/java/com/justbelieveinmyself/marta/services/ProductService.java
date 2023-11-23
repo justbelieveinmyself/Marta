@@ -23,6 +23,7 @@ import com.justbelieveinmyself.marta.repositories.ReviewRepository;
 import com.justbelieveinmyself.marta.repositories.UserRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -59,12 +60,11 @@ public class ProductService {
 
     public ResponseEntity<?> getListProducts(Pageable pageable) {
         Page<Product> products = productRepository.findAll(pageable);
-
         List<ProductWithImageDto> productWithImageDtoList = products.stream()
                 .map(pro -> new ProductWithImageDto(productMapper.modelToDto(pro), Base64.getEncoder().encodeToString(
                         fileHelper.downloadFileAsByteArray(pro.getPreviewImg(), UploadDirectory.PRODUCTS))))
                 .toList();
-        return ResponseEntity.ok(productWithImageDtoList);
+        return ResponseEntity.ok(new PageImpl<>(productWithImageDtoList, pageable, products.getTotalElements()));
     }
 
     public ResponseEntity<?> createProduct(ProductDto productDto, MultipartFile previewImage, User currentUser) {
