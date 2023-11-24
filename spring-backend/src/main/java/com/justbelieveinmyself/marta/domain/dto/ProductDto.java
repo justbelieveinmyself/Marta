@@ -20,11 +20,12 @@ public class ProductDto {
     private BigDecimal price;
     private Long count;
     private String description;
+    private Boolean isVerified;
     private String manufacturer;
     private String structure;
     private SellerDto seller;
     public static ProductDto of(Product product){
-        ProductDto productDto = new ProductDto(product.getId(), product.getProductName(), product.getProductCode(), product.getCategory(), product.getPrice(), product.getCount(), product.getDescription(), product.getManufacturer(), product.getStructure(), SellerDto.of(product.getSeller()));
+        ProductDto productDto = new ProductDto(product.getId(), product.getProductName(), product.getProductCode(), product.getCategory(), product.getPrice(), product.getCount(), product.getDescription(), product.getIsVerified(), product.getManufacturer(), product.getStructure(), SellerDto.of(product.getSeller()));
         return productDto;
     }
 }

@@ -42,7 +42,7 @@ export class ErrorInterceptService implements HttpInterceptor {
                 next: token => {
                     this.tokenService.setAccessToken(token.accessToken);
                     this.tokenService.setRefreshToken(token.refreshToken);
-                    this.userService.getUser().subscribe({
+                    this.userService.getUserCurrentOrById().subscribe({
                         next: user => {
                             this.tokenService.setUser(user);
                         }

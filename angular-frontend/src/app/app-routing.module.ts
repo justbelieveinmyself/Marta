@@ -15,10 +15,12 @@ import {ProductCartComponent} from "./products/product-cart/product-cart.compone
 import {MainPageComponent} from "./main-page/main-page.component";
 import {AdminPageComponent} from "./admin-page/admin-page.component";
 import {AdminGuard} from "./admin-guard";
+import {ActivityPageComponent} from "./activity-page/activity-page.component";
 
 const routes: Routes = [
     {path: 'products', component: MainPageComponent},
     {path: 'adminPanel', component: AdminPageComponent, canActivate: [AdminGuard]},
+    {path: 'adminPanel/activity/:id', component: ActivityPageComponent, canActivate: [AdminGuard]},
     {path: 'products/:id/details', component: ProductDetailsComponent},
     {path: 'products/:id/feedback', component: ProductFeedbackComponent},
     {path: 'products/:id/questions', component: ProductQuestionsComponent},

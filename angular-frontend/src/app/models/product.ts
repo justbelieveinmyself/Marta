@@ -4,6 +4,7 @@ export class Product {
     id: number;
     productName: string;
     productCode: string;
+    isVerified: boolean;
     category: string;
     price: number;
     count: number;

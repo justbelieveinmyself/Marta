@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {ProductWithImage} from 'src/app/models/product-with-image';
 import {Order} from "../../models/order";
 import {ProductService} from "../../service/product.service";
@@ -9,7 +9,7 @@ import {Product} from "../../models/product";
     templateUrl: './product-list.component.html',
     styleUrls: ['./product-list.component.css']
 })
-export class ProductListComponent {
+export class ProductListComponent{
     constructor(
         private productService: ProductService
     ) {}

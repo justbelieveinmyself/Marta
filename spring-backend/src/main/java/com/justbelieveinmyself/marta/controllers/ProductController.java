@@ -45,8 +45,15 @@ public class ProductController {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProductWithImageDto.class)))
     })
-    public ResponseEntity<?> getListProducts(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "10") Integer size ) {
-        return productService.getListProducts(PageRequest.of(page, size));
+    public ResponseEntity<?> getListProducts(
+            @RequestParam(defaultValue = "true") Boolean usePages,
+            @RequestParam(defaultValue = "0") Integer page,
+            @RequestParam(defaultValue = "10") Integer size
+    ) {
+        if(usePages){
+            return productService.getListProducts(PageRequest.of(page, size));
+        }
+        return productService.getListProducts(PageRequest.of(0, Integer.MAX_VALUE));
     }
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)

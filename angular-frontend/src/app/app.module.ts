@@ -27,6 +27,8 @@ import {ProductCartComponent} from './products/product-cart/product-cart.compone
 import {MainPageComponent} from './main-page/main-page.component';
 import {AdminPageComponent} from './admin-page/admin-page.component';
 import {errorInterceptorProvider} from "./service/error-intercept.service";
+import { ActivityPageComponent } from './activity-page/activity-page.component';
+import {TooltipModule} from "ngx-bootstrap/tooltip";
 
 @NgModule({
   declarations: [
@@ -47,7 +49,8 @@ import {errorInterceptorProvider} from "./service/error-intercept.service";
     ProductQuestionsComponent,
     ProductCartComponent,
     MainPageComponent,
-    AdminPageComponent
+    AdminPageComponent,
+    ActivityPageComponent
   ],
     imports: [
         BrowserModule,
@@ -57,7 +60,8 @@ import {errorInterceptorProvider} from "./service/error-intercept.service";
         ReactiveFormsModule,
         SocialLoginModule,
         PopoverModule.forRoot(),
-        NgOptimizedImage
+        NgOptimizedImage,
+        TooltipModule
     ],
   providers: [
     {

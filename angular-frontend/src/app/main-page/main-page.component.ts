@@ -33,7 +33,7 @@ export class MainPageComponent {
     }
 
     getProducts(page: number) {
-        this.productService.getProductList(page, this.sizeOfPage).subscribe({
+        this.productService.getProductList(page, this.sizeOfPage, true).subscribe({
             next: data => {
                 this.products = data.content;
                 this.page = data;

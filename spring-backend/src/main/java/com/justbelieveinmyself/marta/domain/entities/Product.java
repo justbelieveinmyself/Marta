@@ -29,6 +29,8 @@ public class Product {
     @Lob @Column(length = 16777215)
     private String description;
     private String manufacturer;
+    @Column(name = "verified")
+    private Boolean isVerified;
     @Lob @Column(length = 16777215)
     private String structure;
     @ManyToOne(fetch = FetchType.EAGER) @JoinColumn(name = "seller_id")
