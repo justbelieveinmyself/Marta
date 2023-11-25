@@ -92,6 +92,10 @@ export class ProductService {
         return this.httpClient.put(this.baseUrl + '/' + product.id, product);
     }
 
+    verifyProduct(id: number): Observable<Object>{
+        return this.httpClient.put(this.baseUrl + "/verify/"+id, null);
+    }
+
     deleteProduct(id: number): Observable<Object> {
         return this.httpClient.delete(`${this.baseUrl}/${id}`);
     }

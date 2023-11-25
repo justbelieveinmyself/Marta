@@ -17,8 +17,7 @@ export class ProductFeedbackComponent implements OnInit {
         private productService: ProductService,
         private activatedRoute: ActivatedRoute,
         private imageService: ImageService,
-        private userService: UserService,
-        private orderService: OrderService
+        private userService: UserService
     ) {}
 
     protected readonly Math = Math;

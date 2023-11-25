@@ -16,7 +16,14 @@ export class ProductListComponent{
     @Input() card: ProductWithImage[];
     @Input() isOrders: boolean;
     @Input() orders: Order[];
+    products: ProductWithImage[];
     productInToast: Product;
+    ngOnInit() {
+        if(!this.card && !this.orders){
+            setTimeout(() => this.ngOnInit(), 50);
+        }
+        this.products = this.card;
+    }
     addToCart(product: Product){
         this.productService.addProductToCart(product).subscribe({
             error: err => console.log(err)
@@ -26,5 +33,15 @@ export class ProductListComponent{
         // @ts-ignore
         document.getElementById('liveToast').classList.add("show");
     }
+
+    verifyProduct(product: Product, index: number){
+        this.productService.verifyProduct(product.id).subscribe({
+            next: res => {
+                this.card.at(index).product.isVerified = true;
+            }
+        })
+    }
+
     protected readonly Array = Array;
+
 }

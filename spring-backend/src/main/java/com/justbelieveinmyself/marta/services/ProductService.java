@@ -224,4 +224,10 @@ public class ProductService {
             return new ResponseEntity<>(responseError, HttpStatus.FORBIDDEN);
         }
     }
+
+    public ResponseEntity<?> verifyProduct(Product productFromDb) {
+        productFromDb.setIsVerified(true);
+        Product savedProduct = productRepository.save(productFromDb);
+        return ResponseEntity.ok(productMapper.modelToDto(savedProduct));
+    }
 }
