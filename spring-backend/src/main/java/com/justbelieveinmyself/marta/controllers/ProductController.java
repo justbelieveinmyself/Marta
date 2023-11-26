@@ -20,6 +20,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -28,10 +29,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("api/v1/products")
-@Tag(
-        name = "Product",
-        description = "The Product API"
-)
+@Tag(name = "Product", description = "The Product API")
 public class ProductController {
     private final ProductService productService;
 
@@ -40,7 +38,7 @@ public class ProductController {
     }
 
     @GetMapping
-    @Operation(summary = "Get list of all products", description = "Use this to get products")
+    @Operation(summary = "Get list of all products", description = "Use this to get products. By default sort by id with pages")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProductWithImageDto.class)))
@@ -48,9 +46,14 @@ public class ProductController {
     public ResponseEntity<?> getListProducts(
             @RequestParam(defaultValue = "true") Boolean usePages,
             @RequestParam(defaultValue = "0") Integer page,
-            @RequestParam(defaultValue = "10") Integer size
+            @RequestParam(defaultValue = "10") Integer size,
+            @RequestParam(required = false, defaultValue = "id") String sortBy
     ) {
+        System.out.println(sortBy);
         if(usePages){
+            if(sortBy != null){
+                return productService.getListProducts(PageRequest.of(page, size, Sort.by(sortBy).descending()));
+            }
             return productService.getListProducts(PageRequest.of(page, size));
         }
         return productService.getListProducts(PageRequest.of(0, Integer.MAX_VALUE));

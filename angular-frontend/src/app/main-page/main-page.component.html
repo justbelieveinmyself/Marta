@@ -1,24 +1,17 @@
 <hr>
 <div class="mt-3" style="font-size: 17px">
     <span class="text-secondary me-4">Sort by:</span>
-    <a type="button" class="me-4" ><span >Date</span>&nbsp;
-        <i class="fa-solid fa-sm"  style="color: black"></i></a>
+    <a type="button" class="me-4" (click)="sortByDate()"><span [ngClass]="isNeedSortByDate?'sort-active':'sort-not-active'">Date</span>&nbsp;
+        <i *ngIf="isNeedSortByDate" class="fa-solid fa-sm" [ngClass]="sortByDateASC?'fa-arrow-up':'fa-arrow-down'" style="color: black"></i></a>
     <a type="button" class="me-4" ><span >Rate</span>&nbsp;
         <i class="fa-solid fa-sm" style="color: black"></i></a>
-    <input class="form-check-input" type="checkbox" (change)="filterByWithPhoto($event)"
-           id="withPhotoCheck" >
+    <input class="form-check-input" type="checkbox" (change)="filterByWithPhoto($event)" id="withPhotoCheck">
     <label class="form-check-label me-3" for="withPhotoCheck">
         &nbsp;With a photo <span class="text-secondary">{{countOfProductWithImage}}</span>
     </label>
-    <input class="form-check-input" type="checkbox" (change)="filterByVerified($event)"
-           id="verifiedCheck" >
-    <label class="form-check-label me-3" for="verifiedCheck" >
+    <input class="form-check-input" type="checkbox" (change)="filterByVerified($event)" id="verifiedCheck">
+    <label class="form-check-label me-3" for="verifiedCheck">
         &nbsp;Verified <span class="text-secondary">{{countOfVerifiedProduct}}</span>
-    </label>
-    <input class="form-check-input" type="checkbox"
-           id="flexCheckChecked" >
-    <label class="form-check-label" for="flexCheckChecked">
-        &nbsp;With a photo <span class="text-secondary">5</span>
     </label>
 </div>
 <hr>
@@ -29,8 +22,9 @@
             <li class="page-item" [ngClass]="currentPage == 0? 'disabled': ''">
                 <span class="page-link" (click)="getProducts(currentPage - 1)" type="button">Previous</span>
             </li>
-            <li class="page-item " [ngClass]="currentPage == i? 'active':''"  *ngFor="let item of Array(page.totalPages); let i=index"><a type="button" class="page-link"
-                                                                                 (click)="getProducts(i)">{{i+1}}</a></li>
+            <li class="page-item " [ngClass]="currentPage == i? 'active':''"  *ngFor="let item of Array(page.totalPages); let i=index">
+                <a type="button" class="page-link" (click)="getProducts(i)">{{i+1}}</a>
+            </li>
             <li class="page-item">
                 <a class="page-link" [ngClass]="page.last? 'disabled': ''" (click)="getProducts(currentPage + 1)" type="button">Next</a>
             </li>

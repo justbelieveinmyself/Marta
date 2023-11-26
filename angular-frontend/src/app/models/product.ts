@@ -6,6 +6,7 @@ export class Product {
     productCode: string;
     isVerified: boolean;
     category: string;
+    updatedAt: string;
     price: number;
     count: number;
     description: string;

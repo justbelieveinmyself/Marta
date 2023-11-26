@@ -116,8 +116,6 @@ export class ProductFeedbackComponent implements OnInit {
         } else {
             this.filteredReviews.sort((review, review2) => new Date(review2.time).getTime() - new Date(review.time).getTime())
         }
-
-
     }
 
     sortByRate() {
@@ -130,7 +128,6 @@ export class ProductFeedbackComponent implements OnInit {
         } else {
             this.filteredReviews.sort((review, review2) => review2.rating - review.rating);
         }
-
     }
 
     reportReview() {

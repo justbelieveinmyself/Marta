@@ -3,8 +3,10 @@ package com.justbelieveinmyself.marta.domain.entities;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Set;
 
@@ -31,6 +33,8 @@ public class Product {
     private String manufacturer;
     @Column(name = "verified")
     private Boolean isVerified;
+    @UpdateTimestamp
+    private ZonedDateTime updatedAt;
     @Lob @Column(length = 16777215)
     private String structure;
     @ManyToOne(fetch = FetchType.EAGER) @JoinColumn(name = "seller_id")
