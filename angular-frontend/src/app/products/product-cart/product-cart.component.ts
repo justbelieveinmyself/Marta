@@ -1,10 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {TokenService} from "../../service/token.service";
 import {ProductService} from "../../service/product.service";
-import {Product} from "../../models/product";
 import {ProductWithImage} from "../../models/product-with-image";
 import {LocalUser} from "../../models/local-user";
-import {compareSegments} from "@angular/compiler-cli/src/ngtsc/sourcemaps/src/segment_marker";
 
 @Component({
   selector: 'app-product-cart',

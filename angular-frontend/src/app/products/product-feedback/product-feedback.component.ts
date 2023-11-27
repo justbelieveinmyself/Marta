@@ -5,6 +5,7 @@ import {ActivatedRoute} from "@angular/router";
 import {Review} from "../../models/review";
 import {ImageService} from "../../service/image.service";
 import {UserService} from "../../service/user.service";
+import {OrderService} from "../../service/order.service";
 
 @Component({
     selector: 'app-product-feedback',
@@ -35,11 +36,15 @@ export class ProductFeedbackComponent implements OnInit {
     isNeedOpenAnswer: boolean[] = [];
     countOfPhotos = 0;
     countOfReviewsWithPhotos = 0;
+    countOfProductInOrder = 1;
+    totalPrice: number;
+    isPaid = false;
 
     ngOnInit(): void {
         this.productService.getProductById(this.activatedRoute.snapshot.params['id']).subscribe({
             next: product => {
                 this.product = product;
+                this.totalPrice = this.product.product.price;
                 this.userService.getFavourites().subscribe(favourites => {
                     this.isFavourite = favourites.filter(prod => prod.product.id == this.product.product.id).length != 0;
                     console.log(this.isFavourite)
@@ -52,7 +57,6 @@ export class ProductFeedbackComponent implements OnInit {
                             review.photos.map(photo => {
                                 this.imageService.createUrlFromBase64(photo).then(url => {
                                         urls.push(url);
-
                                     }
                                 )
                             });
@@ -112,8 +116,6 @@ export class ProductFeedbackComponent implements OnInit {
         } else {
             this.filteredReviews.sort((review, review2) => new Date(review2.time).getTime() - new Date(review.time).getTime())
         }
-
-
     }
 
     sortByRate() {
@@ -126,7 +128,6 @@ export class ProductFeedbackComponent implements OnInit {
         } else {
             this.filteredReviews.sort((review, review2) => review2.rating - review.rating);
         }
-
     }
 
     reportReview() {
@@ -150,5 +151,29 @@ export class ProductFeedbackComponent implements OnInit {
             });
         }
         this.isFavourite = !this.isFavourite;
+    }
+
+    orderNow() {
+        const map = new Map<ProductWithImage, number>;
+        map.set(this.product, this.countOfProductInOrder);
+        this.productService.createOrder(map, this.isPaid).subscribe({
+            next: result => {
+                this.totalPrice = this.product.product.price;
+                this.countOfProductInOrder = 1;
+            },
+            error: err => console.log(err)
+        })
+    }
+
+    addNumberOfProduct() {
+        this.countOfProductInOrder++;
+        this.totalPrice += this.product.product.price;
+    }
+
+    removeNumberOfProduct() {
+        if(this.countOfProductInOrder > 1){
+            this.countOfProductInOrder--;
+            this.totalPrice -= this.product.product.price;
+        }
     }
 }

@@ -8,6 +8,7 @@ import com.justbelieveinmyself.marta.domain.entities.User;
 import com.justbelieveinmyself.marta.domain.enums.Role;
 import com.justbelieveinmyself.marta.exceptions.ResponseError;
 import com.justbelieveinmyself.marta.exceptions.ResponseMessage;
+import com.justbelieveinmyself.marta.repositories.UserRepository;
 import com.justbelieveinmyself.marta.services.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -31,9 +32,11 @@ import java.util.Set;
 @Tag(name = "User", description = "The User API")
 public class UserController {
     private final UserService userService;
+    private final UserRepository userRepository;
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService, UserRepository userRepository) {
         this.userService = userService;
+        this.userRepository = userRepository;
     }
 
     @PutMapping("{profileId}/email")
@@ -86,11 +89,22 @@ public class UserController {
         return this.userService.updateAvatar(user, file, currentUser);
     }
 
-    @GetMapping("details")
+    @GetMapping(value = {"details", "details/{profileId}"})
+    @Operation(summary = "Get user details", description = "Get user details by profileid(if exists) or else current user")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Success",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = UserDto.class))),
+            @ApiResponse(responseCode = "403", description = "Unauthorized or has no rights",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
+    })
     public ResponseEntity<?> getUserInfo(
-            @CurrentUser User user
+            @CurrentUser User authedUser,
+            @PathVariable(name = "profileId", required = false) User userFromDb
     ){
-        return userService.getUser(user);
+        if(userFromDb != null){
+            return userService.getUser(userFromDb);
+        }
+        return userService.getUser(authedUser);
     }
 
     @GetMapping

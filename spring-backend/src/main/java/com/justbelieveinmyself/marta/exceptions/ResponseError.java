@@ -1,9 +1,6 @@
 package com.justbelieveinmyself.marta.exceptions;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.http.HttpStatus;
 
 import java.util.Date;
@@ -12,10 +9,13 @@ import java.util.Date;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
+@ToString
 public class ResponseError {
     private HttpStatus status;
     private String message;
-    private Date timestamp;
+    @Builder.Default
+    private Date timestamp = new Date();
 
     public ResponseError(HttpStatus httpStatus, String message) {
         this.status = httpStatus;

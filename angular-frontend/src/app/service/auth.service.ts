@@ -1,13 +1,10 @@
-import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {RegisterUser} from '../models/register-user';
-import {firstValueFrom, Observable, of, switchMap, tap} from 'rxjs';
+import {Observable} from 'rxjs';
 import {LoginUser} from '../models/login-user';
 import {LoginResponseDto} from '../models/login-response.dto';
 import {RefreshResponseDto} from "../models/refresh-response.dto";
-import {RefreshRequestDto} from "../models/refresh-request.dto";
-import {daysToMonths} from "ngx-bootstrap/chronos/duration/bubble";
-import {ImageService} from "./image.service";
 
 @Injectable({
     providedIn: 'root'
@@ -19,7 +16,6 @@ export class AuthService {
         private httpClient: HttpClient
     ) {}
 
-
     public register(regUser: RegisterUser, avatar: File): Observable<any> {
         var fd = new FormData();
         var json = new Blob([JSON.stringify(regUser)], {type: 'application/json'});
@@ -29,10 +25,6 @@ export class AuthService {
     }
 
     public login(logUser: LoginUser): Observable<LoginResponseDto> {
-        // const dto = await firstValueFrom();
-        // dto.user.favouriteProducts = await Promise.all(dto.user.favouriteProducts.map(async (product) => {
-        //     return await this.imageService.createImageInProduct(product);
-        // }));
         return this.httpClient.post<LoginResponseDto>(this.authUrl + 'login', logUser);
     }
 
@@ -40,4 +32,5 @@ export class AuthService {
         const dto = {refreshToken};
         return this.httpClient.post<any>(this.authUrl + 'refresh', dto);
     }
+
 }

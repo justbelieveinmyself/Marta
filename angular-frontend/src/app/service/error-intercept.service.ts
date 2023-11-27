@@ -7,12 +7,11 @@ import {
     HttpRequest
 } from '@angular/common/http';
 import {Injectable} from '@angular/core';
-import {catchError, Observable, tap, throwError} from 'rxjs';
-import {ProductService} from "./product.service";
-import {ActivatedRoute, Router} from "@angular/router";
+import {catchError, Observable, throwError} from 'rxjs';
 import {TokenService} from "./token.service";
 import {AuthService} from "./auth.service";
 import {UserService} from "./user.service";
+import {Router} from "@angular/router";
 
 @Injectable({
     providedIn: 'root'
@@ -22,14 +21,14 @@ export class ErrorInterceptService implements HttpInterceptor {
         private router: Router,
         private tokenService: TokenService,
         private authService: AuthService,
-        private userService: UserService) {
-    }
+        private userService: UserService
+    ) {}
 
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         return next.handle(req).pipe(
             catchError((error: any) => {
                 if (error instanceof HttpErrorResponse) {
-                    if (error.error === "Bad access token!") {
+                    if (error.error.message === "Bad access token!") {
                         this.updateAccess();
                     }
                 }
@@ -37,31 +36,30 @@ export class ErrorInterceptService implements HttpInterceptor {
             })
         );
     }
-
     updateAccess() {
         if (this.tokenService.getRefreshToken() != null) {
             this.authService.getAccessToken(this.tokenService.getRefreshToken()).subscribe({
                 next: token => {
                     this.tokenService.setAccessToken(token.accessToken);
                     this.tokenService.setRefreshToken(token.refreshToken);
-                    this.userService.getUser().subscribe({
+                    this.userService.getUserCurrentOrById().subscribe({
                         next: user => {
                             this.tokenService.setUser(user);
                         }
                     });
                     window.location.reload();
-
                 },
                 error: error => {
-                    this.tokenService.logOut()
+                    this.tokenService.logOut();
                     this.router.navigate(['/login']);
                 }
             })
         }
     }
+
 }
 
-export const responseInterceptorProvider = [{
+export const errorInterceptorProvider = [{
     provide: HTTP_INTERCEPTORS,
     useClass: ErrorInterceptService,
     multi: true

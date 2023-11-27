@@ -1,6 +1,6 @@
 import {Seller} from "./seller";
 
-export class Review{
+export class Review {
     message: string;
     answer: string;
     rating: number;

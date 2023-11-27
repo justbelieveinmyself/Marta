@@ -22,11 +22,13 @@ import {ProductDetailsComponent} from './products/product-details/product-detail
 import {PopoverModule} from "ngx-bootstrap/popover";
 import {ProductFeedbackComponent} from './products/product-feedback/product-feedback.component';
 import {NgOptimizedImage} from "@angular/common";
-import { ProductQuestionsComponent } from './products/product-questions/product-questions.component';
-import { ProductCartComponent } from './products/product-cart/product-cart.component';
-import { MainPageComponent } from './main-page/main-page.component';
-import { AdminPageComponent } from './admin-page/admin-page.component';
-import {responseInterceptorProvider} from "./service/error-intercept.service";
+import {ProductQuestionsComponent} from './products/product-questions/product-questions.component';
+import {ProductCartComponent} from './products/product-cart/product-cart.component';
+import {MainPageComponent} from './main-page/main-page.component';
+import {AdminPageComponent} from './admin-page/admin-page.component';
+import {errorInterceptorProvider} from "./service/error-intercept.service";
+import { ActivityPageComponent } from './activity-page/activity-page.component';
+import {TooltipModule} from "ngx-bootstrap/tooltip";
 
 @NgModule({
   declarations: [
@@ -47,7 +49,8 @@ import {responseInterceptorProvider} from "./service/error-intercept.service";
     ProductQuestionsComponent,
     ProductCartComponent,
     MainPageComponent,
-    AdminPageComponent
+    AdminPageComponent,
+    ActivityPageComponent
   ],
     imports: [
         BrowserModule,
@@ -57,7 +60,8 @@ import {responseInterceptorProvider} from "./service/error-intercept.service";
         ReactiveFormsModule,
         SocialLoginModule,
         PopoverModule.forRoot(),
-        NgOptimizedImage
+        NgOptimizedImage,
+        TooltipModule
     ],
   providers: [
     {
@@ -77,7 +81,7 @@ import {responseInterceptorProvider} from "./service/error-intercept.service";
         }
       } as SocialAuthServiceConfig,
     },
-    [requestInterceptorProvider, responseInterceptorProvider]
+    [requestInterceptorProvider, errorInterceptorProvider]
   ],
   bootstrap: [AppComponent]
 })

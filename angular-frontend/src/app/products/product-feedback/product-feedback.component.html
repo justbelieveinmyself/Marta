@@ -22,7 +22,7 @@
             </div>
         </div>
         <div class="w-25 my-3" style="text-align: center">
-            <button class="btn btn-outline-dark w-40 h-100 me-2">Buy now</button>
+            <button class="btn btn-outline-dark w-40 h-100 me-2" data-bs-toggle="modal" data-bs-target="#buyNowModal">Buy now</button>
             <button (click)="addToCart()" class="btn btn-dark w-40 h-100 me-2">Add to cart</button>
             <div class="toast-container position-fixed bottom-0 end-0 p-3">
                 <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
@@ -192,6 +192,40 @@
                 </div>
                 <div class="mt-3 justify-content-center" style="display: flex">
                     <button class="btn btn-outline-dark w-75" (click)="reportReview()">Report</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- For modal with buy product now -->
+<div class="modal fade" id="buyNowModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="min-width: 300px">
+        <div class="modal-content">
+            <div class="modal-header mt-2 mx-3">
+                <h1 class="modal-title fs-5"><b>Order: {{product.product.seller.username | titlecase}}/{{product.product.productName | titlecase}}</b></h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body mx-4" style="font-size: 19px">
+                <span *ngIf="!isPaid" style="font-size: 12px; position: absolute" class="text-secondary">We will write off the payment upon receipt </span> <br>
+                <input class="form-check-input" type="checkbox" (change)="isPaid = !isPaid"
+                       id="flexCheck">
+                <label class="form-check-label" for="flexCheck">
+                    &nbsp;Pay now
+                </label>
+                <div style="font-size: 18px" class="mt-2">
+                    <i type="button" (click)="removeNumberOfProduct()"
+                       class="fa-solid fa-square-minus fa-xl"></i>
+                    {{countOfProductInOrder}}
+                    <i type="button" (click)="addNumberOfProduct()"
+                       class="fa-solid fa-square-plus fa-xl"></i>
+                </div>
+                <div class="name_card_main mt-2">
+                    Total: {{totalPrice}}
+                </div>
+                <div class="mt-3 justify-content-center" style="display: flex">
+                    <button class="btn btn-outline-dark w-75" data-bs-dismiss="modal" (click)="orderNow()">Buy now</button>
                 </div>
             </div>
         </div>

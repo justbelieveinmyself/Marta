@@ -1,7 +1,5 @@
 package com.justbelieveinmyself.marta.domain.dto;
 
-import com.justbelieveinmyself.marta.domain.entities.Product;
-import com.justbelieveinmyself.marta.domain.entities.User;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;

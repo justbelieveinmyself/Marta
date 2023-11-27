@@ -1,7 +1,4 @@
-import { SocialAuthService, SocialUser } from '@abacritt/angularx-social-login';
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { TokenService } from './service/token.service';
+import {Component} from '@angular/core';
 
 @Component({
   selector: 'app-root',

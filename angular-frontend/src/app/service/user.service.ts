@@ -16,7 +16,7 @@ export class UserService {
     constructor(
         private httpClient: HttpClient,
         private tokenService: TokenService,
-        private imageService: ImageService
+        private imageService: ImageService,
     ) {}
 
     getUserFromDbByOauth(userId: string, token: string) {
@@ -57,8 +57,8 @@ export class UserService {
         });
     }
 
-    getUser(): Observable<LocalUser> {
-        return this.httpClient.get<LocalUser>(`${this.baseUrl}/details`);
+    getUserCurrentOrById(userId?: number): Observable<LocalUser> {
+        return this.httpClient.get<LocalUser>(userId? `${this.baseUrl}/details/`+userId:`${this.baseUrl}/details`);
     }
 
     getUsers(): Observable<LocalUser[]> {

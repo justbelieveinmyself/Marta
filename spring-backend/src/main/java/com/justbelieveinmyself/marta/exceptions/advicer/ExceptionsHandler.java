@@ -1,5 +1,6 @@
 package com.justbelieveinmyself.marta.exceptions.advicer;
 
+import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.justbelieveinmyself.marta.exceptions.*;
 import org.apache.tomcat.util.http.fileupload.impl.FileSizeLimitExceededException;
 import org.springframework.http.HttpStatus;
@@ -45,5 +46,11 @@ public class ExceptionsHandler {
     public ResponseEntity<ResponseError> handleFileSizeLimitExceededException(FileSizeLimitExceededException e){
         ResponseError responseError = new ResponseError(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage());
         return new ResponseEntity<>(responseError, HttpStatus.UNPROCESSABLE_ENTITY);
+    }
+
+    @ExceptionHandler(value = TokenExpiredException.class)
+    public ResponseEntity<ResponseError> handleTokenExpiredException(TokenExpiredException e){
+        ResponseError responseError = new ResponseError(HttpStatus.UNAUTHORIZED, e.getMessage());
+        return new ResponseEntity<>(responseError, HttpStatus.UNAUTHORIZED);
     }
 }

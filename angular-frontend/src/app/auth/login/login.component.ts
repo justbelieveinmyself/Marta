@@ -1,17 +1,10 @@
-import {
-    BaseLoginProvider,
-    GoogleLoginProvider,
-    SocialAuthService,
-    SocialUser,
-    VKLoginProvider
-} from '@abacritt/angularx-social-login';
+import {SocialAuthService, SocialUser, VKLoginProvider} from '@abacritt/angularx-social-login';
 import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {UserService} from '../../service/user.service';
 import {TokenService} from 'src/app/service/token.service';
 import {AuthService} from 'src/app/service/auth.service';
 import {LoginUser} from 'src/app/models/login-user';
-import {RegisterUser} from 'src/app/models/register-user';
 
 @Component({
     selector: 'app-login',
@@ -26,18 +19,15 @@ export class LoginComponent implements OnInit {
         private userService: UserService,
         private tokenService: TokenService,
         private authService: AuthService
-    ) {
-    }
+    ) {}
 
     socialUser: SocialUser = new SocialUser;
-    userLogged: SocialUser = new SocialUser;
 
-    loginUser: LoginUser | undefined;
     isLogged: boolean = false;
     isLoginFail: boolean = false;
-    username!: string;
-    password!: string;
-    errorMessage!: string;
+    username: string;
+    password: string;
+    errorMessage: string;
 
     ngOnInit(): void {
         if (this.tokenService.getRefreshToken()) {
@@ -47,8 +37,8 @@ export class LoginComponent implements OnInit {
     }
 
     onLogin(): void {
-        this.loginUser = new LoginUser(this.username, this.password);
-        this.authService.login(this.loginUser).subscribe({
+        const loginUser = new LoginUser(this.username, this.password);
+        this.authService.login(loginUser).subscribe({
             next: n => {
                 this.isLogged = true;
                 this.isLoginFail = false;

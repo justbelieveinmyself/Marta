@@ -1,5 +1,4 @@
 import {Injectable, SecurityContext} from '@angular/core';
-import {UserService} from './user.service';
 import {DomSanitizer} from '@angular/platform-browser';
 import {ProductWithImage} from "../models/product-with-image";
 import {LocalUser} from "../models/local-user";

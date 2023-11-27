@@ -90,3 +90,12 @@ body::-webkit-scrollbar-thumb:hover{
 .w-60 {
     width: 60% !important;
 }
+.sort-not-active{
+    border-bottom: 2px dotted rgb(108, 117, 125);
+    color: #868695;
+}
+.sort-active{
+    font-weight: bold;
+    color: black;
+    border-bottom: 2px dotted rgb(108, 117, 125);
+}

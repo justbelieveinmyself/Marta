@@ -7,6 +7,7 @@ import {ImageService} from "./image.service";
 import {Review} from "../models/review";
 import {Question} from "../models/question";
 import {Order} from "../models/order";
+import {Page} from "../models/page";
 
 @Injectable({
     providedIn: 'root'
@@ -18,12 +19,11 @@ export class ProductService {
     constructor(
         private httpClient: HttpClient,
         private imageService: ImageService
-    ) {
-    }
+    ) {}
 
-    getProductList(): Observable<ProductWithImage[]> {
-        return this.httpClient.get<ProductWithImage[]>(this.baseUrl).pipe(tap(products =>
-            products.map(product => this.imageService.createImageInProduct(product))));
+    getProductList(page: number, size: number, usePages?: boolean): Observable<Page> {
+        return this.httpClient.get<Page>(this.baseUrl + "?page=" + page+"&size=" + size+(usePages != null && usePages != undefined?"&usePages="+usePages : ""))
+        .pipe(tap(page => page.content.map(product => this.imageService.createImageInProduct(product))));
     }
 
     getProductById(id: number): Observable<ProductWithImage> {
@@ -90,6 +90,10 @@ export class ProductService {
 
     updateProduct(product: Product): Observable<Object> {
         return this.httpClient.put(this.baseUrl + '/' + product.id, product);
+    }
+
+    verifyProduct(id: number): Observable<Object>{
+        return this.httpClient.put(this.baseUrl + "/verify/"+id, null);
     }
 
     deleteProduct(id: number): Observable<Object> {

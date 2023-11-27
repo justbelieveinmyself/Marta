@@ -1,4 +1,3 @@
-
 export class RefreshRequestDto {
-  refreshToken!: string;
+  refreshToken: string;
 }

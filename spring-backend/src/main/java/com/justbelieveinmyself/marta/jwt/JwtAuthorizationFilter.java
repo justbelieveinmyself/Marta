@@ -2,6 +2,7 @@ package com.justbelieveinmyself.marta.jwt;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.justbelieveinmyself.marta.services.UserService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -37,17 +38,22 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         chain.doFilter(request, response);
     }
 
-    private UsernamePasswordAuthenticationToken getAuthentication(HttpServletRequest request){
-        String token = request.getHeader(HttpHeaders.AUTHORIZATION);
-        if(token == null || !token.startsWith(TOKEN_PREFIX)){
+    public UsernamePasswordAuthenticationToken getAuthentication(HttpServletRequest request) {
+        try {
+            String token = request.getHeader(HttpHeaders.AUTHORIZATION);
+            if (token == null || !token.startsWith(TOKEN_PREFIX)) {
+                return null;
+            }
+            String username = JWT.require(Algorithm.HMAC256(secret))
+                    .build()
+                    .verify(token.replace(TOKEN_PREFIX, ""))
+                    .getSubject();
+            if (username == null) return null;
+            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+            return new UsernamePasswordAuthenticationToken(userDetails.getUsername(), null, userDetails.getAuthorities());
+        }
+        catch (TokenExpiredException ex){
             return null;
         }
-        String username = JWT.require(Algorithm.HMAC256(secret))
-                .build()
-                .verify(token.replace(TOKEN_PREFIX, ""))
-                .getSubject();
-        if(username == null) return null;
-        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-        return new UsernamePasswordAuthenticationToken(userDetails.getUsername(), null, userDetails.getAuthorities());
     }
 }

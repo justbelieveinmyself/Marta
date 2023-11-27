@@ -1,1 +1,15 @@
-<app-product-list [isOrders]="false" [card]="favouriteProducts"></app-product-list>
+<ng-container *ngIf="favouriteProducts && favouriteProducts.length > 0; else empty">
+    <app-product-list [isOrders]="false" [card]="favouriteProducts"></app-product-list>
+</ng-container>
+<ng-template #empty>
+    <div class="card card_with_shadow">
+        <div class="card-body mx-auto">
+            <div class="name_card my-3">The favorites are still empty</div>
+            <div class="text-secondary my-3">Save the products you liked so that you <br> don't have to search for a
+                long time
+            </div>
+            <a type="button" routerLink="/products" routerLinkActive="active"
+               class="btn btn-outline-dark w-75 my-3 ms-4">Go to the main page</a>
+        </div>
+    </div>
+</ng-template>

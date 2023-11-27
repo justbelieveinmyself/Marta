@@ -43,11 +43,14 @@ export class ProductDetailsComponent implements OnInit {
     messageOfReview: string;
     messageOfQuestion: string;
     reviewPhotos: ImageModel[] = [];
-
+    countOfProductInOrder = 1;
+    totalPrice: number;
+    isPaid = false;
     ngOnInit(): void {
         this.productService.getProductById(this.activatedRoute.snapshot.params['id']).subscribe({
             next: product => {
                 this.product = product;
+                this.totalPrice = product.product.price;
                 this.productService.getProductReviews(this.product.product.id).subscribe({
                     next: reviews => {
                         this.reviews = reviews;
@@ -67,7 +70,6 @@ export class ProductDetailsComponent implements OnInit {
                         this.isNeedRightButtonForQuestions = true; //TODO
                         this.userService.getFavourites().subscribe(favourites => {
                             this.isFavourite = favourites.filter(prod => prod.product.id == this.product.product.id).length != 0;
-                            console.log(this.isFavourite)
                         })
 
                     },
@@ -190,6 +192,30 @@ export class ProductDetailsComponent implements OnInit {
         this.isNeedLeftButtonForQuestions = scrollQuestions.scrollLeft - 440 > 0;
         // @ts-ignore
         this.isNeedRightButtonForQuestions = scrollQuestions.scrollWidth - 1296 > scrollQuestions.scrollLeft - 440;
+    }
+
+    orderNow() {
+        const map = new Map<ProductWithImage, number>;
+        map.set(this.product, this.countOfProductInOrder);
+        this.productService.createOrder(map, this.isPaid).subscribe({
+            next: result => {
+                this.totalPrice = this.product.product.price;
+                this.countOfProductInOrder = 1;
+            },
+            error: err => console.log(err)
+        })
+    }
+
+    addNumberOfProduct() {
+        this.countOfProductInOrder++;
+        this.totalPrice += this.product.product.price;
+    }
+
+    removeNumberOfProduct() {
+        if(this.countOfProductInOrder > 1){
+            this.countOfProductInOrder--;
+            this.totalPrice -= this.product.product.price;
+        }
     }
 
 }

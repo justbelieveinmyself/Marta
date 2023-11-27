@@ -1,8 +1,8 @@
 package com.justbelieveinmyself.marta.domain.dto;
 
-import com.justbelieveinmyself.marta.domain.entities.Product;
 import com.justbelieveinmyself.marta.domain.enums.Role;
 import lombok.*;
+
 import java.util.Set;
 @Data
 @AllArgsConstructor
