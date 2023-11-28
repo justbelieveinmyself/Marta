@@ -23,14 +23,16 @@ export class MainPageComponent {
     copyOfProducts: ProductWithImage[];
     currentPage: number = 0;
     sizeOfPage: number = 12;
+    sortBy: string;
     page: Page;
     countOfVerifiedProduct = 0;
     countOfProductWithImage = 0;
     isFilteredByVerified = false;
     isFilteredByWithPhoto = false;
     sortByDateASC = true;
+    sortByPriceASC = true;
     isNeedSortByDate = false;
-    sortByRateASC = true;
+    isNeedSortByPrice = false;
     ngOnInit(): void {
         this.user = this.tokenService.getUser();
         if(!this.user){
@@ -41,9 +43,8 @@ export class MainPageComponent {
     }
 
     getProducts(page: number) {
-        this.productService.getProductList(page, this.sizeOfPage, true).subscribe({
+        this.productService.getProductList(page, this.sizeOfPage, true, this.sortBy).subscribe({
             next: data => {
-                console.log(this.isFilteredByWithPhoto)
                 if (this.isFilteredByVerified) {
                     this.products = data.content.filter(product => product.product.isVerified);
                 } else if(this.isFilteredByWithPhoto) {
@@ -84,23 +85,22 @@ export class MainPageComponent {
         }
     }
 
-    // sortByRate() {
-    //     this.sortByRateASC = !this.sortByRateASC;
-    //     if (this.sortByRateASC) {
-    //         this.products.sort((product, product2) => product.product. - product2.rating);
-    //     } else {
-    //         this.products.sort((product, product2) => product2.rating - product.rating);
-    //     }
-    // }
+
 
     sortByDate() {
+        this.sortBy = "updatedAt";
+        this.getProducts(0);
         this.sortByDateASC = !this.sortByDateASC;
+        this.isNeedSortByPrice = false;
         this.isNeedSortByDate = true;
-        if (this.sortByDateASC) {
-            this.products.sort((product, product2) => new Date(product.product.updatedAt).getTime() - new Date(product2.product.updatedAt).getTime())
-        } else {
-            this.products.sort((product, product2) => new Date(product2.product.updatedAt).getTime() - new Date(product.product.updatedAt).getTime())
-        }
+
     }
 
+    sortByPrice() {
+        this.sortBy = "price";
+        this.getProducts(0);
+        this.sortByPriceASC = !this.sortByPriceASC;
+        this.isNeedSortByDate = false;
+        this.isNeedSortByPrice = true;
+    }
 }

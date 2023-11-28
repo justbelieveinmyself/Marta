@@ -21,8 +21,8 @@ export class ProductService {
         private imageService: ImageService
     ) {}
 
-    getProductList(page: number, size: number, usePages?: boolean): Observable<Page> {
-        return this.httpClient.get<Page>(this.baseUrl + "?page=" + page+"&size=" + size+(usePages != null && usePages != undefined?"&usePages="+usePages : ""))
+    getProductList(page: number, size: number, usePages?: boolean, sortBy?: string): Observable<Page> {
+        return this.httpClient.get<Page>(this.baseUrl + "?page=" + page+"&size=" + size+(usePages != null && usePages != undefined?"&usePages="+usePages+(sortBy? "&sortBy="+sortBy:"") : ""))
         .pipe(tap(page => page.content.map(product => this.imageService.createImageInProduct(product))));
     }
 

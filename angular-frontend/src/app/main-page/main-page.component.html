@@ -1,10 +1,14 @@
 <hr>
 <div class="mt-3" style="font-size: 17px">
     <span class="text-secondary me-4">Sort by:</span>
-    <a type="button" class="me-4" (click)="sortByDate()"><span [ngClass]="isNeedSortByDate?'sort-active':'sort-not-active'">Date</span>&nbsp;
-        <i *ngIf="isNeedSortByDate" class="fa-solid fa-sm" [ngClass]="sortByDateASC?'fa-arrow-up':'fa-arrow-down'" style="color: black"></i></a>
-    <a type="button" class="me-4" ><span >Rate</span>&nbsp;
-        <i class="fa-solid fa-sm" style="color: black"></i></a>
+    <a type="button" class="me-4" (click)="sortByDate()">
+        <span [ngClass]="isNeedSortByDate?'sort-active':'sort-not-active'">Date</span>&nbsp;
+        <i *ngIf="isNeedSortByDate" class="fa-solid fa-sm" [ngClass]="sortByDateASC?'fa-arrow-up':'fa-arrow-down'" style="color: black"></i>
+    </a>
+    <a type="button" class="me-4" (click)="sortByPrice()">
+        <span [ngClass]="isNeedSortByPrice?'sort-active':'sort-not-active'">Price</span>&nbsp;
+        <i *ngIf="isNeedSortByPrice" class="fa-solid fa-sm" [ngClass]="sortByPriceASC?'fa-arrow-up':'fa-arrow-down'" style="color: black"></i>
+    </a>
     <input class="form-check-input" type="checkbox" (change)="filterByWithPhoto($event)" id="withPhotoCheck">
     <label class="form-check-label me-3" for="withPhotoCheck">
         &nbsp;With a photo <span class="text-secondary">{{countOfProductWithImage}}</span>

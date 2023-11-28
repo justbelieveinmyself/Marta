@@ -47,9 +47,10 @@ public class ProductController {
             @RequestParam(defaultValue = "true") Boolean usePages,
             @RequestParam(defaultValue = "0") Integer page,
             @RequestParam(defaultValue = "10") Integer size,
-            @RequestParam(required = false, defaultValue = "id") String sortBy
+            @RequestParam(required = false, defaultValue = "id") String sortBy,
+            @RequestParam(required = false, defaultValue = "true") Boolean isAsc
     ) {
-        System.out.println(sortBy);
+//        Pageable pageable = usePages? (sortBy != null? PageRequest.of(page, size, Sort.by(sortBy)))  PageRequest.of(page, size) : PageRequest.of(0, Integer.MAX_VALUE);
         if(usePages){
             if(sortBy != null){
                 return productService.getListProducts(PageRequest.of(page, size, Sort.by(sortBy).descending()));
