@@ -3,11 +3,13 @@
     <span class="text-secondary me-4">Sort by:</span>
     <a type="button" class="me-4" (click)="sortByDate()">
         <span [ngClass]="isNeedSortByDate?'sort-active':'sort-not-active'">Date</span>&nbsp;
-        <i *ngIf="isNeedSortByDate" class="fa-solid fa-sm" [ngClass]="sortByDateASC?'fa-arrow-up':'fa-arrow-down'" style="color: black"></i>
+        <i *ngIf="isNeedSortByDate" class="fa-solid fa-sm" [ngClass]="isSortASC?'fa-arrow-up':'fa-arrow-down'"
+           style="color: black"></i>
     </a>
     <a type="button" class="me-4" (click)="sortByPrice()">
         <span [ngClass]="isNeedSortByPrice?'sort-active':'sort-not-active'">Price</span>&nbsp;
-        <i *ngIf="isNeedSortByPrice" class="fa-solid fa-sm" [ngClass]="sortByPriceASC?'fa-arrow-up':'fa-arrow-down'" style="color: black"></i>
+        <i *ngIf="isNeedSortByPrice" class="fa-solid fa-sm" [ngClass]="isSortASC?'fa-arrow-up':'fa-arrow-down'"
+           style="color: black"></i>
     </a>
     <input class="form-check-input" type="checkbox" (change)="filterByWithPhoto($event)" id="withPhotoCheck">
     <label class="form-check-label me-3" for="withPhotoCheck">
@@ -20,17 +22,63 @@
 </div>
 <hr>
 <app-product-list [card]="products" [isOrders]="false"></app-product-list>
-<ng-container *ngIf="page && page.totalPages > 1">
+<ng-container *ngIf="page">
     <nav aria-label="...">
         <ul class="pagination">
-            <li class="page-item" [ngClass]="currentPage == 0? 'disabled': ''">
-                <span class="page-link" (click)="getProducts(currentPage - 1)" type="button">Previous</span>
+            <li class="page-item" [ngClass]="page.pageable.pageNumber == 0? 'disabled': ''">
+                <span class="page-link" (click)="getProducts(page.pageable.pageNumber  - 1)"
+                      type="button">Previous</span>
             </li>
-            <li class="page-item " [ngClass]="currentPage == i? 'active':''"  *ngFor="let item of Array(page.totalPages); let i=index">
-                <a type="button" class="page-link" (click)="getProducts(i)">{{i+1}}</a>
-            </li>
+            <ng-container *ngIf="page.totalPages > 2">
+                <li class="page-item" [ngClass]="page.pageable.pageNumber  == 0? 'active':''">
+                    <a type="button" class="page-link" (click)="getProducts(0)">1</a>
+                </li>
+                <li class="page-item" [ngClass]="page.pageable.pageNumber  == 1? 'active':''">
+                    <a type="button" class="page-link" (click)="getProducts(1)">2</a>
+                </li>
+                <li class="page-item" [ngClass]="page.pageable.pageNumber  == 2? 'active':''">
+                    <a type="button" class="page-link" (click)="getProducts(2)">3</a>
+                </li>
+
+            </ng-container>
+            <ng-container *ngIf="page.pageable.pageNumber>1 && (page.pageable.pageNumber - 1 < page.totalPages - 1)">
+                <li class="page-item disabled">
+                    <a class="page-link">...</a>
+                </li>
+                <li class="page-item" *ngIf="page.pageable.pageNumber - 4 > 0">
+                    <a type="button" class="page-link"
+                       (click)="getProducts(page.pageable.pageNumber-2)">{{page.pageable.pageNumber - 1}}</a>
+                </li>
+                <li class="page-item" *ngIf="page.pageable.pageNumber - 3 > 0">
+                    <a type="button" class="page-link"
+                       (click)="getProducts(page.pageable.pageNumber-1)">{{page.pageable.pageNumber}}</a>
+                </li>
+                <li class="page-item active" *ngIf="page.pageable.pageNumber - 2 > 0 && page.totalPages - 1 > page.pageable.pageNumber">
+                    <a type="button" class="page-link"
+                       (click)="getProducts(page.pageable.pageNumber)">{{page.pageable.pageNumber+1}}</a>
+                </li>
+                <li class="page-item" *ngIf="page.totalPages - 2 > page.pageable.pageNumber">
+                    <a type="button" class="page-link"
+                       (click)="getProducts(page.pageable.pageNumber+1)">{{page.pageable.pageNumber + 2}}</a>
+                </li>
+                <li class="page-item" *ngIf="page.totalPages - 3 > page.pageable.pageNumber">
+                    <a type="button" class="page-link"
+                       (click)="getProducts(page.pageable.pageNumber+2)">{{page.pageable.pageNumber + 3}}</a>
+                </li>
+            </ng-container>
+            <ng-container>
+                <li class="page-item disabled">
+                    <a class="page-link">...</a>
+                </li>
+                <li class="page-item" [ngClass]="page.pageable.pageNumber - i + 1 == page.totalPages? 'active':''"
+                    *ngFor="let item of Array(3); let i=index">
+                    <a type="button" class="page-link"
+                       (click)="getProducts(page.totalPages+i-1)">{{page.totalPages + i}}</a>
+                </li>
+            </ng-container>
             <li class="page-item">
-                <a class="page-link" [ngClass]="page.last? 'disabled': ''" (click)="getProducts(currentPage + 1)" type="button">Next</a>
+                <a class="page-link" [ngClass]="page.last? 'disabled': ''"
+                   (click)="getProducts(page.pageable.pageNumber  + 1);" type="button">Next</a>
             </li>
         </ul>
     </nav>

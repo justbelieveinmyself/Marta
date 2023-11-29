@@ -20,6 +20,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -48,16 +49,17 @@ public class ProductController {
             @RequestParam(defaultValue = "0") Integer page,
             @RequestParam(defaultValue = "10") Integer size,
             @RequestParam(required = false, defaultValue = "id") String sortBy,
-            @RequestParam(required = false, defaultValue = "true") Boolean isAsc
+            @RequestParam(required = false, defaultValue = "false") Boolean isAsc
     ) {
-//        Pageable pageable = usePages? (sortBy != null? PageRequest.of(page, size, Sort.by(sortBy)))  PageRequest.of(page, size) : PageRequest.of(0, Integer.MAX_VALUE);
-        if(usePages){
-            if(sortBy != null){
-                return productService.getListProducts(PageRequest.of(page, size, Sort.by(sortBy).descending()));
-            }
-            return productService.getListProducts(PageRequest.of(page, size));
-        }
-        return productService.getListProducts(PageRequest.of(0, Integer.MAX_VALUE));
+        Pageable pageable = usePages?
+                (sortBy != null?
+                        (isAsc?
+                                PageRequest.of(page, size, Sort.by(sortBy).ascending()) :
+                                PageRequest.of(page, size, Sort.by(sortBy).descending()))
+                        :
+                        PageRequest.of(page, size)) :
+                PageRequest.of(0, Integer.MAX_VALUE);
+        return productService.getListProducts(pageable);
     }
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)

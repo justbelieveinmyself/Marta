@@ -21,16 +21,14 @@ export class MainPageComponent {
     user!: LocalUser;
     products: ProductWithImage[];
     copyOfProducts: ProductWithImage[];
-    currentPage: number = 0;
     sizeOfPage: number = 12;
     sortBy: string;
-    page: Page;
+    page: Page<ProductWithImage>;
     countOfVerifiedProduct = 0;
     countOfProductWithImage = 0;
     isFilteredByVerified = false;
     isFilteredByWithPhoto = false;
-    sortByDateASC = true;
-    sortByPriceASC = true;
+    isSortASC = false;
     isNeedSortByDate = false;
     isNeedSortByPrice = false;
     ngOnInit(): void {
@@ -39,11 +37,11 @@ export class MainPageComponent {
             this.errorIntercept.updateAccess();
             return;
         }
-        this.getProducts(this.currentPage);
+        this.getProducts(0);
     }
 
     getProducts(page: number) {
-        this.productService.getProductList(page, this.sizeOfPage, true, this.sortBy).subscribe({
+        this.productService.getProductList(page, 1, true, this.sortBy, this.isSortASC).subscribe({
             next: data => {
                 if (this.isFilteredByVerified) {
                     this.products = data.content.filter(product => product.product.isVerified);
@@ -56,7 +54,6 @@ export class MainPageComponent {
                 this.page = data;
                 this.countOfVerifiedProduct = data.content.filter(product => product.product.isVerified).length;
                 this.countOfProductWithImage = data.content.filter(product => product.file.length > 150).length;
-                this.currentPage = data.pageable.pageNumber;
             }
         });
     }
@@ -89,8 +86,8 @@ export class MainPageComponent {
 
     sortByDate() {
         this.sortBy = "updatedAt";
+        this.isSortASC = !this.isSortASC;
         this.getProducts(0);
-        this.sortByDateASC = !this.sortByDateASC;
         this.isNeedSortByPrice = false;
         this.isNeedSortByDate = true;
 
@@ -98,9 +95,10 @@ export class MainPageComponent {
 
     sortByPrice() {
         this.sortBy = "price";
+        this.isSortASC = !this.isSortASC;
         this.getProducts(0);
-        this.sortByPriceASC = !this.sortByPriceASC;
         this.isNeedSortByDate = false;
         this.isNeedSortByPrice = true;
     }
+
 }
