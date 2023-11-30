@@ -41,7 +41,7 @@ export class MainPageComponent {
     }
 
     getProducts(page: number) {
-        this.productService.getProductList(page, 1, true, this.sortBy, this.isSortASC).subscribe({
+        this.productService.getProductList(page, this.sizeOfPage, true, this.sortBy, this.isSortASC).subscribe({
             next: data => {
                 if (this.isFilteredByVerified) {
                     this.products = data.content.filter(product => product.product.isVerified);

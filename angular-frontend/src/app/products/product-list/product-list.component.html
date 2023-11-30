@@ -62,7 +62,8 @@
                 </div>
                 <div class="card bottom-wrap hidden-item">
                     <div class="btn btn-outline-dark me-2" (click)="addToCart(item.product)">Add to cart</div>
-                    <div *ngIf="!item.product.isVerified" (click)="verifyProduct(item.product, i)" class="btn btn-outline-success">Verify</div>
+                    <div *ngIf="!item.product.isVerified" (click)="verifyProduct(item.product, i)" class="btn btn-outline-success me-2">Verify</div>
+                    <div (click)="deleteProduct(item.product, i)" class="btn btn-outline-danger">Delete</div>
                 </div>
             </div>
         </div>

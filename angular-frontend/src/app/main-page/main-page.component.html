@@ -39,45 +39,50 @@
                 <li class="page-item" [ngClass]="page.pageable.pageNumber  == 2? 'active':''">
                     <a type="button" class="page-link" (click)="getProducts(2)">3</a>
                 </li>
-
             </ng-container>
             <ng-container *ngIf="page.pageable.pageNumber>1 && (page.pageable.pageNumber - 1 < page.totalPages - 1)">
-                <li class="page-item disabled">
+                <li class="page-item disabled" *ngIf="page.pageable.pageNumber > 5">
                     <a class="page-link">...</a>
                 </li>
-                <li class="page-item" *ngIf="page.pageable.pageNumber - 4 > 0">
+                <li class="page-item" *ngIf="page.pageable.pageNumber - 4 > 0 && page.totalPages - 1 > page.pageable.pageNumber">
                     <a type="button" class="page-link"
                        (click)="getProducts(page.pageable.pageNumber-2)">{{page.pageable.pageNumber - 1}}</a>
                 </li>
-                <li class="page-item" *ngIf="page.pageable.pageNumber - 3 > 0">
+                <li class="page-item" *ngIf="page.pageable.pageNumber - 3 > 0 && page.totalPages - 2 > page.pageable.pageNumber">
                     <a type="button" class="page-link"
                        (click)="getProducts(page.pageable.pageNumber-1)">{{page.pageable.pageNumber}}</a>
                 </li>
-                <li class="page-item active" *ngIf="page.pageable.pageNumber - 2 > 0 && page.totalPages - 1 > page.pageable.pageNumber">
+                <li class="page-item active" *ngIf="page.pageable.pageNumber - 2 > 0 && page.totalPages - 3 > page.pageable.pageNumber">
                     <a type="button" class="page-link"
                        (click)="getProducts(page.pageable.pageNumber)">{{page.pageable.pageNumber+1}}</a>
                 </li>
-                <li class="page-item" *ngIf="page.totalPages - 2 > page.pageable.pageNumber">
+                <li class="page-item" *ngIf="page.totalPages - 4 > page.pageable.pageNumber">
                     <a type="button" class="page-link"
                        (click)="getProducts(page.pageable.pageNumber+1)">{{page.pageable.pageNumber + 2}}</a>
                 </li>
-                <li class="page-item" *ngIf="page.totalPages - 3 > page.pageable.pageNumber">
+                <li class="page-item" *ngIf="page.totalPages - 5 > page.pageable.pageNumber">
                     <a type="button" class="page-link"
                        (click)="getProducts(page.pageable.pageNumber+2)">{{page.pageable.pageNumber + 3}}</a>
                 </li>
             </ng-container>
             <ng-container>
-                <li class="page-item disabled">
+                <li class="page-item disabled" *ngIf="page.totalPages - 6 > page.pageable.pageNumber">
                     <a class="page-link">...</a>
                 </li>
-                <li class="page-item" [ngClass]="page.pageable.pageNumber - i + 1 == page.totalPages? 'active':''"
-                    *ngFor="let item of Array(3); let i=index">
+                <li class="page-item" *ngIf="page.totalPages > 5" [ngClass]="page.pageable.pageNumber + 1 == page.totalPages - 2? 'active':''">
                     <a type="button" class="page-link"
-                       (click)="getProducts(page.totalPages+i-1)">{{page.totalPages + i}}</a>
+                       (click)="getProducts(page.totalPages - 3)">{{page.totalPages - 2}}</a>
                 </li>
+                <li class="page-item" [ngClass]="page.pageable.pageNumber + 1 == page.totalPages - 1? 'active':''">
+                    <a type="button" class="page-link"
+                       (click)="getProducts(page.totalPages - 2)">{{page.totalPages - 1}}</a>
+                </li><li class="page-item" [ngClass]="page.pageable.pageNumber + 1 == page.totalPages? 'active':''">
+                <a type="button" class="page-link"
+                   (click)="getProducts(page.totalPages - 1)">{{page.totalPages}}</a>
+            </li>
             </ng-container>
             <li class="page-item">
-                <a class="page-link" [ngClass]="page.last? 'disabled': ''"
+                <a class="page-link" [ngClass]="page.pageable.pageNumber + 1 == page.totalPages? 'disabled': ''"
                    (click)="getProducts(page.pageable.pageNumber  + 1);" type="button">Next</a>
             </li>
         </ul>

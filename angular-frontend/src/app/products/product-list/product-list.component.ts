@@ -44,4 +44,11 @@ export class ProductListComponent{
 
     protected readonly Array = Array;
 
+    deleteProduct(product: Product, index: number) {
+        this.productService.deleteProduct(product.id).subscribe({
+            next: res => {
+                this.card.splice(index, 1);
+            }
+        })
+    }
 }

@@ -29,7 +29,7 @@
             <div class="btn btn-success">Manage page</div> <br>
             <div class="btn btn-warning mt-2" data-bs-toggle="modal" data-bs-target="#chooseRolesModal" (click)="indexItemInModal = i; newRoles = user.roles.slice(0)">Change roles</div> <br>
             <div class="btn btn-info mt-2" routerLink="activity/{{user.id}}" routerLinkActive="active">Activity page</div> <br>
-            <div class="btn btn-danger mt-2" (click)="deleteUser(user)">Delete user</div> <br>
+            <div class="btn btn-danger mt-2" (click)="deleteUser(user)">Delete user</div>
         </div>
     </tr>
     </tbody>

@@ -9,6 +9,7 @@ import com.justbelieveinmyself.marta.domain.entities.Product;
 import com.justbelieveinmyself.marta.domain.entities.Question;
 import com.justbelieveinmyself.marta.domain.entities.Review;
 import com.justbelieveinmyself.marta.domain.entities.User;
+import com.justbelieveinmyself.marta.domain.enums.Role;
 import com.justbelieveinmyself.marta.domain.enums.UploadDirectory;
 import com.justbelieveinmyself.marta.domain.mappers.ProductMapper;
 import com.justbelieveinmyself.marta.domain.mappers.QuestionMapper;
@@ -77,7 +78,7 @@ public class ProductService {
     }
 
     public ResponseEntity<?> deleteProduct(Product product, User currentUser) {
-        validateRights(product, currentUser);
+        validateRightsOrAdminRole(product, currentUser);
         productRepository.delete(product);
         return ResponseEntity.ok(new ResponseMessage(200, "deleted"));
     }
@@ -88,10 +89,11 @@ public class ProductService {
         return ResponseEntity.ok(productMapper.modelToDto(productRepository.save(productFromDb)));
     }
 
-    private void validateRights(Product product, User currentUser) {
-        if (!product.getSeller().getId().equals(currentUser.getId())) {
-            throw new ForbiddenException("You don't have rights!");
+    private void validateRightsOrAdminRole(Product product, User currentUser) {
+        if (product.getSeller().getId().equals(currentUser.getId()) || currentUser.getRoles().contains(Role.ADMIN)) {
+            return;
         }
+        throw new ForbiddenException("You don't have rights!");
     }
 
     private void validateRights(ProductDto productDto, User currentUser) {
