@@ -19,9 +19,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -49,17 +46,12 @@ public class ProductController {
             @RequestParam(defaultValue = "0") Integer page,
             @RequestParam(defaultValue = "10") Integer size,
             @RequestParam(required = false, defaultValue = "id") String sortBy,
-            @RequestParam(required = false, defaultValue = "false") Boolean isAsc
+            @RequestParam(required = false, defaultValue = "false") Boolean isAsc,
+            @RequestParam(required = false, defaultValue = "false") Boolean filterPhotoNotNull,
+            @RequestParam(required = false, defaultValue = "false") Boolean filterVerified
+
     ) {
-        Pageable pageable = usePages?
-                (sortBy != null?
-                        (isAsc?
-                                PageRequest.of(page, size, Sort.by(sortBy).ascending()) :
-                                PageRequest.of(page, size, Sort.by(sortBy).descending()))
-                        :
-                        PageRequest.of(page, size)) :
-                PageRequest.of(0, Integer.MAX_VALUE);
-        return productService.getListProducts(pageable);
+        return productService.getListProducts(sortBy, isAsc, page, size, usePages, filterVerified, filterPhotoNotNull);
     }
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)

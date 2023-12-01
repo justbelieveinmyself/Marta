@@ -1,5 +1,6 @@
 <hr>
 <div class="mt-3" style="font-size: 17px">
+    <span class="me-4" style="color: black; font-weight: bold; font-size: 18px">Found: {{this.page.totalElements}}</span>
     <span class="text-secondary me-4">Sort by:</span>
     <a type="button" class="me-4" (click)="sortByDate()">
         <span [ngClass]="isNeedSortByDate?'sort-active':'sort-not-active'">Date</span>&nbsp;
@@ -13,16 +14,16 @@
     </a>
     <input class="form-check-input" type="checkbox" (change)="filterByWithPhoto($event)" id="withPhotoCheck">
     <label class="form-check-label me-3" for="withPhotoCheck">
-        &nbsp;With a photo <span class="text-secondary">{{countOfProductWithImage}}</span>
+        &nbsp;With a photo
     </label>
     <input class="form-check-input" type="checkbox" (change)="filterByVerified($event)" id="verifiedCheck">
     <label class="form-check-label me-3" for="verifiedCheck">
-        &nbsp;Verified <span class="text-secondary">{{countOfVerifiedProduct}}</span>
+        &nbsp;Verified
     </label>
 </div>
 <hr>
 <app-product-list [card]="products" [isOrders]="false"></app-product-list>
-<ng-container *ngIf="page">
+<ng-container *ngIf="page && page.totalPages > 1">
     <nav aria-label="...">
         <ul class="pagination">
             <li class="page-item" [ngClass]="page.pageable.pageNumber == 0? 'disabled': ''">

@@ -21,9 +21,18 @@ export class ProductService {
         private imageService: ImageService
     ) {}
 
-    getProductList(page: number, size: number, usePages?: boolean, sortBy?: string, isAsc?: boolean): Observable<Page<ProductWithImage>> {
-        return this.httpClient.get<Page<ProductWithImage>>(this.baseUrl + "?page=" + page+"&size=" + size+(usePages != null && usePages != undefined?"&usePages="+usePages+(sortBy? "&sortBy="+sortBy+"&isAsc="+isAsc:"") : ""))
-        .pipe(tap(page => page.content.map(product => this.imageService.createImageInProduct(product))));
+    getProductList(
+        page: number, size: number, usePages?: boolean, sortBy?: string, isAsc?: boolean,
+        isFilteredByWithPhoto?: boolean, isFilteredByVerified?: boolean
+    ): Observable<Page<ProductWithImage>> {
+        return this.httpClient.get<Page<ProductWithImage>>(this.baseUrl + "?page=" + page+"&size=" + size
+            + (usePages != null?"&usePages="+usePages+(sortBy? "&sortBy="+sortBy+"&isAsc="+isAsc:"") : "")
+            + (isFilteredByVerified != null? "&filterPhotoNotNull="+isFilteredByWithPhoto : "")
+            + (isFilteredByWithPhoto != null? "&filterVerified="+isFilteredByVerified: "")
+        ).pipe(
+            tap(page => page.content.map(product =>
+                this.imageService.createImageInProduct(product)))
+        );
     }
 
     getProductById(id: number): Observable<ProductWithImage> {
