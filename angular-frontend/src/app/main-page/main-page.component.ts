@@ -18,7 +18,7 @@ export class MainPageComponent {
         private errorIntercept: ErrorInterceptService
     ) {}
 
-    user!: LocalUser;
+    user: LocalUser;
     products: ProductWithImage[];
     sizeOfPage: number = 12;
     sortBy: string;
