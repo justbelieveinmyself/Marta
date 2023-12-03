@@ -123,6 +123,12 @@ public class ProductService {
         }
     }
 
+    private void validateRights(Product product, User currentUser) {
+        if (!product.getSeller().getId().equals(currentUser.getId())) {
+            throw new ForbiddenException("You don't have rights!");
+        }
+    }
+
     public ResponseEntity<?> getProduct(Product product) {
         Stream<Product> productStream = Stream.of(product);
         ProductWithImageDto productWithImageDtoList = productStream
@@ -252,5 +258,12 @@ public class ProductService {
         productFromDb.setIsVerified(true);
         Product savedProduct = productRepository.save(productFromDb);
         return ResponseEntity.ok(productMapper.modelToDto(savedProduct));
+    }
+
+    public ResponseEntity<?> answerToReview(Review reviewFromDb, String answer, User authedUser) {
+        validateRights(reviewFromDb.getProduct(), authedUser);
+        reviewFromDb.setAnswer(answer);
+        Review savedReview = reviewRepository.save(reviewFromDb);
+        return ResponseEntity.ok(reviewMapper.modelToDto(savedReview, fileHelper));
     }
 }

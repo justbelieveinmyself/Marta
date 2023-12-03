@@ -1,6 +1,7 @@
 import {Seller} from "./seller";
 
 export class Review {
+    id: number;
     message: string;
     answer: string;
     rating: number;

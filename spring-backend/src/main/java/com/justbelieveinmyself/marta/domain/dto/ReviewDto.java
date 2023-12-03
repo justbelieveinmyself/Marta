@@ -16,6 +16,7 @@ import java.util.List;
 @NoArgsConstructor
 @Schema(description = "Information about review")
 public class ReviewDto {
+    private Long id;
     private String message;
     private String answer;
     @Min(1) @Max(5)
@@ -26,7 +27,7 @@ public class ReviewDto {
     private SellerDto author;
     public static ReviewDto of(Review review){
         ReviewDto reviewDto = new ReviewDto();
-        BeanUtils.copyProperties(review, reviewDto, "product", "id", "author");
+        BeanUtils.copyProperties(review, reviewDto, "product", "author");
         reviewDto.setProductId(review.getProduct().getId());
         reviewDto.setAuthor(SellerDto.of(review.getAuthor()));
         reviewDto.setTime(review.getTime());

@@ -49,7 +49,7 @@ export class ProductFeedbackComponent implements OnInit {
     totalPrice: number;
     isPaid = false;
     messageOfReview: string;
-    answerToReview: string;
+    answerForReview: string;
     reviewPhotos: ImageModel[] = [];
 
     ngOnInit(): void {
@@ -227,4 +227,14 @@ export class ProductFeedbackComponent implements OnInit {
         });
     }
 
+    saveAnswerToReview(){
+        console.log(this.reviewInAnswerToReview.id)
+        this.productService.updateAnswerToReview(this.reviewInAnswerToReview.id, this.answerForReview).subscribe({
+            next: review => {
+                this.reviewInAnswerToReview.answer = this.answerForReview;
+            }
+        })
+    }
+
+    protected readonly console = console;
 }

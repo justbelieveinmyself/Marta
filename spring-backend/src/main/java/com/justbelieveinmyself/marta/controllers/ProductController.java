@@ -137,9 +137,9 @@ public class ProductController {
     }
 
     @GetMapping("reviews/{productId}")
-    @Operation(summary = "Get list of product reviews", description = "Use this to get all reviews of specified product")
+    @Operation(summary = "Get list of product reviews by productId", description = "Use this to get all reviews of specified product")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Product exists",
+            @ApiResponse(responseCode = "200", description = "Product exists and got reviews",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ReviewDto.class))),
             @ApiResponse(responseCode = "403", description = "Product doesn't exists!",
                     content = @Content)
@@ -151,6 +151,7 @@ public class ProductController {
     ){
         return productService.getListProductReviews(product);
     }
+
     @PostMapping(value = "reviews", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(summary = "Create product review", description = "Use this to create review for product")
     @ApiResponses(value = {
@@ -166,6 +167,24 @@ public class ProductController {
     ){
         return productService.createProductReview(reviewDto, author, photos);
     }
+
+    @PutMapping("reviews/{reviewId}")
+    @Operation(summary = "Answer to review", description = "Use this to answer for review")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Answered to review",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ReviewDto.class))),
+            @ApiResponse(responseCode = "403", description = "You don't have the rights!",
+                    content = @Content)
+    })
+    @Parameter(name = "reviewId", required = true, schema = @Schema(type = "integer", name = "reviewId"), in = ParameterIn.PATH)
+    public ResponseEntity<?> answerToReview(
+            @Parameter(hidden = true) @PathVariable(value = "reviewId") Review reviewFromDb,
+            @RequestBody(required = true) String answer,
+            @CurrentUser User authedUser
+    ) {
+        return productService.answerToReview(reviewFromDb, answer, authedUser);
+    }
+
     @DeleteMapping("reviews/{reviewId}")
     @PreAuthorize("hasAuthority('ADMIN')")
     @Operation(summary = "Delete review", description = "Use this to delete review for product")

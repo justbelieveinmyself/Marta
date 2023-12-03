@@ -101,6 +101,10 @@ export class ProductService {
         return this.httpClient.put(this.baseUrl + '/' + product.id, product);
     }
 
+    updateAnswerToReview(reviewId: number, answer: string): Observable<Review> {
+        return this.httpClient.put<Review>(this.baseUrl + "/reviews/"+reviewId, answer);
+    }
+
     verifyProduct(id: number): Observable<Object>{
         return this.httpClient.put(this.baseUrl + "/verify/"+id, null);
     }
