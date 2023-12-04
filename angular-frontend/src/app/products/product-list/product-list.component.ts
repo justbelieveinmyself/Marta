@@ -13,9 +13,11 @@ export class ProductListComponent{
     constructor(
         private productService: ProductService
     ) {}
+
     @Input() card: ProductWithImage[];
-    @Input() isOrders: boolean;
     @Input() orders: Order[];
+    @Input() isOrders: boolean;
+    @Input() isAdminPage: boolean;
     products: ProductWithImage[];
     productInToast: Product;
     ngOnInit() {

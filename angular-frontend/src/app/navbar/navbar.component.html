@@ -1,26 +1,37 @@
-<nav class="navbar navbar-expand-sm bg-dark navbar-dark mb-3">
-    <a class="navbar-brand ms-3" routerLink="">Marta</a>
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark mb-3" style="height: 100px">
+    <a class="navbar-brand ms-5" routerLink="products" routerLinkActive="active">
+        <img src="assets/logo.png" width="181" height="38" alt="logo with 'Marta'">
+    </a>
+    <form class="d-flex" role="search">
+        <input class="form-control me-2" style="height: 50px; width: 400px" type="search" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-success" type="submit">Search</button>
+    </form>
     <ul class="navbar-nav me-auto">
-        <li class="nav-item">
-            <a routerLink="products" routerLinkActive="active" class="nav-link" style="color: #E1E3E6;">Product List</a>
-        </li>
         <li class="nav-item">
             <a routerLink="create-product" routerLinkActive="active" class="nav-link" style="color: #E1E3E6;">Add Product</a>
         </li>
     </ul>
-    <ul class="navbar-nav" *ngIf="isLogged && user.roles!.includes('ADMIN')">
-        <li class="nav-item">
-            <a routerLink="adminPanel" routerLinkActive="active" class="nav-link" style="color: #E1E3E6;">AdminPanel</a>
+    <ul class="navbar-nav">
+        <li class="nav-item me-3" *ngIf="isLogged && user.roles!.includes('ADMIN')">
+            <a routerLink="adminPanel" routerLinkActive="active" class="nav-link"
+               style="color: #E1E3E6;">
+                <i class="fa-solid fa-lock fa-xl" style="padding: 15px 0 0 10px; display: block;"></i> <br>
+                <span class="text-secondary">Panel</span>
+            </a>
         </li>
-    </ul>
-    <ul class="navbar-nav" *ngIf="isLogged">
-        <li class="nav-item">
-            <a routerLink="profile" routerLinkActive="active" class="nav-link" style="color: #E1E3E6;">Profile</a>
+        <li class="nav-item me-3" *ngIf="isLogged">
+            <a routerLink="profile" routerLinkActive="active" class="nav-link"
+               style="color: #E1E3E6;">
+                <i class="fa-solid fa-user fa-xl" style="padding: 15px 0 0 12px; display: block;"></i> <br>
+                <span class="text-secondary">Profile</span>
+            </a>
         </li>
-    </ul>
-    <ul class="navbar-nav" *ngIf="isLogged">
-        <li class="nav-item">
-            <a routerLink="profile/cart" routerLinkActive="active" class="nav-link" style="color: #E1E3E6;">Cart <i class="fa-solid fa-cart-shopping fa-lg"></i></a>
+        <li class="nav-item me-3" *ngIf="isLogged">
+            <a routerLink="profile/cart" routerLinkActive="active" class="nav-link"
+               style="color: #E1E3E6;">
+                <i class="fa-solid fa-cart-shopping fa-xl" style="padding: 15px 0 0 0; display: block;"></i> <br>
+                <span class="text-secondary">Cart</span>
+            </a>
         </li>
     </ul>
     <button *ngIf="!isLogged" class="btn btn-outline-success me-2" type="submit" routerLink="/login"><i class="fa-solid fa-right-to-bracket"></i> Log In</button>

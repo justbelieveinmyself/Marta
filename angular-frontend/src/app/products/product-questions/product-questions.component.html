@@ -1,3 +1,6 @@
+<b routerLinkActive="active" routerLink="../details" style="font-size: 15px; padding-left: 10px" type="button">
+    <i class="fa-solid fa-arrow-left fa-lg" ></i> Назад
+</b>
 <div id="sticky" style="background-color: white;">
     <div class="w-100 mt-2" style="display: inline-flex;">
         <div class="align-items-center w-75" style="display: inline-flex;">
@@ -22,7 +25,9 @@
             </div>
         </div>
         <div class="w-25 my-3" style="text-align: center">
-            <button class="btn btn-outline-dark w-40 h-100 me-2" data-bs-toggle="modal" data-bs-target="#buyNowModal">Buy now</button>
+            <button class="btn btn-outline-dark w-40 h-100 me-2" data-bs-toggle="modal" data-bs-target="#buyNowModal">
+                Buy now
+            </button>
             <button (click)="addToCart()" class="btn btn-dark w-40 h-100 me-2">Add to cart</button>
             <div class="toast-container position-fixed bottom-0 end-0 p-3">
                 <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
@@ -35,7 +40,8 @@
                     </div>
                 </div>
             </div>
-            <a type="button" style="color: black" (click)="addOrRemoveFavourite()" [ngClass]="isFavourite? 'fa-solid' : 'fa-regular'" class="fa-regular fa-heart fa-xl"></a>
+            <a type="button" style="color: black" (click)="addOrRemoveFavourite()"
+               [ngClass]="isFavourite? 'fa-solid' : 'fa-regular'" class="fa-regular fa-heart fa-xl"></a>
         </div>
     </div>
 </div>
@@ -122,12 +128,14 @@
     <div class="modal-dialog modal-dialog-centered" style="min-width: 300px">
         <div class="modal-content">
             <div class="modal-header mt-2 mx-3">
-                <h1 class="modal-title fs-5"><b>Order: {{product.product.seller.username | titlecase}}/{{product.product.productName | titlecase}}</b></h1>
+                <h1 class="modal-title fs-5"><b>Order: {{product.product.seller.username | titlecase}}
+                    /{{product.product.productName | titlecase}}</b></h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
             <div class="modal-body mx-4" style="font-size: 19px">
-                <span *ngIf="!isPaid" style="font-size: 12px; position: absolute" class="text-secondary">We will write off the payment upon receipt </span> <br>
+                <span *ngIf="!isPaid" style="font-size: 12px; position: absolute" class="text-secondary">We will write off the payment upon receipt </span>
+                <br>
                 <input class="form-check-input" type="checkbox" (change)="isPaid = !isPaid"
                        id="flexCheck">
                 <label class="form-check-label" for="flexCheck">
@@ -144,7 +152,8 @@
                     Total: {{totalPrice}}
                 </div>
                 <div class="mt-3 justify-content-center" style="display: flex">
-                    <button class="btn btn-outline-dark w-75" data-bs-dismiss="modal" (click)="orderNow()">Buy now</button>
+                    <button class="btn btn-outline-dark w-75" data-bs-dismiss="modal" (click)="orderNow()">Buy now
+                    </button>
                 </div>
             </div>
         </div>

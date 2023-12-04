@@ -6,7 +6,7 @@ import {LocalUser} from '../models/local-user';
 @Component({
     selector: 'app-navbar',
     templateUrl: './navbar.component.html',
-    styleUrls: ['./navbar.component.scss']
+    styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent {
     user: LocalUser = new LocalUser([]);

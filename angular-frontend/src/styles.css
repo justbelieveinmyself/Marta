@@ -1,14 +1,17 @@
 /* You can add global styles to this file, and also import other style files */
 @import "~bootstrap/dist/css/bootstrap.min.css";
 @import "~bootstrap/dist/css/bootstrap";
-body{
+
+body {
     height: 100%;
 }
-a{
+
+a {
     text-decoration-line: none;
     color: deepskyblue;
 }
-.footer{
+
+.footer {
     display: flex;
     width: 100%;
     height: 50px;
@@ -18,51 +21,58 @@ a{
     margin-top: auto;
     line-height: 50px;
 }
-.page{
+
+.page {
     overflow: visible;
     display: flex;
     flex-direction: column;
     min-height: 100vh;
 }
+
 body::-webkit-scrollbar {
-    width: 12px;               /* ширина всей полосы прокрутки */
+    width: 12px; /* ширина всей полосы прокрутки */
 }
 
 body::-webkit-scrollbar-track {
-    background: #212529;        /* цвет зоны отслеживания */
+    background: #212529; /* цвет зоны отслеживания */
 }
 
 body::-webkit-scrollbar-thumb {
-    background-color: rgb(81, 81, 103);    /* цвет бегунка */
-    border-radius: 1px;       /* округлось бегунка */
-    border: 3px solid #212529;  /* отступ вокруг бегунка */
+    background-color: rgb(81, 81, 103); /* цвет бегунка */
+    border-radius: 1px; /* округлось бегунка */
+    border: 3px solid #212529; /* отступ вокруг бегунка */
 }
-body::-webkit-scrollbar-thumb:hover{
+
+body::-webkit-scrollbar-thumb:hover {
     background-color: rgb(115, 115, 145);
 }
 
-.name_card{
-  color: black;
-  font-size: 25px;
-  font-weight: bold;
+.name_card {
+    color: black;
+    font-size: 25px;
+    font-weight: bold;
 }
-.name_card_main{
-  color: black;
-  font-size: 25px;
-  font-weight: bold;
-  display: inline-block;
+
+.name_card_main {
+    color: black;
+    font-size: 25px;
+    font-weight: bold;
+    display: inline-block;
 
 }
-.card_body_value{
-  color: black;
+
+.card_body_value {
+    color: black;
 }
-.card_with_shadow{
-  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
-  transition: box-shadow 0.4s ease-in-out;
+
+.card_with_shadow {
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+    transition: box-shadow 0.4s ease-in-out;
 }
-.card_with_shadow:hover{
-  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-  transition: box-shadow 0.4s ease-in-out;
+
+.card_with_shadow:hover {
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    transition: box-shadow 0.4s ease-in-out;
 }
 
 .w-35 {
@@ -72,30 +82,42 @@ body::-webkit-scrollbar-thumb:hover{
 .w-45 {
     width: 45% !important;
 }
+
 .w-40 {
     width: 40% !important;
 }
+
 .w-65 {
     width: 65% !important;
 }
+
 .w-70 {
     width: 70% !important;
 }
+
 .w-20 {
     width: 20% !important;
 }
+
 .w-15 {
     width: 15% !important;
 }
+
 .w-60 {
     width: 60% !important;
 }
-.sort-not-active{
+
+.sort-not-active {
     border-bottom: 2px dotted rgb(108, 117, 125);
     color: #868695;
 }
-.sort-active{
+
+.sort-active {
     font-weight: bold;
     color: black;
     border-bottom: 2px dotted rgb(108, 117, 125);
+}
+
+html {
+    font-family: system, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Segoe WP', Roboto, Ubuntu, Oxygen, Cantarell, 'Fira Sans', 'Helvetica Neue', Helvetica, 'Lucida Grande', 'Droid Sans', Tahoma, 'Microsoft Sans Serif', sans-serif;
 }
