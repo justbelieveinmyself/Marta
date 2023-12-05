@@ -29,6 +29,7 @@ import {AdminPageComponent} from './admin-page/admin-page.component';
 import {errorInterceptorProvider} from "./service/error-intercept.service";
 import { ActivityPageComponent } from './activity-page/activity-page.component';
 import {TooltipModule} from "ngx-bootstrap/tooltip";
+import { SearchComponent } from './search/search.component';
 
 @NgModule({
   declarations: [
@@ -50,7 +51,8 @@ import {TooltipModule} from "ngx-bootstrap/tooltip";
     ProductCartComponent,
     MainPageComponent,
     AdminPageComponent,
-    ActivityPageComponent
+    ActivityPageComponent,
+    SearchComponent
   ],
     imports: [
         BrowserModule,

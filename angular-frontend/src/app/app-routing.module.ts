@@ -16,6 +16,7 @@ import {MainPageComponent} from "./main-page/main-page.component";
 import {AdminPageComponent} from "./admin-page/admin-page.component";
 import {AdminGuard} from "./admin-guard";
 import {ActivityPageComponent} from "./activity-page/activity-page.component";
+import {SearchComponent} from "./search/search.component";
 
 const routes: Routes = [
     {path: 'products', component: MainPageComponent},
@@ -24,6 +25,7 @@ const routes: Routes = [
     {path: 'products/:id/details', component: ProductDetailsComponent},
     {path: 'products/:id/feedback', component: ProductFeedbackComponent},
     {path: 'products/:id/questions', component: ProductQuestionsComponent},
+    {path: 'products/search', component: SearchComponent},
     {path: '', redirectTo: 'products', pathMatch: 'full'},
     {path: 'create-product', component: CreateProductComponent},
     {path: 'update-product/:id', component: UpdateProductComponent},
@@ -34,7 +36,7 @@ const routes: Routes = [
     {path: 'profile/details', component: UserDetailsComponent},
     {path: 'profile/favourites', component: UserFavouritesComponent},
     {path: 'profile/delivery', component: UserDeliveryComponent},
-    {path: '**', redirectTo: 'create-product', pathMatch: 'full'},
+    {path: '**', redirectTo: 'create-product', pathMatch: 'full'}
 
 ];
 const routerOptions: ExtraOptions = {

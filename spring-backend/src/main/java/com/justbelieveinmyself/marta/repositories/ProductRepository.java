@@ -11,5 +11,5 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     Page<Product> findAllByPreviewImgIsNotNull(Pageable pageable);
     Page<Product> findAllByIsVerifiedIsTrue(Pageable pageable);
     Page<Product> findAllByIsVerifiedIsTrueAndPreviewImgIsNotNull(Pageable pageable);
-
+    Page<Product> findAllByProductNameContainingIgnoreCaseOrSeller_UsernameContainingIgnoreCase(String keyword, String firstname, Pageable pageable);
 }

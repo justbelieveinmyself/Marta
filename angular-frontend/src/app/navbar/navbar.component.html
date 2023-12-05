@@ -1,10 +1,11 @@
-<nav class="navbar navbar-expand-sm bg-dark navbar-dark mb-3" style="height: 100px">
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark mb-3" style="height: 90px">
     <a class="navbar-brand ms-5" routerLink="products" routerLinkActive="active">
-        <img src="assets/logo.png" width="181" height="38" alt="logo with 'Marta'">
+        <img src="assets/logo.png" width="165" height="35" alt="logo with 'Marta'">
     </a>
     <form class="d-flex" role="search">
-        <input class="form-control me-2" style="height: 50px; width: 400px" type="search" placeholder="Search" aria-label="Search">
-        <button class="btn btn-outline-success" type="submit">Search</button>
+        <input class="form-control me-2" style="height: 50px; width: 400px" type="search" placeholder="Search" name="search" [(ngModel)]="search" aria-label="Search">
+        <button class="btn btn-outline-success" type="submit"
+                routerLinkActive="active" routerLink="/products/search" [queryParams]="{keyword: search}">Search</button>
     </form>
     <ul class="navbar-nav me-auto">
         <li class="nav-item">
@@ -17,6 +18,20 @@
                style="color: #E1E3E6;">
                 <i class="fa-solid fa-lock fa-xl" style="padding: 15px 0 0 10px; display: block;"></i> <br>
                 <span class="text-secondary">Panel</span>
+            </a>
+        </li>
+        <li class="nav-item me-3" *ngIf="isLogged">
+            <a routerLink="profile/favourites" routerLinkActive="active" class="nav-link"
+               style="color: #E1E3E6;">
+                <i class="fa-solid fa-heart fa-xl" style="padding: 15px 0 0 24px; display: block;"></i> <br>
+                <span class="text-secondary">Favourites</span>
+            </a>
+        </li>
+        <li class="nav-item me-3" *ngIf="isLogged">
+            <a routerLink="profile/delivery" routerLinkActive="active" class="nav-link"
+               style="color: #E1E3E6;">
+                <i class="fa-solid fa-box-open fa-xl" style="padding: 15px 0 0 14px; display: block;"></i> <br>
+                <span class="text-secondary">Delivery</span>
             </a>
         </li>
         <li class="nav-item me-3" *ngIf="isLogged">

@@ -63,6 +63,7 @@ public class ProductService {
             Boolean usePages,
             Boolean filterVerified, Boolean filterPhotoNotNull
     ) {
+        Page<Product> anime = productRepository.findAllByProductNameContainingIgnoreCaseOrSeller_UsernameContainingIgnoreCase("a","a", PageRequest.of(0, 20));
         Pageable pageable = usePages?
                 (sortBy != null?
                         (isAsc?
