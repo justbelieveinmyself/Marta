@@ -48,10 +48,11 @@ public class ProductController {
             @RequestParam(required = false, defaultValue = "id") String sortBy,
             @RequestParam(required = false, defaultValue = "false") Boolean isAsc,
             @RequestParam(required = false, defaultValue = "false") Boolean filterPhotoNotNull,
-            @RequestParam(required = false, defaultValue = "false") Boolean filterVerified
+            @RequestParam(required = false, defaultValue = "false") Boolean filterVerified,
+            @RequestParam(required = false) String searchWord
 
     ) {
-        return productService.getListProducts(sortBy, isAsc, page, size, usePages, filterVerified, filterPhotoNotNull);
+        return productService.getListProducts(sortBy, isAsc, page, size, usePages, filterVerified, filterPhotoNotNull, searchWord);
     }
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)

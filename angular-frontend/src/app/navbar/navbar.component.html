@@ -2,11 +2,8 @@
     <a class="navbar-brand ms-5" routerLink="products" routerLinkActive="active">
         <img src="assets/logo.png" width="165" height="35" alt="logo with 'Marta'">
     </a>
-    <form class="d-flex" role="search">
-        <input class="form-control me-2" style="height: 50px; width: 400px" type="search" placeholder="Search" name="search" [(ngModel)]="search" aria-label="Search">
-        <button class="btn btn-outline-success" type="submit"
-                routerLinkActive="active" routerLink="/products/search" [queryParams]="{keyword: search}">Search</button>
-    </form>
+    <app-search>
+    </app-search>
     <ul class="navbar-nav me-auto">
         <li class="nav-item">
             <a routerLink="create-product" routerLinkActive="active" class="nav-link" style="color: #E1E3E6;">Add Product</a>

@@ -1,4 +1,6 @@
-<h3 style="font-weight: bold"> {{search| async | titlecase}}</h3>
-<app-main-page >
+<form class="d-flex" role="search">
+    <input class="form-control me-2" style="height: 50px; width: 400px" type="search" placeholder="Search" name="search" [(ngModel)]="search" aria-label="Search">
+    <button class="btn btn-outline-success" type="submit"
+            routerLinkActive="active" routerLink="/products/search" [queryParams]="{keyword: search}">Search</button>
+</form>
 
-</app-main-page>

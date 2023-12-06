@@ -25,7 +25,7 @@ const routes: Routes = [
     {path: 'products/:id/details', component: ProductDetailsComponent},
     {path: 'products/:id/feedback', component: ProductFeedbackComponent},
     {path: 'products/:id/questions', component: ProductQuestionsComponent},
-    {path: 'products/search', component: SearchComponent},
+    {path: 'products/search', component: MainPageComponent},
     {path: '', redirectTo: 'products', pathMatch: 'full'},
     {path: 'create-product', component: CreateProductComponent},
     {path: 'update-product/:id', component: UpdateProductComponent},

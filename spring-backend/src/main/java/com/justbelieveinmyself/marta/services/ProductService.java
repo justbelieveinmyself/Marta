@@ -22,6 +22,7 @@ import com.justbelieveinmyself.marta.repositories.ProductRepository;
 import com.justbelieveinmyself.marta.repositories.QuestionRepository;
 import com.justbelieveinmyself.marta.repositories.ReviewRepository;
 import com.justbelieveinmyself.marta.repositories.UserRepository;
+import com.mysql.cj.util.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.*;
 import org.springframework.http.HttpStatus;
@@ -61,9 +62,9 @@ public class ProductService {
             String sortBy, Boolean isAsc,
             Integer page, Integer size,
             Boolean usePages,
-            Boolean filterVerified, Boolean filterPhotoNotNull
+            Boolean filterVerified, Boolean filterPhotoNotNull,
+            String searchWord
     ) {
-        Page<Product> anime = productRepository.findAllByProductNameContainingIgnoreCaseOrSeller_UsernameContainingIgnoreCase("a","a", PageRequest.of(0, 20));
         Pageable pageable = usePages?
                 (sortBy != null?
                         (isAsc?
@@ -82,6 +83,12 @@ public class ProductService {
             products = productRepository.findAllByPreviewImgIsNotNull(pageable);
         }else {
             products = productRepository.findAll(pageable);
+        }
+        if(!StringUtils.isEmptyOrWhitespaceOnly(searchWord)){
+            List<Product> list = products.stream()
+                    .filter(product -> StringUtils.startsWithIgnoreCaseAndWs(product.getSeller().getUsername(), searchWord)
+                            || StringUtils.startsWithIgnoreCaseAndWs(product.getProductName(), searchWord)).toList();
+            products = new PageImpl<>(list, pageable, list.size());
         }
         List<ProductWithImageDto> productWithImageDtoList = products.stream()
                 .map(pro -> new ProductWithImageDto(productMapper.modelToDto(pro), Base64.getEncoder().encodeToString(

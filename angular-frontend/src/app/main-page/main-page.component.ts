@@ -5,6 +5,8 @@ import {ProductService} from "../service/product.service";
 import {ProductWithImage} from "../models/product-with-image";
 import {ErrorInterceptService} from "../service/error-intercept.service";
 import {Page} from "../models/page";
+import {ActivatedRoute, ParamMap} from "@angular/router";
+import {map, Observable} from "rxjs";
 
 @Component({
     selector: 'app-main-page',
@@ -15,9 +17,11 @@ export class MainPageComponent {
     constructor(
         private productService: ProductService,
         private tokenService: TokenService,
-        private errorIntercept: ErrorInterceptService
+        private errorIntercept: ErrorInterceptService,
+        private activatedRoute: ActivatedRoute
     ) {}
-
+    searchWordObs: Observable<string>;
+    searchWord: string;
     user: LocalUser;
     products: ProductWithImage[];
     sizeOfPage: number = 12;
@@ -34,11 +38,17 @@ export class MainPageComponent {
             this.errorIntercept.updateAccess();
             return;
         }
+        this.activatedRoute.queryParamMap.pipe(map((params: ParamMap) => params.get('keyword'))).subscribe({
+            next: param => {
+                this.searchWord = param
+                this.getProducts(0);
+            }
+        });
         this.getProducts(0);
     }
 
     getProducts(page: number) {
-        this.productService.getProductList(page, this.sizeOfPage, true, this.sortBy, this.isSortASC, this.isFilteredByWithPhoto, this.isFilteredByVerified).subscribe({
+        this.productService.getProductList(page, this.sizeOfPage, true, this.sortBy, this.isSortASC, this.isFilteredByWithPhoto, this.isFilteredByVerified, this.searchWord).subscribe({
             next: data => {
                 this.products = data.content;
                 this.page = data;
@@ -58,8 +68,6 @@ export class MainPageComponent {
         this.getProducts(0);
     }
 
-
-
     sortByDate() {
         this.sortBy = "updatedAt";
         this.isSortASC = !this.isSortASC;
@@ -76,4 +84,5 @@ export class MainPageComponent {
         this.isNeedSortByPrice = true;
     }
 
+    protected readonly console = console;
 }

@@ -11,7 +11,6 @@ import {LocalUser} from '../models/local-user';
 export class NavbarComponent {
     user: LocalUser = new LocalUser([]);
     isLogged: boolean = false;
-    search: String;
     constructor(
         private router: Router,
         private tokenService: TokenService
@@ -33,5 +32,4 @@ export class NavbarComponent {
         this.user = this.tokenService.getUser();
     }
 
-    protected readonly console = console;
 }
