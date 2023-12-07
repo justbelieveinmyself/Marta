@@ -25,6 +25,7 @@ import com.justbelieveinmyself.marta.repositories.UserRepository;
 import com.mysql.cj.util.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.*;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -65,36 +66,53 @@ public class ProductService {
             Boolean filterVerified, Boolean filterPhotoNotNull,
             String searchWord
     ) {
-        Pageable pageable = usePages?
-                (sortBy != null?
-                        (isAsc?
-                                PageRequest.of(page, size, Sort.by(sortBy).ascending()) :
-                                PageRequest.of(page, size, Sort.by(sortBy).descending()))
-                        :
-                        PageRequest.of(page, size)) :
-                PageRequest.of(0, Integer.MAX_VALUE);
-        Page<Product> products;
-
-        if (filterPhotoNotNull && filterVerified) {
-            products = productRepository.findAllByIsVerifiedIsTrueAndPreviewImgIsNotNull(pageable);
-        } else if (filterVerified) {
-            products = productRepository.findAllByIsVerifiedIsTrue(pageable);
-        } else if (filterPhotoNotNull) {
-            products = productRepository.findAllByPreviewImgIsNotNull(pageable);
-        }else {
-            products = productRepository.findAll(pageable);
-        }
-        if(!StringUtils.isEmptyOrWhitespaceOnly(searchWord)){
-            List<Product> list = products.stream()
-                    .filter(product -> StringUtils.startsWithIgnoreCaseAndWs(product.getSeller().getUsername(), searchWord)
-                            || StringUtils.startsWithIgnoreCaseAndWs(product.getProductName(), searchWord)).toList();
-            products = new PageImpl<>(list, pageable, list.size());
-        }
+        Pageable pageable = createPageable(sortBy, isAsc, page, size, usePages);
+        Specification<Product> specification = createSpecification(filterPhotoNotNull, filterVerified, searchWord);
+        Page<Product> products = productRepository.findAll(specification, pageable);
         List<ProductWithImageDto> productWithImageDtoList = products.stream()
                 .map(pro -> new ProductWithImageDto(productMapper.modelToDto(pro), Base64.getEncoder().encodeToString(
                         fileHelper.downloadFileAsByteArray(pro.getPreviewImg(), UploadDirectory.PRODUCTS))))
                 .toList();
         return ResponseEntity.ok(new PageImpl<>(productWithImageDtoList, pageable, products.getTotalElements()));
+    }
+
+    private Specification<Product> createSpecification(Boolean filterPhotoNotNull, Boolean filterVerified, String searchWord) {
+        Specification<Product> specification = Specification.where(null);
+        if (filterPhotoNotNull) {
+            specification = specification.and((root, query, criteriaBuilder) ->
+                    criteriaBuilder.isNotNull(root.get("previewImg")));
+        }
+
+        if (filterVerified) {
+            specification = specification.and((root, query, criteriaBuilder) ->
+                    criteriaBuilder.isTrue(root.get("isVerified")));
+        }
+
+        if (!StringUtils.isEmptyOrWhitespaceOnly(searchWord)) {
+            specification = specification.and((root, query, criteriaBuilder) ->
+                    criteriaBuilder.or(
+                            criteriaBuilder.like(
+                                    criteriaBuilder.lower(root.get("productName")),
+                                    "%" + searchWord.toLowerCase() + "%"
+                            ),
+                            criteriaBuilder.like(
+                                    criteriaBuilder.lower(root.get("seller").get("username")),
+                                    "%" + searchWord.toLowerCase() + "%"
+                            )
+                    )
+            );
+        }
+        return specification;
+    }
+
+    private Pageable createPageable(String sortBy, Boolean isAsc, Integer page, Integer size, Boolean usePages) {
+        return usePages ?
+                (sortBy != null ?
+                        (isAsc ?
+                                PageRequest.of(page, size, Sort.by(sortBy).ascending()) :
+                                PageRequest.of(page, size, Sort.by(sortBy).descending()))
+                        : PageRequest.of(page, size)) :
+                PageRequest.of(0, Integer.MAX_VALUE);
     }
 
     public ResponseEntity<?> createProduct(ProductDto productDto, MultipartFile previewImage, User currentUser) {

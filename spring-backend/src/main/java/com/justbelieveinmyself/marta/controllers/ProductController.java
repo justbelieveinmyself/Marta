@@ -1,10 +1,7 @@
 package com.justbelieveinmyself.marta.controllers;
 
 import com.justbelieveinmyself.marta.domain.annotations.CurrentUser;
-import com.justbelieveinmyself.marta.domain.dto.ProductDto;
-import com.justbelieveinmyself.marta.domain.dto.ProductWithImageDto;
-import com.justbelieveinmyself.marta.domain.dto.QuestionDto;
-import com.justbelieveinmyself.marta.domain.dto.ReviewDto;
+import com.justbelieveinmyself.marta.domain.dto.*;
 import com.justbelieveinmyself.marta.domain.entities.Product;
 import com.justbelieveinmyself.marta.domain.entities.Review;
 import com.justbelieveinmyself.marta.domain.entities.User;
@@ -41,18 +38,17 @@ public class ProductController {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProductWithImageDto.class)))
     })
-    public ResponseEntity<?> getListProducts(
-            @RequestParam(defaultValue = "true") Boolean usePages,
-            @RequestParam(defaultValue = "0") Integer page,
-            @RequestParam(defaultValue = "10") Integer size,
-            @RequestParam(required = false, defaultValue = "id") String sortBy,
-            @RequestParam(required = false, defaultValue = "false") Boolean isAsc,
-            @RequestParam(required = false, defaultValue = "false") Boolean filterPhotoNotNull,
-            @RequestParam(required = false, defaultValue = "false") Boolean filterVerified,
-            @RequestParam(required = false) String searchWord
-
-    ) {
-        return productService.getListProducts(sortBy, isAsc, page, size, usePages, filterVerified, filterPhotoNotNull, searchWord);
+    public ResponseEntity<?> getListProducts(ProductListRequest productListRequest) {
+        return productService.getListProducts(
+                productListRequest.getSortBy(),
+                productListRequest.getIsAsc(),
+                productListRequest.getPage(),
+                productListRequest.getSize(),
+                productListRequest.getUsePages(),
+                productListRequest.getFilterVerified(),
+                productListRequest.getFilterPhotoNotNull(),
+                productListRequest.getSearchWord()
+        );
     }
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)

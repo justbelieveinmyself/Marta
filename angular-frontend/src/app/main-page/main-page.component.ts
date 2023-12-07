@@ -38,7 +38,7 @@ export class MainPageComponent {
             this.errorIntercept.updateAccess();
             return;
         }
-        this.activatedRoute.queryParamMap.pipe(map((params: ParamMap) => params.get('keyword'))).subscribe({
+        this.activatedRoute.queryParamMap.pipe(map((params: ParamMap) => params.get('search'))).subscribe({
             next: param => {
                 this.searchWord = param
                 this.getProducts(0);
