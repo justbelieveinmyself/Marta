@@ -226,7 +226,7 @@ public class ProductService {
         }
         Product product = productOpt.get();
         if(customer.getCartProducts().add(product)){
-            User savedUser = userRepository.save(customer);
+            userRepository.save(customer);
             return ResponseEntity.ok(productMapper.modelToDto(product));
         }else{
             ResponseError responseError = new ResponseError(HttpStatus.FORBIDDEN, "Already added to cart!");
@@ -266,7 +266,7 @@ public class ProductService {
         List<ProductWithImageDto> productDtos = favouriteProducts.stream()
                 .map(pro -> new ProductWithImageDto(productMapper.modelToDto(pro), Base64.getEncoder().encodeToString(
                         fileHelper.downloadFileAsByteArray(pro.getPreviewImg(), UploadDirectory.PRODUCTS))))
-                .toList();;
+                .toList();
         return ResponseEntity.ok(productDtos);
     }
 
@@ -291,5 +291,18 @@ public class ProductService {
         reviewFromDb.setAnswer(answer);
         Review savedReview = reviewRepository.save(reviewFromDb);
         return ResponseEntity.ok(reviewMapper.modelToDto(savedReview, fileHelper));
+    }
+
+    public ResponseEntity<?> answerToQuestion(Question questionFromDb, String answer, User authedUser) {
+        validateRights(questionFromDb.getProduct(), authedUser);
+        questionFromDb.setAnswer(answer);
+        Question savedQuestion = questionRepository.save(questionFromDb);
+        return ResponseEntity.ok(questionMapper.modelToDto(savedQuestion));
+    }
+
+    public ResponseEntity<?> deleteProductQuestion(Question question) {
+        //no need to validate rights cause can be deleted only with authority "admin"
+        questionRepository.delete(question);
+        return ResponseEntity.ok(new ResponseMessage(HttpStatus.OK.value(), "Successfully deleted"));
     }
 }
