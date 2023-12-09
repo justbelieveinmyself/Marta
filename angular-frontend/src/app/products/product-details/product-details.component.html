@@ -1,5 +1,5 @@
 <div style="display: flex">
-    <span routerLinkActive="active" routerLink="../details" style="font-size: 18px;" type="button">
+    <span routerLinkActive="active" routerLink="../../" style="font-size: 18px;" type="button">
         <i class="fa-solid fa-arrow-left fa-lg"></i>
         <span class="text-secondary ms-2">Main / {{product.product.category}} / {{product.product.seller.username | titlecase}}</span>
     </span>
@@ -461,17 +461,18 @@
     <div class="modal-dialog modal-dialog-centered" style="min-width: 300px">
         <div class="modal-content">
             <div class="modal-body ms-4" style="font-size: 17px">
-                <div style="display: flex">
+                <div style="display: flex" class="mb-4">
                     <h2><b>Share</b></h2>
                     <button type="button" class="btn-close ms-auto" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div style="font-size: 20px">
-                <i class="fa-brands fa-telegram fa-2xl" style="color: #35ACE1"></i>
-                <i class="fa-brands fa-vk fa-2xl" style="color: #5181B8"></i>
-                <i class="fa-brands fa-square-facebook fa-2xl" style="color: #5865F2"></i>
+                <div class="row-cols-2">
+                    <i (click)="goToLink('https://t.me/share/url?url=&text=')" class="col-2 fa-brands fa-telegram fa-2xl increase_size" style="color: #35ACE1" type="button"></i>
+                    <i (click)="goToLink('https://vk.com/share.php?url=&comment=')" class="col-2 fa-brands fa-vk fa-2xl increase_size" style="color: #5181B8" type="button"></i>
+                    <i (click)="goToLink('https://connect.ok.ru/offer?url=&title=')" class="col-2 fa-brands fa-square-odnoklassniki fa-2xl increase_size" style="color: #EF7D01" type="button"></i>
+                    <i (click)="goToLink('https://web.whatsapp.com/send?text=')" class="col-2 fa-brands fa-square-whatsapp fa-2xl increase_size" style="color: #25D366" type="button"></i>
                 </div>
-                <div class="mt-3 justify-content-center" style="display: flex">
-                    <button class="btn btn-outline-dark w-75">
+                <div class="justify-content-center" style="display: flex; margin-top: 40px">
+                    <button class="btn btn-outline-dark w-75" (click)="copyToClipboard()">
                         Copy to clipboard
                         <i class="fa-regular fa-copy fa-lg float-end" style="margin-top: 12px"></i>
                     </button>
@@ -503,7 +504,7 @@
         <div class="modal-content">
             <div class="modal-header mt-2 mx-3">
                 <h1 class="modal-title fs-5"><b>Order: {{product.product.seller.username | titlecase}}
-                    /{{product.product.productName | titlecase}}</b></h1>
+                    / {{product.product.productName | titlecase}}</b></h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 

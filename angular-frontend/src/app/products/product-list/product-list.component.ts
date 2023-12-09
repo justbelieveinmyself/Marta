@@ -3,6 +3,9 @@ import {ProductWithImage} from 'src/app/models/product-with-image';
 import {Order} from "../../models/order";
 import {ProductService} from "../../service/product.service";
 import {Product} from "../../models/product";
+import {TokenService} from "../../service/token.service";
+import {LocalUser} from "../../models/local-user";
+import {UserService} from "../../service/user.service";
 
 @Component({
     selector: 'app-product-list',
@@ -11,7 +14,9 @@ import {Product} from "../../models/product";
 })
 export class ProductListComponent{
     constructor(
-        private productService: ProductService
+        private productService: ProductService,
+        private tokenService: TokenService,
+        private userService: UserService
     ) {}
 
     @Input() card: ProductWithImage[];
@@ -20,12 +25,29 @@ export class ProductListComponent{
     @Input() isAdminPage: boolean;
     products: ProductWithImage[];
     productInToast: Product;
+    currentUser: LocalUser;
+    isFavourite: boolean[];
+    favourites: ProductWithImage[];
     ngOnInit() {
         if(!this.card && !this.orders){
             setTimeout(() => this.ngOnInit(), 50);
+            console.log("test");
+        }
+        if(!this.favourites){
+            let index = 0;
+            this.userService.getFavourites().subscribe({
+                next: favourites => {
+                    favourites.forEach(favour => {
+                        // this.isFavourite[]
+                        index++;
+                    })
+                }
+            })
         }
         this.products = this.card;
+        this.currentUser = this.tokenService.getUser();
     }
+
     addToCart(product: Product){
         this.productService.addProductToCart(product).subscribe({
             error: err => console.log(err)
@@ -53,4 +75,19 @@ export class ProductListComponent{
             }
         })
     }
+
+    addOrRemoveFavourite(item: ProductWithImage, isFavourite: boolean) {
+        if(isFavourite){
+            this.productService.deleteProductFromFavourite(item.product).subscribe({
+                // next: next => item.product = next,
+                error: err => console.log(err)
+            })
+        }else {
+            this.productService.addProductToFavourite(item.product).subscribe({
+                next: next => item.product = next,
+                error: err => console.log(err)
+            });
+        }
+    }
+
 }

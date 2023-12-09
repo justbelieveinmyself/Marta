@@ -72,3 +72,10 @@ span.discount {
 .highlight-hover:hover{
     color: black;
 }
+.increase_size{
+    transition: font-size 0.1s ease-out;
+    font-size: 3em;
+}
+.increase_size:hover{
+    font-size: 3.1em;
+}
