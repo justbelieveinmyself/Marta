@@ -1,33 +1,73 @@
-<div class="col-md-6 offset-md-3">
-<form (ngSubmit)="onSubmit()" class="m-4">
-    <div class="form-group">
-        <input type="text" class="form-control" name="product_name" placeholder="name"
-            [(ngModel)]="product.productName">
-    </div>
-    <div class="form-group">
-        <input type="number" class="form-control" name="price" placeholder="price"
-            [(ngModel)]="product.price">
-    </div>
-    <div class="form-group">
-        <input type="number" class="form-control" name="count" placeholder="count"
-            [(ngModel)]="product.count">
-    </div>
-    <div class="form-group">
-        <input type="text" class="form-control" name="description" placeholder="description"
-            [(ngModel)]="product.description">
-    </div>
-    <div class="form-group">
-        <input type="text" class="form-control" name="manufacturer" placeholder="manufacturer"
-            [(ngModel)]="product.manufacturer">
-    </div>
-    <div class="form-group">
-        <input type="text" class="form-control" name="structure" placeholder="structure"
-            [(ngModel)]="product.structure">
-    </div>
-    <div class="form-group mb-3">
-        <label class="form-label">Upload preview image</label>
-        <input type="file" (change)="onFileSelected($event)" class="form-control" name="image">
-      </div>
-    <button type="submit" class="btn btn-success">Submit</button>
-</form>
+<div style="display: flex; justify-content: center; margin-bottom: 10px">
+    <form (ngSubmit)="onSubmit()" [formGroup]="productForm">
+        <h2 style="display: flex; justify-content: center; font-weight: bold">Create Product</h2>
+        <div class="input-group my-3">
+            <label class="input-group-text" for="product_name">Name</label>
+            <input type="text" class="form-control" id="product_name" name="product_name" placeholder="Name"
+                   formControlName="productName">
+            <div *ngIf="productForm.get('productName').hasError('required') && productForm.get('productName').touched"
+                 class="text-danger">Name is required.
+            </div>
+        </div>
+        <div class="input-group mb-3">
+            <label class="input-group-text" for="price">Price</label>
+            <input type="number" class="form-control" id="price" name="price" placeholder="Price"
+                   formControlName="price">
+        </div>
+        <div class="input-group mb-3">
+            <label class="input-group-text" for="count">Count</label>
+            <input type="number" class="form-control" id="count" name="product_name" placeholder="Count"
+                   formControlName="count">
+        </div>
+        <div class="input-group mb-3">
+            <label class="input-group-text" for="description">Description</label>
+            <input type="text" class="form-control" id="description" name="description" placeholder="Description"
+                   formControlName="description">
+        </div>
+        <div class="input-group mb-3">
+            <label class="input-group-text" for="structure">Structure</label>
+            <input type="text" class="form-control" id="structure" name="structure" placeholder="Structure"
+                   formControlName="structure">
+        </div>
+        <div class="input-group mb-3">
+            <label class="input-group-text" for="manufacturer">Manufacturer</label>
+            <input type="text" class="form-control" id="manufacturer" name="manufacturer" placeholder="Manufacturer"
+                   formControlName="manufacturer">
+        </div>
+        <div class="input-group mb-3">
+            <label class="input-group-text" for="category">Category</label>
+            <select id="category" class="form-select" name="category" formControlName="category">
+                <option selected disabled>Choose...</option>
+                <option>Women's clothing</option>
+                <option>Men's clothing</option>
+                <option>Children's clothing</option>
+                <option>Outerwear</option>
+                <option>Footwear</option>
+                <option>Sporting goods</option>
+                <option>Accessories</option>
+                <option>Cosmetics and perfumes</option>
+                <option>Household Goods</option>
+                <option>Electronics</option>
+                <option>Children's goods and toys</option>
+                <option>Beauty and health products</option>
+                <option>Bags and accessories</option>
+                <option>Watch</option>
+                <option>Jewelry</option>
+                <option>Gourmet products</option>
+                <option>Books and audiobooks</option>
+                <option>Sports nutrition</option>
+                <option>Automotive products</option>
+                <option>Furniture and household goods</option>
+                <option>Tools and automotive supplies</option>
+                <option>Pet Supplies</option>
+            </select>
+        </div>
+        <div class="input-group mb-3">
+            <label class="input-group-text" for="image">Preview Image</label>
+            <input type="file" class="form-control" (change)="onFileSelected($event)" name="image" id="image">
+        </div>
+        <div style="display: flex; justify-content: center">
+            <button type="submit" class="btn btn-outline-success btn-lg">Submit</button>
+        </div>
+    </form>
 </div>

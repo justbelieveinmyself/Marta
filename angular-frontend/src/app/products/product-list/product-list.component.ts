@@ -33,19 +33,31 @@ export class ProductListComponent{
             setTimeout(() => this.ngOnInit(), 50);
             console.log("test");
         }
-        if(!this.favourites){
-            let index = 0;
-            this.userService.getFavourites().subscribe({
-                next: favourites => {
-                    favourites.forEach(favour => {
-                        // this.isFavourite[]
-                        index++;
-                    })
-                }
-            })
-        }
         this.products = this.card;
         this.currentUser = this.tokenService.getUser();
+        if(!this.favourites){
+            this.getFavourites();
+        }
+    }
+    ngOnChanges(){
+        if(!this.card){
+            this.getFavourites();
+        }
+    }
+
+    getFavourites(){
+        this.isFavourite = new Array(this.card.length)
+        this.userService.getFavourites().subscribe({
+            next: favourites => {
+                for (let i = 0; i < this.card.length; i++) {
+                    const currentProduct = this.card[i].product;
+                    this.isFavourite[i] = favourites.some(favourite => {
+                        return this.currentUser.id === favourite.product.seller.id && currentProduct.id === favourite.product.id;
+                    });
+                }
+                console.log(this.isFavourite)
+            }
+        })
     }
 
     addToCart(product: Product){
@@ -76,15 +88,16 @@ export class ProductListComponent{
         })
     }
 
-    addOrRemoveFavourite(item: ProductWithImage, isFavourite: boolean) {
+    addOrRemoveFavourite(item: ProductWithImage, index: number) {
+        const isFavourite = this.isFavourite[index];
         if(isFavourite){
             this.productService.deleteProductFromFavourite(item.product).subscribe({
-                // next: next => item.product = next,
+                next: next => this.isFavourite[index] = false,
                 error: err => console.log(err)
             })
         }else {
             this.productService.addProductToFavourite(item.product).subscribe({
-                next: next => item.product = next,
+                next: next => this.isFavourite[index] = true,
                 error: err => console.log(err)
             });
         }
