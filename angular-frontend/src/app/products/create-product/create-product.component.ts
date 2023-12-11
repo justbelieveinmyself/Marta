@@ -16,6 +16,15 @@ export class CreateProductComponent implements OnInit {
     user: LocalUser;
     previewImg: File;
     productForm: FormGroup;
+    categories: string[] =
+        ["Women's clothing", "Men's clothing", "Children's clothing", "Outerwear",
+            "Footwear", "Sporting goods", "Accessories", "Cosmetics and perfumes",
+            "Household Goods", "Electronics", "Children's goods and toys",
+            "Beauty and health products", "Bags and accessories", "Watch", "Jewelry",
+            "Gourmet products", "Books and audiobooks", "Sports nutrition",
+            "Automotive products", "Furniture and household goods",
+            "Tools and automotive supplies", "Pet Supplies"
+        ];
     constructor(
         private productService: ProductService,
         private router: Router,
@@ -26,18 +35,17 @@ export class CreateProductComponent implements OnInit {
     ngOnInit() {
         this.user = this.tokenService.getUser();
         this.productForm = this.formBuilder.group({
-            productName: ['', Validators.required],
-            price: [null, [Validators.required, Validators.min(0)]],
-            count: [null, [Validators.required, Validators.min(0)]],
+            productName: ['', [Validators.required, Validators.nullValidator]],
+            price: [null, [Validators.required, Validators.min(1)]],
+            count: [null, [Validators.required, Validators.min(3)]],
             description: ['', Validators.required],
-            structure: [''],
-            manufacturer: [''],
+            structure: ['' ],
+            manufacturer: ['', [Validators.required, Validators.nullValidator]],
             category: [null, Validators.required]
         });
     }
 
-    onSubmit() {
-        // this.saveProduct();
+    saveProduct() {
         this.product.productName = this.productForm.value.productName;
         this.product.price = this.productForm.value.price;
         this.product.count = this.productForm.value.count;
@@ -45,10 +53,9 @@ export class CreateProductComponent implements OnInit {
         this.product.structure = this.productForm.value.structure;
         this.product.manufacturer = this.productForm.value.manufacturer;
         this.product.category = this.productForm.value.category;
-        console.log(this.product)
-    }
-
-    saveProduct() {
+        if(this.productForm.invalid){
+            return;
+        }
         this.product.seller = this.user;
         this.productService.addProduct(this.product, this.previewImg).subscribe(data => {
             console.log(data);
