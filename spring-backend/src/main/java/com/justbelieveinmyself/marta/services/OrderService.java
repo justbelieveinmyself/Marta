@@ -6,6 +6,7 @@ import com.justbelieveinmyself.marta.domain.entities.OrderProduct;
 import com.justbelieveinmyself.marta.domain.entities.Product;
 import com.justbelieveinmyself.marta.domain.entities.User;
 import com.justbelieveinmyself.marta.domain.enums.DeliveryStatus;
+import com.justbelieveinmyself.marta.domain.mappers.OrderMapper;
 import com.justbelieveinmyself.marta.exceptions.ForbiddenException;
 import com.justbelieveinmyself.marta.repositories.OrderRepository;
 import com.justbelieveinmyself.marta.repositories.ProductRepository;
@@ -22,15 +23,17 @@ public class OrderService {
     private final UserRepository userRepository;
     private final OrderRepository orderRepository;
     private final ProductRepository productRepository;
+    private final OrderMapper orderMapper;
 
-    public OrderService(UserRepository userRepository, OrderRepository orderRepository, ProductRepository productRepository) {
+    public OrderService(UserRepository userRepository, OrderRepository orderRepository, ProductRepository productRepository, OrderMapper orderMapper) {
         this.userRepository = userRepository;
         this.orderRepository = orderRepository;
         this.productRepository = productRepository;
+        this.orderMapper = orderMapper;
     }
 
     public ResponseEntity<?> getListOrders(User user) {
-        return ResponseEntity.ok(user.getOrders().stream().map(OrderDto::of).toList());
+        return ResponseEntity.ok(user.getOrders().stream().map(orderMapper::modelToDto).toList());
     }
 
     public ResponseEntity<?> createOrder(User user, OrderDto orderDto) {
@@ -53,14 +56,14 @@ public class OrderService {
         Order savedOrder = orderRepository.save(order);
         user.getOrders().add(savedOrder);
         userRepository.save(user);
-        return ResponseEntity.ok(OrderDto.of(savedOrder));
+        return ResponseEntity.ok(orderMapper.modelToDto(savedOrder));
     }
 
     public ResponseEntity<?> changeOrderStatus(Order order, String status, User authedUser) {
         validateRights(authedUser, order.getCustomer());
         order.setStatus(DeliveryStatus.valueOf(status));
         orderRepository.save(order);
-        return ResponseEntity.ok(OrderDto.of(order));
+        return ResponseEntity.ok(orderMapper.modelToDto(order));
     }
 
     private void validateRights(User userFromAuthToken, User userToEdit) { //TODO: refactor this to bean

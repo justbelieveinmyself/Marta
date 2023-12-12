@@ -8,7 +8,10 @@
     font-size: 25px;
     font-weight: bold;
     display: inline-block;
-    
+}
+a{
+    text-decoration-line: none;
+    color: deepskyblue;
 }
 .card_body_value{
     color: black;

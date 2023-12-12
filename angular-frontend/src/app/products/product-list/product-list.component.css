@@ -12,7 +12,7 @@
     height: auto;
     left: -1px;
     width: 288px;
-    z-index: 100;
+    z-index: 10;
     padding: 8px;
     /*border-radius: 0 0 10px 10px;*/
     /*outline: 1px solid #D2D2D2;*/
@@ -43,4 +43,9 @@
 
 .hidden-item {
     display: none;
+}
+
+a{
+    text-decoration-line: none;
+    color: deepskyblue;
 }

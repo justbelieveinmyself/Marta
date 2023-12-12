@@ -23,7 +23,6 @@ export class ProductListComponent{
     @Input() orders: Order[];
     @Input() isOrders: boolean;
     @Input() isAdminPage: boolean;
-    products: ProductWithImage[];
     productInToast: Product;
     currentUser: LocalUser;
     isFavourite: boolean[];
@@ -33,7 +32,6 @@ export class ProductListComponent{
             setTimeout(() => this.ngOnInit(), 50);
             console.log("test");
         }
-        this.products = this.card;
         this.currentUser = this.tokenService.getUser();
         if(!this.favourites){
             this.getFavourites();
