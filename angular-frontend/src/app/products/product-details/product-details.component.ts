@@ -67,7 +67,7 @@ export class ProductDetailsComponent implements OnInit {
                             review.photos = urls;
                         })
                         this.isNeedRightButtonForReviews = this.reviews.length > 2;
-                        this.isNeedRightButtonForQuestions = true; //TODO
+                        this.isNeedRightButtonForQuestions = this.questions.length > 3; //TODO
                         this.userService.getFavourites().subscribe(favourites => {
                             this.isFavourite = favourites.filter(prod => prod.product.id == this.product.product.id).length != 0;
                         })
@@ -216,6 +216,16 @@ export class ProductDetailsComponent implements OnInit {
             this.countOfProductInOrder--;
             this.totalPrice -= this.product.product.price;
         }
+    }
+
+    copyToClipboard() {
+        navigator.clipboard.writeText(window.location.href);
+    }
+
+    goToLink(templateUrl: string) {
+        const fomattedText = this.product.product.productName.replaceAll(" ", "%20");
+        let splitedTemplate = templateUrl.split("url=");
+        window.open(splitedTemplate[0] + "url=" + window.location.href + (splitedTemplate[1]? splitedTemplate[1] : "") + fomattedText);
     }
 
 }

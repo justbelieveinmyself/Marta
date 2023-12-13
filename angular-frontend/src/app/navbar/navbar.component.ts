@@ -6,12 +6,11 @@ import {LocalUser} from '../models/local-user';
 @Component({
     selector: 'app-navbar',
     templateUrl: './navbar.component.html',
-    styleUrls: ['./navbar.component.scss']
+    styleUrls: ['./navbar.component.css', '../products/product-details/product-details.component.css']
 })
 export class NavbarComponent {
     user: LocalUser = new LocalUser([]);
     isLogged: boolean = false;
-
     constructor(
         private router: Router,
         private tokenService: TokenService
@@ -32,4 +31,5 @@ export class NavbarComponent {
     updateInfo() {
         this.user = this.tokenService.getUser();
     }
+
 }

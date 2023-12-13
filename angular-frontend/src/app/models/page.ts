@@ -1,6 +1,6 @@
 import {ProductWithImage} from "./product-with-image";
 
-export class Page {
+export class Page<T> {
     content: [
         product: ProductWithImage
     ]

@@ -1,7 +1,18 @@
+<div style="display: flex">
+    <span routerLinkActive="active" routerLink="../../" style="font-size: 18px;" type="button">
+        <i class="fa-solid fa-arrow-left fa-lg"></i>
+        <span class="text-secondary ms-2">Main / {{product.product.category}} / {{product.product.seller.username | titlecase}}</span>
+    </span>
+    <span class="ms-auto mt-2">
+        <i type="button" data-bs-toggle="modal" data-bs-target="#productReportModal" class="fa-regular fa-flag fa-xl"></i>
+        <i type="button" data-bs-toggle="modal" data-bs-target="#productShareModal" class="fa-regular fa-share-from-square fa-xl ms-3"></i>
+    </span>
+
+</div>
 <div class="mb-3">
     <div style="display: flex">
-        <h3 style="word-break: break-all">{{product.product.seller.username | titlecase}} / {{product.product.productName | titlecase}}</h3>
-        <i type="button" data-bs-toggle="modal" data-bs-target="#productReportModal" class="fa-regular fa-flag fa-xl ms-auto"></i>
+        <h3 style="word-break: break-all">{{product.product.seller.username | titlecase}}
+            / {{product.product.productName | titlecase}}</h3>
     </div>
     <p class="mb-2">
         <i class="fa-solid fa-star" style="color: #c9cc24;"></i>{{(ratingOverall ? ratingOverall : 0) | number:'1.0-1'}}&nbsp;
@@ -33,21 +44,28 @@
                 <div class="card-body">
                     <h2 class="card-title">{{product.product.price | currency}}
                         <span class="discount" style="font-size: 17px; margin-left: 8px;">700$</span>
-                        <a type="button" class="fa-regular fa-heart float-end" [ngClass]="isFavourite? 'fa-solid' : 'fa-regular'" style="color: black" (click)="addOrRemoveFavourite()"></a>
+                        <a type="button" class="fa-regular fa-heart float-end"
+                           [ngClass]="isFavourite? 'fa-solid' : 'fa-regular'" style="color: black"
+                           (click)="addOrRemoveFavourite()"></a>
                     </h2>
-                    <button (click)="addToCart()" class="btn btn-dark w-100 mb-2" style="justify-content: center;">Add to cart</button>
+                    <button (click)="addToCart()" class="btn btn-dark w-100 mb-2" style="justify-content: center;">Add
+                        to cart
+                    </button>
                     <div class="toast-container position-fixed bottom-0 end-0 p-3">
                         <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
                             <div class="toast-header">
                                 <strong class="me-auto">Cart</strong>
-                                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                                <button type="button" class="btn-close" data-bs-dismiss="toast"
+                                        aria-label="Close"></button>
                             </div>
                             <div class="toast-body">
                                 '{{product.product.productName}}' has added to cart!
                             </div>
                         </div>
                     </div>
-                    <button class="btn btn-outline-dark w-100" style="justify-content: center;" data-bs-toggle="modal" data-bs-target="#buyNowModal">Buy now</button>
+                    <button class="btn btn-outline-dark w-100" style="justify-content: center;" data-bs-toggle="modal"
+                            data-bs-target="#buyNowModal">Buy now
+                    </button>
                 </div>
             </div>
 
@@ -219,8 +237,8 @@
                 </div>
             </div>
 
-            <a class="btn btn-lg btn-outline-dark mt-3" routerLink="../feedback" routerLinkActive="active">View all
-                reviews</a>
+            <button class="btn btn-lg btn-outline-dark mt-3" routerLink="../feedback" routerLinkActive="active">View all
+                reviews</button>
         </div>
 
         <div *ngIf="!isReviews">
@@ -264,8 +282,8 @@
                     </div>
                 </div>
             </div>
-            <a class="btn btn-lg btn-outline-dark mt-3" routerLink="../questions" routerLinkActive="active">View all
-                questions</a>
+            <button class="btn btn-lg btn-outline-dark mt-3" routerLink="../questions" routerLinkActive="active">View all
+                questions</button>
         </div>
     </div>
 </div>
@@ -438,6 +456,32 @@
     </div>
 </div>
 
+<!-- For modal with share product -->
+<div class="modal fade" id="productShareModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="min-width: 300px">
+        <div class="modal-content">
+            <div class="modal-body ms-4" style="font-size: 17px">
+                <div style="display: flex" class="mb-4">
+                    <h2><b>Share</b></h2>
+                    <button type="button" class="btn-close ms-auto" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="row-cols-2">
+                    <i (click)="goToLink('https://t.me/share/url?url=&text=')" class="col-2 fa-brands fa-telegram fa-2xl increase_size" style="color: #35ACE1" type="button"></i>
+                    <i (click)="goToLink('https://vk.com/share.php?url=&comment=')" class="col-2 fa-brands fa-vk fa-2xl increase_size" style="color: #5181B8" type="button"></i>
+                    <i (click)="goToLink('https://connect.ok.ru/offer?url=&title=')" class="col-2 fa-brands fa-square-odnoklassniki fa-2xl increase_size" style="color: #EF7D01" type="button"></i>
+                    <i (click)="goToLink('https://web.whatsapp.com/send?text=')" class="col-2 fa-brands fa-square-whatsapp fa-2xl increase_size" style="color: #25D366" type="button"></i>
+                </div>
+                <div class="justify-content-center" style="display: flex; margin-top: 40px">
+                    <button class="btn btn-outline-dark w-75" (click)="copyToClipboard()">
+                        Copy to clipboard
+                        <i class="fa-regular fa-copy fa-lg float-end" style="margin-top: 12px"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <ng-template #cantLeaveReview>
     <div class="modal-dialog modal-dialog-centered" style="min-width: 500px">
         <div class="modal-content">
@@ -459,12 +503,14 @@
     <div class="modal-dialog modal-dialog-centered" style="min-width: 300px">
         <div class="modal-content">
             <div class="modal-header mt-2 mx-3">
-                <h1 class="modal-title fs-5"><b>Order: {{product.product.seller.username | titlecase}}/{{product.product.productName | titlecase}}</b></h1>
+                <h1 class="modal-title fs-5"><b>Order: {{product.product.seller.username | titlecase}}
+                    / {{product.product.productName | titlecase}}</b></h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
             <div class="modal-body mx-4" style="font-size: 19px">
-                <span *ngIf="!isPaid" style="font-size: 12px; position: absolute" class="text-secondary">We will write off the payment upon receipt </span> <br>
+                <span *ngIf="!isPaid" style="font-size: 12px; position: absolute" class="text-secondary">We will write off the payment upon receipt </span>
+                <br>
                 <input class="form-check-input" type="checkbox" (change)="isPaid = !isPaid"
                        id="flexCheck">
                 <label class="form-check-label" for="flexCheck">
@@ -481,7 +527,8 @@
                     Total: {{totalPrice}}
                 </div>
                 <div class="mt-3 justify-content-center" style="display: flex">
-                    <button class="btn btn-outline-dark w-75" data-bs-dismiss="modal" (click)="orderNow()">Buy now</button>
+                    <button class="btn btn-outline-dark w-75" data-bs-dismiss="modal" (click)="orderNow()">Buy now
+                    </button>
                 </div>
             </div>
         </div>

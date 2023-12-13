@@ -9,6 +9,7 @@ import com.justbelieveinmyself.marta.domain.entities.Product;
 import com.justbelieveinmyself.marta.domain.entities.Question;
 import com.justbelieveinmyself.marta.domain.entities.Review;
 import com.justbelieveinmyself.marta.domain.entities.User;
+import com.justbelieveinmyself.marta.domain.enums.Role;
 import com.justbelieveinmyself.marta.domain.enums.UploadDirectory;
 import com.justbelieveinmyself.marta.domain.mappers.ProductMapper;
 import com.justbelieveinmyself.marta.domain.mappers.QuestionMapper;
@@ -21,10 +22,10 @@ import com.justbelieveinmyself.marta.repositories.ProductRepository;
 import com.justbelieveinmyself.marta.repositories.QuestionRepository;
 import com.justbelieveinmyself.marta.repositories.ReviewRepository;
 import com.justbelieveinmyself.marta.repositories.UserRepository;
+import com.mysql.cj.util.StringUtils;
 import org.springframework.beans.BeanUtils;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -58,13 +59,60 @@ public class ProductService {
         this.fileHelper = fileHelper;
     }
 
-    public ResponseEntity<?> getListProducts(Pageable pageable) {
-        Page<Product> products = productRepository.findAll(pageable);
+    public ResponseEntity<?> getListProducts(
+            String sortBy, Boolean isAsc,
+            Integer page, Integer size,
+            Boolean usePages,
+            Boolean filterVerified, Boolean filterPhotoNotNull,
+            String searchWord
+    ) {
+        Pageable pageable = createPageable(sortBy, isAsc, page, size, usePages);
+        Specification<Product> specification = createSpecification(filterPhotoNotNull, filterVerified, searchWord);
+        Page<Product> products = productRepository.findAll(specification, pageable);
         List<ProductWithImageDto> productWithImageDtoList = products.stream()
                 .map(pro -> new ProductWithImageDto(productMapper.modelToDto(pro), Base64.getEncoder().encodeToString(
                         fileHelper.downloadFileAsByteArray(pro.getPreviewImg(), UploadDirectory.PRODUCTS))))
                 .toList();
         return ResponseEntity.ok(new PageImpl<>(productWithImageDtoList, pageable, products.getTotalElements()));
+    }
+
+    private Specification<Product> createSpecification(Boolean filterPhotoNotNull, Boolean filterVerified, String searchWord) {
+        Specification<Product> specification = Specification.where(null);
+        if (filterPhotoNotNull) {
+            specification = specification.and((root, query, criteriaBuilder) ->
+                    criteriaBuilder.isNotNull(root.get("previewImg")));
+        }
+
+        if (filterVerified) {
+            specification = specification.and((root, query, criteriaBuilder) ->
+                    criteriaBuilder.isTrue(root.get("isVerified")));
+        }
+
+        if (!StringUtils.isEmptyOrWhitespaceOnly(searchWord)) {
+            specification = specification.and((root, query, criteriaBuilder) ->
+                    criteriaBuilder.or(
+                            criteriaBuilder.like(
+                                    criteriaBuilder.lower(root.get("productName")),
+                                    "%" + searchWord.toLowerCase() + "%"
+                            ),
+                            criteriaBuilder.like(
+                                    criteriaBuilder.lower(root.get("seller").get("username")),
+                                    "%" + searchWord.toLowerCase() + "%"
+                            )
+                    )
+            );
+        }
+        return specification;
+    }
+
+    private Pageable createPageable(String sortBy, Boolean isAsc, Integer page, Integer size, Boolean usePages) {
+        return usePages ?
+                (sortBy != null ?
+                        (isAsc ?
+                                PageRequest.of(page, size, Sort.by(sortBy).ascending()) :
+                                PageRequest.of(page, size, Sort.by(sortBy).descending()))
+                        : PageRequest.of(page, size)) :
+                PageRequest.of(0, Integer.MAX_VALUE);
     }
 
     public ResponseEntity<?> createProduct(ProductDto productDto, MultipartFile previewImage, User currentUser) {
@@ -77,7 +125,7 @@ public class ProductService {
     }
 
     public ResponseEntity<?> deleteProduct(Product product, User currentUser) {
-        validateRights(product, currentUser);
+        validateRightsOrAdminRole(product, currentUser);
         productRepository.delete(product);
         return ResponseEntity.ok(new ResponseMessage(200, "deleted"));
     }
@@ -88,14 +136,21 @@ public class ProductService {
         return ResponseEntity.ok(productMapper.modelToDto(productRepository.save(productFromDb)));
     }
 
-    private void validateRights(Product product, User currentUser) {
-        if (!product.getSeller().getId().equals(currentUser.getId())) {
-            throw new ForbiddenException("You don't have rights!");
+    private void validateRightsOrAdminRole(Product product, User currentUser) {
+        if (product.getSeller().getId().equals(currentUser.getId()) || currentUser.getRoles().contains(Role.ADMIN)) {
+            return;
         }
+        throw new ForbiddenException("You don't have rights!");
     }
 
     private void validateRights(ProductDto productDto, User currentUser) {
         if (!productDto.getSeller().getId().equals(currentUser.getId())) {
+            throw new ForbiddenException("You don't have rights!");
+        }
+    }
+
+    private void validateRights(Product product, User currentUser) {
+        if (!product.getSeller().getId().equals(currentUser.getId())) {
             throw new ForbiddenException("You don't have rights!");
         }
     }
@@ -171,7 +226,7 @@ public class ProductService {
         }
         Product product = productOpt.get();
         if(customer.getCartProducts().add(product)){
-            User savedUser = userRepository.save(customer);
+            userRepository.save(customer);
             return ResponseEntity.ok(productMapper.modelToDto(product));
         }else{
             ResponseError responseError = new ResponseError(HttpStatus.FORBIDDEN, "Already added to cart!");
@@ -211,7 +266,7 @@ public class ProductService {
         List<ProductWithImageDto> productDtos = favouriteProducts.stream()
                 .map(pro -> new ProductWithImageDto(productMapper.modelToDto(pro), Base64.getEncoder().encodeToString(
                         fileHelper.downloadFileAsByteArray(pro.getPreviewImg(), UploadDirectory.PRODUCTS))))
-                .toList();;
+                .toList();
         return ResponseEntity.ok(productDtos);
     }
 
@@ -229,5 +284,25 @@ public class ProductService {
         productFromDb.setIsVerified(true);
         Product savedProduct = productRepository.save(productFromDb);
         return ResponseEntity.ok(productMapper.modelToDto(savedProduct));
+    }
+
+    public ResponseEntity<?> answerToReview(Review reviewFromDb, String answer, User authedUser) {
+        validateRights(reviewFromDb.getProduct(), authedUser);
+        reviewFromDb.setAnswer(answer);
+        Review savedReview = reviewRepository.save(reviewFromDb);
+        return ResponseEntity.ok(reviewMapper.modelToDto(savedReview, fileHelper));
+    }
+
+    public ResponseEntity<?> answerToQuestion(Question questionFromDb, String answer, User authedUser) {
+        validateRights(questionFromDb.getProduct(), authedUser);
+        questionFromDb.setAnswer(answer);
+        Question savedQuestion = questionRepository.save(questionFromDb);
+        return ResponseEntity.ok(questionMapper.modelToDto(savedQuestion));
+    }
+
+    public ResponseEntity<?> deleteProductQuestion(Question question) {
+        //no need to validate rights cause can be deleted only with authority "admin"
+        questionRepository.delete(question);
+        return ResponseEntity.ok(new ResponseMessage(HttpStatus.OK.value(), "Successfully deleted"));
     }
 }

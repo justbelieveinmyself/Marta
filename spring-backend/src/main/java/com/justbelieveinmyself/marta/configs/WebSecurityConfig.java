@@ -41,8 +41,8 @@ import java.util.List;
 public class WebSecurityConfig {
     private final AntPathRequestMatcher[] whiteList = new AntPathRequestMatcher[]{
             AntPathRequestMatcher.antMatcher("/api/v1/auth/**"),
-            AntPathRequestMatcher.antMatcher("/api/v1/swagger-ui/**"),
-            AntPathRequestMatcher.antMatcher("/api/v1/v3/api-docs/**")
+            AntPathRequestMatcher.antMatcher("/swagger-ui/**"),
+            AntPathRequestMatcher.antMatcher("/v3/api-docs/**")
     };
 
     @Value("${jwt.secret}")

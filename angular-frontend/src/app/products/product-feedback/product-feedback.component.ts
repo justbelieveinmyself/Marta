@@ -6,6 +6,10 @@ import {Review} from "../../models/review";
 import {ImageService} from "../../service/image.service";
 import {UserService} from "../../service/user.service";
 import {OrderService} from "../../service/order.service";
+import {LocalUser} from "../../models/local-user";
+import {TokenService} from "../../service/token.service";
+import {ImageModel} from "../../models/image-model";
+import {DomSanitizer} from "@angular/platform-browser";
 
 @Component({
     selector: 'app-product-feedback',
@@ -17,11 +21,14 @@ export class ProductFeedbackComponent implements OnInit {
         private productService: ProductService,
         private activatedRoute: ActivatedRoute,
         private imageService: ImageService,
-        private userService: UserService
+        private sanitizer: DomSanitizer,
+        private userService: UserService,
+        private tokenService: TokenService
     ) {}
 
     protected readonly Math = Math;
     product: ProductWithImage;
+    currentUser: LocalUser;
     reviews: Review[];
     filteredReviews: Review[];
     isReceivedProduct = true;
@@ -37,8 +44,13 @@ export class ProductFeedbackComponent implements OnInit {
     countOfPhotos = 0;
     countOfReviewsWithPhotos = 0;
     countOfProductInOrder = 1;
+    reviewInAnswerToReview: Review;
+    currentRate: number = 0;
     totalPrice: number;
     isPaid = false;
+    messageOfReview: string;
+    answerForReview: string;
+    reviewPhotos: ImageModel[] = [];
 
     ngOnInit(): void {
         this.productService.getProductById(this.activatedRoute.snapshot.params['id']).subscribe({
@@ -47,7 +59,6 @@ export class ProductFeedbackComponent implements OnInit {
                 this.totalPrice = this.product.product.price;
                 this.userService.getFavourites().subscribe(favourites => {
                     this.isFavourite = favourites.filter(prod => prod.product.id == this.product.product.id).length != 0;
-                    console.log(this.isFavourite)
                 })
                 this.productService.getProductReviews(this.product.product.id).subscribe({
                     next: reviews => {
@@ -72,6 +83,7 @@ export class ProductFeedbackComponent implements OnInit {
                     },
                     error: err => console.log(err)
                 })
+                this.currentUser = this.tokenService.getUser();
             },
             error: err => console.log(err)
         })
@@ -96,7 +108,7 @@ export class ProductFeedbackComponent implements OnInit {
 
     }
 
-    onChangeFilterReviewsWithPhotos(event: any) {
+    filterReviewsByWithPhotos(event: any) {
         this.isNeedReviewsOnlyWithPhotos = event.target.checked;
         this.isNeedOpenAnswer.fill(false);
         if (this.isNeedReviewsOnlyWithPhotos) {
@@ -140,7 +152,7 @@ export class ProductFeedbackComponent implements OnInit {
         // @ts-ignore
         document.getElementById('liveToast').classList.add("show");
     }
-    addOrRemoveFavourite() {
+    addOrRemoveFavourite() { //TODO: remove duplicated code
         if(this.isFavourite){
             this.productService.deleteProductFromFavourite(this.product.product).subscribe({
                 error: err => console.log(err)
@@ -153,7 +165,7 @@ export class ProductFeedbackComponent implements OnInit {
         this.isFavourite = !this.isFavourite;
     }
 
-    orderNow() {
+    orderNow() { //TODO: remove duplicated code
         const map = new Map<ProductWithImage, number>;
         map.set(this.product, this.countOfProductInOrder);
         this.productService.createOrder(map, this.isPaid).subscribe({
@@ -176,4 +188,53 @@ export class ProductFeedbackComponent implements OnInit {
             this.totalPrice -= this.product.product.price;
         }
     }
+
+    onFileAdded(event: any) {
+        if (event.target.files) {
+            const file = event.target.files[0];
+            const imageModel: ImageModel = {
+                file: file,
+                url: this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(file))
+            }
+            this.reviewPhotos.push(imageModel);
+        }
+    }
+
+    saveReview() {
+        let review = new Review();
+        review.message = this.messageOfReview;
+        review.rating = this.currentRate;
+        review.productId = this.product.product.id;
+        let files = null;
+        if (this.reviewPhotos) {
+            files = this.reviewPhotos.map(photos => photos.file);
+        }
+        // @ts-ignore
+        this.productService.addReview(review, files).subscribe({
+            next: review => {
+                if (review.photos) {
+                    let urls: string[] = [];
+                    review.photos.map(photo => {
+                        this.imageService.createUrlFromBase64(photo).then(url =>
+                            urls.push(url)
+                        )
+                    });
+                    review.photos = urls;
+                }
+                this.reviews.push(review);
+            },
+            error: err => console.log(err)
+        });
+    }
+
+    saveAnswerToReview(){
+        console.log(this.reviewInAnswerToReview.id)
+        this.productService.updateAnswerToReview(this.reviewInAnswerToReview.id, this.answerForReview).subscribe({
+            next: review => {
+                this.reviewInAnswerToReview.answer = this.answerForReview;
+            }
+        })
+    }
+
+    protected readonly console = console;
 }

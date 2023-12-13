@@ -2,11 +2,9 @@ package com.justbelieveinmyself.marta.controllers;
 
 import com.justbelieveinmyself.marta.domain.annotations.CurrentUser;
 import com.justbelieveinmyself.marta.domain.dto.ProductDto;
+import com.justbelieveinmyself.marta.domain.dto.ProductListRequest;
 import com.justbelieveinmyself.marta.domain.dto.ProductWithImageDto;
-import com.justbelieveinmyself.marta.domain.dto.QuestionDto;
-import com.justbelieveinmyself.marta.domain.dto.ReviewDto;
 import com.justbelieveinmyself.marta.domain.entities.Product;
-import com.justbelieveinmyself.marta.domain.entities.Review;
 import com.justbelieveinmyself.marta.domain.entities.User;
 import com.justbelieveinmyself.marta.exceptions.ResponseError;
 import com.justbelieveinmyself.marta.exceptions.ResponseMessage;
@@ -19,8 +17,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -43,20 +39,17 @@ public class ProductController {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProductWithImageDto.class)))
     })
-    public ResponseEntity<?> getListProducts(
-            @RequestParam(defaultValue = "true") Boolean usePages,
-            @RequestParam(defaultValue = "0") Integer page,
-            @RequestParam(defaultValue = "10") Integer size,
-            @RequestParam(required = false, defaultValue = "id") String sortBy
-    ) {
-        System.out.println(sortBy);
-        if(usePages){
-            if(sortBy != null){
-                return productService.getListProducts(PageRequest.of(page, size, Sort.by(sortBy).descending()));
-            }
-            return productService.getListProducts(PageRequest.of(page, size));
-        }
-        return productService.getListProducts(PageRequest.of(0, Integer.MAX_VALUE));
+    public ResponseEntity<?> getListProducts(ProductListRequest productListRequest) {
+        return productService.getListProducts(
+                productListRequest.getSortBy(),
+                productListRequest.getIsAsc(),
+                productListRequest.getPage(),
+                productListRequest.getSize(),
+                productListRequest.getUsePages(),
+                productListRequest.getFilterVerified(),
+                productListRequest.getFilterPhotoNotNull(),
+                productListRequest.getSearchWord()
+        );
     }
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -139,143 +132,6 @@ public class ProductController {
             @Parameter(hidden = true) @PathVariable(value = "productId") Product productFromDb
     ) {
         return productService.verifyProduct(productFromDb);
-    }
-
-    @GetMapping("reviews/{productId}")
-    @Operation(summary = "Get list of product reviews", description = "Use this to get all reviews of specified product")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Product exists",
-                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ReviewDto.class))),
-            @ApiResponse(responseCode = "403", description = "Product doesn't exists!",
-                    content = @Content)
-    })
-    @Parameter(name = "productId", required = true, schema = @Schema(type = "integer", name = "productId"), in = ParameterIn.PATH)
-    public ResponseEntity<?> getProductReviews(
-            @Parameter(hidden = true)
-            @PathVariable(name = "productId") Product product
-    ){
-        return productService.getListProductReviews(product);
-    }
-    @PostMapping(value = "reviews", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    @Operation(summary = "Create product review", description = "Use this to create review for product")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Review saved",
-                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ReviewDto.class))),
-            @ApiResponse(responseCode = "403", description = "Review doesn't saved",
-                    content = @Content)
-    })
-    public ResponseEntity<?> createProductReview(
-            @RequestPart ReviewDto reviewDto,
-            @RequestPart(required = false) MultipartFile[] photos,
-            @CurrentUser User author
-    ){
-        return productService.createProductReview(reviewDto, author, photos);
-    }
-    @DeleteMapping("reviews/{reviewId}")
-    @PreAuthorize("hasAuthority('ADMIN')")
-    @Operation(summary = "Delete review", description = "Use this to delete review for product")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Review successfully deleted",
-                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ResponseMessage.class))),
-            @ApiResponse(responseCode = "403", description = "Review doesn't deleted",
-                    content = @Content)
-    })
-    public ResponseEntity<?> deleteProductReview(
-            @PathVariable(name = "reviewId") Review review
-    ){
-        return productService.deleteProductReview(review);
-    }
-
-    @GetMapping("questions/{productId}")
-    @Operation(summary = "Get list of product questions", description = "Use this to get all questions of specified product")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Product exists",
-                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = QuestionDto.class))),
-            @ApiResponse(responseCode = "403", description = "Product doesn't exists!",
-                    content = @Content)
-    })
-    @Parameter(name = "productId", required = true, schema = @Schema(type = "integer", name = "productId"), in = ParameterIn.PATH)
-    public ResponseEntity<?> getProductQuestions(
-            @Parameter(hidden = true)
-            @PathVariable(name = "productId") Product product
-    ){
-        return productService.getListProductQuestions(product);
-    }
-
-    @PostMapping(value = "questions")
-    @Operation(summary = "Create product question", description = "Use this to create question for product")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Question saved",
-                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = QuestionDto.class))),
-            @ApiResponse(responseCode = "403", description = "Question doesn't saved",
-                    content = @Content)
-    })
-    public ResponseEntity<?> createProductQuestion(
-            @RequestBody QuestionDto questionDto,
-            @CurrentUser User author
-    ){
-        return productService.createProductQuestion(questionDto, author);
-    }
-
-    @GetMapping("cart")
-    @Operation(summary = "Get products from personal cart", description = "Use this to get product from his cart")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Success",
-                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProductDto.class))),
-            @ApiResponse(responseCode = "403", description = "Unauthorized",
-                    content = @Content)
-    })
-    public ResponseEntity<?> getProductsFromCart(
-            @CurrentUser User user
-    ){
-        return productService.getProductsFromCart(user);
-    }
-
-    @PostMapping(value = "cart/{productId}")
-    @Operation(summary = "Add product to personal cart", description = "Use this to add product into cart")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Product added",
-                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProductDto.class))),
-            @ApiResponse(responseCode = "403", description = "Product doesn't added to cart",
-                    content = @Content)
-    })
-    @Parameter(name = "productId", required = true, schema = @Schema(type = "integer", name = "productId"), in = ParameterIn.PATH)
-    public ResponseEntity<?> addProductToCart(
-            @Parameter(hidden = true)
-            @PathVariable("productId") Long productId,
-            @CurrentUser User customer
-    ){
-        return productService.addProductToCart(productId, customer);
-    }
-
-    @DeleteMapping("cart")
-    @Operation(summary = "Delete All products in cart", description = "Use this to delete all products from cart")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "All products in Cart successfully deleted",
-                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ResponseMessage.class))),
-            @ApiResponse(responseCode = "403", description = "Cart doesn't deleted",
-                    content = @Content)
-    })
-    public ResponseEntity<?> deleteAllProductsInCart(
-            @CurrentUser User user
-    ){
-        return productService.deleteAllProductsInCart(user);
-    }
-
-    @DeleteMapping("cart/{productId}")
-    @Operation(summary = "Delete one product in cart", description = "Use this to delete one product from cart")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Product in Cart successfully deleted",
-                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ResponseMessage.class))),
-            @ApiResponse(responseCode = "403", description = "Product from cart doesn't deleted",
-                    content = @Content)
-    })
-    @Parameter(name = "productId", required = true, schema = @Schema(type = "integer", name = "productId"), in = ParameterIn.PATH)
-    public ResponseEntity<?> deleteProductFromCart(
-            @CurrentUser User user,
-            @Parameter(hidden = true) @PathVariable("productId") Product product
-    ) {
-        return productService.deleteProductFromCart(user, product);
     }
 
     @PostMapping(value = "favourite/{productId}")
