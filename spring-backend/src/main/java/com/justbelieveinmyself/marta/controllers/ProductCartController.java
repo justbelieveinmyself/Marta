@@ -28,7 +28,7 @@ public class ProductCartController {
         this.productService = productService;
     }
 
-    @GetMapping("cart")
+    @GetMapping
     @Operation(summary = "Get products from personal cart", description = "Use this to get product from his cart")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
@@ -42,7 +42,7 @@ public class ProductCartController {
         return productService.getProductsFromCart(user);
     }
 
-    @PostMapping(value = "cart/{productId}")
+    @PostMapping(value = "{productId}")
     @Operation(summary = "Add product to personal cart", description = "Use this to add product into cart")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Product added",
@@ -59,7 +59,7 @@ public class ProductCartController {
         return productService.addProductToCart(productId, customer);
     }
 
-    @DeleteMapping("cart")
+    @DeleteMapping
     @Operation(summary = "Delete All products in cart", description = "Use this to delete all products from cart")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "All products in Cart successfully deleted",
@@ -73,7 +73,7 @@ public class ProductCartController {
         return productService.deleteAllProductsInCart(user);
     }
 
-    @DeleteMapping("cart/{productId}")
+    @DeleteMapping("{productId}")
     @Operation(summary = "Delete one product in cart", description = "Use this to delete one product from cart")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Product in Cart successfully deleted",

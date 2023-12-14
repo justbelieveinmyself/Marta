@@ -23,7 +23,7 @@
                             </div>
                         </div>
                         <div class="card bottom-wrap hidden-item ">
-                            <span type="button"
+                            <span type="button" data-bs-toggle="modal" data-bs-target="#contactSellerModal" (click)="contactSeller = item.key.product.seller"
                                   style="border-bottom: 2px dotted rgb(108, 117, 125); color: #868695; font-size: 14px">Contact the seller</span>
                         </div>
                         <div>
@@ -83,6 +83,25 @@
                   routerLink="/products/{{productInToast?productInToast.id:'error'}}/details" routerLinkActive="active">'{{(productInToast ? productInToast.productName : 'None')| titlecase}}
                 '</span> has added to <span type="button" routerLink="/profile/cart" style="color: #c9cc24"
                                             routerLinkActive="active">cart!</span>
+        </div>
+    </div>
+</div>
+<!-- For modal with contact seller -->
+<div class="modal fade" id="contactSellerModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="min-width: 300px">
+        <div class="modal-content">
+            <div class="modal-header mt-2 mx-3">
+                <h1 class="modal-title fs-5"><b>Write a message to Seller</b></h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body mx-4" style="font-size: 19px">
+                <p style="font-weight: bold">Seller: {{contactSeller.username | titlecase}}</p>
+                <textarea [(ngModel)]="messageForSeller" class="form-control w-100 mt-2" style="height: 200px"
+                          type="text"> </textarea>
+                <div class="mt-3 justify-content-center" style="display: flex">
+                    <button class="btn btn-outline-dark w-75"  data-bs-dismiss="modal" (click)="sendMessageToSeller()">Send</button>
+                </div>
+            </div>
         </div>
     </div>
 </div>

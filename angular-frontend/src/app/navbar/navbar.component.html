@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-sm bg-dark navbar-dark" style="position: sticky; top: 0px; height: 30px">
+<nav *ngIf="isLogged" class="navbar navbar-expand-sm bg-dark navbar-dark" style="position: sticky; top: 0px; height: 30px; display: block">
     <div class="text-secondary mx-4" style="font-size: 15px;">
         <a type="button" routerLink="create-product" routerLinkActive="active" class="highlight-hover-white no-text-decoration-line">
             <i class="fa-solid fa-location-dot"></i>&nbsp;
