@@ -32,7 +32,6 @@ export class ProductListComponent{
     favourites: ProductWithImage[];
     ngOnInit() {
         if(!this.card && !this.orders){
-            console.log("1")
             setTimeout(() => this.ngOnInit(), 50);
             console.log("test");
         }

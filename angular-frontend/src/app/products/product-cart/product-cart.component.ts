@@ -76,5 +76,9 @@ export class ProductCartComponent implements OnInit{
             error: err => console.log(err)
         });
     }
+
+    choosePayMethod() {
+
+    }
 }
 
