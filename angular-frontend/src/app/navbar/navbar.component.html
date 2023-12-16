@@ -8,7 +8,7 @@
             <span>Sell at Marta!</span>
         </a>
     </div>
-    <a class="ms-auto text-white me-5" type="button" routerLink="profile" routerLinkActive="active">
+    <a class="ms-auto text-white" style="margin-right: 20px" type="button" routerLink="profile" routerLinkActive="active">
         {{(user.balance? user.balance : 0) | currency }} <i class="fa-solid fa-hand-holding-dollar"></i>
     </a>
 </nav>

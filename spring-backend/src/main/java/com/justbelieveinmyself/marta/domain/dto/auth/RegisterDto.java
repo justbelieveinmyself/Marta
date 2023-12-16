@@ -1,11 +1,11 @@
 package com.justbelieveinmyself.marta.domain.dto.auth;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 @Schema(title = "RegisterDTO", description = "DTO for register new User")
-@Getter
-@Setter
+@Data
+@AllArgsConstructor
 public class RegisterDto {
     private String firstName;
     private String lastName;

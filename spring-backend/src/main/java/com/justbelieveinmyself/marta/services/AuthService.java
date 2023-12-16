@@ -34,7 +34,7 @@ public class AuthService {
         this.fileHelper = fileHelper;
     }
 
-    public ResponseEntity<?> createAuthToken(@RequestBody LoginRequestDto authRequest) {
+    public ResponseEntity<LoginResponseDto> createAuthToken(@RequestBody LoginRequestDto authRequest) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken
                 (authRequest.getUsername(), authRequest.getPassword()));
         User userDetails = userService.loadUserByUsername(authRequest.getUsername());
@@ -44,7 +44,7 @@ public class AuthService {
     }
 
 
-    public ResponseEntity<?> createNewUser(RegisterDto registrationUserDto, MultipartFile file) {
+    public ResponseEntity<SellerDto> createNewUser(RegisterDto registrationUserDto, MultipartFile file) {
         if (!registrationUserDto.getPassword().equals(registrationUserDto.getPasswordConfirm())) {
             throw new NotCreatedException("Passwords different!");
         }
