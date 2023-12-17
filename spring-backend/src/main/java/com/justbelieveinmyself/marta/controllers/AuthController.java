@@ -41,7 +41,6 @@ public class AuthController {
             @RequestPart("regUser") RegisterDto registerDTO,
             @Parameter(description = "Avatar") @RequestPart(name = "file",required = false) MultipartFile file
     ){
-        System.out.println("12345");
         return authService.createNewUser(registerDTO, file);
     }
 

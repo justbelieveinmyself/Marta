@@ -4,10 +4,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.justbelieveinmyself.marta.domain.dto.SellerDto;
 import com.justbelieveinmyself.marta.domain.dto.auth.LoginRequestDto;
 import com.justbelieveinmyself.marta.domain.dto.auth.LoginResponseDto;
+import com.justbelieveinmyself.marta.domain.dto.auth.RefreshResponseDto;
 import com.justbelieveinmyself.marta.domain.dto.auth.RegisterDto;
 import com.justbelieveinmyself.marta.services.AuthService;
 import com.justbelieveinmyself.marta.services.RefreshTokenService;
-import com.justbelieveinmyself.marta.services.UserService;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,11 +31,12 @@ class AuthControllerTest {
     @Autowired
     private MockMvc mockMvc;
     @MockBean
-    private UserService userService;
-    @MockBean
     private AuthService authService;
     @MockBean
     private RefreshTokenService refreshTokenService;
+
+    AuthControllerTest() {
+    }
 
     @Test
     void register_ReturnsValidResponseEntity() throws Exception {
@@ -70,7 +71,6 @@ class AuthControllerTest {
 
         when(authService.createAuthToken(any())).thenReturn(ResponseEntity.ok(loginResponseDto));
 
-        // Выполняем запрос и проверяем, что получаем ожидаемый JSON-ответ
         mockMvc.perform(post("/api/v1/auth/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(loginRequestDto)))
@@ -81,5 +81,7 @@ class AuthControllerTest {
 
     @Test
     void refreshToken() {
+        when(refreshTokenService.refreshToken(any())).thenReturn(new RefreshResponseDto());
+
     }
 }
