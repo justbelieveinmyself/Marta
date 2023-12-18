@@ -59,7 +59,7 @@ public class ProductService {
         this.fileHelper = fileHelper;
     }
 
-    public ResponseEntity<?> getListProducts(
+    public ResponseEntity<Page<ProductWithImageDto>> getProductsAsPage(
             String sortBy, Boolean isAsc,
             Integer page, Integer size,
             Boolean usePages,

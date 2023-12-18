@@ -17,6 +17,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -34,13 +35,13 @@ public class ProductController {
     }
 
     @GetMapping
-    @Operation(summary = "Get list of all products", description = "Use this to get products. By default sort by id with pages")
+    @Operation(summary = "Get page of all products", description = "Use this to get products. By default sort by id with pages")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProductWithImageDto.class)))
     })
-    public ResponseEntity<?> getListProducts(ProductListRequest productListRequest) {
-        return productService.getListProducts(
+    public ResponseEntity<Page<ProductWithImageDto>> getListProducts(ProductListRequest productListRequest) {
+        return productService.getProductsAsPage(
                 productListRequest.getSortBy(),
                 productListRequest.getIsAsc(),
                 productListRequest.getPage(),
