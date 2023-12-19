@@ -1,10 +1,7 @@
 package com.justbelieveinmyself.marta.domain.dto;
 
 import com.justbelieveinmyself.marta.domain.entities.Product;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
@@ -13,6 +10,7 @@ import java.time.ZonedDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
+@Builder
 public class ProductDto {
     private Long id;
     private String productName;

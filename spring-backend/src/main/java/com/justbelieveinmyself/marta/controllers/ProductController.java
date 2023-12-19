@@ -61,7 +61,7 @@ public class ProductController {
             @ApiResponse(responseCode = "403", description = "1. You don't have the rights! \n 2. Preview image so big!",
                     content = @Content)
     })
-    public ResponseEntity<?> createProduct(
+    public ResponseEntity<ProductDto> createProduct(
             @RequestPart("product") ProductDto productDto,
             @RequestPart(value = "file", required = false) MultipartFile file,
             @CurrentUser User currentUser
@@ -78,7 +78,7 @@ public class ProductController {
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ResponseError.class)))
     })
     @Parameter(name = "productId", required = true, schema = @Schema(type = "integer", name = "productId"), in = ParameterIn.PATH)
-    public ResponseEntity<?> deleteProduct(
+    public ResponseEntity<ResponseMessage> deleteProduct(
             @Parameter(hidden = true) @PathVariable(value = "productId", required = false) Product product,
             @CurrentUser User currentUser
     ) {
@@ -111,7 +111,7 @@ public class ProductController {
                     content = @Content)
     })
     @Parameter(name = "productId", required = true, schema = @Schema(type = "integer", name = "productId"), in = ParameterIn.PATH)
-    public ResponseEntity<?> updateProduct(
+    public ResponseEntity<ProductDto> updateProduct(
             @Parameter(hidden = true) @PathVariable(value = "productId") Product productFromDb,
             @RequestBody ProductDto productDto,
             @CurrentUser User currentUser

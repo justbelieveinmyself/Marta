@@ -115,25 +115,26 @@ public class ProductService {
                 PageRequest.of(0, Integer.MAX_VALUE);
     }
 
-    public ResponseEntity<?> createProduct(ProductDto productDto, MultipartFile previewImage, User currentUser) {
-        validateRights(productDto, currentUser);
+    public ResponseEntity<ProductDto> createProduct(ProductDto productDto, MultipartFile previewImage, User currentUser) {
         String imagePath = fileHelper.uploadFile(previewImage, UploadDirectory.PRODUCTS);
         Product product = productMapper.dtoToModel(productDto);
+        product.setSeller(currentUser);
         product.setPreviewImg(imagePath);
         Product savedProduct = productRepository.save(product);
         return ResponseEntity.ok(productMapper.modelToDto(savedProduct));
     }
 
-    public ResponseEntity<?> deleteProduct(Product product, User currentUser) {
+    public ResponseEntity<ResponseMessage> deleteProduct(Product product, User currentUser) {
         validateRightsOrAdminRole(product, currentUser);
         productRepository.delete(product);
-        return ResponseEntity.ok(new ResponseMessage(200, "deleted"));
+        return ResponseEntity.ok(new ResponseMessage(200, "Successfully deleted!"));
     }
 
-    public ResponseEntity<?> updateProduct(Product productFromDb, ProductDto productDto, User currentUser) {
+    public ResponseEntity<ProductDto> updateProduct(Product productFromDb, ProductDto productDto, User currentUser) {
         validateRights(productDto, currentUser);
         BeanUtils.copyProperties(productDto, productFromDb, "id", "seller");
-        return ResponseEntity.ok(productMapper.modelToDto(productRepository.save(productFromDb)));
+        Product savedProduct = productRepository.save(productFromDb);
+        return ResponseEntity.ok(productMapper.modelToDto(savedProduct));
     }
 
     private void validateRightsOrAdminRole(Product product, User currentUser) {
