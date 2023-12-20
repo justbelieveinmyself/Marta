@@ -3,8 +3,10 @@ package com.justbelieveinmyself.marta.services;
 import com.justbelieveinmyself.marta.configs.beans.FileHelper;
 import com.justbelieveinmyself.marta.domain.dto.ProductDto;
 import com.justbelieveinmyself.marta.domain.dto.ProductWithImageDto;
+import com.justbelieveinmyself.marta.domain.dto.ReviewDto;
 import com.justbelieveinmyself.marta.domain.dto.SellerDto;
 import com.justbelieveinmyself.marta.domain.entities.Product;
+import com.justbelieveinmyself.marta.domain.entities.Review;
 import com.justbelieveinmyself.marta.domain.entities.User;
 import com.justbelieveinmyself.marta.domain.mappers.QuestionMapper;
 import com.justbelieveinmyself.marta.domain.mappers.ReviewMapper;
@@ -26,6 +28,7 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
+import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.List;
 
@@ -120,10 +123,36 @@ class ProductServiceTest {
 
     @Test
     void getProduct() {
+        Product mockProduct = Product.builder().productName("Test name").id(1L).description("test").previewImg("test.png").build();
+
+        when(fileHelper.downloadFileAsByteArray(any(), any())).thenReturn("base64encodedimage".getBytes());
+
+        ResponseEntity<ProductWithImageDto> productWithImageDtoAsResponseEntity = productService.getProduct(mockProduct);
+
+        assertEquals("YmFzZTY0ZW5jb2RlZGltYWdl", productWithImageDtoAsResponseEntity.getBody().getFile());
+        assertEquals("Test name", productWithImageDtoAsResponseEntity.getBody().getProduct().getProductName());
+        verify(fileHelper, times(1)).downloadFileAsByteArray(any(), any());
     }
 
     @Test
     void getListProductReviews() {
+        Product mockProduct = Product.builder().productName("Test name").id(1L).description("test").previewImg("test.png").build();
+        List<String> mockImages = List.of("test.png", "test2.png");
+        User mockUser = User.builder().id(1L).username("user").build();
+        List<Review> mockReviews = List.of(
+                new Review(1L, "Test", "Answer", 4, mockUser, ZonedDateTime.now(), mockImages, mockProduct),
+                new Review(2L, "New", "Answer2", 2, mockUser, ZonedDateTime.now(), mockImages, mockProduct)
+        );
+        mockProduct.setReviews(mockReviews);
+        when(fileHelper.downloadFileAsByteArray(any(), any())).thenReturn("base64encodedimage".getBytes());
+
+        ResponseEntity<List<ReviewDto>> reviewsAsResponseEntity = productService.getListProductReviews(mockProduct);
+
+        assertEquals("Test", reviewsAsResponseEntity.getBody().get(0).getMessage());
+        assertEquals("Answer2", reviewsAsResponseEntity.getBody().get(1).getAnswer());
+        assertEquals(2, reviewsAsResponseEntity.getBody().get(1).getRating());
+        assertEquals("YmFzZTY0ZW5jb2RlZGltYWdl", reviewsAsResponseEntity.getBody().get(0).getPhotos().get(0));
+        verify(fileHelper, times(4)).downloadFileAsByteArray(any(), any());
     }
 
     @Test

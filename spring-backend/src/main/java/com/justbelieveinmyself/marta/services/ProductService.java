@@ -156,7 +156,7 @@ public class ProductService {
         }
     }
 
-    public ResponseEntity<?> getProduct(Product product) {
+    public ResponseEntity<ProductWithImageDto> getProduct(Product product) {
         Stream<Product> productStream = Stream.of(product);
         ProductWithImageDto productWithImageDtoList = productStream
                 .map(pro -> new ProductWithImageDto(productMapper.modelToDto(pro), Base64.getEncoder().encodeToString(
@@ -164,7 +164,7 @@ public class ProductService {
         return ResponseEntity.ok(productWithImageDtoList);
     }
 
-    public ResponseEntity<?> getListProductReviews(Product product) {
+    public ResponseEntity<List<ReviewDto>> getListProductReviews(Product product) {
         product.getReviews().forEach(review -> {
             List<String> base64photos = review.getPhotos().stream().map(photo
                     -> Base64.getEncoder().encodeToString(fileHelper.downloadFileAsByteArray(photo, UploadDirectory.REVIEWS))).toList();

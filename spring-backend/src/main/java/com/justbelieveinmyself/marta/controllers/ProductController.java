@@ -94,7 +94,7 @@ public class ProductController {
                     content = @Content)
     })
     @Parameter(name = "productId", required = true, schema = @Schema(type = "integer", name = "productId"), in = ParameterIn.PATH)
-    public ResponseEntity<?> getProduct(
+    public ResponseEntity<ProductWithImageDto> getProduct(
             @Parameter(hidden = true)
             @PathVariable(value = "productId") Product product
     ) {
