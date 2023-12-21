@@ -174,7 +174,7 @@ public class ProductService {
         return ResponseEntity.ok(reviews);
     }
 
-    public ResponseEntity<?> createProductReview(ReviewDto reviewDto, User author, MultipartFile[] photos) {
+    public ResponseEntity<ReviewDto> createProductReview(ReviewDto reviewDto, User author, MultipartFile[] photos) {
         Optional<Product> productOpt = productRepository.findById(reviewDto.getProductId());
         if(productOpt.isEmpty()){
             throw new NotFoundException("Product with [%s] doesn't exists".formatted(reviewDto.getProductId()));
@@ -184,7 +184,8 @@ public class ProductService {
         Review savedReview = reviewRepository.save(review);
         product.getReviews().add(savedReview);
         productRepository.save(product);
-        return ResponseEntity.ok(reviewMapper.modelToDto(savedReview, fileHelper));
+        ReviewDto reviewDto1 = reviewMapper.modelToDto(savedReview, fileHelper);
+        return ResponseEntity.ok(reviewDto1);
     }
 
     public ResponseEntity<?> deleteProductReview(Review review) {

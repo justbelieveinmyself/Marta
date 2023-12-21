@@ -59,7 +59,7 @@ public class ProductFeedbackController {
             @ApiResponse(responseCode = "403", description = "Review doesn't saved",
                     content = @Content)
     })
-    public ResponseEntity<?> createProductReview(
+    public ResponseEntity<ReviewDto> createProductReview(
             @RequestPart ReviewDto reviewDto,
             @RequestPart(required = false) MultipartFile[] photos,
             @CurrentUser User author

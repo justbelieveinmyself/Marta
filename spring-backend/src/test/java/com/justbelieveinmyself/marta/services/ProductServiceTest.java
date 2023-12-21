@@ -8,8 +8,6 @@ import com.justbelieveinmyself.marta.domain.dto.SellerDto;
 import com.justbelieveinmyself.marta.domain.entities.Product;
 import com.justbelieveinmyself.marta.domain.entities.Review;
 import com.justbelieveinmyself.marta.domain.entities.User;
-import com.justbelieveinmyself.marta.domain.mappers.QuestionMapper;
-import com.justbelieveinmyself.marta.domain.mappers.ReviewMapper;
 import com.justbelieveinmyself.marta.exceptions.ResponseMessage;
 import com.justbelieveinmyself.marta.repositories.ProductRepository;
 import com.justbelieveinmyself.marta.repositories.QuestionRepository;
@@ -29,8 +27,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -50,10 +50,6 @@ class ProductServiceTest {
     private QuestionRepository questionRepository;
     @MockBean
     private UserRepository userRepository;
-    @MockBean
-    private QuestionMapper questionMapper;
-    @MockBean
-    private ReviewMapper reviewMapper;
     @MockBean
     private FileHelper fileHelper;
 
@@ -157,6 +153,25 @@ class ProductServiceTest {
 
     @Test
     void createProductReview() {
+        SellerDto sellerDto = new SellerDto(1L, "user", "test@mail.ru");
+        ReviewDto mockReviewDto = ReviewDto.builder().productId(1L).message("test").answer("another").id(1L).author(sellerDto).build();
+        List<Review> mockReviews = new ArrayList<>();
+        Product mockProduct = Product.builder().id(1L).reviews(mockReviews).build();
+        MockMultipartFile[] mockImages = new MockMultipartFile[1];
+        mockImages[0] = new MockMultipartFile("xd", "xd".getBytes());
+        User mockUser = User.builder().id(1L).username("user").email("test@mail.ru").build();
+//        when(fileHelper.uploadFile((MultipartFile[]) any(), any())).thenReturn(List.of("path.png"));
+//        when(fileHelper.downloadFileAsByteArray(any(), any())).thenReturn("base64encodedimage".getBytes());
+        when(reviewRepository.save(any())).thenAnswer(i -> i.getArguments()[0]);
+        when(productRepository.findById(1L)).thenReturn(Optional.ofNullable(mockProduct));
+
+        ResponseEntity<ReviewDto> reviewDtoAsResponseEntity = productService.createProductReview(mockReviewDto, mockUser, mockImages);
+
+        assertEquals("test", reviewDtoAsResponseEntity.getBody().getMessage());
+        assertEquals("another", reviewDtoAsResponseEntity.getBody().getAnswer());
+        assertEquals(1L, reviewDtoAsResponseEntity.getBody().getAuthor().getId());
+//        assertEquals("YmFzZTY0ZW5jb2RlZGltYWdl", reviewDtoAsResponseEntity.getBody().getPhotos().get(0));
+//        verify(fileHelper, times(1)).downloadFileAsByteArray(any(), any());
     }
 
     @Test
