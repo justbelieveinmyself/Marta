@@ -1,11 +1,9 @@
 package com.justbelieveinmyself.marta.services;
 
 import com.justbelieveinmyself.marta.configs.beans.FileHelper;
-import com.justbelieveinmyself.marta.domain.dto.ProductDto;
-import com.justbelieveinmyself.marta.domain.dto.ProductWithImageDto;
-import com.justbelieveinmyself.marta.domain.dto.ReviewDto;
-import com.justbelieveinmyself.marta.domain.dto.SellerDto;
+import com.justbelieveinmyself.marta.domain.dto.*;
 import com.justbelieveinmyself.marta.domain.entities.Product;
+import com.justbelieveinmyself.marta.domain.entities.Question;
 import com.justbelieveinmyself.marta.domain.entities.Review;
 import com.justbelieveinmyself.marta.domain.entities.User;
 import com.justbelieveinmyself.marta.exceptions.ResponseMessage;
@@ -66,6 +64,7 @@ class ProductServiceTest {
 
         assertEquals(5, productsAsPage.getBody().getSize());
         assertEquals(3, productsAsPage.getBody().getTotalElements());
+
         verify(productRepository, times(1)).findAll((Specification<Product>) any(), any());
     }
 
@@ -82,6 +81,7 @@ class ProductServiceTest {
 
         assertEquals("Test Name", productDtoAsResponseEntity.getBody().getProductName());
         assertEquals(1L, productDtoAsResponseEntity.getBody().getId());
+
         verify(productRepository, times(1)).save(any());
         verify(fileHelper, times(1)).uploadFile((MultipartFile) any(), any());
     }
@@ -96,6 +96,7 @@ class ProductServiceTest {
 
         assertEquals("Successfully deleted!", responseMessageAsResponseEntity.getBody().getMessage());
         assertEquals(200, responseMessageAsResponseEntity.getBody().getStatus());
+
         verify(productRepository, times(1)).delete(any());
     }
 
@@ -114,6 +115,7 @@ class ProductServiceTest {
         assertEquals("Some description", productDtoAsResponseEntity.getBody().getDescription());
         assertEquals(BigDecimal.valueOf(5), productDtoAsResponseEntity.getBody().getPrice());
         assertEquals(1L, productDtoAsResponseEntity.getBody().getId());
+
         verify(productRepository, times(1)).save(any());
     }
 
@@ -127,6 +129,7 @@ class ProductServiceTest {
 
         assertEquals("YmFzZTY0ZW5jb2RlZGltYWdl", productWithImageDtoAsResponseEntity.getBody().getFile());
         assertEquals("Test name", productWithImageDtoAsResponseEntity.getBody().getProduct().getProductName());
+
         verify(fileHelper, times(1)).downloadFileAsByteArray(any(), any());
     }
 
@@ -140,6 +143,7 @@ class ProductServiceTest {
                 new Review(2L, "New", "Answer2", 2, mockUser, ZonedDateTime.now(), mockImages, mockProduct)
         );
         mockProduct.setReviews(mockReviews);
+
         when(fileHelper.downloadFileAsByteArray(any(), any())).thenReturn("base64encodedimage".getBytes());
 
         ResponseEntity<List<ReviewDto>> reviewsAsResponseEntity = productService.getListProductReviews(mockProduct);
@@ -148,20 +152,22 @@ class ProductServiceTest {
         assertEquals("Answer2", reviewsAsResponseEntity.getBody().get(1).getAnswer());
         assertEquals(2, reviewsAsResponseEntity.getBody().get(1).getRating());
         assertEquals("YmFzZTY0ZW5jb2RlZGltYWdl", reviewsAsResponseEntity.getBody().get(0).getPhotos().get(0));
+
         verify(fileHelper, times(4)).downloadFileAsByteArray(any(), any());
     }
 
     @Test
     void createProductReview() {
         SellerDto sellerDto = new SellerDto(1L, "user", "test@mail.ru");
-        ReviewDto mockReviewDto = ReviewDto.builder().productId(1L).message("test").answer("another").id(1L).author(sellerDto).build();
+        ReviewDto mockReviewDto = new ReviewDto(1L, "test", "another", 4, ZonedDateTime.now(), null,1L,sellerDto);
         List<Review> mockReviews = new ArrayList<>();
         Product mockProduct = Product.builder().id(1L).reviews(mockReviews).build();
         MockMultipartFile[] mockImages = new MockMultipartFile[1];
         mockImages[0] = new MockMultipartFile("xd", "xd".getBytes());
         User mockUser = User.builder().id(1L).username("user").email("test@mail.ru").build();
-//        when(fileHelper.uploadFile((MultipartFile[]) any(), any())).thenReturn(List.of("path.png"));
-//        when(fileHelper.downloadFileAsByteArray(any(), any())).thenReturn("base64encodedimage".getBytes());
+
+        when(fileHelper.uploadFile((MultipartFile[]) any(), any())).thenReturn(List.of("path.png"));
+        when(fileHelper.downloadFileAsByteArray(any(), any())).thenReturn("base64encodedimage".getBytes());
         when(reviewRepository.save(any())).thenAnswer(i -> i.getArguments()[0]);
         when(productRepository.findById(1L)).thenReturn(Optional.ofNullable(mockProduct));
 
@@ -170,20 +176,66 @@ class ProductServiceTest {
         assertEquals("test", reviewDtoAsResponseEntity.getBody().getMessage());
         assertEquals("another", reviewDtoAsResponseEntity.getBody().getAnswer());
         assertEquals(1L, reviewDtoAsResponseEntity.getBody().getAuthor().getId());
-//        assertEquals("YmFzZTY0ZW5jb2RlZGltYWdl", reviewDtoAsResponseEntity.getBody().getPhotos().get(0));
-//        verify(fileHelper, times(1)).downloadFileAsByteArray(any(), any());
+        assertEquals("YmFzZTY0ZW5jb2RlZGltYWdl", reviewDtoAsResponseEntity.getBody().getPhotos().get(0));
+
+        verify(fileHelper, times(1)).downloadFileAsByteArray(any(), any());
+        verify(fileHelper, times(1)).uploadFile((MultipartFile[])any(), any());
+        verify(reviewRepository, times(1)).save(any());
+        verify(productRepository, times(1)).findById(any());
     }
 
     @Test
     void deleteProductReview() {
+
+        ResponseEntity<ResponseMessage> responseMessageResponseEntity = productService.deleteProductReview(any());
+
+        assertEquals("Successfully deleted!", responseMessageResponseEntity.getBody().getMessage());
+        assertEquals(200, responseMessageResponseEntity.getBody().getStatus());
+
+        verify(reviewRepository, times(1)).delete(any());
     }
 
     @Test
     void getListProductQuestions() {
+        User mockUser = User.builder().id(1L).username("user").build();
+        Product mockProduct = Product.builder().id(1L).build();
+        List<Question> mockQuestions = new ArrayList<>();
+        mockQuestions.add(new Question(1L, ZonedDateTime.now(), mockUser, "message1", "answer1", mockProduct));
+        mockQuestions.add(new Question(2L, ZonedDateTime.now(), mockUser, "message2", "answer2", mockProduct));
+        mockQuestions.add(new Question(5L, ZonedDateTime.now(), mockUser, "message5", "answer5", mockProduct));
+        mockProduct.setQuestions(mockQuestions);
+        mockUser.setProducts(List.of(mockProduct));
+
+        ResponseEntity<List<QuestionDto>> questionsAsResponseEntity = productService.getListProductQuestions(mockProduct);
+
+        assertEquals("message1", questionsAsResponseEntity.getBody().get(0).getMessage());
+        assertEquals("answer2", questionsAsResponseEntity.getBody().get(1).getAnswer());
+        assertEquals(1L, questionsAsResponseEntity.getBody().get(1).getProductId());
+        assertEquals("user", questionsAsResponseEntity.getBody().get(2).getAuthor().getUsername());
     }
 
     @Test
     void createProductQuestion() {
+        //not worked
+        User mockUser = User.builder().id(2L).username("user").build();
+        SellerDto sellerDto = new SellerDto(2L, "user", "test@mail.ru");
+        QuestionDto questionDto = new QuestionDto(ZonedDateTime.now(), sellerDto, "message", "answer", 1L);
+
+        when(fileHelper.uploadFile((MultipartFile[]) any(), any())).thenReturn(List.of("path.png"));
+        when(fileHelper.downloadFileAsByteArray(any(), any())).thenReturn("base64encodedimage".getBytes());
+        when(reviewRepository.save(any())).thenAnswer(i -> i.getArguments()[0]);
+//        when(productRepository.findById(1L)).thenReturn(Optional.ofNullable(mockProduct));
+
+        ResponseEntity<QuestionDto> questionAsResponseEntity = productService.createProductQuestion(questionDto, mockUser);
+
+        assertEquals("message", questionAsResponseEntity.getBody().getMessage());
+        assertEquals("answer", questionAsResponseEntity.getBody().getAnswer());
+        assertEquals(2L, questionAsResponseEntity.getBody().getAuthor().getId());
+        assertEquals(1L, questionAsResponseEntity.getBody().getProductId());
+
+        verify(fileHelper, times(1)).downloadFileAsByteArray(any(), any());
+        verify(reviewRepository, times(1)).save(any());
+        verify(productRepository, times(1)).findById(any());
     }
 
     @Test

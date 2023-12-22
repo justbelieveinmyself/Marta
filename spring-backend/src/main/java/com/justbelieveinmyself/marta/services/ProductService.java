@@ -184,22 +184,21 @@ public class ProductService {
         Review savedReview = reviewRepository.save(review);
         product.getReviews().add(savedReview);
         productRepository.save(product);
-        ReviewDto reviewDto1 = reviewMapper.modelToDto(savedReview, fileHelper);
-        return ResponseEntity.ok(reviewDto1);
+        return ResponseEntity.ok(reviewMapper.modelToDto(savedReview, fileHelper));
     }
 
-    public ResponseEntity<?> deleteProductReview(Review review) {
+    public ResponseEntity<ResponseMessage> deleteProductReview(Review review) {
         //no need to validate rights cause can be deleted only with authority "admin"
         reviewRepository.delete(review);
-        return ResponseEntity.ok(new ResponseMessage(HttpStatus.OK.value(), "Successfully deleted"));
+        return ResponseEntity.ok(new ResponseMessage(HttpStatus.OK.value(), "Successfully deleted!"));
     }
 
-    public ResponseEntity<?> getListProductQuestions(Product product) {
+    public ResponseEntity<List<QuestionDto>> getListProductQuestions(Product product) {
         List<QuestionDto> questions = product.getQuestions().stream().map(question -> questionMapper.modelToDto(question)).toList();
         return ResponseEntity.ok(questions);
     }
 
-    public ResponseEntity<?> createProductQuestion(QuestionDto questionDto, User author) {
+    public ResponseEntity<QuestionDto> createProductQuestion(QuestionDto questionDto, User author) {
         Optional<Product> productOpt = productRepository.findById(questionDto.getProductId());
         if(productOpt.isEmpty()){
             throw new NotFoundException("Product with [id] doesn't exists");

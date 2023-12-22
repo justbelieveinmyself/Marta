@@ -93,7 +93,7 @@ public class ProductFeedbackController {
             @ApiResponse(responseCode = "403", description = "Review doesn't deleted",
                     content = @Content)
     })
-    public ResponseEntity<?> deleteProductReview(
+    public ResponseEntity<ResponseMessage> deleteProductReview(
             @PathVariable(name = "reviewId") Review review
     ){
         return productService.deleteProductReview(review);
@@ -140,7 +140,7 @@ public class ProductFeedbackController {
                     content = @Content)
     })
     @Parameter(name = "productId", required = true, schema = @Schema(type = "integer", name = "productId"), in = ParameterIn.PATH)
-    public ResponseEntity<?> getProductQuestions(
+    public ResponseEntity<List<QuestionDto>> getProductQuestions(
             @Parameter(hidden = true)
             @PathVariable(name = "productId") Product product
     ){
@@ -155,7 +155,7 @@ public class ProductFeedbackController {
             @ApiResponse(responseCode = "403", description = "Question doesn't saved",
                     content = @Content)
     })
-    public ResponseEntity<?> createProductQuestion(
+    public ResponseEntity<QuestionDto> createProductQuestion(
             @RequestBody QuestionDto questionDto,
             @CurrentUser User author
     ){
