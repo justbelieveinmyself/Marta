@@ -209,10 +209,11 @@ public class ProductService {
         Question savedQuestion = questionRepository.save(question);
         product.getQuestions().add(savedQuestion);
         productRepository.save(product);
-        return ResponseEntity.ok(questionMapper.modelToDto(savedQuestion));
+        QuestionDto questionDto1 = questionMapper.modelToDto(savedQuestion);
+        return ResponseEntity.ok(questionDto1);
     }
 
-    public ResponseEntity<?> getProductsFromCart(User user) {
+    public ResponseEntity<List<ProductWithImageDto>> getProductsFromCart(User user) {
         List<ProductWithImageDto> productDtos = user.getCartProducts().stream()
                 .map(pro -> new ProductWithImageDto(productMapper.modelToDto(pro), Base64.getEncoder().encodeToString(
                         fileHelper.downloadFileAsByteArray(pro.getPreviewImg(), UploadDirectory.PRODUCTS))))

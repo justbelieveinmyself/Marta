@@ -11,6 +11,7 @@ import com.justbelieveinmyself.marta.repositories.ProductRepository;
 import com.justbelieveinmyself.marta.repositories.QuestionRepository;
 import com.justbelieveinmyself.marta.repositories.ReviewRepository;
 import com.justbelieveinmyself.marta.repositories.UserRepository;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -25,10 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -216,15 +214,14 @@ class ProductServiceTest {
 
     @Test
     void createProductQuestion() {
-        //not worked
         User mockUser = User.builder().id(2L).username("user").build();
         SellerDto sellerDto = new SellerDto(2L, "user", "test@mail.ru");
+        List<Question> questions = new ArrayList<>();
+        Product mockProduct = Product.builder().id(1L).questions(questions).build();
         QuestionDto questionDto = new QuestionDto(ZonedDateTime.now(), sellerDto, "message", "answer", 1L);
 
-        when(fileHelper.uploadFile((MultipartFile[]) any(), any())).thenReturn(List.of("path.png"));
-        when(fileHelper.downloadFileAsByteArray(any(), any())).thenReturn("base64encodedimage".getBytes());
-        when(reviewRepository.save(any())).thenAnswer(i -> i.getArguments()[0]);
-//        when(productRepository.findById(1L)).thenReturn(Optional.ofNullable(mockProduct));
+        when(productRepository.findById(any())).thenReturn(Optional.ofNullable(mockProduct));
+        when(questionRepository.save(any())).thenAnswer(i -> i.getArguments()[0]);
 
         ResponseEntity<QuestionDto> questionAsResponseEntity = productService.createProductQuestion(questionDto, mockUser);
 
@@ -233,13 +230,29 @@ class ProductServiceTest {
         assertEquals(2L, questionAsResponseEntity.getBody().getAuthor().getId());
         assertEquals(1L, questionAsResponseEntity.getBody().getProductId());
 
-        verify(fileHelper, times(1)).downloadFileAsByteArray(any(), any());
-        verify(reviewRepository, times(1)).save(any());
-        verify(productRepository, times(1)).findById(any());
+        verify(questionRepository, times(1)).save(any());
+        verify(productRepository, times(2)).findById(any());
     }
 
     @Test
     void getProductsFromCart() {
+        Set<Product> products = new HashSet<>();
+        products.add(Product.builder().id(1L).build());
+        products.add(Product.builder().id(2L).build());
+        products.add(Product.builder().id(5L).build());
+        User mockUser = User.builder().id(2L).username("user").cartProducts(products).build();
+
+        when(fileHelper.downloadFileAsByteArray(any(), any())).thenReturn("base64encodedimage".getBytes());
+
+        ResponseEntity<List<ProductWithImageDto>> productsFromCartAsResponseEntity = productService.getProductsFromCart(mockUser);
+
+        Long id = productsFromCartAsResponseEntity.getBody().get(0).getProduct().getId();
+        Assertions.assertTrue(id == 1L || id == 2L || id == 5L);
+        id = productsFromCartAsResponseEntity.getBody().get(2).getProduct().getId();
+        Assertions.assertTrue(id == 1L || id == 2L || id == 5L);
+        assertEquals("YmFzZTY0ZW5jb2RlZGltYWdl", productsFromCartAsResponseEntity.getBody().get(1).getFile());
+
+        verify(fileHelper, times(3)).downloadFileAsByteArray(any(), any());
     }
 
     @Test

@@ -2,6 +2,7 @@ package com.justbelieveinmyself.marta.controllers;
 
 import com.justbelieveinmyself.marta.domain.annotations.CurrentUser;
 import com.justbelieveinmyself.marta.domain.dto.ProductDto;
+import com.justbelieveinmyself.marta.domain.dto.ProductWithImageDto;
 import com.justbelieveinmyself.marta.domain.entities.Product;
 import com.justbelieveinmyself.marta.domain.entities.User;
 import com.justbelieveinmyself.marta.exceptions.ResponseMessage;
@@ -17,6 +18,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "api/v1/products/cart")
@@ -36,7 +39,7 @@ public class ProductCartController {
             @ApiResponse(responseCode = "403", description = "Unauthorized",
                     content = @Content)
     })
-    public ResponseEntity<?> getProductsFromCart(
+    public ResponseEntity<List<ProductWithImageDto>> getProductsFromCart(
             @CurrentUser User user
     ){
         return productService.getProductsFromCart(user);
