@@ -76,7 +76,7 @@ public class ProductFeedbackController {
                     content = @Content)
     })
     @Parameter(name = "reviewId", required = true, schema = @Schema(type = "integer", name = "reviewId"), in = ParameterIn.PATH)
-    public ResponseEntity<?> answerToReview(
+    public ResponseEntity<ReviewDto> answerToReview(
             @Parameter(hidden = true) @PathVariable(value = "reviewId") Review reviewFromDb,
             @RequestBody(required = true) String answer,
             @CurrentUser User authedUser
@@ -108,7 +108,7 @@ public class ProductFeedbackController {
                     content = @Content)
     })
     @Parameter(name = "questionId", required = true, schema = @Schema(type = "integer", name = "questionId"), in = ParameterIn.PATH)
-    public ResponseEntity<?> answerToQuestion(
+    public ResponseEntity<QuestionDto> answerToQuestion(
             @Parameter(hidden = true) @PathVariable(value = "questionId") Question questionFromDb,
             @RequestBody(required = true) String answer,
             @CurrentUser User authedUser
@@ -125,7 +125,7 @@ public class ProductFeedbackController {
             @ApiResponse(responseCode = "403", description = "Question doesn't deleted",
                     content = @Content)
     })
-    public ResponseEntity<?> deleteProductQuestion(
+    public ResponseEntity<ResponseMessage> deleteProductQuestion(
             @PathVariable(name = "questionId") Question question
     ){
         return productService.deleteProductQuestion(question);

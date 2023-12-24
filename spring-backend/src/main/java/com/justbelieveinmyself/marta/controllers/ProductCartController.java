@@ -56,10 +56,10 @@ public class ProductCartController {
     @Parameter(name = "productId", required = true, schema = @Schema(type = "integer", name = "productId"), in = ParameterIn.PATH)
     public ResponseEntity<?> addProductToCart(
             @Parameter(hidden = true)
-            @PathVariable("productId") Long productId,
+            @PathVariable("productId") Product product,
             @CurrentUser User customer
     ){
-        return productService.addProductToCart(productId, customer);
+        return productService.addProductToCart(product, customer);
     }
 
     @DeleteMapping
@@ -70,7 +70,7 @@ public class ProductCartController {
             @ApiResponse(responseCode = "403", description = "Cart doesn't deleted",
                     content = @Content)
     })
-    public ResponseEntity<?> deleteAllProductsInCart(
+    public ResponseEntity<ResponseMessage> deleteAllProductsInCart(
             @CurrentUser User user
     ){
         return productService.deleteAllProductsInCart(user);

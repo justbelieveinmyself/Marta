@@ -221,12 +221,7 @@ public class ProductService {
         return ResponseEntity.ok(productDtos);
     }
 
-    public ResponseEntity<?> addProductToCart(Long productId, User customer) {
-        Optional<Product> productOpt = productRepository.findById(productId);
-        if(productOpt.isEmpty()){
-            throw new NotFoundException("Product with [id] doesn't exists");
-        }
-        Product product = productOpt.get();
+    public ResponseEntity<?> addProductToCart(Product product, User customer) {
         if(customer.getCartProducts().add(product)){
             userRepository.save(customer);
             return ResponseEntity.ok(productMapper.modelToDto(product));
@@ -237,18 +232,18 @@ public class ProductService {
 
     }
 
-    public ResponseEntity<?> deleteAllProductsInCart(User customer) {
+    public ResponseEntity<ResponseMessage> deleteAllProductsInCart(User customer) {
         customer.setCartProducts(null);
         userRepository.save(customer);
-        return ResponseEntity.ok(new ResponseMessage(200, "Deleted"));
+        return ResponseEntity.ok(new ResponseMessage(200, "Successfully deleted!"));
     }
 
     public ResponseEntity<?> deleteProductFromCart(User customer, Product product) {
         if(customer.getCartProducts().remove(product)){
             userRepository.save(customer);
-            return ResponseEntity.ok(new ResponseMessage(200, "Product in Cart successfully deleted"));
+            return ResponseEntity.ok(new ResponseMessage(200, "The product has been successfully removed from the shopping cart!"));
         }else{
-            ResponseError responseError = new ResponseError(HttpStatus.FORBIDDEN, "Already removed from cart!");
+            ResponseError responseError = new ResponseError(HttpStatus.FORBIDDEN, "This product is not in the shopping cart!");
             return new ResponseEntity<>(responseError, HttpStatus.FORBIDDEN);
         }
     }
@@ -263,7 +258,7 @@ public class ProductService {
         }
     }
 
-    public ResponseEntity<?> getProductsFromFavourites(User user) {
+    public ResponseEntity<List<ProductWithImageDto>> getProductsFromFavourites(User user) {
         Set<Product> favouriteProducts = user.getFavouriteProducts();
         List<ProductWithImageDto> productDtos = favouriteProducts.stream()
                 .map(pro -> new ProductWithImageDto(productMapper.modelToDto(pro), Base64.getEncoder().encodeToString(
@@ -275,36 +270,36 @@ public class ProductService {
     public ResponseEntity<?> deleteProductFromFavourites(User user, Product product) {
         if (user.getFavouriteProducts().remove(product)) {
             userRepository.save(user);
-            return ResponseEntity.ok(new ResponseMessage(200, "Product in Favourites successfully deleted"));
+            return ResponseEntity.ok(new ResponseMessage(200, "The product has been successfully removed from the favourites!"));
         } else {
-            ResponseError responseError = new ResponseError(HttpStatus.FORBIDDEN, "Already removed from favourites!");
+            ResponseError responseError = new ResponseError(HttpStatus.FORBIDDEN, "This product is not in the favourites!");
             return new ResponseEntity<>(responseError, HttpStatus.FORBIDDEN);
         }
     }
 
-    public ResponseEntity<?> verifyProduct(Product productFromDb) {
+    public ResponseEntity<ProductDto> verifyProduct(Product productFromDb) {
         productFromDb.setIsVerified(true);
         Product savedProduct = productRepository.save(productFromDb);
         return ResponseEntity.ok(productMapper.modelToDto(savedProduct));
     }
 
-    public ResponseEntity<?> answerToReview(Review reviewFromDb, String answer, User authedUser) {
+    public ResponseEntity<ReviewDto> answerToReview(Review reviewFromDb, String answer, User authedUser) {
         validateRights(reviewFromDb.getProduct(), authedUser);
         reviewFromDb.setAnswer(answer);
         Review savedReview = reviewRepository.save(reviewFromDb);
         return ResponseEntity.ok(reviewMapper.modelToDto(savedReview, fileHelper));
     }
 
-    public ResponseEntity<?> answerToQuestion(Question questionFromDb, String answer, User authedUser) {
+    public ResponseEntity<QuestionDto> answerToQuestion(Question questionFromDb, String answer, User authedUser) {
         validateRights(questionFromDb.getProduct(), authedUser);
         questionFromDb.setAnswer(answer);
         Question savedQuestion = questionRepository.save(questionFromDb);
         return ResponseEntity.ok(questionMapper.modelToDto(savedQuestion));
     }
 
-    public ResponseEntity<?> deleteProductQuestion(Question question) {
+    public ResponseEntity<ResponseMessage> deleteProductQuestion(Question question) {
         //no need to validate rights cause can be deleted only with authority "admin"
         questionRepository.delete(question);
-        return ResponseEntity.ok(new ResponseMessage(HttpStatus.OK.value(), "Successfully deleted"));
+        return ResponseEntity.ok(new ResponseMessage(HttpStatus.OK.value(), "Successfully deleted!"));
     }
 }

@@ -24,6 +24,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("api/v1/products")
 @Tag(name = "Product", description = "The Product API")
@@ -129,7 +131,7 @@ public class ProductController {
                     content = @Content)
     })
     @Parameter(name = "productId", required = true, schema = @Schema(type = "integer", name = "productId"), in = ParameterIn.PATH)
-    public ResponseEntity<?> verifyProduct(
+    public ResponseEntity<ProductDto> verifyProduct(
             @Parameter(hidden = true) @PathVariable(value = "productId") Product productFromDb
     ) {
         return productService.verifyProduct(productFromDb);
@@ -160,7 +162,7 @@ public class ProductController {
             @ApiResponse(responseCode = "403", description = "Unauthorized",
                     content = @Content)
     })
-    public ResponseEntity<?> getProductsFromFavourites(
+    public ResponseEntity<List<ProductWithImageDto>> getProductsFromFavourites(
             @CurrentUser User user
     ){
         return productService.getProductsFromFavourites(user);

@@ -6,6 +6,7 @@ import com.justbelieveinmyself.marta.domain.entities.Product;
 import com.justbelieveinmyself.marta.domain.entities.Question;
 import com.justbelieveinmyself.marta.domain.entities.Review;
 import com.justbelieveinmyself.marta.domain.entities.User;
+import com.justbelieveinmyself.marta.exceptions.ResponseError;
 import com.justbelieveinmyself.marta.exceptions.ResponseMessage;
 import com.justbelieveinmyself.marta.repositories.ProductRepository;
 import com.justbelieveinmyself.marta.repositories.QuestionRepository;
@@ -29,6 +30,7 @@ import java.time.ZonedDateTime;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -256,42 +258,203 @@ class ProductServiceTest {
     }
 
     @Test
-    void addProductToCart() {
+    void addProductToCart_whenProductAddedToCart() {
+        Product mockProduct = Product.builder().id(5L).build();
+        User mockUser = User.builder().id(2L).username("user").cartProducts(new HashSet<Product>()).build();
+
+        when(userRepository.save(any())).thenAnswer(i -> i.getArguments()[0]);
+
+        ResponseEntity<?> response = productService.addProductToCart(mockProduct, mockUser);
+
+        assertEquals(5L, ((ProductDto) response.getBody()).getId());
+
+        verify(userRepository, times(1)).save(any());
+    }
+
+    @Test
+    void addProductToCart_whenProductAlreadyExistsInCart() {
+        Product mockProduct = Product.builder().id(5L).build();
+        HashSet<Product> products = new HashSet<>();
+        products.add(mockProduct);
+        User mockUser = User.builder().id(2L).username("user").cartProducts(products).build();
+
+        ResponseEntity<?> response = productService.addProductToCart(mockProduct, mockUser);
+
+        assertEquals("Already added to cart!", ((ResponseError) response.getBody()).getMessage());
+        assertEquals(403, ((ResponseError) response.getBody()).getStatus().value());
     }
 
     @Test
     void deleteAllProductsInCart() {
+        HashSet<Product> products = new HashSet<>();
+        products.add(Product.builder().id(2L).build());
+        products.add(Product.builder().id(5L).build());
+        User mockUser = User.builder().id(2L).username("user").cartProducts(products).build();
+
+        ResponseEntity<ResponseMessage> responseMessageAsResponseEntity = productService.deleteAllProductsInCart(mockUser);
+
+        assertEquals("Successfully deleted!", responseMessageAsResponseEntity.getBody().getMessage());
+        assertEquals(200, responseMessageAsResponseEntity.getBody().getStatus());
+
+        verify(userRepository, times(1)).save(any());
     }
 
     @Test
-    void deleteProductFromCart() {
+    void deleteProductFromCart_whenProductExistsInCart() {
+        HashSet<Product> products = new HashSet<>();
+        Product mockProduct = Product.builder().id(2L).build();
+        products.add(mockProduct);
+        products.add(Product.builder().id(5L).build());
+        User mockUser = User.builder().id(2L).username("user").cartProducts(products).build();
+
+        ResponseEntity<?> response = productService.deleteProductFromCart(mockUser, mockProduct);
+
+        assertEquals("The product has been successfully removed from the shopping cart!", ((ResponseMessage) response.getBody()).getMessage());
+        assertEquals(200, ((ResponseMessage) response.getBody()).getStatus());
+
+        verify(userRepository, times(1)).save(any());
     }
 
     @Test
-    void addProductToFavourites() {
+    void deleteProductFromCart_whenProductDoesntExistsInCart() {
+        HashSet<Product> products = new HashSet<>();
+        Product mockProduct = Product.builder().id(2L).build();
+        products.add(Product.builder().id(5L).build());
+        User mockUser = User.builder().id(2L).username("user").cartProducts(products).build();
+
+        ResponseEntity<?> response = productService.deleteProductFromCart(mockUser, mockProduct);
+
+        assertEquals("This product is not in the shopping cart!", ((ResponseError) response.getBody()).getMessage());
+        assertEquals(403, ((ResponseError) response.getBody()).getStatus().value());
+    }
+
+    @Test
+    void addProductToFavourites_whenProductAddedToFavourites() {
+        Product mockProduct = Product.builder().id(5L).build();
+        User mockUser = User.builder().id(2L).username("user").favouriteProducts(new HashSet<Product>()).build();
+
+        when(userRepository.save(any())).thenAnswer(i -> i.getArguments()[0]);
+
+        ResponseEntity<?> response = productService.addProductToFavourites(mockProduct, mockUser);
+
+        assertEquals(5L, ((ProductDto) response.getBody()).getId());
+
+        verify(userRepository, times(1)).save(any());
+    }
+
+    @Test
+    void addProductToFavourites_whenProductAlreadyExistsInFavourites() {
+        Product mockProduct = Product.builder().id(5L).build();
+        HashSet<Product> products = new HashSet<>();
+        products.add(mockProduct);
+        User mockUser = User.builder().id(2L).username("user").favouriteProducts(products).build();
+
+        ResponseEntity<?> response = productService.addProductToFavourites(mockProduct, mockUser);
+
+        assertEquals("Already added to favourites!", ((ResponseError) response.getBody()).getMessage());
+        assertEquals(403, ((ResponseError) response.getBody()).getStatus().value());
     }
 
     @Test
     void getProductsFromFavourites() {
+        Set<Product> mockFavourites = new HashSet<>();
+        mockFavourites.add(Product.builder().id(1L).previewImg("test1.png").build());
+        mockFavourites.add(Product.builder().id(3L).previewImg("test3.png").build());
+        mockFavourites.add(Product.builder().id(5L).previewImg("test5.png").build());
+        User mockUser = User.builder().id(1L).favouriteProducts(mockFavourites).build();
+
+        when(fileHelper.downloadFileAsByteArray(any(), any())).thenReturn("base64encodedimage".getBytes());
+
+        ResponseEntity<List<ProductWithImageDto>> favouritesAsResponseEntity = productService.getProductsFromFavourites(mockUser);
+
+        Long id = favouritesAsResponseEntity.getBody().get(0).getProduct().getId();
+        assertTrue(id == 1L || id == 3L || id == 5L);
+        assertEquals("YmFzZTY0ZW5jb2RlZGltYWdl", favouritesAsResponseEntity.getBody().get(0).getFile());
+
+        verify(fileHelper, times(3)).downloadFileAsByteArray(any(), any());
     }
 
     @Test
-    void deleteProductFromFavourites() {
+    void deleteProductFromFavourites_whenProductExistsInFavourites() {
+        HashSet<Product> products = new HashSet<>();
+        Product mockProduct = Product.builder().id(2L).build();
+        products.add(mockProduct);
+        products.add(Product.builder().id(5L).build());
+        User mockUser = User.builder().id(2L).username("user").favouriteProducts(products).build();
+
+        ResponseEntity<?> response = productService.deleteProductFromFavourites(mockUser, mockProduct);
+
+        assertEquals("The product has been successfully removed from the favourites!", ((ResponseMessage) response.getBody()).getMessage());
+        assertEquals(200, ((ResponseMessage) response.getBody()).getStatus());
+
+        verify(userRepository, times(1)).save(any());
+    }
+
+    @Test
+    void deleteProductFromFavourites_whenProductDoesntExistsInCart() {
+        HashSet<Product> products = new HashSet<>();
+        Product mockProduct = Product.builder().id(2L).build();
+        products.add(Product.builder().id(5L).build());
+        User mockUser = User.builder().id(2L).username("user").favouriteProducts(products).build();
+
+        ResponseEntity<?> response = productService.deleteProductFromFavourites(mockUser, mockProduct);
+
+        assertEquals("This product is not in the favourites!", ((ResponseError) response.getBody()).getMessage());
+        assertEquals(403, ((ResponseError) response.getBody()).getStatus().value());
     }
 
     @Test
     void verifyProduct() {
+        Product mockProduct = Product.builder().id(1L).isVerified(false).build();
+
+        when(productRepository.save(any())).thenAnswer(i -> i.getArguments()[0]);
+
+        ResponseEntity<ProductDto> productDtoAsResponseEntity = productService.verifyProduct(mockProduct);
+
+        assertTrue(productDtoAsResponseEntity.getBody().getIsVerified());
+        assertEquals(1L, productDtoAsResponseEntity.getBody().getId());
+
+        verify(productRepository, times(1)).save(any());
     }
 
     @Test
     void answerToReview() {
+        User mockUser = User.builder().id(2L).username("user").build();
+        Product mockProduct = Product.builder().id(1L).seller(mockUser).build();
+        Review mockReview =  new Review(1L, "message", "answer", 2, mockUser, ZonedDateTime.now(), null, mockProduct);
+        when(reviewRepository.save(any())).thenAnswer(i -> i.getArguments()[0]);
+
+        ResponseEntity<ReviewDto> reviewDtoAsResponseEntity = productService.answerToReview(mockReview, "test", mockUser);
+
+        assertEquals(2, reviewDtoAsResponseEntity.getBody().getRating());
+        assertEquals("test", reviewDtoAsResponseEntity.getBody().getAnswer());
+        assertEquals("message", reviewDtoAsResponseEntity.getBody().getMessage());
+
+        verify(reviewRepository, times(1)).save(any());
     }
 
     @Test
     void answerToQuestion() {
+        User mockUser = User.builder().id(2L).username("user").build();
+        Product mockProduct = Product.builder().id(1L).seller(mockUser).build();
+        Question mockQuestion =  new Question(1L, ZonedDateTime.now(), mockUser, "message", "answer", mockProduct);
+        when(questionRepository.save(any())).thenAnswer(i -> i.getArguments()[0]);
+
+        ResponseEntity<QuestionDto> questionDtoAsResponseEntity = productService.answerToQuestion(mockQuestion, "test", mockUser);
+
+        assertEquals("test", questionDtoAsResponseEntity.getBody().getAnswer());
+        assertEquals("message", questionDtoAsResponseEntity.getBody().getMessage());
+
+        verify(questionRepository, times(1)).save(any());
     }
 
     @Test
     void deleteProductQuestion() {
+        ResponseEntity<ResponseMessage> responseMessageAsResponseEntity = productService.deleteProductQuestion(any());
+
+        assertEquals("Successfully deleted!", responseMessageAsResponseEntity.getBody().getMessage());
+        assertEquals(200, responseMessageAsResponseEntity.getBody().getStatus());
+
+        verify(questionRepository, times(1)).delete(any());
     }
 }
