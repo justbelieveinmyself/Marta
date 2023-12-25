@@ -19,6 +19,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("api/v1/orders")
 @Tag(name = "Order", description = "The Order API")
@@ -35,11 +37,11 @@ public class OrderController {
             @ApiResponse(responseCode = "200", description = "Successfully",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProductDto.class))),
     })
-    public ResponseEntity<?> getListOrders(@CurrentUser User user) {
+    public ResponseEntity<List<OrderDto>> getListOrders(@CurrentUser User user) {
         return orderService.getListOrders(user);
     }
     @PostMapping
-    public ResponseEntity<?> createOrder(
+    public ResponseEntity<OrderDto> createOrder(
             @CurrentUser User user,
             @RequestBody OrderDto orderDto
     ) {

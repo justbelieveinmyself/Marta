@@ -1,15 +1,16 @@
 package com.justbelieveinmyself.marta.domain.entities;
 
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import lombok.*;
 
 @Entity
 @Table(name = "order_product")
 @EqualsAndHashCode
 @ToString(exclude = {"product", "quantity"})
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class OrderProduct {
     @Id @ManyToOne @JoinColumn
     private Order order;

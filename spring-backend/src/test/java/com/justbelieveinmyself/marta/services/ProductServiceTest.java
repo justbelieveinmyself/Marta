@@ -37,7 +37,6 @@ import static org.mockito.Mockito.*;
 @SpringBootTest
 @AutoConfigureMockMvc
 class ProductServiceTest {
-
     @Autowired
     private ProductService productService;
     @MockBean
