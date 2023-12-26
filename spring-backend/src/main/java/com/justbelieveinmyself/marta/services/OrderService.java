@@ -61,9 +61,9 @@ public class OrderService {
         return ResponseEntity.ok(orderMapper.modelToDto(savedOrder));
     }
 
-    public ResponseEntity<?> changeOrderStatus(Order order, String status, User authedUser) {
+    public ResponseEntity<OrderDto> changeOrderStatus(Order order, DeliveryStatus status, User authedUser) {
         validateRights(authedUser, order.getCustomer());
-        order.setStatus(DeliveryStatus.valueOf(status));
+        order.setStatus(status);
         orderRepository.save(order);
         return ResponseEntity.ok(orderMapper.modelToDto(order));
     }

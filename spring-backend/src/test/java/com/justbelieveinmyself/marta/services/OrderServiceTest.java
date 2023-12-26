@@ -82,5 +82,14 @@ class OrderServiceTest {
 
     @Test
     void changeOrderStatus() {
+        List<Order> orders = new ArrayList<>();
+        User mockUser = User.builder().id(1L).orders(orders).build();
+        Order order = Order.builder().id(2L).customer(mockUser).orderedAt(ZonedDateTime.now()).status(DeliveryStatus.IN_PROCESSING).build();
+
+        ResponseEntity<OrderDto> orderDtoAsResponseEntity = orderService.changeOrderStatus(order, DeliveryStatus.DELAYED, mockUser);
+
+        assertEquals(DeliveryStatus.DELAYED, orderDtoAsResponseEntity.getBody().getStatus());
+
+        verify(orderRepository, times(1)).save(any());
     }
 }
