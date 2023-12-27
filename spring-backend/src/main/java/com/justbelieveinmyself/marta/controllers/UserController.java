@@ -131,7 +131,7 @@ public class UserController {
     })
     @PreAuthorize("hasAuthority('ADMIN')")
     @Parameter(name = "profileId", schema = @Schema(name = "profileId", type = "integer"), in = ParameterIn.PATH)
-    public ResponseEntity<?> deleteUser(
+    public ResponseEntity<ResponseMessage> deleteUser(
             @Parameter(hidden = true) @PathVariable("profileId") User user
     ) {
         return userService.deleteUser(user);

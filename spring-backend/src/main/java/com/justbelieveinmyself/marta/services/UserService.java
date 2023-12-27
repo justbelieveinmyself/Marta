@@ -46,7 +46,7 @@ public class UserService implements UserDetailsService {
     }
 
 
-    public ResponseEntity<?> deleteUser(User user) {
+    public ResponseEntity<ResponseMessage> deleteUser(User user) {
         userRepository.delete(user);
         return ResponseEntity.ok(new ResponseMessage(200, "User successfully deleted!"));
     }
