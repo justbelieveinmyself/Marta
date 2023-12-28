@@ -45,7 +45,7 @@ public class FileHelper {
         });
         return paths;
     }
-    public ResponseEntity<?> downloadFileAsResponse(String filename, UploadDirectory from) {
+    public ResponseEntity<UrlResource> downloadFileAsResponse(String filename, UploadDirectory from) {
         try {
             UrlResource resource = getFileAsResource(filename, from);
             HttpHeaders httpHeaders = new HttpHeaders();

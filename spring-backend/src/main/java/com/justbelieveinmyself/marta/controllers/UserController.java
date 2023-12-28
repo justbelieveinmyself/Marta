@@ -19,6 +19,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.core.io.UrlResource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -48,7 +49,7 @@ public class UserController {
                     content = @Content)
     })
     @Parameter(name = "profileId", schema = @Schema(name = "profileId", type = "integer"), in = ParameterIn.PATH)
-    public ResponseEntity<?> updateEmail(
+    public ResponseEntity<LoginResponseDto> updateEmail(
             @Parameter(hidden = true) @PathVariable("profileId")User user,
             @RequestBody String email,
             @CurrentUser User currentUser
@@ -65,7 +66,7 @@ public class UserController {
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,schema = @Schema(implementation = ResponseError.class)))
     })
     @Parameter(name = "profileId", schema = @Schema(name = "profileId", type = "integer"), in = ParameterIn.PATH)
-    public ResponseEntity<?> getAvatar(
+    public ResponseEntity<UrlResource> getAvatar(
             @Parameter(hidden = true) @PathVariable("profileId") User user,
             @CurrentUser User currentUser
     ) {
@@ -81,7 +82,7 @@ public class UserController {
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,schema = @Schema(implementation = ResponseError.class)))
     })
     @Parameter(name = "profileId", schema = @Schema(name = "profileId", type = "integer"), in = ParameterIn.PATH)
-    public ResponseEntity<?> updateAvatar(
+    public ResponseEntity<ResponseMessage> updateAvatar(
             @Parameter(hidden = true) @PathVariable("profileId") User user,
             @RequestParam("file") MultipartFile file,
             @CurrentUser User currentUser

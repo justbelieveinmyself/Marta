@@ -14,6 +14,7 @@ import com.justbelieveinmyself.marta.exceptions.ForbiddenException;
 import com.justbelieveinmyself.marta.exceptions.ResponseMessage;
 import com.justbelieveinmyself.marta.repositories.UserRepository;
 import org.springframework.beans.BeanUtils;
+import org.springframework.core.io.UrlResource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -71,22 +72,22 @@ public class UserService implements UserDetailsService {
         return userRepository.save(user);
     }
 
-    public ResponseEntity<?> updateEmail(User user, String email, User authUser) {
+    public ResponseEntity<LoginResponseDto> updateEmail(User user, String email, User authUser) {
         validateRights(authUser, user);
         user.setEmail(email);
         User savedUser = userRepository.save(user);
-        return ResponseEntity.ok(new LoginResponseDto(null, userMapper.modelToDto(savedUser, fileHelper,productMapper)));
+        return ResponseEntity.ok(new LoginResponseDto(null, userMapper.modelToDto(savedUser, fileHelper, productMapper)));
     }
 
-    public ResponseEntity<?> updateAvatar(User user, MultipartFile file, User authUser) {
+    public ResponseEntity<ResponseMessage> updateAvatar(User user, MultipartFile file, User authUser) {
         validateRights(authUser, user);
         String path = fileHelper.uploadFile(file, UploadDirectory.AVATARS);
         user.setAvatar(path);
         userRepository.save(user);
-        return ResponseEntity.ok(new ResponseMessage(201, "Updated"));
+        return ResponseEntity.ok(new ResponseMessage(201, "Successfully updated!"));
     }
 
-    public ResponseEntity<?> getAvatar(User user, User authUser) {
+    public ResponseEntity<UrlResource> getAvatar(User user, User authUser) {
         validateRights(authUser, user);
         return fileHelper.downloadFileAsResponse(user.getAvatar(), UploadDirectory.AVATARS);
     }
