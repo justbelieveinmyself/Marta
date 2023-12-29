@@ -1,10 +1,12 @@
 package com.justbelieveinmyself.marta.services;
 
 import com.justbelieveinmyself.marta.configs.beans.FileHelper;
+import com.justbelieveinmyself.marta.domain.dto.UserDto;
 import com.justbelieveinmyself.marta.domain.dto.auth.LoginResponseDto;
 import com.justbelieveinmyself.marta.domain.dto.auth.RegisterDto;
 import com.justbelieveinmyself.marta.domain.entities.User;
 import com.justbelieveinmyself.marta.domain.enums.Role;
+import com.justbelieveinmyself.marta.domain.enums.UploadDirectory;
 import com.justbelieveinmyself.marta.exceptions.ForbiddenException;
 import com.justbelieveinmyself.marta.exceptions.ResponseMessage;
 import com.justbelieveinmyself.marta.repositories.UserRepository;
@@ -13,11 +15,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.net.MalformedURLException;
 import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -187,12 +192,38 @@ class UserServiceTest {
     }
 
     @Test
-    void getAvatar() {
+    void getAvatar_whenUsersEquals() throws MalformedURLException {
+        User mockUser = User.builder().id(1L).username("user").avatar("avatar.png").build();
 
+        when(fileHelper.downloadFileAsResponse("avatar.png", UploadDirectory.AVATARS)).thenReturn(new ResponseEntity<UrlResource>(HttpStatusCode.valueOf(200)));
+
+        ResponseEntity<UrlResource> avatarAsResponseEntity = userService.getAvatar(mockUser, mockUser);
+
+        assertEquals(200, avatarAsResponseEntity.getStatusCode());
+        verify(fileHelper, times(1)).downloadFileAsResponse("avatar.png", UploadDirectory.AVATARS);
+    }
+
+    @Test
+    void getAvatar_whenDifferentUsers() {
+        User mockUser = User.builder().id(1L).username("user").avatar("avatar.png").build();
+        User mockUser1 = User.builder().id(2L).username("another").build();
+
+        assertThrows(ForbiddenException.class, () -> {
+            ResponseEntity<UrlResource> avatarAsResponseEntity = userService.getAvatar(mockUser, mockUser1);
+        }, "You don't have the rights!");
+
+        verify(fileHelper, times(0)).downloadFileAsResponse(any(), any());
     }
 
     @Test
     void updateGender() {
+        User mockUser = User.builder().id(1L).username("user").gender("FEMALE").avatar("avatar.png").build();
+
+        when(userRepository.save(any())).thenAnswer(i -> i.getArguments()[0]);
+
+        ResponseEntity<UserDto> userDtoAsResponseEntity = userService.updateGender(mockUser, "MALE", mockUser);
+
+        verify(userRepository, times(1)).save(any());
     }
 
     @Test

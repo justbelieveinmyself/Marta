@@ -147,7 +147,7 @@ public class UserController {
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,schema = @Schema(implementation = ResponseError.class)))
     })
     @Parameter(name = "profileId", schema = @Schema(name = "profileId", type = "integer"), in = ParameterIn.PATH)
-    public ResponseEntity<?> updateGender(
+    public ResponseEntity<UserDto> updateGender(
             @Parameter(hidden = true) @PathVariable("profileId") User user,
             @RequestBody String gender,
             @CurrentUser User authedUser

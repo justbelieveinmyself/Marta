@@ -98,7 +98,7 @@ public class UserService implements UserDetailsService {
         }
     }
 
-    public ResponseEntity<?> updateGender(User user, String gender, User authUser) {
+    public ResponseEntity<UserDto> updateGender(User user, String gender, User authUser) {
         validateRights(authUser, user);
         user.setGender(gender);
         User savedUser = userRepository.save(user);
