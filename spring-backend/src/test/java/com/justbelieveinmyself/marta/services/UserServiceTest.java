@@ -2,6 +2,7 @@ package com.justbelieveinmyself.marta.services;
 
 import com.justbelieveinmyself.marta.configs.beans.FileHelper;
 import com.justbelieveinmyself.marta.domain.dto.UserDto;
+import com.justbelieveinmyself.marta.domain.dto.UserNamesDto;
 import com.justbelieveinmyself.marta.domain.dto.auth.LoginResponseDto;
 import com.justbelieveinmyself.marta.domain.dto.auth.RegisterDto;
 import com.justbelieveinmyself.marta.domain.entities.User;
@@ -23,6 +24,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.net.MalformedURLException;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -216,26 +219,89 @@ class UserServiceTest {
     }
 
     @Test
-    void updateGender() {
-        User mockUser = User.builder().id(1L).username("user").gender("FEMALE").avatar("avatar.png").build();
+    void updateGender_whenUsersEquals() {
+        User mockUser = User.builder().id(1L).username("user").gender("FEMALE").build();
 
         when(userRepository.save(any())).thenAnswer(i -> i.getArguments()[0]);
 
         ResponseEntity<UserDto> userDtoAsResponseEntity = userService.updateGender(mockUser, "MALE", mockUser);
 
+        assertEquals("MALE", userDtoAsResponseEntity.getBody().getGender());
+        assertEquals("user", userDtoAsResponseEntity.getBody().getUsername());
+
         verify(userRepository, times(1)).save(any());
     }
 
     @Test
-    void updateNameAndSurname() {
+    void updateGender_whenDifferentUsers() {
+        User mockUser = User.builder().id(1L).username("user").gender("FEMALE").build();
+        User mockUser1 = User.builder().id(2L).username("xd").build();
+
+        assertThrows(ForbiddenException.class, () -> {
+            ResponseEntity<UserDto> userDtoAsResponseEntity = userService.updateGender(mockUser, "MALE", mockUser1);
+        }, "You don't have the rights!");
+
+        verify(userRepository, times(0)).save(any());
+    }
+
+    @Test
+    void updateNameAndSurname_whenUsersEquals() {
+        User mockUser = User.builder().id(1L).username("user").firstName("First").lastName("Last").build();
+
+        when(userRepository.save(any())).thenAnswer(i -> i.getArguments()[0]);
+
+        ResponseEntity<UserDto> userDtoAsResponseEntity = userService.updateNameAndSurname(mockUser, new UserNamesDto("1st", "2nd"), mockUser);
+
+        assertEquals("1st", userDtoAsResponseEntity.getBody().getFirstName());
+        assertEquals("2nd", userDtoAsResponseEntity.getBody().getLastName());
+
+        verify(userRepository, times(1)).save(any());
+    }
+
+    @Test
+    void updateNameAndSurname_whenDifferentUsers() {
+        User mockUser = User.builder().id(1L).username("user").firstName("First").lastName("Last").build();
+        User mockUser1 = User.builder().id(2L).username("test").firstName("First").lastName("Last").build();
+
+        when(userRepository.save(any())).thenAnswer(i -> i.getArguments()[0]);
+
+        assertThrows(ForbiddenException.class, () -> {
+            ResponseEntity<UserDto> userDtoAsResponseEntity = userService.updateNameAndSurname(mockUser, new UserNamesDto("1st", "2nd"), mockUser1);
+        }, "You don't have the rights!");
+
+        verify(userRepository, times(0)).save(any());
     }
 
     @Test
     void getUser() {
+        User mockUser = User.builder().id(1L).username("user").firstName("1st").lastName("2nd").build();
+
+        when(userRepository.save(any())).thenAnswer(i -> i.getArguments()[0]);
+
+        ResponseEntity<UserDto> userDtoAsResponseEntity = userService.getUser(mockUser);
+
+        assertEquals("1st", userDtoAsResponseEntity.getBody().getFirstName());
+        assertEquals("2nd", userDtoAsResponseEntity.getBody().getLastName());
+        assertEquals("user", userDtoAsResponseEntity.getBody().getUsername());
     }
 
     @Test
     void getAllUsers() {
+        List<User> users = Arrays.asList(
+                User.builder().id(1L).username("user").build(),
+                User.builder().id(3L).username("admin").build(),
+                User.builder().id(5L).username("test").build()
+        );
+
+        when(userRepository.findAll()).thenReturn(users);
+
+        ResponseEntity<List<UserDto>> usersAsResponseEntity = userService.getAllUsers();
+
+        assertEquals("user", usersAsResponseEntity.getBody().get(0).getUsername());
+        assertEquals("admin", usersAsResponseEntity.getBody().get(1).getUsername());
+        assertEquals("test", usersAsResponseEntity.getBody().get(2).getUsername());
+
+        verify(userRepository, times(1)).findAll();
     }
 
     @Test

@@ -26,6 +26,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 import java.util.Set;
 
 @RestController
@@ -98,7 +99,7 @@ public class UserController {
             @ApiResponse(responseCode = "403", description = "Unauthorized or has no rights",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
     })
-    public ResponseEntity<?> getUserInfo(
+    public ResponseEntity<UserDto> getUserInfo(
             @CurrentUser User authedUser,
             @PathVariable(name = "profileId", required = false) User userFromDb
     ){
@@ -117,7 +118,7 @@ public class UserController {
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ResponseError.class)))
     })
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<?> getAllUsers(
+    public ResponseEntity<List<UserDto>> getAllUsers(
     ) {
         return userService.getAllUsers();
     }
@@ -181,7 +182,7 @@ public class UserController {
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,schema = @Schema(implementation = ResponseError.class)))
     })
     @Parameter(name = "profileId", schema = @Schema(name = "profileId", type = "integer"), in = ParameterIn.PATH)
-    public ResponseEntity<?> updateNameAndSurname(
+    public ResponseEntity<UserDto> updateNameAndSurname(
             @Parameter(hidden = true) @PathVariable("profileId") User user,
             @RequestBody UserNamesDto userNamesDto,
             @CurrentUser User authedUser

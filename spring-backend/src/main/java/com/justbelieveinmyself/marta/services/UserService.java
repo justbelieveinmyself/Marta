@@ -105,7 +105,7 @@ public class UserService implements UserDetailsService {
         return ResponseEntity.ok(userMapper.modelToDto(savedUser, fileHelper, productMapper));
     }
 
-    public ResponseEntity<?> updateNameAndSurname(User user, UserNamesDto userNamesDto, User authedUser) {
+    public ResponseEntity<UserDto> updateNameAndSurname(User user, UserNamesDto userNamesDto, User authedUser) {
         validateRights(authedUser, user);
         user.setFirstName(userNamesDto.getFirstName());
         user.setLastName(userNamesDto.getLastName());
@@ -113,11 +113,11 @@ public class UserService implements UserDetailsService {
         return ResponseEntity.ok(userMapper.modelToDto(savedUser, fileHelper, productMapper));
     }
 
-    public ResponseEntity<?> getUser(User user) {
+    public ResponseEntity<UserDto> getUser(User user) {
         return ResponseEntity.ok(userMapper.modelToDto(user, fileHelper, productMapper));
     }
 
-    public ResponseEntity<?> getAllUsers() {
+    public ResponseEntity<List<UserDto>> getAllUsers() {
         List<User> users = userRepository.findAll();
         List<UserDto> userDtos = users.stream().map(user -> userMapper.modelToDto(user, fileHelper, productMapper)).toList();
         return ResponseEntity.ok(userDtos);
