@@ -166,7 +166,7 @@ public class UserController {
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,schema = @Schema(implementation = ResponseError.class)))
     })
     @Parameter(name = "profileId", schema = @Schema(name = "profileId", type = "integer"), in = ParameterIn.PATH)
-    public ResponseEntity<?> updateRoles(
+    public ResponseEntity<UserDto> updateRoles(
             @Parameter(hidden = true) @PathVariable("profileId") User user,
             @RequestBody Set<Role> roles
     ){

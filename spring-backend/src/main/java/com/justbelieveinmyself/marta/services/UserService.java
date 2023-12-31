@@ -123,7 +123,7 @@ public class UserService implements UserDetailsService {
         return ResponseEntity.ok(userDtos);
     }
 
-    public ResponseEntity<?> updateRoles(User user, Set<Role> roles) {
+    public ResponseEntity<UserDto> updateRoles(User user, Set<Role> roles) {
         user.setRoles(roles);
         User savedUser = userRepository.save(user);
         return ResponseEntity.ok(userMapper.modelToDto(savedUser, fileHelper, productMapper));

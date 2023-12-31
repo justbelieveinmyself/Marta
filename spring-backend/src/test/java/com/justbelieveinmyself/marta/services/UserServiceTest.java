@@ -25,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.net.MalformedURLException;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 
@@ -306,5 +307,21 @@ class UserServiceTest {
 
     @Test
     void updateRoles() {
+        HashSet<Role> mockRoles = new HashSet<>();
+        mockRoles.add(Role.USER);
+        mockRoles.add(Role.ADMIN);
+        HashSet<Role> newRoles = new HashSet<>();
+        newRoles.add(Role.USER);
+        User mockUser = User.builder().id(1L).username("user").roles(mockRoles).build();
+
+        when(userRepository.save(any())).thenAnswer(i -> i.getArguments()[0]);
+
+        ResponseEntity<UserDto> userDtoAsResponseEntity = userService.updateRoles(mockUser, newRoles);
+
+        assertEquals(1, userDtoAsResponseEntity.getBody().getRoles().size());
+        assertEquals("user", userDtoAsResponseEntity.getBody().getUsername());
+        assertTrue(userDtoAsResponseEntity.getBody().getRoles().contains(Role.USER));
+
+        verify(userRepository, times(1)).save(any());
     }
 }
