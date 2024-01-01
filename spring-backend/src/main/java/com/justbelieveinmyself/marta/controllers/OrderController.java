@@ -5,6 +5,7 @@ import com.justbelieveinmyself.marta.domain.dto.OrderDto;
 import com.justbelieveinmyself.marta.domain.dto.ProductDto;
 import com.justbelieveinmyself.marta.domain.entities.Order;
 import com.justbelieveinmyself.marta.domain.entities.User;
+import com.justbelieveinmyself.marta.domain.enums.DeliveryStatus;
 import com.justbelieveinmyself.marta.exceptions.ResponseError;
 import com.justbelieveinmyself.marta.services.OrderService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -18,6 +19,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/orders")
@@ -35,11 +38,11 @@ public class OrderController {
             @ApiResponse(responseCode = "200", description = "Successfully",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProductDto.class))),
     })
-    public ResponseEntity<?> getListOrders(@CurrentUser User user) {
+    public ResponseEntity<List<OrderDto>> getListOrders(@CurrentUser User user) {
         return orderService.getListOrders(user);
     }
     @PostMapping
-    public ResponseEntity<?> createOrder(
+    public ResponseEntity<OrderDto> createOrder(
             @CurrentUser User user,
             @RequestBody OrderDto orderDto
     ) {
@@ -55,12 +58,12 @@ public class OrderController {
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,schema = @Schema(implementation = ResponseError.class)))
     })
     @Parameter(name = "orderId", schema = @Schema(name = "orderId", type = "integer"), in = ParameterIn.PATH)
-    public ResponseEntity<?> updateOrderStatus(
+    public ResponseEntity<OrderDto> updateOrderStatus(
             @Parameter(hidden = true) @PathVariable("orderId") Order order,
             @RequestBody String status,
             @CurrentUser User authedUser
     ){
-        return orderService.changeOrderStatus(order, status, authedUser);
+        return orderService.changeOrderStatus(order, DeliveryStatus.valueOf(status), authedUser);
     }
 
 }

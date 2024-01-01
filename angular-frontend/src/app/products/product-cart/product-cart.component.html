@@ -146,12 +146,38 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body mx-4" style="font-size: 17px">
-                Balance
-                Card 1
-                Card 2
-                Link new card
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadio1">
+                    <label class="form-check-label" for="flexRadio1">
+                        VISA
+                    </label>
+                </div>
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadio2">
+                    <label class="form-check-label" for="flexRadio2">
+                        MIR
+                    </label>
+                </div>
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadio3">
+                    <label class="form-check-label" for="flexRadio3">
+                        BALANCE
+                    </label>
+                </div>
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadio4">
+                    <label class="form-check-label" for="flexRadio4">
+                        QR-CODE
+                    </label>
+                </div>
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadio5">
+                    <label class="form-check-label" for="flexRadio5">
+                        LINK SBP
+                    </label>
+                </div>
                 <div class="mt-3 justify-content-center" style="display: flex">
-                    <button class="btn btn-outline-dark w-75" >Choose</button>
+                    <button class="btn btn-outline-dark w-75" (click)="choosePayMethod()">Choose</button>
                 </div>
             </div>
         </div>

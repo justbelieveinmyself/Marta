@@ -6,6 +6,7 @@ import {Product} from "../../models/product";
 import {TokenService} from "../../service/token.service";
 import {LocalUser} from "../../models/local-user";
 import {UserService} from "../../service/user.service";
+import {Seller} from "../../models/seller";
 
 @Component({
     selector: 'app-product-list',
@@ -24,7 +25,9 @@ export class ProductListComponent{
     @Input() isOrders: boolean;
     @Input() isAdminPage: boolean;
     productInToast: Product;
+    contactSeller: Seller = new Seller();
     currentUser: LocalUser;
+    messageForSeller = "";
     isFavourite: boolean[];
     favourites: ProductWithImage[];
     ngOnInit() {
@@ -33,12 +36,12 @@ export class ProductListComponent{
             console.log("test");
         }
         this.currentUser = this.tokenService.getUser();
-        if(!this.favourites){
+        if(this.card && !this.favourites){
             this.getFavourites();
         }
     }
     ngOnChanges(){
-        if(!this.card){
+        if(this.card){
             this.getFavourites();
         }
     }
@@ -101,4 +104,7 @@ export class ProductListComponent{
         }
     }
 
+    sendMessageToSeller() {
+
+    }
 }

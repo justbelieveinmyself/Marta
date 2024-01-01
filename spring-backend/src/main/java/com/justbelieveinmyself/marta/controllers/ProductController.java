@@ -17,11 +17,14 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/products")
@@ -34,13 +37,13 @@ public class ProductController {
     }
 
     @GetMapping
-    @Operation(summary = "Get list of all products", description = "Use this to get products. By default sort by id with pages")
+    @Operation(summary = "Get page of all products", description = "Use this to get products. By default sort by id with pages")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProductWithImageDto.class)))
     })
-    public ResponseEntity<?> getListProducts(ProductListRequest productListRequest) {
-        return productService.getListProducts(
+    public ResponseEntity<Page<ProductWithImageDto>> getListProducts(ProductListRequest productListRequest) {
+        return productService.getProductsAsPage(
                 productListRequest.getSortBy(),
                 productListRequest.getIsAsc(),
                 productListRequest.getPage(),
@@ -60,7 +63,7 @@ public class ProductController {
             @ApiResponse(responseCode = "403", description = "1. You don't have the rights! \n 2. Preview image so big!",
                     content = @Content)
     })
-    public ResponseEntity<?> createProduct(
+    public ResponseEntity<ProductDto> createProduct(
             @RequestPart("product") ProductDto productDto,
             @RequestPart(value = "file", required = false) MultipartFile file,
             @CurrentUser User currentUser
@@ -77,7 +80,7 @@ public class ProductController {
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ResponseError.class)))
     })
     @Parameter(name = "productId", required = true, schema = @Schema(type = "integer", name = "productId"), in = ParameterIn.PATH)
-    public ResponseEntity<?> deleteProduct(
+    public ResponseEntity<ResponseMessage> deleteProduct(
             @Parameter(hidden = true) @PathVariable(value = "productId", required = false) Product product,
             @CurrentUser User currentUser
     ) {
@@ -93,7 +96,7 @@ public class ProductController {
                     content = @Content)
     })
     @Parameter(name = "productId", required = true, schema = @Schema(type = "integer", name = "productId"), in = ParameterIn.PATH)
-    public ResponseEntity<?> getProduct(
+    public ResponseEntity<ProductWithImageDto> getProduct(
             @Parameter(hidden = true)
             @PathVariable(value = "productId") Product product
     ) {
@@ -110,7 +113,7 @@ public class ProductController {
                     content = @Content)
     })
     @Parameter(name = "productId", required = true, schema = @Schema(type = "integer", name = "productId"), in = ParameterIn.PATH)
-    public ResponseEntity<?> updateProduct(
+    public ResponseEntity<ProductDto> updateProduct(
             @Parameter(hidden = true) @PathVariable(value = "productId") Product productFromDb,
             @RequestBody ProductDto productDto,
             @CurrentUser User currentUser
@@ -128,7 +131,7 @@ public class ProductController {
                     content = @Content)
     })
     @Parameter(name = "productId", required = true, schema = @Schema(type = "integer", name = "productId"), in = ParameterIn.PATH)
-    public ResponseEntity<?> verifyProduct(
+    public ResponseEntity<ProductDto> verifyProduct(
             @Parameter(hidden = true) @PathVariable(value = "productId") Product productFromDb
     ) {
         return productService.verifyProduct(productFromDb);
@@ -159,7 +162,7 @@ public class ProductController {
             @ApiResponse(responseCode = "403", description = "Unauthorized",
                     content = @Content)
     })
-    public ResponseEntity<?> getProductsFromFavourites(
+    public ResponseEntity<List<ProductWithImageDto>> getProductsFromFavourites(
             @CurrentUser User user
     ){
         return productService.getProductsFromFavourites(user);

@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class ProductWithImageDto {
-    public ProductDto product;
-    public String file;
+    private ProductDto product;
+    private String file;
 }

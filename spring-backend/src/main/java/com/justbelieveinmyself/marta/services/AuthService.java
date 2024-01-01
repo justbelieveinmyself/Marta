@@ -34,17 +34,17 @@ public class AuthService {
         this.fileHelper = fileHelper;
     }
 
-    public ResponseEntity<?> createAuthToken(@RequestBody LoginRequestDto authRequest) {
+    public ResponseEntity<LoginResponseDto> createAuthToken(@RequestBody LoginRequestDto authRequest) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken
                 (authRequest.getUsername(), authRequest.getPassword()));
         User userDetails = userService.loadUserByUsername(authRequest.getUsername());
-        String token = refreshTokenService.createToken(userDetails);
+        String token = refreshTokenService.createRefreshToken(userDetails);
         LoginResponseDto loginResponseDTO = new LoginResponseDto(token, userMapper.modelToDto(userDetails, fileHelper, productMapper));
         return ResponseEntity.ok(loginResponseDTO);
     }
 
 
-    public ResponseEntity<?> createNewUser(RegisterDto registrationUserDto, MultipartFile file) {
+    public ResponseEntity<SellerDto> createNewUser(RegisterDto registrationUserDto, MultipartFile file) {
         if (!registrationUserDto.getPassword().equals(registrationUserDto.getPasswordConfirm())) {
             throw new NotCreatedException("Passwords different!");
         }

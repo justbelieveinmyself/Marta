@@ -23,6 +23,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("api/v1/products")
 @Tag(name = "Product Feedback", description = "The Product-Feedback API")
@@ -42,7 +44,7 @@ public class ProductFeedbackController {
                     content = @Content)
     })
     @Parameter(name = "productId", required = true, schema = @Schema(type = "integer", name = "productId"), in = ParameterIn.PATH)
-    public ResponseEntity<?> getProductReviews(
+    public ResponseEntity<List<ReviewDto>> getProductReviews(
             @Parameter(hidden = true)
             @PathVariable(name = "productId") Product product
     ){
@@ -57,7 +59,7 @@ public class ProductFeedbackController {
             @ApiResponse(responseCode = "403", description = "Review doesn't saved",
                     content = @Content)
     })
-    public ResponseEntity<?> createProductReview(
+    public ResponseEntity<ReviewDto> createProductReview(
             @RequestPart ReviewDto reviewDto,
             @RequestPart(required = false) MultipartFile[] photos,
             @CurrentUser User author
@@ -74,7 +76,7 @@ public class ProductFeedbackController {
                     content = @Content)
     })
     @Parameter(name = "reviewId", required = true, schema = @Schema(type = "integer", name = "reviewId"), in = ParameterIn.PATH)
-    public ResponseEntity<?> answerToReview(
+    public ResponseEntity<ReviewDto> answerToReview(
             @Parameter(hidden = true) @PathVariable(value = "reviewId") Review reviewFromDb,
             @RequestBody(required = true) String answer,
             @CurrentUser User authedUser
@@ -91,7 +93,7 @@ public class ProductFeedbackController {
             @ApiResponse(responseCode = "403", description = "Review doesn't deleted",
                     content = @Content)
     })
-    public ResponseEntity<?> deleteProductReview(
+    public ResponseEntity<ResponseMessage> deleteProductReview(
             @PathVariable(name = "reviewId") Review review
     ){
         return productService.deleteProductReview(review);
@@ -106,7 +108,7 @@ public class ProductFeedbackController {
                     content = @Content)
     })
     @Parameter(name = "questionId", required = true, schema = @Schema(type = "integer", name = "questionId"), in = ParameterIn.PATH)
-    public ResponseEntity<?> answerToQuestion(
+    public ResponseEntity<QuestionDto> answerToQuestion(
             @Parameter(hidden = true) @PathVariable(value = "questionId") Question questionFromDb,
             @RequestBody(required = true) String answer,
             @CurrentUser User authedUser
@@ -123,7 +125,7 @@ public class ProductFeedbackController {
             @ApiResponse(responseCode = "403", description = "Question doesn't deleted",
                     content = @Content)
     })
-    public ResponseEntity<?> deleteProductQuestion(
+    public ResponseEntity<ResponseMessage> deleteProductQuestion(
             @PathVariable(name = "questionId") Question question
     ){
         return productService.deleteProductQuestion(question);
@@ -138,7 +140,7 @@ public class ProductFeedbackController {
                     content = @Content)
     })
     @Parameter(name = "productId", required = true, schema = @Schema(type = "integer", name = "productId"), in = ParameterIn.PATH)
-    public ResponseEntity<?> getProductQuestions(
+    public ResponseEntity<List<QuestionDto>> getProductQuestions(
             @Parameter(hidden = true)
             @PathVariable(name = "productId") Product product
     ){
@@ -153,7 +155,7 @@ public class ProductFeedbackController {
             @ApiResponse(responseCode = "403", description = "Question doesn't saved",
                     content = @Content)
     })
-    public ResponseEntity<?> createProductQuestion(
+    public ResponseEntity<QuestionDto> createProductQuestion(
             @RequestBody QuestionDto questionDto,
             @CurrentUser User author
     ){

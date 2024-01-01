@@ -21,6 +21,7 @@ export class OrderService {
             .pipe(tap(
                 orders => {
                     orders.forEach(order => {
+                        console.log(order)
                         const productsAndQuantity: Map<ProductWithImage, number> = new Map();
                         let map: Map<string, number> = new Map(Object.entries(order.productIdAndQuantity));
                         if (map instanceof Map) {

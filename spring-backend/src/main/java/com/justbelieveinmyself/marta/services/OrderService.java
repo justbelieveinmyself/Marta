@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -32,11 +33,12 @@ public class OrderService {
         this.orderMapper = orderMapper;
     }
 
-    public ResponseEntity<?> getListOrders(User user) {
-        return ResponseEntity.ok(user.getOrders().stream().map(orderMapper::modelToDto).toList());
+    public ResponseEntity<List<OrderDto>> getListOrders(User user) {
+        List<OrderDto> list = user.getOrders().stream().map(orderMapper::modelToDto).toList();
+        return ResponseEntity.ok(list);
     }
 
-    public ResponseEntity<?> createOrder(User user, OrderDto orderDto) {
+    public ResponseEntity<OrderDto> createOrder(User user, OrderDto orderDto) {
         Order order = new Order();
         order.setCustomer(user);
         order.setStatus(DeliveryStatus.AWAITING_CONFIRMATION);
@@ -59,9 +61,9 @@ public class OrderService {
         return ResponseEntity.ok(orderMapper.modelToDto(savedOrder));
     }
 
-    public ResponseEntity<?> changeOrderStatus(Order order, String status, User authedUser) {
+    public ResponseEntity<OrderDto> changeOrderStatus(Order order, DeliveryStatus status, User authedUser) {
         validateRights(authedUser, order.getCustomer());
-        order.setStatus(DeliveryStatus.valueOf(status));
+        order.setStatus(status);
         orderRepository.save(order);
         return ResponseEntity.ok(orderMapper.modelToDto(order));
     }

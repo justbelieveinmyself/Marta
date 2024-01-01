@@ -21,6 +21,7 @@ import java.util.*;
 public class FileHelper {
     @Value("${upload.path}")
     private String uploadPath;
+
     public String uploadFile(MultipartFile file, UploadDirectory to) {
         try{
             if (file != null && !Objects.requireNonNull(file.getOriginalFilename()).isEmpty()) {
@@ -38,6 +39,7 @@ public class FileHelper {
             throw new NotCreatedException("Cannot upload image!");
         }
     }
+
     public List<String> uploadFile(MultipartFile[] files, UploadDirectory to) {
         List<String> paths = new ArrayList<>();
         Arrays.stream(files).forEach(file -> {
@@ -45,7 +47,8 @@ public class FileHelper {
         });
         return paths;
     }
-    public ResponseEntity<?> downloadFileAsResponse(String filename, UploadDirectory from) {
+
+    public ResponseEntity<UrlResource> downloadFileAsResponse(String filename, UploadDirectory from) {
         try {
             UrlResource resource = getFileAsResource(filename, from);
             HttpHeaders httpHeaders = new HttpHeaders();

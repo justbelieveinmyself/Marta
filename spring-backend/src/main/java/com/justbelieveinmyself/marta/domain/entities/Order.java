@@ -2,9 +2,7 @@ package com.justbelieveinmyself.marta.domain.entities;
 
 import com.justbelieveinmyself.marta.domain.enums.DeliveryStatus;
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.ZonedDateTime;
@@ -15,6 +13,9 @@ import java.util.Set;
 @Table(name = "orders")
 @EqualsAndHashCode(exclude = {"orderProduct"})
 @ToString(exclude = {"orderProduct"})
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Order {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

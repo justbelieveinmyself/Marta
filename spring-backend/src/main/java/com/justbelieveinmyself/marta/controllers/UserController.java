@@ -19,12 +19,14 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.core.io.UrlResource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 import java.util.Set;
 
 @RestController
@@ -48,7 +50,7 @@ public class UserController {
                     content = @Content)
     })
     @Parameter(name = "profileId", schema = @Schema(name = "profileId", type = "integer"), in = ParameterIn.PATH)
-    public ResponseEntity<?> updateEmail(
+    public ResponseEntity<LoginResponseDto> updateEmail(
             @Parameter(hidden = true) @PathVariable("profileId")User user,
             @RequestBody String email,
             @CurrentUser User currentUser
@@ -65,7 +67,7 @@ public class UserController {
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,schema = @Schema(implementation = ResponseError.class)))
     })
     @Parameter(name = "profileId", schema = @Schema(name = "profileId", type = "integer"), in = ParameterIn.PATH)
-    public ResponseEntity<?> getAvatar(
+    public ResponseEntity<UrlResource> getAvatar(
             @Parameter(hidden = true) @PathVariable("profileId") User user,
             @CurrentUser User currentUser
     ) {
@@ -81,7 +83,7 @@ public class UserController {
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,schema = @Schema(implementation = ResponseError.class)))
     })
     @Parameter(name = "profileId", schema = @Schema(name = "profileId", type = "integer"), in = ParameterIn.PATH)
-    public ResponseEntity<?> updateAvatar(
+    public ResponseEntity<ResponseMessage> updateAvatar(
             @Parameter(hidden = true) @PathVariable("profileId") User user,
             @RequestParam("file") MultipartFile file,
             @CurrentUser User currentUser
@@ -97,7 +99,7 @@ public class UserController {
             @ApiResponse(responseCode = "403", description = "Unauthorized or has no rights",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
     })
-    public ResponseEntity<?> getUserInfo(
+    public ResponseEntity<UserDto> getUserInfo(
             @CurrentUser User authedUser,
             @PathVariable(name = "profileId", required = false) User userFromDb
     ){
@@ -116,7 +118,7 @@ public class UserController {
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ResponseError.class)))
     })
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<?> getAllUsers(
+    public ResponseEntity<List<UserDto>> getAllUsers(
     ) {
         return userService.getAllUsers();
     }
@@ -131,7 +133,7 @@ public class UserController {
     })
     @PreAuthorize("hasAuthority('ADMIN')")
     @Parameter(name = "profileId", schema = @Schema(name = "profileId", type = "integer"), in = ParameterIn.PATH)
-    public ResponseEntity<?> deleteUser(
+    public ResponseEntity<ResponseMessage> deleteUser(
             @Parameter(hidden = true) @PathVariable("profileId") User user
     ) {
         return userService.deleteUser(user);
@@ -146,7 +148,7 @@ public class UserController {
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,schema = @Schema(implementation = ResponseError.class)))
     })
     @Parameter(name = "profileId", schema = @Schema(name = "profileId", type = "integer"), in = ParameterIn.PATH)
-    public ResponseEntity<?> updateGender(
+    public ResponseEntity<UserDto> updateGender(
             @Parameter(hidden = true) @PathVariable("profileId") User user,
             @RequestBody String gender,
             @CurrentUser User authedUser
@@ -164,7 +166,7 @@ public class UserController {
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,schema = @Schema(implementation = ResponseError.class)))
     })
     @Parameter(name = "profileId", schema = @Schema(name = "profileId", type = "integer"), in = ParameterIn.PATH)
-    public ResponseEntity<?> updateRoles(
+    public ResponseEntity<UserDto> updateRoles(
             @Parameter(hidden = true) @PathVariable("profileId") User user,
             @RequestBody Set<Role> roles
     ){
@@ -180,7 +182,7 @@ public class UserController {
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,schema = @Schema(implementation = ResponseError.class)))
     })
     @Parameter(name = "profileId", schema = @Schema(name = "profileId", type = "integer"), in = ParameterIn.PATH)
-    public ResponseEntity<?> updateNameAndSurname(
+    public ResponseEntity<UserDto> updateNameAndSurname(
             @Parameter(hidden = true) @PathVariable("profileId") User user,
             @RequestBody UserNamesDto userNamesDto,
             @CurrentUser User authedUser

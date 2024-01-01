@@ -14,6 +14,7 @@ import com.justbelieveinmyself.marta.exceptions.ForbiddenException;
 import com.justbelieveinmyself.marta.exceptions.ResponseMessage;
 import com.justbelieveinmyself.marta.repositories.UserRepository;
 import org.springframework.beans.BeanUtils;
+import org.springframework.core.io.UrlResource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -46,7 +47,7 @@ public class UserService implements UserDetailsService {
     }
 
 
-    public ResponseEntity<?> deleteUser(User user) {
+    public ResponseEntity<ResponseMessage> deleteUser(User user) {
         userRepository.delete(user);
         return ResponseEntity.ok(new ResponseMessage(200, "User successfully deleted!"));
     }
@@ -71,22 +72,22 @@ public class UserService implements UserDetailsService {
         return userRepository.save(user);
     }
 
-    public ResponseEntity<?> updateEmail(User user, String email, User authUser) {
+    public ResponseEntity<LoginResponseDto> updateEmail(User user, String email, User authUser) {
         validateRights(authUser, user);
         user.setEmail(email);
         User savedUser = userRepository.save(user);
-        return ResponseEntity.ok(new LoginResponseDto(null, userMapper.modelToDto(savedUser, fileHelper,productMapper)));
+        return ResponseEntity.ok(new LoginResponseDto(null, userMapper.modelToDto(savedUser, fileHelper, productMapper)));
     }
 
-    public ResponseEntity<?> updateAvatar(User user, MultipartFile file, User authUser) {
+    public ResponseEntity<ResponseMessage> updateAvatar(User user, MultipartFile file, User authUser) {
         validateRights(authUser, user);
         String path = fileHelper.uploadFile(file, UploadDirectory.AVATARS);
         user.setAvatar(path);
         userRepository.save(user);
-        return ResponseEntity.ok(new ResponseMessage(201, "Updated"));
+        return ResponseEntity.ok(new ResponseMessage(201, "Successfully updated!"));
     }
 
-    public ResponseEntity<?> getAvatar(User user, User authUser) {
+    public ResponseEntity<UrlResource> getAvatar(User user, User authUser) {
         validateRights(authUser, user);
         return fileHelper.downloadFileAsResponse(user.getAvatar(), UploadDirectory.AVATARS);
     }
@@ -97,14 +98,14 @@ public class UserService implements UserDetailsService {
         }
     }
 
-    public ResponseEntity<?> updateGender(User user, String gender, User authUser) {
+    public ResponseEntity<UserDto> updateGender(User user, String gender, User authUser) {
         validateRights(authUser, user);
         user.setGender(gender);
         User savedUser = userRepository.save(user);
         return ResponseEntity.ok(userMapper.modelToDto(savedUser, fileHelper, productMapper));
     }
 
-    public ResponseEntity<?> updateNameAndSurname(User user, UserNamesDto userNamesDto, User authedUser) {
+    public ResponseEntity<UserDto> updateNameAndSurname(User user, UserNamesDto userNamesDto, User authedUser) {
         validateRights(authedUser, user);
         user.setFirstName(userNamesDto.getFirstName());
         user.setLastName(userNamesDto.getLastName());
@@ -112,17 +113,17 @@ public class UserService implements UserDetailsService {
         return ResponseEntity.ok(userMapper.modelToDto(savedUser, fileHelper, productMapper));
     }
 
-    public ResponseEntity<?> getUser(User user) {
+    public ResponseEntity<UserDto> getUser(User user) {
         return ResponseEntity.ok(userMapper.modelToDto(user, fileHelper, productMapper));
     }
 
-    public ResponseEntity<?> getAllUsers() {
+    public ResponseEntity<List<UserDto>> getAllUsers() {
         List<User> users = userRepository.findAll();
         List<UserDto> userDtos = users.stream().map(user -> userMapper.modelToDto(user, fileHelper, productMapper)).toList();
         return ResponseEntity.ok(userDtos);
     }
 
-    public ResponseEntity<?> updateRoles(User user, Set<Role> roles) {
+    public ResponseEntity<UserDto> updateRoles(User user, Set<Role> roles) {
         user.setRoles(roles);
         User savedUser = userRepository.save(user);
         return ResponseEntity.ok(userMapper.modelToDto(savedUser, fileHelper, productMapper));

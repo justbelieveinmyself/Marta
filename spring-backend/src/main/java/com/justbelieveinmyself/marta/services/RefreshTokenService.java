@@ -27,7 +27,7 @@ public class RefreshTokenService {
         this.jwtUtils = jwtUtils;
     }
 
-    public String createToken(User user){
+    public String createRefreshToken(User user){
         if(user.getRefreshToken() != null) {
             refreshTokenRepository.delete(user.getRefreshToken());
             user.setRefreshToken(null);

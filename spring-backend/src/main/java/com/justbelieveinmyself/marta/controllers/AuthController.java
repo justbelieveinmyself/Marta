@@ -37,7 +37,7 @@ public class AuthController {
             @ApiResponse(responseCode = "400", description = "1. User with nickname already exists! \n 2. Passwords different!",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ResponseError.class)))
     })
-    public ResponseEntity<?> register(
+    public ResponseEntity<SellerDto> register(
             @RequestPart("regUser") RegisterDto registerDTO,
             @Parameter(description = "Avatar") @RequestPart(name = "file",required = false) MultipartFile file
     ){
@@ -52,7 +52,7 @@ public class AuthController {
             @ApiResponse(responseCode = "401", description = "Bad credentials!",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ResponseError.class)))
     })
-    public ResponseEntity<?> login(@RequestBody LoginRequestDto loginRequestDto){
+    public ResponseEntity<LoginResponseDto> login(@RequestBody LoginRequestDto loginRequestDto){
         return authService.createAuthToken(loginRequestDto);
     }
 

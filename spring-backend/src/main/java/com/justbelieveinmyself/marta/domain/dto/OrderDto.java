@@ -3,10 +3,7 @@ package com.justbelieveinmyself.marta.domain.dto;
 import com.justbelieveinmyself.marta.domain.entities.Order;
 import com.justbelieveinmyself.marta.domain.entities.OrderProduct;
 import com.justbelieveinmyself.marta.domain.enums.DeliveryStatus;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.ZonedDateTime;
 import java.util.Map;
@@ -16,6 +13,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
+@Builder
 public class OrderDto {
     private Long id;
     private Map<Long, Integer> productIdAndQuantity;

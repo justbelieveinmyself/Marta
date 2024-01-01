@@ -1,9 +1,8 @@
 <h2 style="display: flex; justify-content: center;">Personal Account</h2>
-<div class="row">
+<div class="row mb-3">
     <div class="col" style="display: flex;">
         <a routerLink="details" routerLinkActive="active">
             <div class="card card_with_shadow" style="height: 250px; width: 370px;">
-
                 <div class="card-body">
                     <div style="padding-left: 30px;">
                         <img [src]="user.avatar"
@@ -16,7 +15,7 @@
                     <div>
                         <span class="text-body-secondary me-2">Email</span>
                         <span class="card_body_value">{{user.email}}</span>
-                        <app-logout style="bottom: 25px;right: 20px; position: absolute;"></app-logout>
+                        <app-logout style="top: 15px;right: 20px; position: absolute;"></app-logout>
                     </div>
                 </div>
 
