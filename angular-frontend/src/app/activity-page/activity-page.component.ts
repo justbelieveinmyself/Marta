@@ -20,6 +20,10 @@ export class ActivityPageComponent implements OnInit {
     user: LocalUser;
     products: ProductWithImage[];
     ngOnInit(): void {
+        console.log(this.products)
+        setTimeout(() => this.getInformationAboutUser(), 5000);
+    }
+    getInformationAboutUser(){
         this.userService.getUserCurrentOrById(this.activatedRoute.snapshot.params['id']).subscribe({
             next: user => {
                 this.user = user;
@@ -31,5 +35,4 @@ export class ActivityPageComponent implements OnInit {
             }
         })
     }
-
 }

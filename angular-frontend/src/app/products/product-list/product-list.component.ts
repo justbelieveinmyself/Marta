@@ -31,10 +31,10 @@ export class ProductListComponent{
     isFavourite: boolean[];
     favourites: ProductWithImage[];
     ngOnInit() {
-        if(!this.card && !this.orders){
-            setTimeout(() => this.ngOnInit(), 50);
-            console.log("test");
-        }
+        // if(!this.card && !this.orders){
+        //     setTimeout(() => this.ngOnInit(), 50);
+        //     console.log("test");
+        // }
         this.currentUser = this.tokenService.getUser();
         if(this.card && !this.favourites){
             this.getFavourites();

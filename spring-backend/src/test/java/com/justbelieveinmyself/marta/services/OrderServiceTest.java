@@ -60,7 +60,7 @@ class OrderServiceTest {
         Map<Long, Integer> productIdAndQuantity = new HashMap<>();
         productIdAndQuantity.put(4L, 2);
         productIdAndQuantity.put(2L, 1);
-        OrderDto orderDto = OrderDto.builder().id(1L).orderedAt(ZonedDateTime.now()).status(DeliveryStatus.SENT).customer(mockSellerDto).isPaid(false).productIdAndQuantity(productIdAndQuantity).build();
+        OrderDto orderDto = new OrderDto(1L, productIdAndQuantity, ZonedDateTime.now(), DeliveryStatus.SENT, false, mockSellerDto);
         User mockUser = User.builder().id(1L).orders(new ArrayList<>()).build();
 
         when(productRepository.findById(anyLong())).thenAnswer(i -> Optional.of(Product.builder().id((Long) i.getArguments()[0]).build()));

@@ -30,6 +30,7 @@ import {errorInterceptorProvider} from "./service/error-intercept.service";
 import { ActivityPageComponent } from './activity-page/activity-page.component';
 import {TooltipModule} from "ngx-bootstrap/tooltip";
 import { SearchComponent } from './search/search.component';
+import { PreloaderComponent } from './preloader/preloader.component';
 
 @NgModule({
   declarations: [
@@ -52,7 +53,8 @@ import { SearchComponent } from './search/search.component';
     MainPageComponent,
     AdminPageComponent,
     ActivityPageComponent,
-    SearchComponent
+    SearchComponent,
+    PreloaderComponent
   ],
     imports: [
         BrowserModule,
