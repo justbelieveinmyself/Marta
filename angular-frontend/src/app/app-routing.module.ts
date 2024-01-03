@@ -1,5 +1,5 @@
-import {NgModule} from '@angular/core';
-import {ExtraOptions, RouterModule, Routes} from '@angular/router';
+import {inject, NgModule} from '@angular/core';
+import {ActivatedRouteSnapshot, ExtraOptions, RouterModule, Routes} from '@angular/router';
 import {CreateProductComponent} from './products/create-product/create-product.component';
 import {UpdateProductComponent} from './products/update-product/update-product.component';
 import {LoginComponent} from './auth/login/login.component';
@@ -17,9 +17,15 @@ import {AdminPageComponent} from "./admin-page/admin-page.component";
 import {AdminGuard} from "./admin-guard";
 import {ActivityPageComponent} from "./activity-page/activity-page.component";
 import {SearchComponent} from "./search/search.component";
+import {resolve} from "@angular/compiler-cli";
+import {ProductService} from "./service/product.service";
+import {MainPageResolverService} from "./resolvers/main-page-resolver.service";
 
 const routes: Routes = [
-    {path: 'products', component: MainPageComponent},
+    {path: 'products', component: MainPageComponent,
+        resolve: {
+            productsPage: MainPageResolverService
+        }},
     {path: 'adminPanel', component: AdminPageComponent, canActivate: [AdminGuard]},
     {path: 'adminPanel/activity/:id', component: ActivityPageComponent, canActivate: [AdminGuard]},
     {path: 'products/:id/details', component: ProductDetailsComponent},

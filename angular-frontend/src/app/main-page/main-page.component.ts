@@ -44,7 +44,14 @@ export class MainPageComponent {
                 this.getProducts(0);
             }
         });
-        this.getProducts(0);
+        // this.getProducts(0);
+        this.activatedRoute.data.subscribe(data => {
+            // 'productsPage' - это ключ, который мы использовали при конфигурации резольвера
+            this.page = data['productsPage'];
+            // Теперь у вас есть доступ к данным из резольвера в свойстве this.page
+            this.products = this.page.content;
+        });
+
     }
 
     getProducts(page: number) {
