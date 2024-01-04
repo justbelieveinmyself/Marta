@@ -1,6 +1,5 @@
-<ng-container *ngIf="products != null; else loading"></ng-container>
 <app-product-list [card]="products" [isOrders]="false" [isAdminPage]="true"
-                  *ngIf="products.length > 0; else noActivity"></app-product-list>
+                  *ngIf="products && products.length > 0; else noActivity"></app-product-list>
 <ng-template #noActivity>
     <div class="card card_with_shadow">
         <div class="card-body mx-auto">
@@ -12,8 +11,4 @@
         </div>
     </div>
 </ng-template>
-<ng-template #loading>
-    <app-preloader></app-preloader>
-</ng-template>
-
 

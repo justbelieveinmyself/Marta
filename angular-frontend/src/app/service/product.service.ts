@@ -1,6 +1,6 @@
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
-import {Observable, tap} from 'rxjs';
+import {delay, Observable, tap} from 'rxjs';
 import {Product} from '../models/product';
 import {ProductWithImage} from '../models/product-with-image';
 import {ImageService} from "./image.service";
@@ -24,7 +24,7 @@ export class ProductService {
     getProductList(
         page: number, size: number, usePages?: boolean, sortBy?: string, isAsc?: boolean,
         isFilteredByWithPhoto?: boolean, isFilteredByVerified?: boolean, searchWord?: string
-    ): Observable<Page<ProductWithImage>>
+    ) : Observable<Page<ProductWithImage>>
     {
         return this.httpClient.get<Page<ProductWithImage>>(this.baseUrl + "?page=" + page+"&size=" + size
             + (usePages != null?"&usePages="+usePages+(sortBy? "&sortBy="+sortBy+"&isAsc="+isAsc:"") : "")

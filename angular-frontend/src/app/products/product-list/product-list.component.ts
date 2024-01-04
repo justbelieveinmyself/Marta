@@ -56,7 +56,6 @@ export class ProductListComponent{
                         return this.currentUser.id === favourite.product.seller.id && currentProduct.id === favourite.product.id;
                     });
                 }
-                console.log(this.isFavourite)
             }
         })
     }
@@ -66,7 +65,6 @@ export class ProductListComponent{
             error: err => console.log(err)
         });
         this.productInToast = product;
-        console.log(this.productInToast)
         // @ts-ignore
         document.getElementById('liveToast').classList.add("show");
     }

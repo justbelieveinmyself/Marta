@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {LocalUser} from "../models/local-user";
 import {UserService} from "../service/user.service";
+import {ActivatedRoute} from "@angular/router";
 
 @Component({
     selector: 'app-admin-page',
@@ -9,17 +10,15 @@ import {UserService} from "../service/user.service";
 })
 export class AdminPageComponent implements OnInit {
     constructor(
-        private userService: UserService
+        private userService: UserService,
+        private activatedRoute: ActivatedRoute
     ) {}
     users: LocalUser[];
     indexItemInModal: number = null;
     newRoles : string[] = [];
     ngOnInit(): void {
-        this.userService.getUsers().subscribe({
-            next: users => {
-                this.users = users;
-            },
-            error: err => console.log(err)
+        this.activatedRoute.data.subscribe(data => {
+            this.users = data["users"];
         });
     }
 
