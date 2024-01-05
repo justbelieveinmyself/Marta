@@ -68,7 +68,6 @@ export class ProductDetailsComponent implements OnInit {
                     review.photos = urls;
                 })
                 this.isNeedRightButtonForReviews = this.reviews.length > 2;
-                this.isNeedRightButtonForQuestions = this.questions.length > 3; //TODO
                 this.userService.getFavourites().subscribe(favourites => {
                     this.isFavourite = favourites.filter(prod => prod.product.id == this.product.product.id).length != 0;
                 })
@@ -79,6 +78,7 @@ export class ProductDetailsComponent implements OnInit {
         this.productService.getProductQuestions(this.product.product.id).subscribe({
             next: questions => {
                 this.questions = questions.filter(question => question.answer != null);
+                this.isNeedRightButtonForQuestions = this.questions.length > 3; //TODO
             },
             error: err => console.log(err)
         })

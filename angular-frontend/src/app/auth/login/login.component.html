@@ -1,5 +1,4 @@
-<div *ngIf="!isLogged; else xd">
-
+<div *ngIf="!isLogged">
   <div class="container w-50 justify-content-center mb-3">
     <div class="card">
       <div class="card-header">
@@ -42,8 +41,3 @@
     </div>
   </div>
 </div>
-
-
-<ng-template #xd>
-  <div> You're already, autheroized</div>
-</ng-template>

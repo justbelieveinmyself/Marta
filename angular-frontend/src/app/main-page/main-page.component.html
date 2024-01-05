@@ -12,11 +12,11 @@
         <i *ngIf="isNeedSortByPrice" class="fa-solid fa-sm" [ngClass]="isSortASC?'fa-arrow-up':'fa-arrow-down'"
            style="color: black"></i>
     </a>
-    <input class="form-check-input" type="checkbox" (change)="filterByWithPhoto($event)" id="withPhotoCheck">
+    <input class="form-check-input" type="checkbox" (change)="this.getProducts(0)" id="withPhotoCheck" [(ngModel)]="isFilteredByWithPhoto">
     <label class="form-check-label me-3" for="withPhotoCheck">
         &nbsp;With a photo
     </label>
-    <input class="form-check-input" type="checkbox" (change)="filterByVerified($event)" id="verifiedCheck">
+    <input class="form-check-input" type="checkbox" (change)="this.getProducts(0)" id="verifiedCheck" [(ngModel)]="isFilteredByVerified">
     <label class="form-check-label me-3" for="verifiedCheck">
         &nbsp;Verified
     </label>

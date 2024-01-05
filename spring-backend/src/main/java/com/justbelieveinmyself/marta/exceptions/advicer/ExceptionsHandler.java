@@ -53,4 +53,5 @@ public class ExceptionsHandler {
         ResponseError responseError = new ResponseError(HttpStatus.UNAUTHORIZED, e.getMessage());
         return new ResponseEntity<>(responseError, HttpStatus.UNAUTHORIZED);
     }
+
 }

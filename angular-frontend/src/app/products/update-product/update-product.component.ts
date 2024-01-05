@@ -14,7 +14,6 @@ export class UpdateProductComponent {
     user: LocalUser;
     product: Product;
     hasRights: boolean;
-    productId: number;
 
     constructor(
         private productService: ProductService,
@@ -25,15 +24,10 @@ export class UpdateProductComponent {
 
     ngOnInit() {
         this.user = this.tokenService.getUser();
-        this.productId = this.activatedRoute.snapshot.params['id'];
-        this.productService.getProductById(this.productId).subscribe({
-            next: (p) => {
-                this.product = p.product;
-                this.hasRights = this.user.id == this.product.seller.id;
-            },
-            error: (e) => console.log(e)
+        this.activatedRoute.data.subscribe(data => {
+            this.product = data["product"].product;
+            this.hasRights = this.user.id == this.product.seller.id;
         });
-
     }
 
     onSubmit() {

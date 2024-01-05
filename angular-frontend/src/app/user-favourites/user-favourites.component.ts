@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {UserService} from "../service/user.service";
 import {ProductWithImage} from "../models/product-with-image";
+import {ActivatedRoute} from "@angular/router";
 
 @Component({
   selector: 'app-user-favourites',
@@ -9,16 +10,13 @@ import {ProductWithImage} from "../models/product-with-image";
 })
 export class UserFavouritesComponent implements OnInit{
     constructor(
-        private userService: UserService
+        private activatedRoute: ActivatedRoute
     ) {}
     favouriteProducts: ProductWithImage[];
     ngOnInit(): void {
-        this.userService.getFavourites().subscribe({
-            next: products => {
-                this.favouriteProducts = products
-            },
-            error: err => console.log(err)
-        });
+        this.activatedRoute.data.subscribe(data => {
+            this.favouriteProducts = data["favouritesProducts"];
+        })
 
     }
 }

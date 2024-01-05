@@ -22,7 +22,6 @@ export class LoginComponent implements OnInit {
     ) {}
 
     socialUser: SocialUser = new SocialUser;
-
     isLogged: boolean = false;
     isLoginFail: boolean = false;
     username: string;
@@ -33,6 +32,7 @@ export class LoginComponent implements OnInit {
         if (this.tokenService.getRefreshToken()) {
             this.isLogged = true;
             this.isLoginFail = false;
+            this.router.navigate(['products']);
         }
     }
 

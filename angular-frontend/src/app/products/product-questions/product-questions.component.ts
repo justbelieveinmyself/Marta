@@ -16,6 +16,7 @@ export class ProductQuestionsComponent implements OnInit {
         private activatedRoute: ActivatedRoute,
         private userService: UserService
     ) {}
+
     isFavourite = false;
     isWriteQuestion = false;
     messageOfQuestion: string;
@@ -24,24 +25,22 @@ export class ProductQuestionsComponent implements OnInit {
     countOfProductInOrder = 1;
     totalPrice: number;
     isPaid = false;
+
     ngOnInit(): void {
-        this.productService.getProductById(this.activatedRoute.snapshot.params['id']).subscribe({
-            next: product => {
-                this.product = product;
-                this.totalPrice = product.product.price;
-                this.userService.getFavourites().subscribe(favourites => {
-                    this.isFavourite = favourites.filter(prod => prod.product.id == this.product.product.id).length != 0;
-                    console.log(this.isFavourite)
-                })
-                this.productService.getProductQuestions(this.product.product.id).subscribe({
-                    next: questions => {
-                        this.questions = questions.filter(question => question.answer != null);
-                    },
-                    error: err => console.log(err)
-                })
+        this.activatedRoute.data.subscribe(data => {
+            this.product = data["product"];
+        });
+        this.totalPrice = this.product.product.price;
+        this.userService.getFavourites().subscribe(favourites => {
+            this.isFavourite = favourites.filter(prod => prod.product.id == this.product.product.id).length != 0;
+            console.log(this.isFavourite)
+        })
+        this.productService.getProductQuestions(this.product.product.id).subscribe({
+            next: questions => {
+                this.questions = questions.filter(question => question.answer != null);
             },
             error: err => console.log(err)
-        });
+        })
     }
 
     saveQuestion() {
@@ -54,7 +53,7 @@ export class ProductQuestionsComponent implements OnInit {
         })
     }
 
-    addToCart(){
+    addToCart() {
         this.productService.addProductToCart(this.product.product).subscribe({
             error: err => console.log(err)
         });
@@ -63,11 +62,11 @@ export class ProductQuestionsComponent implements OnInit {
     }
 
     addOrRemoveFavourite() {
-        if(this.isFavourite){
+        if (this.isFavourite) {
             this.productService.deleteProductFromFavourite(this.product.product).subscribe({
                 error: err => console.log(err)
             })
-        }else {
+        } else {
             this.productService.addProductToFavourite(this.product.product).subscribe({
                 error: err => console.log(err)
             });
@@ -93,7 +92,7 @@ export class ProductQuestionsComponent implements OnInit {
     }
 
     removeNumberOfProduct() {
-        if(this.countOfProductInOrder > 1){
+        if (this.countOfProductInOrder > 1) {
             this.countOfProductInOrder--;
             this.totalPrice -= this.product.product.price;
         }

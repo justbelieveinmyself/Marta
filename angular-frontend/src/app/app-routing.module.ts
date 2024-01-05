@@ -18,12 +18,12 @@ import {AdminGuard} from "./admin-guard";
 import {ActivityPageComponent} from "./activity-page/activity-page.component";
 import {ProductService} from "./service/product.service";
 import {UserService} from "./service/user.service";
-import {using} from "rxjs";
 
 const routes: Routes = [
-    {path: 'products', component: MainPageComponent,
+    {
+        path: 'products', component: MainPageComponent,
         resolve: {
-            productsPage: (route : ActivatedRouteSnapshot) => {
+            productsPage: (route: ActivatedRouteSnapshot) => {
                 const page = route.queryParams['page'] || 0;
                 const size = route.queryParams['size'] || 12;
                 const sortBy = route.queryParams['sortBy'];
@@ -33,42 +33,92 @@ const routes: Routes = [
                 const searchWord = route.queryParams['searchWord'];
                 return inject(ProductService).getProductList(page, size, true, sortBy, isAsc, isFilteredByWithPhoto, isFilteredByVerified, searchWord);
             }
-        }},
-    {path: 'adminPanel', component: AdminPageComponent, canActivate: [AdminGuard],
+        }
+    },
+    {
+        path: 'adminPanel', component: AdminPageComponent, canActivate: [AdminGuard],
         resolve: {
             users: () => {
                 return inject(UserService).getUsers();
             }
-        }},
-    {path: 'adminPanel/activity/:id', component: ActivityPageComponent, canActivate: [AdminGuard],
+        }
+    },
+    {
+        path: 'adminPanel/activity/:id', component: ActivityPageComponent, canActivate: [AdminGuard],
         resolve: {
             user: (route: ActivatedRouteSnapshot) => {
-                const param = route.params['id'];
+                const param = route.params["id"];
                 return inject(UserService).getUserCurrentOrById(param);
             },
             products: (route: ActivatedRouteSnapshot) => {
                 return inject(ProductService).getProductList(0, 1, false);
             }
-        }},
-    {path: 'products/:id/details', component: ProductDetailsComponent,
+        }
+    },
+    {
+        path: 'products/:id/details', component: ProductDetailsComponent,
         resolve: {
             product: (route: ActivatedRouteSnapshot) => {
-                const param = route.params['id'];
+                const param = route.params["id"];
                 return inject(ProductService).getProductById(param);
             }
-        }},
-    {path: 'products/:id/feedback', component: ProductFeedbackComponent},
-    {path: 'products/:id/questions', component: ProductQuestionsComponent},
-    {path: 'products/search', component: MainPageComponent},
+        }
+    },
+    {
+        path: 'products/:id/feedback', component: ProductFeedbackComponent,
+        resolve: {
+            product: (route: ActivatedRouteSnapshot) => {
+                const param = route.params["id"];
+                return inject(ProductService).getProductById(param);
+            }
+        }
+    },
+    {
+        path: 'products/:id/questions', component: ProductQuestionsComponent,
+        resolve: {
+            product: (route: ActivatedRouteSnapshot) => {
+                const param = route.params["id"];
+                return inject(ProductService).getProductById(param);
+            }
+        }
+    },
+    {
+        path: 'products/search', component: MainPageComponent,
+        resolve: {
+            productsPage: (route: ActivatedRouteSnapshot) => {
+                const page = route.queryParams['page'] || 0;
+                const size = route.queryParams['size'] || 12;
+                const sortBy = route.queryParams['sortBy'];
+                const isAsc = route.queryParams['isAsc'] === 'true';
+                const isFilteredByWithPhoto = route.queryParams['isFilteredByWithPhoto'] === 'true';
+                const isFilteredByVerified = route.queryParams['isFilteredByVerified'] === 'true';
+                const searchWord = route.queryParams['searchWord'];
+                return inject(ProductService).getProductList(page, size, true, sortBy, isAsc, isFilteredByWithPhoto, isFilteredByVerified, searchWord);
+            }
+        }
+    },
     {path: '', redirectTo: 'products', pathMatch: 'full'},
     {path: 'create-product', component: CreateProductComponent},
-    {path: 'update-product/:id', component: UpdateProductComponent},
+    {path: 'update-product/:id', component: UpdateProductComponent,
+        resolve: {
+            product: (route: ActivatedRouteSnapshot) => {
+                const param = route.params["id"];
+                return inject(ProductService).getProductById(param);
+            }
+        }
+    },
     {path: 'login', component: LoginComponent},
     {path: 'register', component: RegisterComponent},
     {path: 'profile/cart', component: ProductCartComponent},
     {path: 'profile', component: UserProfileComponent},
     {path: 'profile/details', component: UserDetailsComponent},
-    {path: 'profile/favourites', component: UserFavouritesComponent},
+    {path: 'profile/favourites', component: UserFavouritesComponent,
+        resolve: {
+            favouritesProducts: (route: ActivatedRouteSnapshot) => {
+                return inject(UserService).getFavourites();
+            }
+        }
+    },
     {path: 'profile/delivery', component: UserDeliveryComponent},
     {path: '**', redirectTo: 'create-product', pathMatch: 'full'}
 

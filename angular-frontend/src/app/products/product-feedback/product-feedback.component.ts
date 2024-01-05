@@ -53,40 +53,37 @@ export class ProductFeedbackComponent implements OnInit {
     reviewPhotos: ImageModel[] = [];
 
     ngOnInit(): void {
-        this.productService.getProductById(this.activatedRoute.snapshot.params['id']).subscribe({
-            next: product => {
-                this.product = product;
-                this.totalPrice = this.product.product.price;
-                this.userService.getFavourites().subscribe(favourites => {
-                    this.isFavourite = favourites.filter(prod => prod.product.id == this.product.product.id).length != 0;
-                })
-                this.productService.getProductReviews(this.product.product.id).subscribe({
-                    next: reviews => {
-                        this.reviews = reviews;
-                        this.reviews.forEach(review => {
-                            let urls: string[] = [];
-                            review.photos.map(photo => {
-                                this.imageService.createUrlFromBase64(photo).then(url => {
-                                        urls.push(url);
-                                    }
-                                )
-                            });
-                            this.countOfPhotos += review.photos.length;
-                            this.countOfReviewsWithPhotos += review.photos.length > 0 ? 1 : 0;
-                            review.photos = urls;
+        this.activatedRoute.data.subscribe(data => {
+            this.product = data["product"];
+        })
+        this.totalPrice = this.product.product.price;
+        this.userService.getFavourites().subscribe(favourites => {
+            this.isFavourite = favourites.filter(prod => prod.product.id == this.product.product.id).length != 0;
+        })
+        this.productService.getProductReviews(this.product.product.id).subscribe({
+            next: reviews => {
+                this.reviews = reviews;
+                this.reviews.forEach(review => {
+                    let urls: string[] = [];
+                    review.photos.map(photo => {
+                        this.imageService.createUrlFromBase64(photo).then(url => {
+                                urls.push(url);
+                            }
+                        )
+                    });
+                    this.countOfPhotos += review.photos.length;
+                    this.countOfReviewsWithPhotos += review.photos.length > 0 ? 1 : 0;
+                    review.photos = urls;
 
-                        })
-                        this.isNeedRightButtonForPhotos = this.countOfPhotos > 11; //TODO
-                        this.filteredReviews = reviews;
-                        if (this.isNeedSortByDate) this.sortByDate();
-                        this.isNeedOpenAnswer = new Array(this.filteredReviews.length).fill(false);
-                    },
-                    error: err => console.log(err)
                 })
-                this.currentUser = this.tokenService.getUser();
+                this.isNeedRightButtonForPhotos = this.countOfPhotos > 11; //TODO
+                this.filteredReviews = reviews;
+                if (this.isNeedSortByDate) this.sortByDate();
+                this.isNeedOpenAnswer = new Array(this.filteredReviews.length).fill(false);
             },
             error: err => console.log(err)
         })
+        this.currentUser = this.tokenService.getUser();
     }
 
     rightScrollForPhotos() {
@@ -145,19 +142,20 @@ export class ProductFeedbackComponent implements OnInit {
     reportReview() {
     }
 
-    addToCart(){
+    addToCart() {
         this.productService.addProductToCart(this.product.product).subscribe({
             error: err => console.log(err)
         });
         // @ts-ignore
         document.getElementById('liveToast').classList.add("show");
     }
+
     addOrRemoveFavourite() { //TODO: remove duplicated code
-        if(this.isFavourite){
+        if (this.isFavourite) {
             this.productService.deleteProductFromFavourite(this.product.product).subscribe({
                 error: err => console.log(err)
             })
-        }else {
+        } else {
             this.productService.addProductToFavourite(this.product.product).subscribe({
                 error: err => console.log(err)
             });
@@ -183,7 +181,7 @@ export class ProductFeedbackComponent implements OnInit {
     }
 
     removeNumberOfProduct() {
-        if(this.countOfProductInOrder > 1){
+        if (this.countOfProductInOrder > 1) {
             this.countOfProductInOrder--;
             this.totalPrice -= this.product.product.price;
         }
@@ -227,7 +225,7 @@ export class ProductFeedbackComponent implements OnInit {
         });
     }
 
-    saveAnswerToReview(){
+    saveAnswerToReview() {
         console.log(this.reviewInAnswerToReview.id)
         this.productService.updateAnswerToReview(this.reviewInAnswerToReview.id, this.answerForReview).subscribe({
             next: review => {

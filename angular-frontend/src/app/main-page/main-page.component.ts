@@ -6,7 +6,7 @@ import {ProductWithImage} from "../models/product-with-image";
 import {ErrorInterceptService} from "../service/error-intercept.service";
 import {Page} from "../models/page";
 import {ActivatedRoute, ParamMap} from "@angular/router";
-import {map, Observable} from "rxjs";
+import {map} from "rxjs";
 
 @Component({
     selector: 'app-main-page',
@@ -20,18 +20,19 @@ export class MainPageComponent {
         private errorIntercept: ErrorInterceptService,
         private activatedRoute: ActivatedRoute
     ) {}
-    searchWordObs: Observable<string>;
+
     searchWord: string;
     user: LocalUser;
     products: ProductWithImage[];
     sizeOfPage: number = 12;
     sortBy: string;
     page: Page<ProductWithImage>;
-    isFilteredByVerified = false;
+    isFilteredByVerified = true;
     isFilteredByWithPhoto = false;
     isSortASC = false;
     isNeedSortByDate = false;
     isNeedSortByPrice = false;
+
     ngOnInit(): void {
         this.user = this.tokenService.getUser();
         if(!this.user){
@@ -40,7 +41,7 @@ export class MainPageComponent {
         }
         this.activatedRoute.queryParamMap.pipe(map((params: ParamMap) => params.get('search'))).subscribe({
             next: param => {
-                this.searchWord = param
+                this.searchWord = param;
                 this.getProducts(0);
             }
         });
@@ -60,17 +61,7 @@ export class MainPageComponent {
         });
     }
 
-    filterByVerified(event: any) {
-        this.isFilteredByVerified = event.target.checked;
-        this.getProducts(0);
-    }
-
     protected readonly Array = Array;
-
-    filterByWithPhoto(event: any) {
-        this.isFilteredByWithPhoto = event.target.checked;
-        this.getProducts(0);
-    }
 
     sortByDate() {
         this.sortBy = "updatedAt";
@@ -88,5 +79,4 @@ export class MainPageComponent {
         this.isNeedSortByPrice = true;
     }
 
-    protected readonly console = console;
 }
