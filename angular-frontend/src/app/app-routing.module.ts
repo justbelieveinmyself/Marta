@@ -24,7 +24,8 @@ const routes: Routes = [
         path: 'products', component: MainPageComponent,
         resolve: {
             productsPage: (route: ActivatedRouteSnapshot) => {
-                const page = route.queryParams['page'] || 0;
+                const number = route.queryParams['page']-1 || 0;
+                const page = number > 0? number : 0;
                 const size = route.queryParams['size'] || 12;
                 const sortBy = route.queryParams['sortBy'];
                 const isAsc = route.queryParams['isAsc'] === 'true';
@@ -82,21 +83,6 @@ const routes: Routes = [
             }
         }
     },
-    {
-        path: 'products/search', component: MainPageComponent,
-        resolve: {
-            productsPage: (route: ActivatedRouteSnapshot) => {
-                const page = route.queryParams['page'] || 0;
-                const size = route.queryParams['size'] || 12;
-                const sortBy = route.queryParams['sortBy'];
-                const isAsc = route.queryParams['isAsc'] === 'true';
-                const isFilteredByWithPhoto = route.queryParams['isFilteredByWithPhoto'] === 'true';
-                const isFilteredByVerified = route.queryParams['isFilteredByVerified'] === 'true';
-                const searchWord = route.queryParams['searchWord'];
-                return inject(ProductService).getProductList(page, size, true, sortBy, isAsc, isFilteredByWithPhoto, isFilteredByVerified, searchWord);
-            }
-        }
-    },
     {path: '', redirectTo: 'products', pathMatch: 'full'},
     {path: 'create-product', component: CreateProductComponent},
     {path: 'update-product/:id', component: UpdateProductComponent,
@@ -123,13 +109,13 @@ const routes: Routes = [
     {path: '**', redirectTo: 'create-product', pathMatch: 'full'}
 
 ];
-const routerOptions: ExtraOptions = {
-    anchorScrolling: 'enabled',
-    onSameUrlNavigation: 'reload'
-};
+// const routerOptions: ExtraOptions = {
+//     anchorScrolling: 'enabled',
+//     onSameUrlNavigation: 'reload'
+// };
 
 @NgModule({
-    imports: [RouterModule.forRoot(routes, routerOptions)],
+    imports: [RouterModule.forRoot(routes)],
     exports: [RouterModule]
 })
 export class AppRoutingModule {

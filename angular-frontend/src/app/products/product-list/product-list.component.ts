@@ -30,6 +30,7 @@ export class ProductListComponent{
     messageForSeller = "";
     isFavourite: boolean[];
     favourites: ProductWithImage[];
+
     ngOnInit() {
         // if(!this.card && !this.orders){
         //     setTimeout(() => this.ngOnInit(), 50);
