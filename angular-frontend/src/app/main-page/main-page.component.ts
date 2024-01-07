@@ -9,6 +9,7 @@ import {ActivatedRoute, ActivatedRouteSnapshot, ParamMap, Router, UrlSerializer,
 import {map} from "rxjs";
 import {isNumber} from "ngx-bootstrap/carousel/utils";
 import {isBoolean} from "ngx-bootstrap/chronos/utils/type-checks";
+import {PageDataService} from "../service/page-data.service";
 
 @Component({
     selector: 'app-main-page',
@@ -20,10 +21,11 @@ export class MainPageComponent {
         private productService: ProductService,
         private tokenService: TokenService,
         private errorIntercept: ErrorInterceptService,
-        private activatedRoute: ActivatedRoute
+        private activatedRoute: ActivatedRoute,
+        private pageDataService: PageDataService
     ) {}
 
-    searchWord: string;
+    searchWord: string = "";
     user: LocalUser;
     products: ProductWithImage[];
     sizeOfPage: number = 12;
@@ -66,11 +68,7 @@ export class MainPageComponent {
         })
         this.activatedRoute.queryParamMap.pipe(map((params: ParamMap) => params.get("isAsc"))).subscribe({
             next: param => {
-                if (typeof param === 'boolean') {
-                    this.isSortASC = param;
-                } else {
-                    // fail
-                }
+                this.isSortASC = param === 'true';
             }
         })
         this.activatedRoute.queryParamMap.pipe(map((params: ParamMap) => params.get("isFilteredByWithPhoto"))).subscribe({
@@ -85,9 +83,10 @@ export class MainPageComponent {
         })
         this.activatedRoute.queryParamMap.pipe(map((params: ParamMap) => params.get('search'))).subscribe({
             next: param => {
-                console.log("search?")
-                this.searchWord = param;
-                // this.getProducts(0);
+                if(param != this.searchWord) {
+                    this.searchWord = param; //need to inject from resolver to prevent double fetching
+                    this.getProducts(0);
+                }
             }
         });
         this.activatedRoute.data.subscribe(data => {
@@ -95,9 +94,15 @@ export class MainPageComponent {
             this.products = this.page.content;
         });
     }
+    ngOnChanges() {
+        console.log("XDS")
+    }
 
     getProducts(page?: number) {
-        this.productService.getProductList(page? page : this.pageNumber, this.sizeOfPage, true, this.sortBy, this.isSortASC, this.isFilteredByWithPhoto, this.isFilteredByVerified, this.searchWord).subscribe({
+        if(page != null) {
+            this.pageNumber = page;
+        }
+        this.productService.getProductList(this.pageNumber, this.sizeOfPage, true, this.sortBy, this.isSortASC, this.isFilteredByWithPhoto, this.isFilteredByVerified, this.searchWord).subscribe({
             next: data => {
                 this.products = data.content;
                 this.page = data;

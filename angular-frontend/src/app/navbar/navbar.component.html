@@ -16,8 +16,7 @@
     <a class="navbar-brand ms-5" routerLink="products" routerLinkActive="active">
         <img src="assets/logo.png" width="165" height="35" alt="logo with 'Marta'">
     </a>
-    <app-search>
-    </app-search>
+    <app-search></app-search>
     <ul class="navbar-nav ms-auto">
         <li class="nav-item me-3" *ngIf="isLogged && user.roles!.includes('ADMIN')">
             <a routerLink="adminPanel" routerLinkActive="active" class="nav-link"

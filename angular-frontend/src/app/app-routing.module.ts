@@ -18,21 +18,23 @@ import {AdminGuard} from "./admin-guard";
 import {ActivityPageComponent} from "./activity-page/activity-page.component";
 import {ProductService} from "./service/product.service";
 import {UserService} from "./service/user.service";
+import {PageDataService} from "./service/page-data.service";
 
 const routes: Routes = [
     {
         path: 'products', component: MainPageComponent,
         resolve: {
             productsPage: (route: ActivatedRouteSnapshot) => {
+                const pageDataService = inject(PageDataService);
                 const number = route.queryParams['page']-1 || 0;
-                const page = number > 0? number : 0;
+                pageDataService.pageNumber = number > 0? number : 0;
                 const size = route.queryParams['size'] || 12;
                 const sortBy = route.queryParams['sortBy'];
                 const isAsc = route.queryParams['isAsc'] === 'true';
                 const isFilteredByWithPhoto = route.queryParams['isFilteredByWithPhoto'] === 'true';
                 const isFilteredByVerified = route.queryParams['isFilteredByVerified'] === 'true';
                 const searchWord = route.queryParams['searchWord'];
-                return inject(ProductService).getProductList(page, size, true, sortBy, isAsc, isFilteredByWithPhoto, isFilteredByVerified, searchWord);
+                return inject(ProductService).getProductList(pageDataService.pageNumber, size, true, sortBy, isAsc, isFilteredByWithPhoto, isFilteredByVerified, searchWord);
             }
         }
     },

@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {ActivatedRoute, ParamMap} from "@angular/router";
 import {map} from "rxjs";
 
@@ -9,6 +9,12 @@ import {map} from "rxjs";
 })
 export class SearchComponent implements OnInit {
     constructor(private activatedRoute: ActivatedRoute) {}
+    pageNumber: number;
+    sizeOfPage: number;
+    isSortASC: boolean;
+    isFilteredByWithPhoto: boolean;
+    isFilteredByVerified: boolean;
+    sortBy: string;
     searchWord: string;
     ngOnInit(){
         this.activatedRoute.queryParamMap.pipe(map((params: ParamMap) => params.get('search'))).subscribe({

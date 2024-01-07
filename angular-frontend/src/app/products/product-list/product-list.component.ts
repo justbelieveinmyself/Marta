@@ -13,7 +13,7 @@ import {Seller} from "../../models/seller";
     templateUrl: './product-list.component.html',
     styleUrls: ['./product-list.component.css']
 })
-export class ProductListComponent{
+export class ProductListComponent {
     constructor(
         private productService: ProductService,
         private tokenService: TokenService,
@@ -32,14 +32,7 @@ export class ProductListComponent{
     favourites: ProductWithImage[];
 
     ngOnInit() {
-        // if(!this.card && !this.orders){
-        //     setTimeout(() => this.ngOnInit(), 50);
-        //     console.log("test");
-        // }
         this.currentUser = this.tokenService.getUser();
-        if(this.card && !this.favourites){
-            this.getFavourites();
-        }
     }
     ngOnChanges(){
         if(this.card){
