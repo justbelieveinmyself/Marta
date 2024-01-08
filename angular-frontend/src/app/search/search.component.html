@@ -2,7 +2,8 @@
     <input class="form-control me-2" style="height: 50px; width: 400px" type="search" placeholder="Search" name="search" [(ngModel)]="searchWord" aria-label="Search">
     <button class="btn btn-outline-success" type="submit"
             routerLinkActive="active" routerLink="/products"
-            [queryParams]="{search: searchWord, onlyVerified: isFilteredByVerified, isASC: isSortASC, page: pageNumber,
-            onlyWithPhoto: isFilteredByWithPhoto, size: sizeOfPage, sortBy: sortBy}">Search</button>
+            [queryParams]="{search: searchWord, onlyVerified: pageDataService.isFilteredByVerified, isASC: pageDataService.isSortASC,
+            page: pageDataService.pageNumber, onlyWithPhoto: pageDataService.isFilteredByWithPhoto, size: pageDataService.sizeOfPage,
+            sortBy: pageDataService.sortBy}">Search</button>
 </form>
 

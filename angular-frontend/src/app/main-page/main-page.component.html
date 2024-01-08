@@ -1,22 +1,22 @@
-<h4 style="font-weight: bold">{{searchWord}}</h4>
+<h4 style="font-weight: bold" *ngIf="pageDataService.searchWord != null">{{pageDataService.searchWord}}</h4>
 <div class="mt-3" style="font-size: 17px">
     <span class="me-4" style="color: black; font-weight: bold; font-size: 18px">Found: {{this.page? this.page.totalElements : 0}}</span>
     <span class="text-secondary me-4">Sort by:</span>
     <a type="button" class="me-4" (click)="sortByDate()">
         <span [ngClass]="isNeedSortByDate?'sort-active':'sort-not-active'">Date</span>&nbsp;
-        <i *ngIf="isNeedSortByDate" class="fa-solid fa-sm" [ngClass]="isSortASC?'fa-arrow-up':'fa-arrow-down'"
+        <i *ngIf="isNeedSortByDate" class="fa-solid fa-sm" [ngClass]="pageDataService.isSortASC?'fa-arrow-up':'fa-arrow-down'"
            style="color: black"></i>
     </a>
     <a type="button" class="me-4" (click)="sortByPrice()">
         <span [ngClass]="isNeedSortByPrice?'sort-active':'sort-not-active'">Price</span>&nbsp;
-        <i *ngIf="isNeedSortByPrice" class="fa-solid fa-sm" [ngClass]="isSortASC?'fa-arrow-up':'fa-arrow-down'"
+        <i *ngIf="isNeedSortByPrice" class="fa-solid fa-sm" [ngClass]="pageDataService.isSortASC?'fa-arrow-up':'fa-arrow-down'"
            style="color: black"></i>
     </a>
-    <input class="form-check-input" type="checkbox" (change)="this.getProducts(0)" id="withPhotoCheck" [(ngModel)]="isFilteredByWithPhoto">
+    <input class="form-check-input" type="checkbox" (change)="this.getProducts(0)" id="withPhotoCheck" [(ngModel)]="pageDataService.isFilteredByWithPhoto">
     <label class="form-check-label me-3" for="withPhotoCheck">
         &nbsp;With a photo
     </label>
-    <input class="form-check-input" type="checkbox" (change)="this.getProducts(0)" id="verifiedCheck" [(ngModel)]="isFilteredByVerified">
+    <input class="form-check-input" type="checkbox" (change)="this.getProducts(0)" id="verifiedCheck" [(ngModel)]="pageDataService.isFilteredByVerified">
     <label class="form-check-label me-3" for="verifiedCheck">
         &nbsp;Verified
     </label>

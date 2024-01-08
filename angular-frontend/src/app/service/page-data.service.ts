@@ -4,12 +4,7 @@ import {Injectable} from '@angular/core';
     providedIn: 'root'
 })
 export class PageDataService {
-    constructor(
 
-    ) {}
-    ngOnInit(){
-        console.log("page-data-service")
-    }
     private _pageNumber: number;
     private _sizeOfPage: number;
     private _isSortASC: boolean;

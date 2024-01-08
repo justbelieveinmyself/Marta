@@ -1,5 +1,5 @@
 import {inject, NgModule} from '@angular/core';
-import {ActivatedRouteSnapshot, ExtraOptions, RouterModule, Routes} from '@angular/router';
+import {ActivatedRouteSnapshot, RouterModule, Routes} from '@angular/router';
 import {CreateProductComponent} from './products/create-product/create-product.component';
 import {UpdateProductComponent} from './products/update-product/update-product.component';
 import {LoginComponent} from './auth/login/login.component';
@@ -28,13 +28,13 @@ const routes: Routes = [
                 const pageDataService = inject(PageDataService);
                 const number = route.queryParams['page']-1 || 0;
                 pageDataService.pageNumber = number > 0? number : 0;
-                const size = route.queryParams['size'] || 12;
-                const sortBy = route.queryParams['sortBy'];
-                const isAsc = route.queryParams['isAsc'] === 'true';
-                const isFilteredByWithPhoto = route.queryParams['isFilteredByWithPhoto'] === 'true';
-                const isFilteredByVerified = route.queryParams['isFilteredByVerified'] === 'true';
-                const searchWord = route.queryParams['searchWord'];
-                return inject(ProductService).getProductList(pageDataService.pageNumber, size, true, sortBy, isAsc, isFilteredByWithPhoto, isFilteredByVerified, searchWord);
+                pageDataService.sizeOfPage = route.queryParams['size'] || 12;
+                pageDataService.sortBy = route.queryParams['sortBy'];
+                pageDataService.isSortASC = route.queryParams['isASC'] === 'true';
+                pageDataService.isFilteredByWithPhoto = route.queryParams['onlyWithPhoto'] === 'true';
+                pageDataService.isFilteredByVerified = route.queryParams['onlyVerified'] === 'true';
+                pageDataService.searchWord = route.queryParams['search'];
+                return inject(ProductService).getProductList(pageDataService.pageNumber, pageDataService.sizeOfPage, true, pageDataService.sortBy, pageDataService.isSortASC, pageDataService.isFilteredByWithPhoto, pageDataService.isFilteredByVerified, pageDataService.searchWord);
             }
         }
     },

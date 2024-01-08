@@ -5,10 +5,8 @@ import {ProductService} from "../service/product.service";
 import {ProductWithImage} from "../models/product-with-image";
 import {ErrorInterceptService} from "../service/error-intercept.service";
 import {Page} from "../models/page";
-import {ActivatedRoute, ActivatedRouteSnapshot, ParamMap, Router, UrlSerializer, UrlTree} from "@angular/router";
+import {ActivatedRoute, ParamMap} from "@angular/router";
 import {map} from "rxjs";
-import {isNumber} from "ngx-bootstrap/carousel/utils";
-import {isBoolean} from "ngx-bootstrap/chronos/utils/type-checks";
 import {PageDataService} from "../service/page-data.service";
 
 @Component({
@@ -22,19 +20,12 @@ export class MainPageComponent {
         private tokenService: TokenService,
         private errorIntercept: ErrorInterceptService,
         private activatedRoute: ActivatedRoute,
-        private pageDataService: PageDataService
+        public pageDataService: PageDataService
     ) {}
 
-    searchWord: string = "";
     user: LocalUser;
     products: ProductWithImage[];
-    sizeOfPage: number = 12;
-    sortBy: string;
-    pageNumber = 0;
     page: Page<ProductWithImage>;
-    isFilteredByVerified = true;
-    isFilteredByWithPhoto = false;
-    isSortASC = false;
     isNeedSortByDate = false;
     isNeedSortByPrice = false;
 
@@ -44,47 +35,11 @@ export class MainPageComponent {
             this.errorIntercept.updateAccess();
             return;
         }
-        this.activatedRoute.queryParamMap.pipe(map((params: ParamMap) => params.get("page"))).subscribe({
-            next: param => {
-                if (param && !isNaN(Number(param))) {
-                    const number = Number(param) - 1;
-                    this.pageNumber = number > 0? number : 0;
-                }
-            }
-        })
-        this.activatedRoute.queryParamMap.pipe(map((params: ParamMap) => params.get("size"))).subscribe({
-            next: param => {
-                if (param && !isNaN(Number(param))) {
-                    this.sizeOfPage = Number(param);
-                }
-            }
-        })
-        this.activatedRoute.queryParamMap.pipe(map((params: ParamMap) => params.get("sortBy"))).subscribe({
-            next: param => {
-                if(param){
-                    this.sortBy = param;
-                }
-            }
-        })
-        this.activatedRoute.queryParamMap.pipe(map((params: ParamMap) => params.get("isAsc"))).subscribe({
-            next: param => {
-                this.isSortASC = param === 'true';
-            }
-        })
-        this.activatedRoute.queryParamMap.pipe(map((params: ParamMap) => params.get("isFilteredByWithPhoto"))).subscribe({
-            next: param => {
-                this.isFilteredByWithPhoto = param === 'true';
-            }
-        })
-        this.activatedRoute.queryParamMap.pipe(map((params: ParamMap) => params.get("isFilteredByVerified"))).subscribe({
-            next: param => {
-                this.isFilteredByVerified = param === 'true';
-            }
-        })
+
         this.activatedRoute.queryParamMap.pipe(map((params: ParamMap) => params.get('search'))).subscribe({
             next: param => {
-                if(param != this.searchWord) {
-                    this.searchWord = param; //need to inject from resolver to prevent double fetching
+                if(param != this.pageDataService.searchWord) {
+                    this.pageDataService.searchWord = param;
                     this.getProducts(0);
                 }
             }
@@ -94,15 +49,12 @@ export class MainPageComponent {
             this.products = this.page.content;
         });
     }
-    ngOnChanges() {
-        console.log("XDS")
-    }
 
     getProducts(page?: number) {
         if(page != null) {
-            this.pageNumber = page;
+            this.pageDataService.pageNumber = page;
         }
-        this.productService.getProductList(this.pageNumber, this.sizeOfPage, true, this.sortBy, this.isSortASC, this.isFilteredByWithPhoto, this.isFilteredByVerified, this.searchWord).subscribe({
+        this.productService.getProductList(this.pageDataService.pageNumber, this.pageDataService.sizeOfPage, true, this.pageDataService.sortBy, this.pageDataService.isSortASC, this.pageDataService.isFilteredByWithPhoto, this.pageDataService.isFilteredByVerified, this.pageDataService.searchWord).subscribe({
             next: data => {
                 this.products = data.content;
                 this.page = data;
@@ -113,16 +65,16 @@ export class MainPageComponent {
     protected readonly Array = Array;
 
     sortByDate() {
-        this.sortBy = "updatedAt";
-        this.isSortASC = !this.isSortASC;
+        this.pageDataService.sortBy = "updatedAt";
+        this.pageDataService.isSortASC = !this.pageDataService.isSortASC;
         this.getProducts(0);
         this.isNeedSortByPrice = false;
         this.isNeedSortByDate = true;
     }
 
     sortByPrice() {
-        this.sortBy = "price";
-        this.isSortASC = !this.isSortASC;
+        this.pageDataService.sortBy = "price";
+        this.pageDataService.isSortASC = !this.pageDataService.isSortASC;
         this.getProducts(0);
         this.isNeedSortByDate = false;
         this.isNeedSortByPrice = true;

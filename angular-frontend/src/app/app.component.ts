@@ -13,11 +13,9 @@ export class AppComponent{
         this.router.events.subscribe(ev => {
             if(ev instanceof NavigationStart) {
                 this.loading = true;
-                console.log("Start");
             }
             if(ev instanceof NavigationEnd || ev instanceof NavigationCancel || ev instanceof NavigationError) {
                 this.loading = false;
-                console.log("End");
             }
         })
     }
