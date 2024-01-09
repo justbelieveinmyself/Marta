@@ -19,6 +19,7 @@ import {ActivityPageComponent} from "./activity-page/activity-page.component";
 import {ProductService} from "./service/product.service";
 import {UserService} from "./service/user.service";
 import {PageDataService} from "./service/page-data.service";
+import {OrderService} from "./service/order.service";
 
 const routes: Routes = [
     {
@@ -97,7 +98,13 @@ const routes: Routes = [
     },
     {path: 'login', component: LoginComponent},
     {path: 'register', component: RegisterComponent},
-    {path: 'profile/cart', component: ProductCartComponent},
+    {path: 'profile/cart', component: ProductCartComponent,
+        resolve: {
+            products: () => {
+                return inject(ProductService).getProductsFromCart();
+            }
+        }
+    },
     {path: 'profile', component: UserProfileComponent},
     {path: 'profile/details', component: UserDetailsComponent},
     {path: 'profile/favourites', component: UserFavouritesComponent,
@@ -107,14 +114,16 @@ const routes: Routes = [
             }
         }
     },
-    {path: 'profile/delivery', component: UserDeliveryComponent},
-    {path: '**', redirectTo: 'create-product', pathMatch: 'full'}
+    {path: 'profile/delivery', component: UserDeliveryComponent,
+        resolve: {
+            orders: () => {
+                return inject(OrderService).getCurrentUserOrders();
+            }
+        }
+    },
+    {path: '**', redirectTo: 'products', pathMatch: 'full'}
 
 ];
-// const routerOptions: ExtraOptions = {
-//     anchorScrolling: 'enabled',
-//     onSameUrlNavigation: 'reload'
-// };
 
 @NgModule({
     imports: [RouterModule.forRoot(routes)],

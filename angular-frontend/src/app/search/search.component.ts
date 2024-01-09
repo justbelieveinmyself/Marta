@@ -10,7 +10,6 @@ import {PageDataService} from "../service/page-data.service";
 })
 export class SearchComponent {
     constructor(
-        private activatedRoute: ActivatedRoute,
         public pageDataService: PageDataService
     ) {}
     searchWord: string;

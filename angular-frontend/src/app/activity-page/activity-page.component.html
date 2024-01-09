@@ -1,4 +1,4 @@
-<app-product-list [card]="products" [isOrders]="false" [isAdminPage]="true"
+<app-product-list [card]="products" [isOrders]="false" [isAdminPage]="true" [isNeedFavourites]="false"
                   *ngIf="products && products.length > 0; else noActivity"></app-product-list>
 <ng-template #noActivity>
     <div class="card card_with_shadow">

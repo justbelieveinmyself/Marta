@@ -42,7 +42,7 @@
                 <b [ngStyle]="item.product.isVerified? {'color':'green'}:{'color':'red'}" style="position: absolute; top: 8px; right: 10px; font-size: 13px;">
                     <i class="fa-solid fa-2xl" tooltip="{{item.product.isVerified? 'Verified by the administrator':'Not yet verified by the administrator'}}" [ngClass]="item.product.isVerified? 'fa-check': 'fa-xmark'"></i>
                 </b>
-                <a type="button" class="fa-regular fa-heart fa-xl" [ngClass]="isFavourite[i]? 'fa-solid' : 'fa-regular'" style="color: red; position: absolute; top: 16px; left: 10px;"
+                <a *ngIf="isNeedFavourites" type="button" class="fa-regular fa-heart fa-xl" [ngClass]="isFavourite[i]? 'fa-solid' : 'fa-regular'" style="color: red; position: absolute; top: 16px; left: 10px;"
                    (click)="addOrRemoveFavourite(item, i)"></a>
                 <img type="button" routerLink="/products/{{item.product.id}}/details" routerLinkActive="active"
                      [src]="item.file" style="object-fit: cover;" height="381.86" width="286.4" class="card-img-top"

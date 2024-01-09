@@ -47,7 +47,7 @@ export class ErrorInterceptService implements HttpInterceptor {
                             this.tokenService.setUser(user);
                         }
                     });
-                    window.location.reload();
+                    // window.location.reload();
                 },
                 error: error => {
                     this.tokenService.logOut();

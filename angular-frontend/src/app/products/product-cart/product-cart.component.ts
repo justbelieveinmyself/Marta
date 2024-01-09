@@ -3,6 +3,7 @@ import {TokenService} from "../../service/token.service";
 import {ProductService} from "../../service/product.service";
 import {ProductWithImage} from "../../models/product-with-image";
 import {LocalUser} from "../../models/local-user";
+import {ActivatedRoute} from "@angular/router";
 
 @Component({
   selector: 'app-product-cart',
@@ -13,22 +14,21 @@ export class ProductCartComponent implements OnInit{
     constructor(
         private tokenService: TokenService,
         private productService: ProductService,
+        private activatedRoute: ActivatedRoute
     ) {}
-    isLogged = false;
+
     isPayNow = false;
     user: LocalUser;
     productAndQuantity = new Map<ProductWithImage, number>;
     totalCountOfProduct = 0;
     totalPrice = 0;
+
     ngOnInit(): void {
-        this.tokenService.isLogged().subscribe(data => this.isLogged = data);
-        this.productService.getProductsFromCart().subscribe({
-            next: products => {
-                products.forEach(product => this.productAndQuantity.set(product, 1));
-                products.forEach(product => this.totalPrice += product.product.price);
-                this.totalCountOfProduct = products.length;
-            },
-            error: err => console.log(err)
+        this.activatedRoute.data.subscribe(data => {
+            const products: ProductWithImage[] = data["products"];
+            products.forEach(product => this.productAndQuantity.set(product, 1));
+            products.forEach(product => this.totalPrice += product.product.price);
+            this.totalCountOfProduct = products.length;
         })
         this.user = this.tokenService.getUser();
     }

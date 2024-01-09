@@ -24,6 +24,7 @@ export class ProductListComponent {
     @Input() orders: Order[];
     @Input() isOrders: boolean;
     @Input() isAdminPage: boolean;
+    @Input() isNeedFavourites: boolean;
     productInToast: Product;
     contactSeller: Seller = new Seller();
     currentUser: LocalUser;
@@ -35,7 +36,7 @@ export class ProductListComponent {
         this.currentUser = this.tokenService.getUser();
     }
     ngOnChanges(){
-        if(this.card){
+        if(this.isNeedFavourites && this.card){
             this.getFavourites();
         }
     }
