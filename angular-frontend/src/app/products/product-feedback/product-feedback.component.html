@@ -219,7 +219,7 @@
 
             <div class="modal-body mx-4" style="font-size: 19px">
                 <span *ngIf="!isPaid" style="font-size: 12px; position: absolute" class="text-secondary">We will write off the payment upon receipt </span> <br>
-                <input class="form-check-input" type="checkbox" (change)="isPaid = !isPaid"
+                <input class="form-check-input" type="checkbox" [(ngModel)]="isPaid"
                        id="flexCheck">
                 <label class="form-check-label" for="flexCheck">
                     &nbsp;Pay now
@@ -232,7 +232,7 @@
                        class="fa-solid fa-square-plus fa-xl"></i>
                 </div>
                 <div class="name_card_main mt-2">
-                    Total: {{totalPrice}}
+                    Total: {{totalPrice| currency}}
                 </div>
                 <div class="mt-3 justify-content-center" style="display: flex">
                     <button class="btn btn-outline-dark w-75" data-bs-dismiss="modal" (click)="orderNow()">Buy now</button>

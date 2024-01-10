@@ -4,6 +4,7 @@ import {ProductService} from "../../service/product.service";
 import {ActivatedRoute} from "@angular/router";
 import {ProductWithImage} from "../../models/product-with-image";
 import {UserService} from "../../service/user.service";
+import {ProductInteractionService} from "../../service/product-interaction.service";
 
 @Component({
     selector: 'app-product-questions',
@@ -14,7 +15,8 @@ export class ProductQuestionsComponent implements OnInit {
     constructor(
         private productService: ProductService,
         private activatedRoute: ActivatedRoute,
-        private userService: UserService
+        private userService: UserService,
+        private productInteractionService: ProductInteractionService
     ) {}
 
     isFavourite = false;
@@ -62,28 +64,19 @@ export class ProductQuestionsComponent implements OnInit {
     }
 
     addOrRemoveFavourite() {
-        if (this.isFavourite) {
-            this.productService.deleteProductFromFavourite(this.product.product).subscribe({
-                error: err => console.log(err)
-            })
-        } else {
-            this.productService.addProductToFavourite(this.product.product).subscribe({
-                error: err => console.log(err)
-            });
-        }
-        this.isFavourite = !this.isFavourite;
+        this.productInteractionService.addOrRemoveFavourite(this.isFavourite, this.product.product.id)
+        .subscribe(isFavourite => {
+            this.isFavourite = isFavourite;
+        });
     }
 
     orderNow() {
-        const map = new Map<ProductWithImage, number>;
-        map.set(this.product, this.countOfProductInOrder);
-        this.productService.createOrder(map, this.isPaid).subscribe({
-            next: result => {
-                this.totalPrice = this.product.product.price;
+        this.productInteractionService.orderNow(this.product, this.countOfProductInOrder, this.isPaid).then(isOrdered => {
+            if(isOrdered) {
                 this.countOfProductInOrder = 1;
-            },
-            error: err => console.log(err)
-        })
+                this.totalPrice = this.product.product.price;
+            }
+        });
     }
 
     addNumberOfProduct() {

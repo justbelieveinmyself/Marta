@@ -7,6 +7,7 @@ import {TokenService} from "../../service/token.service";
 import {LocalUser} from "../../models/local-user";
 import {UserService} from "../../service/user.service";
 import {Seller} from "../../models/seller";
+import {ProductInteractionService} from "../../service/product-interaction.service";
 
 @Component({
     selector: 'app-product-list',
@@ -17,7 +18,8 @@ export class ProductListComponent {
     constructor(
         private productService: ProductService,
         private tokenService: TokenService,
-        private userService: UserService
+        private userService: UserService,
+        private productInteractionService: ProductInteractionService
     ) {}
 
     @Input() card: ProductWithImage[];
@@ -84,18 +86,12 @@ export class ProductListComponent {
 
     addOrRemoveFavourite(item: ProductWithImage, index: number) {
         const isFavourite = this.isFavourite[index];
-        if(isFavourite){
-            this.productService.deleteProductFromFavourite(item.product).subscribe({
-                next: next => this.isFavourite[index] = false,
-                error: err => console.log(err)
-            })
-        }else {
-            this.productService.addProductToFavourite(item.product).subscribe({
-                next: next => this.isFavourite[index] = true,
-                error: err => console.log(err)
-            });
-        }
+
+        this.productInteractionService.addOrRemoveFavourite(isFavourite, item.product.id).subscribe(isFavourite => {
+           this.isFavourite[index] = isFavourite;
+        });
     }
+
 
     sendMessageToSeller() {
 

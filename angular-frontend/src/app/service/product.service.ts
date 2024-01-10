@@ -79,8 +79,8 @@ export class ProductService {
         return this.httpClient.post<Product>(`${this.baseUrl}/cart/` + product.id, null);
     }
 
-    addProductToFavourite(product: Product){
-        return this.httpClient.post<Product>(`${this.baseUrl}/favourite/` + product.id, null);
+    addProductToFavourite(productId: number){
+        return this.httpClient.post<Product>(`${this.baseUrl}/favourite/` + productId, null);
     }
 
     addReview(review: Review, photos: File[]): Observable<Review> {
@@ -123,8 +123,8 @@ export class ProductService {
         return this.httpClient.delete(`${this.baseUrl}/cart/${product.id}`);
     }
 
-    deleteProductFromFavourite(product: Product): Observable<Object>{
-        return this.httpClient.delete(`${this.baseUrl}/favourite/` + product.id)
+    deleteProductFromFavourite(productId: number): Observable<Object>{
+        return this.httpClient.delete(`${this.baseUrl}/favourite/` + productId)
     }
 
 }

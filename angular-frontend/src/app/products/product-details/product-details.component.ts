@@ -8,6 +8,7 @@ import {ImageModel} from "../../models/image-model";
 import {DomSanitizer} from "@angular/platform-browser";
 import {Question} from "../../models/question";
 import {UserService} from "../../service/user.service";
+import {ProductInteractionService} from "../../service/product-interaction.service";
 
 @Component({
     selector: 'app-product-details',
@@ -23,7 +24,8 @@ export class ProductDetailsComponent implements OnInit {
         private activatedRoute: ActivatedRoute,
         private imageService: ImageService,
         private sanitizer: DomSanitizer,
-        private userService: UserService
+        private userService: UserService,
+        private productInteractionService: ProductInteractionService
     ) {}
 
     product: ProductWithImage;
@@ -95,43 +97,17 @@ export class ProductDetailsComponent implements OnInit {
     }
 
     addOrRemoveFavourite() {
-        if (this.isFavourite) {
-            this.productService.deleteProductFromFavourite(this.product.product).subscribe({
-                error: err => console.log(err)
-            })
-        } else {
-            this.productService.addProductToFavourite(this.product.product).subscribe({
-                error: err => console.log(err)
-            });
-        }
-        this.isFavourite = !this.isFavourite;
+        this.productInteractionService.addOrRemoveFavourite(this.isFavourite, this.product.product.id)
+        .subscribe(isFavourite => {
+            this.isFavourite = isFavourite;
+        });
     }
 
     saveReview() {
-        let review = new Review();
-        review.message = this.messageOfReview;
-        review.rating = this.currentRate;
-        review.productId = this.product.product.id;
-        let files = null;
-        if (this.reviewPhotos) {
-            files = this.reviewPhotos.map(photos => photos.file);
-        }
-        // @ts-ignore
-        this.productService.addReview(review, files).subscribe({
-            next: review => {
-                if (review.photos) {
-                    let urls: string[] = [];
-                    review.photos.map(photo => {
-                        this.imageService.createUrlFromBase64(photo).then(url =>
-                            urls.push(url)
-                        )
-                    });
-                    review.photos = urls;
-                }
+        this.productInteractionService.saveReview(this.messageOfReview, this.currentRate, this.product.product.id, this.reviewPhotos)
+            .then(review => {
                 this.reviews.push(review);
-            },
-            error: err => console.log(err)
-        });
+        })
     }
 
     saveQuestion() {
@@ -195,15 +171,12 @@ export class ProductDetailsComponent implements OnInit {
     }
 
     orderNow() {
-        const map = new Map<ProductWithImage, number>;
-        map.set(this.product, this.countOfProductInOrder);
-        this.productService.createOrder(map, this.isPaid).subscribe({
-            next: result => {
-                this.totalPrice = this.product.product.price;
+        this.productInteractionService.orderNow(this.product, this.countOfProductInOrder, this.isPaid).then(isOrdered => {
+            if(isOrdered) {
                 this.countOfProductInOrder = 1;
-            },
-            error: err => console.log(err)
-        })
+                this.totalPrice = this.product.product.price;
+            }
+        });
     }
 
     addNumberOfProduct() {

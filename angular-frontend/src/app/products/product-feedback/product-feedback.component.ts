@@ -10,6 +10,7 @@ import {LocalUser} from "../../models/local-user";
 import {TokenService} from "../../service/token.service";
 import {ImageModel} from "../../models/image-model";
 import {DomSanitizer} from "@angular/platform-browser";
+import {ProductInteractionService} from "../../service/product-interaction.service";
 
 @Component({
     selector: 'app-product-feedback',
@@ -23,7 +24,8 @@ export class ProductFeedbackComponent implements OnInit {
         private imageService: ImageService,
         private sanitizer: DomSanitizer,
         private userService: UserService,
-        private tokenService: TokenService
+        private tokenService: TokenService,
+        private productInteractionService: ProductInteractionService
     ) {}
 
     protected readonly Math = Math;
@@ -150,29 +152,20 @@ export class ProductFeedbackComponent implements OnInit {
         document.getElementById('liveToast').classList.add("show");
     }
 
-    addOrRemoveFavourite() { //TODO: remove duplicated code
-        if (this.isFavourite) {
-            this.productService.deleteProductFromFavourite(this.product.product).subscribe({
-                error: err => console.log(err)
-            })
-        } else {
-            this.productService.addProductToFavourite(this.product.product).subscribe({
-                error: err => console.log(err)
-            });
-        }
-        this.isFavourite = !this.isFavourite;
+    addOrRemoveFavourite() {
+        this.productInteractionService.addOrRemoveFavourite(this.isFavourite, this.product.product.id)
+        .subscribe(isFavourite => {
+            this.isFavourite = isFavourite;
+        });
     }
 
-    orderNow() { //TODO: remove duplicated code
-        const map = new Map<ProductWithImage, number>;
-        map.set(this.product, this.countOfProductInOrder);
-        this.productService.createOrder(map, this.isPaid).subscribe({
-            next: result => {
-                this.totalPrice = this.product.product.price;
+    orderNow() {
+        this.productInteractionService.orderNow(this.product, this.countOfProductInOrder, this.isPaid).then(isOrdered => {
+            if(isOrdered) {
                 this.countOfProductInOrder = 1;
-            },
-            error: err => console.log(err)
-        })
+                this.totalPrice = this.product.product.price;
+            }
+        });
     }
 
     addNumberOfProduct() {
@@ -199,30 +192,10 @@ export class ProductFeedbackComponent implements OnInit {
     }
 
     saveReview() {
-        let review = new Review();
-        review.message = this.messageOfReview;
-        review.rating = this.currentRate;
-        review.productId = this.product.product.id;
-        let files = null;
-        if (this.reviewPhotos) {
-            files = this.reviewPhotos.map(photos => photos.file);
-        }
-        // @ts-ignore
-        this.productService.addReview(review, files).subscribe({
-            next: review => {
-                if (review.photos) {
-                    let urls: string[] = [];
-                    review.photos.map(photo => {
-                        this.imageService.createUrlFromBase64(photo).then(url =>
-                            urls.push(url)
-                        )
-                    });
-                    review.photos = urls;
-                }
+        this.productInteractionService.saveReview(this.messageOfReview, this.currentRate, this.product.product.id, this.reviewPhotos)
+            .then(review => {
                 this.reviews.push(review);
-            },
-            error: err => console.log(err)
-        });
+            })
     }
 
     saveAnswerToReview() {
