@@ -203,7 +203,7 @@ class UserServiceTest {
 
         ResponseEntity<UrlResource> avatarAsResponseEntity = userService.getAvatar(mockUser, mockUser);
 
-        assertEquals(200, avatarAsResponseEntity.getStatusCode());
+        assertEquals(200, avatarAsResponseEntity.getStatusCode().value());
         verify(fileHelper, times(1)).downloadFileAsResponse("avatar.png", UploadDirectory.AVATARS);
     }
 

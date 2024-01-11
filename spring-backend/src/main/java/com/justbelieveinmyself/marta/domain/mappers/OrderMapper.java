@@ -17,7 +17,10 @@ public interface OrderMapper {
     OrderDto modelToDto(Order order);
     @AfterMapping
     default void modelToDto(@MappingTarget OrderDto target, Order order){
-        Map<Long, Integer> productAndQuantity = order.getOrderProduct().stream().collect(Collectors.toMap(orderItem -> orderItem.getProduct().getId(), OrderProduct::getQuantity));
-        target.setProductIdAndQuantity(productAndQuantity);
+        if(order.getOrderProduct() != null){
+            Map<Long, Integer> productAndQuantity = order.getOrderProduct().stream().collect(Collectors.toMap(orderItem -> orderItem.getProduct().getId(), OrderProduct::getQuantity));
+            target.setProductIdAndQuantity(productAndQuantity);
+        }
+
     }
 }

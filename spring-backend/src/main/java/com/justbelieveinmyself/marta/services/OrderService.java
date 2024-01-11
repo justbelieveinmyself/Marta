@@ -1,5 +1,6 @@
 package com.justbelieveinmyself.marta.services;
 
+import com.justbelieveinmyself.marta.configs.beans.UserRightsValidator;
 import com.justbelieveinmyself.marta.domain.dto.OrderDto;
 import com.justbelieveinmyself.marta.domain.entities.Order;
 import com.justbelieveinmyself.marta.domain.entities.OrderProduct;
@@ -7,7 +8,6 @@ import com.justbelieveinmyself.marta.domain.entities.Product;
 import com.justbelieveinmyself.marta.domain.entities.User;
 import com.justbelieveinmyself.marta.domain.enums.DeliveryStatus;
 import com.justbelieveinmyself.marta.domain.mappers.OrderMapper;
-import com.justbelieveinmyself.marta.exceptions.ForbiddenException;
 import com.justbelieveinmyself.marta.repositories.OrderRepository;
 import com.justbelieveinmyself.marta.repositories.ProductRepository;
 import com.justbelieveinmyself.marta.repositories.UserRepository;
@@ -25,12 +25,14 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final ProductRepository productRepository;
     private final OrderMapper orderMapper;
+    private final UserRightsValidator userRightsValidator;
 
-    public OrderService(UserRepository userRepository, OrderRepository orderRepository, ProductRepository productRepository, OrderMapper orderMapper) {
+    public OrderService(UserRepository userRepository, OrderRepository orderRepository, ProductRepository productRepository, OrderMapper orderMapper, UserRightsValidator userRightsValidator) {
         this.userRepository = userRepository;
         this.orderRepository = orderRepository;
         this.productRepository = productRepository;
         this.orderMapper = orderMapper;
+        this.userRightsValidator = userRightsValidator;
     }
 
     public ResponseEntity<List<OrderDto>> getListOrders(User user) {
@@ -62,15 +64,10 @@ public class OrderService {
     }
 
     public ResponseEntity<OrderDto> changeOrderStatus(Order order, DeliveryStatus status, User authedUser) {
-        validateRights(authedUser, order.getCustomer());
+        userRightsValidator.validateRights(authedUser, order.getCustomer());
         order.setStatus(status);
         orderRepository.save(order);
         return ResponseEntity.ok(orderMapper.modelToDto(order));
     }
 
-    private void validateRights(User userFromAuthToken, User userToEdit) { //TODO: refactor this to bean
-        if(!userToEdit.getId().equals(userFromAuthToken.getId())){
-            throw new ForbiddenException("You don't have the rights!");
-        }
-    }
 }

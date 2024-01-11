@@ -1,6 +1,7 @@
 package com.justbelieveinmyself.marta.services;
 
 import com.justbelieveinmyself.marta.configs.beans.FileHelper;
+import com.justbelieveinmyself.marta.configs.beans.UserRightsValidator;
 import com.justbelieveinmyself.marta.domain.dto.UserDto;
 import com.justbelieveinmyself.marta.domain.dto.UserNamesDto;
 import com.justbelieveinmyself.marta.domain.dto.auth.LoginResponseDto;
@@ -10,7 +11,6 @@ import com.justbelieveinmyself.marta.domain.enums.Role;
 import com.justbelieveinmyself.marta.domain.enums.UploadDirectory;
 import com.justbelieveinmyself.marta.domain.mappers.ProductMapper;
 import com.justbelieveinmyself.marta.domain.mappers.UserMapper;
-import com.justbelieveinmyself.marta.exceptions.ForbiddenException;
 import com.justbelieveinmyself.marta.exceptions.ResponseMessage;
 import com.justbelieveinmyself.marta.repositories.UserRepository;
 import org.springframework.beans.BeanUtils;
@@ -33,13 +33,15 @@ public class UserService implements UserDetailsService {
     private final ProductMapper productMapper;
     private final FileHelper fileHelper;
     private final UserMapper userMapper;
+    private final UserRightsValidator userRightsValidator;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, ProductMapper productMapper, FileHelper fileHelper, UserMapper userMapper) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, ProductMapper productMapper, FileHelper fileHelper, UserMapper userMapper, UserRightsValidator userRightsValidator) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.productMapper = productMapper;
         this.fileHelper = fileHelper;
         this.userMapper = userMapper;
+        this.userRightsValidator = userRightsValidator;
     }
 
     public User save(User user) {
@@ -73,14 +75,14 @@ public class UserService implements UserDetailsService {
     }
 
     public ResponseEntity<LoginResponseDto> updateEmail(User user, String email, User authUser) {
-        validateRights(authUser, user);
+        userRightsValidator.validateRights(authUser, user);
         user.setEmail(email);
         User savedUser = userRepository.save(user);
         return ResponseEntity.ok(new LoginResponseDto(null, userMapper.modelToDto(savedUser, fileHelper, productMapper)));
     }
 
     public ResponseEntity<ResponseMessage> updateAvatar(User user, MultipartFile file, User authUser) {
-        validateRights(authUser, user);
+        userRightsValidator.validateRights(authUser, user);
         String path = fileHelper.uploadFile(file, UploadDirectory.AVATARS);
         user.setAvatar(path);
         userRepository.save(user);
@@ -88,25 +90,19 @@ public class UserService implements UserDetailsService {
     }
 
     public ResponseEntity<UrlResource> getAvatar(User user, User authUser) {
-        validateRights(authUser, user);
+        userRightsValidator.validateRights(authUser, user);
         return fileHelper.downloadFileAsResponse(user.getAvatar(), UploadDirectory.AVATARS);
     }
 
-    private void validateRights(User userFromAuthToken, User userToEdit) {
-        if(!userToEdit.getId().equals(userFromAuthToken.getId())){
-            throw new ForbiddenException("You don't have the rights!");
-        }
-    }
-
     public ResponseEntity<UserDto> updateGender(User user, String gender, User authUser) {
-        validateRights(authUser, user);
+        userRightsValidator.validateRights(authUser, user);
         user.setGender(gender);
         User savedUser = userRepository.save(user);
         return ResponseEntity.ok(userMapper.modelToDto(savedUser, fileHelper, productMapper));
     }
 
     public ResponseEntity<UserDto> updateNameAndSurname(User user, UserNamesDto userNamesDto, User authedUser) {
-        validateRights(authedUser, user);
+        userRightsValidator.validateRights(authedUser, user);
         user.setFirstName(userNamesDto.getFirstName());
         user.setLastName(userNamesDto.getLastName());
         User savedUser = userRepository.save(user);

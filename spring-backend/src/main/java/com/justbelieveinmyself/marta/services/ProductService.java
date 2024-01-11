@@ -1,6 +1,7 @@
 package com.justbelieveinmyself.marta.services;
 
 import com.justbelieveinmyself.marta.configs.beans.FileHelper;
+import com.justbelieveinmyself.marta.configs.beans.UserRightsValidator;
 import com.justbelieveinmyself.marta.domain.dto.ProductDto;
 import com.justbelieveinmyself.marta.domain.dto.ProductWithImageDto;
 import com.justbelieveinmyself.marta.domain.dto.QuestionDto;
@@ -9,12 +10,10 @@ import com.justbelieveinmyself.marta.domain.entities.Product;
 import com.justbelieveinmyself.marta.domain.entities.Question;
 import com.justbelieveinmyself.marta.domain.entities.Review;
 import com.justbelieveinmyself.marta.domain.entities.User;
-import com.justbelieveinmyself.marta.domain.enums.Role;
 import com.justbelieveinmyself.marta.domain.enums.UploadDirectory;
 import com.justbelieveinmyself.marta.domain.mappers.ProductMapper;
 import com.justbelieveinmyself.marta.domain.mappers.QuestionMapper;
 import com.justbelieveinmyself.marta.domain.mappers.ReviewMapper;
-import com.justbelieveinmyself.marta.exceptions.ForbiddenException;
 import com.justbelieveinmyself.marta.exceptions.NotFoundException;
 import com.justbelieveinmyself.marta.exceptions.ResponseError;
 import com.justbelieveinmyself.marta.exceptions.ResponseMessage;
@@ -47,8 +46,9 @@ public class ProductService {
     private final QuestionMapper questionMapper;
     private final ReviewMapper reviewMapper;
     private final FileHelper fileHelper;
+    private final UserRightsValidator userRightsValidator;
 
-    public ProductService(ProductRepository productRepository, ReviewRepository reviewRepository, QuestionRepository questionRepository, UserRepository userRepository, ProductMapper productMapper, QuestionMapper questionMapper, ReviewMapper reviewMapper, FileHelper fileHelper) {
+    public ProductService(ProductRepository productRepository, ReviewRepository reviewRepository, QuestionRepository questionRepository, UserRepository userRepository, ProductMapper productMapper, QuestionMapper questionMapper, ReviewMapper reviewMapper, FileHelper fileHelper, UserRightsValidator userRightsValidator) {
         this.productRepository = productRepository;
         this.reviewRepository = reviewRepository;
         this.questionRepository = questionRepository;
@@ -57,6 +57,7 @@ public class ProductService {
         this.questionMapper = questionMapper;
         this.reviewMapper = reviewMapper;
         this.fileHelper = fileHelper;
+        this.userRightsValidator = userRightsValidator;
     }
 
     public ResponseEntity<Page<ProductWithImageDto>> getProductsAsPage(
@@ -125,36 +126,19 @@ public class ProductService {
     }
 
     public ResponseEntity<ResponseMessage> deleteProduct(Product product, User currentUser) {
-        validateRightsOrAdminRole(product, currentUser);
+        userRightsValidator.validateRightsOrAdminRole(product, currentUser);
         productRepository.delete(product);
         return ResponseEntity.ok(new ResponseMessage(200, "Successfully deleted!"));
     }
 
     public ResponseEntity<ProductDto> updateProduct(Product productFromDb, ProductDto productDto, User currentUser) {
-        validateRights(productDto, currentUser);
+        userRightsValidator.validateRights(productDto, currentUser);
         BeanUtils.copyProperties(productDto, productFromDb, "id", "seller");
         Product savedProduct = productRepository.save(productFromDb);
         return ResponseEntity.ok(productMapper.modelToDto(savedProduct));
     }
 
-    private void validateRightsOrAdminRole(Product product, User currentUser) {
-        if (product.getSeller().getId().equals(currentUser.getId()) || currentUser.getRoles().contains(Role.ADMIN)) {
-            return;
-        }
-        throw new ForbiddenException("You don't have rights!");
-    }
 
-    private void validateRights(ProductDto productDto, User currentUser) {
-        if (!productDto.getSeller().getId().equals(currentUser.getId())) {
-            throw new ForbiddenException("You don't have rights!");
-        }
-    }
-
-    private void validateRights(Product product, User currentUser) {
-        if (!product.getSeller().getId().equals(currentUser.getId())) {
-            throw new ForbiddenException("You don't have rights!");
-        }
-    }
 
     public ResponseEntity<ProductWithImageDto> getProduct(Product product) {
         Stream<Product> productStream = Stream.of(product);
@@ -284,14 +268,14 @@ public class ProductService {
     }
 
     public ResponseEntity<ReviewDto> answerToReview(Review reviewFromDb, String answer, User authedUser) {
-        validateRights(reviewFromDb.getProduct(), authedUser);
+        userRightsValidator.validateRights(reviewFromDb.getProduct(), authedUser);
         reviewFromDb.setAnswer(answer);
         Review savedReview = reviewRepository.save(reviewFromDb);
         return ResponseEntity.ok(reviewMapper.modelToDto(savedReview, fileHelper));
     }
 
     public ResponseEntity<QuestionDto> answerToQuestion(Question questionFromDb, String answer, User authedUser) {
-        validateRights(questionFromDb.getProduct(), authedUser);
+        userRightsValidator.validateRights(questionFromDb.getProduct(), authedUser);
         questionFromDb.setAnswer(answer);
         Question savedQuestion = questionRepository.save(questionFromDb);
         return ResponseEntity.ok(questionMapper.modelToDto(savedQuestion));
