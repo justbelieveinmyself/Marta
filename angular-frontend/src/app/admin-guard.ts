@@ -1,6 +1,6 @@
 import {Observable} from "rxjs";
 import {Router, UrlTree} from "@angular/router";
-import {TokenService} from "./service/token.service";
+import {TokenService} from "./services/token.service";
 import {Injectable} from "@angular/core";
 
 @Injectable({
@@ -12,6 +12,7 @@ export class AdminGuard {
         private router: Router,
         private tokenService: TokenService
     ) {}
+
     canActivate(): | Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
         if (this.tokenService.getUser().roles.includes("ADMIN")) {
             return true;
