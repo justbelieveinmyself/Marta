@@ -2,6 +2,7 @@ package com.justbelieveinmyself.marta.services;
 
 import com.justbelieveinmyself.marta.configs.beans.FileHelper;
 import com.justbelieveinmyself.marta.configs.beans.UserRightsValidator;
+import com.justbelieveinmyself.marta.domain.dto.ProductWithImageDto;
 import com.justbelieveinmyself.marta.domain.dto.UserDto;
 import com.justbelieveinmyself.marta.domain.dto.UserNamesDto;
 import com.justbelieveinmyself.marta.domain.dto.auth.LoginResponseDto;
@@ -22,6 +23,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Base64;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -123,5 +125,14 @@ public class UserService implements UserDetailsService {
         user.setRoles(roles);
         User savedUser = userRepository.save(user);
         return ResponseEntity.ok(userMapper.modelToDto(savedUser, fileHelper, productMapper));
+    }
+
+    public ResponseEntity<List<ProductWithImageDto>> getProducts(User user, User currentUser) {
+        userRightsValidator.validateRights(user, currentUser);
+        List<ProductWithImageDto> productDtos = user.getProducts().stream()
+                .map(pro -> new ProductWithImageDto(productMapper.modelToDto(pro), Base64.getEncoder().encodeToString(
+                        fileHelper.downloadFileAsByteArray(pro.getPreviewImg(), UploadDirectory.PRODUCTS))))
+                .toList();
+        return ResponseEntity.ok(productDtos);
     }
 }

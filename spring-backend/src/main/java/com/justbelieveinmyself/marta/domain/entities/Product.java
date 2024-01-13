@@ -52,4 +52,6 @@ public class Product {
     private List<Review> reviews;
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Question> questions;
+    @OneToOne(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private ProductDetail productDetail;
 }

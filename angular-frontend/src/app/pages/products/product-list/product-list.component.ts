@@ -27,12 +27,12 @@ export class ProductListComponent {
     @Input() isOrders: boolean;
     @Input() isAdminPage: boolean;
     @Input() isNeedFavourites: boolean;
+    @Input() isCanEdit: boolean;
     productInToast: Product;
     contactSeller: Seller = new Seller();
     currentUser: LocalUser;
     messageForSeller = "";
     isFavourite: boolean[];
-    favourites: ProductWithImage[];
 
     ngOnInit() {
         this.currentUser = this.tokenService.getUser();
