@@ -28,16 +28,12 @@ public class Product {
     private String productCode;
     private String category;
     private BigDecimal price;
-    private Long count;
-    @Lob @Column(length = 16777215)
-    private String description;
-    private String manufacturer;
+    @Column(name = "discount_percentage")
+    private Integer discountPercentage;
     @Column(name = "verified")
     private Boolean isVerified;
     @UpdateTimestamp
     private ZonedDateTime updatedAt;
-    @Lob @Column(length = 16777215)
-    private String structure;
     @ManyToOne(fetch = FetchType.EAGER) @JoinColumn(name = "seller_id")
     private User seller;
     @Column(name = "preview_image")

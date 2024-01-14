@@ -4,6 +4,7 @@ import com.justbelieveinmyself.marta.domain.annotations.CurrentUser;
 import com.justbelieveinmyself.marta.domain.dto.ProductDto;
 import com.justbelieveinmyself.marta.domain.dto.ProductListRequest;
 import com.justbelieveinmyself.marta.domain.dto.ProductWithImageDto;
+import com.justbelieveinmyself.marta.domain.dto.auth.ProductDetailDto;
 import com.justbelieveinmyself.marta.domain.entities.Product;
 import com.justbelieveinmyself.marta.domain.entities.User;
 import com.justbelieveinmyself.marta.exceptions.ResponseError;
@@ -65,10 +66,11 @@ public class ProductController {
     })
     public ResponseEntity<ProductDto> createProduct(
             @RequestPart("product") ProductDto productDto,
+            @RequestPart(value = "productDetail", required = false) ProductDetailDto productDetailDto,
             @RequestPart(value = "file", required = false) MultipartFile file,
             @CurrentUser User currentUser
     ) {
-        return productService.createProduct(productDto, file, currentUser);
+        return productService.createProduct(productDto, file, productDetailDto, currentUser);
     }
 
     @DeleteMapping("/{productId}")

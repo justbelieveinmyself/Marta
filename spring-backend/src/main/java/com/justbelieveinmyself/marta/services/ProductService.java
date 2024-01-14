@@ -6,11 +6,10 @@ import com.justbelieveinmyself.marta.domain.dto.ProductDto;
 import com.justbelieveinmyself.marta.domain.dto.ProductWithImageDto;
 import com.justbelieveinmyself.marta.domain.dto.QuestionDto;
 import com.justbelieveinmyself.marta.domain.dto.ReviewDto;
-import com.justbelieveinmyself.marta.domain.entities.Product;
-import com.justbelieveinmyself.marta.domain.entities.Question;
-import com.justbelieveinmyself.marta.domain.entities.Review;
-import com.justbelieveinmyself.marta.domain.entities.User;
+import com.justbelieveinmyself.marta.domain.dto.auth.ProductDetailDto;
+import com.justbelieveinmyself.marta.domain.entities.*;
 import com.justbelieveinmyself.marta.domain.enums.UploadDirectory;
+import com.justbelieveinmyself.marta.domain.mappers.ProductDetailMapper;
 import com.justbelieveinmyself.marta.domain.mappers.ProductMapper;
 import com.justbelieveinmyself.marta.domain.mappers.QuestionMapper;
 import com.justbelieveinmyself.marta.domain.mappers.ReviewMapper;
@@ -43,17 +42,19 @@ public class ProductService {
     private final QuestionRepository questionRepository;
     private final UserRepository userRepository;
     private final ProductMapper productMapper;
+    private final ProductDetailMapper productDetailMapper;
     private final QuestionMapper questionMapper;
     private final ReviewMapper reviewMapper;
     private final FileHelper fileHelper;
     private final UserRightsValidator userRightsValidator;
 
-    public ProductService(ProductRepository productRepository, ReviewRepository reviewRepository, QuestionRepository questionRepository, UserRepository userRepository, ProductMapper productMapper, QuestionMapper questionMapper, ReviewMapper reviewMapper, FileHelper fileHelper, UserRightsValidator userRightsValidator) {
+    public ProductService(ProductRepository productRepository, ReviewRepository reviewRepository, QuestionRepository questionRepository, UserRepository userRepository, ProductMapper productMapper, ProductDetailMapper productDetailMapper, QuestionMapper questionMapper, ReviewMapper reviewMapper, FileHelper fileHelper, UserRightsValidator userRightsValidator) {
         this.productRepository = productRepository;
         this.reviewRepository = reviewRepository;
         this.questionRepository = questionRepository;
         this.userRepository = userRepository;
         this.productMapper = productMapper;
+        this.productDetailMapper = productDetailMapper;
         this.questionMapper = questionMapper;
         this.reviewMapper = reviewMapper;
         this.fileHelper = fileHelper;
@@ -116,10 +117,13 @@ public class ProductService {
                 PageRequest.of(0, Integer.MAX_VALUE);
     }
 
-    public ResponseEntity<ProductDto> createProduct(ProductDto productDto, MultipartFile previewImage, User currentUser) {
+    public ResponseEntity<ProductDto> createProduct(ProductDto productDto, MultipartFile previewImage, ProductDetailDto productDetailDto, User currentUser) {
         String imagePath = fileHelper.uploadFile(previewImage, UploadDirectory.PRODUCTS);
         Product product = productMapper.dtoToModel(productDto);
         product.setSeller(currentUser);
+        if(productDetailDto != null) {
+            product.setProductDetail(productDetailMapper.dtoToModel(productDetailDto));
+        }
         product.setPreviewImg(imagePath);
         Product savedProduct = productRepository.save(product);
         return ResponseEntity.ok(productMapper.modelToDto(savedProduct));

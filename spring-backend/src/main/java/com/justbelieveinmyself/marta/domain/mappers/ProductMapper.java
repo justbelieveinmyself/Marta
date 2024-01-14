@@ -8,4 +8,5 @@ import org.mapstruct.Mapper;
 public interface ProductMapper {
     ProductDto modelToDto(Product product);
     Product dtoToModel(ProductDto productDto);
+    //TODO: use product details mapper
 }

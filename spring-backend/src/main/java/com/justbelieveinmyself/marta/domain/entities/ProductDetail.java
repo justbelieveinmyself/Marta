@@ -19,10 +19,13 @@ public class ProductDetail {
     private Long id;
     @MapsId @OneToOne
     private Product product;
+    @Lob @Column(length = 16777215)
+    private String description;
+    @Lob @Column(length = 16777215)
+    private String structure;
+    private String manufacturer;
     private String dimensions;
     private Double weight;
-    @Column(name = "discount_percentage")
-    private Integer discountPercentage;
     @Column(name = "sold_count")
     private Integer soldCount;
     private String material;

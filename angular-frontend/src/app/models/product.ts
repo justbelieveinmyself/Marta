@@ -13,4 +13,5 @@ export class Product {
     manufacturer: string;
     structure: string;
     seller: Seller;
+    //TODO: refactor with new api
 }
