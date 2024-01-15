@@ -17,8 +17,8 @@ import java.util.Set;
 @NoArgsConstructor
 @Data
 @Builder
-@ToString(exclude = {"customers", "followers", "orderProduct"})
-@EqualsAndHashCode(exclude = {"customers", "followers", "orderProduct"})
+@ToString(exclude = {"customers", "followers", "orderProduct", "productDetail"})
+@EqualsAndHashCode(exclude = {"customers", "followers", "orderProduct", "productDetail"})
 public class Product {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

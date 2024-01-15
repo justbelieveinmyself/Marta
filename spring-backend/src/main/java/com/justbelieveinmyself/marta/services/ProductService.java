@@ -16,10 +16,7 @@ import com.justbelieveinmyself.marta.domain.mappers.ReviewMapper;
 import com.justbelieveinmyself.marta.exceptions.NotFoundException;
 import com.justbelieveinmyself.marta.exceptions.ResponseError;
 import com.justbelieveinmyself.marta.exceptions.ResponseMessage;
-import com.justbelieveinmyself.marta.repositories.ProductRepository;
-import com.justbelieveinmyself.marta.repositories.QuestionRepository;
-import com.justbelieveinmyself.marta.repositories.ReviewRepository;
-import com.justbelieveinmyself.marta.repositories.UserRepository;
+import com.justbelieveinmyself.marta.repositories.*;
 import com.mysql.cj.util.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.*;
@@ -41,6 +38,7 @@ public class ProductService {
     private final ReviewRepository reviewRepository;
     private final QuestionRepository questionRepository;
     private final UserRepository userRepository;
+    private final ProductDetailRepository productDetailRepository;
     private final ProductMapper productMapper;
     private final ProductDetailMapper productDetailMapper;
     private final QuestionMapper questionMapper;
@@ -48,11 +46,12 @@ public class ProductService {
     private final FileHelper fileHelper;
     private final UserRightsValidator userRightsValidator;
 
-    public ProductService(ProductRepository productRepository, ReviewRepository reviewRepository, QuestionRepository questionRepository, UserRepository userRepository, ProductMapper productMapper, ProductDetailMapper productDetailMapper, QuestionMapper questionMapper, ReviewMapper reviewMapper, FileHelper fileHelper, UserRightsValidator userRightsValidator) {
+    public ProductService(ProductRepository productRepository, ReviewRepository reviewRepository, QuestionRepository questionRepository, UserRepository userRepository, ProductDetailRepository productDetailRepository, ProductMapper productMapper, ProductDetailMapper productDetailMapper, QuestionMapper questionMapper, ReviewMapper reviewMapper, FileHelper fileHelper, UserRightsValidator userRightsValidator) {
         this.productRepository = productRepository;
         this.reviewRepository = reviewRepository;
         this.questionRepository = questionRepository;
         this.userRepository = userRepository;
+        this.productDetailRepository = productDetailRepository;
         this.productMapper = productMapper;
         this.productDetailMapper = productDetailMapper;
         this.questionMapper = questionMapper;
@@ -118,11 +117,14 @@ public class ProductService {
     }
 
     public ResponseEntity<ProductDto> createProduct(ProductDto productDto, MultipartFile previewImage, ProductDetailDto productDetailDto, User currentUser) {
+        //TODO: Fix not auto increment id!
         String imagePath = fileHelper.uploadFile(previewImage, UploadDirectory.PRODUCTS);
         Product product = productMapper.dtoToModel(productDto);
         product.setSeller(currentUser);
         if(productDetailDto != null) {
-            product.setProductDetail(productDetailMapper.dtoToModel(productDetailDto));
+            ProductDetail productDetail = productDetailMapper.dtoToModel(productDetailDto, productRepository);
+            productDetail.setProduct(product);
+            product.setProductDetail(productDetail);
         }
         product.setPreviewImg(imagePath);
         Product savedProduct = productRepository.save(product);
@@ -289,5 +291,10 @@ public class ProductService {
         //no need to validate rights cause can be deleted only with authority "admin"
         questionRepository.delete(question);
         return ResponseEntity.ok(new ResponseMessage(HttpStatus.OK.value(), "Successfully deleted!"));
+    }
+
+    public ResponseEntity<ProductDetailDto> getProductDetail(Product product) {
+        ProductDetail productDetail = product.getProductDetail();
+        return ResponseEntity.ok(productDetailMapper.modelToDto(productDetail));
     }
 }
