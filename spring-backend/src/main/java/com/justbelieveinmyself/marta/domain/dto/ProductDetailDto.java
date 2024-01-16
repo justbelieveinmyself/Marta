@@ -1,4 +1,4 @@
-package com.justbelieveinmyself.marta.domain.dto.auth;
+package com.justbelieveinmyself.marta.domain.dto;
 
 import lombok.*;
 

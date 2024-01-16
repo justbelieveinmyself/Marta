@@ -1,6 +1,6 @@
 package com.justbelieveinmyself.marta.domain.mappers;
 
-import com.justbelieveinmyself.marta.domain.dto.auth.ProductDetailDto;
+import com.justbelieveinmyself.marta.domain.dto.ProductDetailDto;
 import com.justbelieveinmyself.marta.domain.entities.Product;
 import com.justbelieveinmyself.marta.domain.entities.ProductDetail;
 import com.justbelieveinmyself.marta.repositories.ProductRepository;

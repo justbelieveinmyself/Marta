@@ -1,7 +1,7 @@
 <div style="display: flex">
     <span routerLinkActive="active" routerLink="../../" style="font-size: 18px;" type="button">
         <i class="fa-solid fa-arrow-left fa-lg"></i>
-        <span class="text-secondary ms-2">Main / {{product.product.category}} / {{product.product.seller.username | titlecase}}</span>
+        <span class="text-secondary ms-2">Main / {{card.product.category}} / {{card.product.seller.username | titlecase}}</span>
     </span>
     <span class="ms-auto mt-2">
         <i type="button" data-bs-toggle="modal" data-bs-target="#productReportModal" class="fa-regular fa-flag fa-xl"></i>
@@ -11,29 +11,29 @@
 </div>
 <div class="mb-3">
     <div style="display: flex">
-        <h3 style="word-break: break-all">{{product.product.seller.username | titlecase}}
-            / {{product.product.productName | titlecase}}</h3>
+        <h3 style="word-break: break-all">{{card.product.seller.username | titlecase}}
+            / {{card.product.productName | titlecase}}</h3>
     </div>
     <p class="mb-2">
         <i class="fa-solid fa-star" style="color: #c9cc24;"></i>{{(ratingOverall ? ratingOverall : 0) | number:'1.0-1'}}&nbsp;
         <span class="text-secondary"><a class="ratings ratings-router-link" routerLink="../feedback"
                                         routerLinkActive="active"
                                         type="button">{{reviews ? reviews.length : 0}}
-            ratings</a> Art: {{this.product.product.productCode}}</span>
+            ratings</a> Art: {{this.card.product.productCode}}</span>
     </p>
     <div class="row align-items-start mb-3">
-        <img [src]="product.file" width="1" height="1" alt="photo image" class="col-1 rounded-4"
+        <img [src]="card.file" width="1" height="1" alt="photo image" class="col-1 rounded-4"
              style="width: 400px; height: 500px; object-fit: cover; border: solid 3px black; padding: 0"/>
         <div class="col">
             <table class="table table-borderless">
                 <tbody>
                 <tr>
                     <td class="w-50"><span class="text-secondary">Country of manufacture</span></td>
-                    <td>{{product.product.manufacturer | titlecase}}</td>
+                    <td>{{productDetail.manufacturer | titlecase}}</td>
                 </tr>
                 <tr>
                     <td><span class="text-secondary">Category</span></td>
-                    <td>{{product.product.category | titlecase}}</td>
+                    <td>{{card.product.category | titlecase}}</td>
                 </tr>
                 </tbody>
             </table>
@@ -42,7 +42,7 @@
         <div class="col-auto">
             <div class="card card_with_shadow" style="height: auto; width: 400px; margin-left: auto;">
                 <div class="card-body">
-                    <h2 class="card-title">{{product.product.price | currency}}
+                    <h2 class="card-title">{{card.product.price | currency}}
                         <span class="discount" style="font-size: 17px; margin-left: 8px;">700$</span>
                         <a type="button" class="fa-regular fa-heart float-end"
                            [ngClass]="isFavourite? 'fa-solid' : 'fa-regular'" style="color: black"
@@ -59,7 +59,7 @@
                                         aria-label="Close"></button>
                             </div>
                             <div class="toast-body">
-                                '{{product.product.productName}}' has added to cart!
+                                '{{card.product.productName}}' has added to cart!
                             </div>
                         </div>
                     </div>
@@ -76,7 +76,7 @@
                         <i class="fa-solid fa-shop fa-2xl"></i>
                     </div>
                     <div class="col-10">
-                        <b class="col">{{product.product.seller.username | titlecase}}
+                        <b class="col">{{card.product.seller.username | titlecase}}
                             <a class="fa-solid fa-circle-info" type="button"
                                [popover]="popoverHtml"
                                placement="bottom" style="color: #6d7583;"></a>
@@ -101,11 +101,12 @@
                         <tbody>
                         <tr>
                             <td class="w-50"><span class="text-secondary">Products sold</span></td>
-                            <td style="text-align: right">3625</td>
+                            <td style="text-align: right">{{productDetail.soldCount}}</td>
                         </tr>
                         <tr>
                             <td><span class="text-secondary">On Marta</span></td>
-                            <td style="text-align: right">2 years 4m</td>
+                            <td style="text-align: right">2 years 4m </td>
+<!--                            TODO: registration timestamp-->
                         </tr>
                         </tbody>
                     </table>
@@ -118,15 +119,16 @@
         <div class="row">
             <div class="col">
                 <b>Additional information</b>
+<!--                TODO: other information if exists-->
                 <table class="table table-borderless">
                     <tbody>
                     <tr>
                         <td class="w-35"><span class="text-secondary">Country of manufacture</span></td>
-                        <td>{{product.product.manufacturer | titlecase}}</td>
+                        <td>{{productDetail.manufacturer | titlecase}}</td>
                     </tr>
                     <tr>
                         <td><span class="text-secondary">Category</span></td>
-                        <td>{{product.product.category | titlecase}}</td>
+                        <td>{{card.product.category | titlecase}}</td>
                     </tr>
                     <tr>
                         <td><span class="text-secondary">Dimensions</span></td>
@@ -142,11 +144,11 @@
             <div class="col">
                 <b>Structure</b>
                 <p>
-                    {{product.product.structure}}
+                    {{productDetail.structure}}
                 </p>
                 <b>Description</b>
                 <p>
-                    {{product.product.description}}
+                    {{productDetail.description}}
                 </p>
             </div>
         </div>
@@ -335,8 +337,8 @@
          style="min-width: 800px">
         <div class="modal-content">
             <div class="modal-header mt-2 mx-3">
-                <h1 class="modal-title fs-5"><b>Product Review «{{product.product.seller.username | titlecase}}
-                    / {{product.product.productName | titlecase}}»</b></h1>
+                <h1 class="modal-title fs-5"><b>Product Review «{{card.product.seller.username | titlecase}}
+                    / {{card.product.productName | titlecase}}»</b></h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body mx-4" style="font-size: 17px">
@@ -503,8 +505,8 @@
     <div class="modal-dialog modal-dialog-centered" style="min-width: 300px">
         <div class="modal-content">
             <div class="modal-header mt-2 mx-3">
-                <h1 class="modal-title fs-5"><b>Order: {{product.product.seller.username | titlecase}}
-                    / {{product.product.productName | titlecase}}</b></h1>
+                <h1 class="modal-title fs-5"><b>Order: {{card.product.seller.username | titlecase}}
+                    / {{card.product.productName | titlecase}}</b></h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 

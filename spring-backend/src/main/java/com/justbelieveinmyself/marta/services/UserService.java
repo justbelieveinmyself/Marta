@@ -80,7 +80,7 @@ public class UserService implements UserDetailsService {
         userRightsValidator.validateRights(authUser, user);
         user.setEmail(email);
         User savedUser = userRepository.save(user);
-        return ResponseEntity.ok(new LoginResponseDto(null, userMapper.modelToDto(savedUser, fileHelper, productMapper)));
+        return ResponseEntity.ok(new LoginResponseDto(null, userMapper.modelToDto(savedUser, fileHelper)));
     }
 
     public ResponseEntity<ResponseMessage> updateAvatar(User user, MultipartFile file, User authUser) {
@@ -100,7 +100,7 @@ public class UserService implements UserDetailsService {
         userRightsValidator.validateRights(authUser, user);
         user.setGender(gender);
         User savedUser = userRepository.save(user);
-        return ResponseEntity.ok(userMapper.modelToDto(savedUser, fileHelper, productMapper));
+        return ResponseEntity.ok(userMapper.modelToDto(savedUser, fileHelper));
     }
 
     public ResponseEntity<UserDto> updateNameAndSurname(User user, UserNamesDto userNamesDto, User authedUser) {
@@ -108,23 +108,23 @@ public class UserService implements UserDetailsService {
         user.setFirstName(userNamesDto.getFirstName());
         user.setLastName(userNamesDto.getLastName());
         User savedUser = userRepository.save(user);
-        return ResponseEntity.ok(userMapper.modelToDto(savedUser, fileHelper, productMapper));
+        return ResponseEntity.ok(userMapper.modelToDto(savedUser, fileHelper));
     }
 
     public ResponseEntity<UserDto> getUser(User user) {
-        return ResponseEntity.ok(userMapper.modelToDto(user, fileHelper, productMapper));
+        return ResponseEntity.ok(userMapper.modelToDto(user, fileHelper));
     }
 
     public ResponseEntity<List<UserDto>> getAllUsers() {
         List<User> users = userRepository.findAll();
-        List<UserDto> userDtos = users.stream().map(user -> userMapper.modelToDto(user, fileHelper, productMapper)).toList();
+        List<UserDto> userDtos = users.stream().map(user -> userMapper.modelToDto(user, fileHelper)).toList();
         return ResponseEntity.ok(userDtos);
     }
 
     public ResponseEntity<UserDto> updateRoles(User user, Set<Role> roles) {
         user.setRoles(roles);
         User savedUser = userRepository.save(user);
-        return ResponseEntity.ok(userMapper.modelToDto(savedUser, fileHelper, productMapper));
+        return ResponseEntity.ok(userMapper.modelToDto(savedUser, fileHelper));
     }
 
     public ResponseEntity<List<ProductWithImageDto>> getProducts(User user, User currentUser) {

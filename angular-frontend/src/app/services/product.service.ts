@@ -8,6 +8,7 @@ import {Review} from "../models/review";
 import {Question} from "../models/question";
 import {Order} from "../models/order";
 import {Page} from "../models/page";
+import {ProductDetail} from "../models/product-detail";
 
 @Injectable({
     providedIn: 'root'
@@ -42,6 +43,10 @@ export class ProductService {
             .pipe(tap(product => this.imageService.createImageInProduct(product)));
     }
 
+    getProductDetailById(id: number): Observable<ProductDetail> {
+        return this.httpClient.get<ProductDetail>(`${this.baseUrl}/detail/${id}`);
+    }
+
     getProductReviews(productId: number): Observable<Review[]> {
         return this.httpClient.get<Review[]>(`${this.baseUrl}/reviews/` + productId);
     }
@@ -58,11 +63,13 @@ export class ProductService {
         return this.httpClient.get<Question[]>(`${this.baseUrl}/questions/` + productId);
     }
 
-    addProduct(product: Product, preview: File): Observable<Object> {
+    addProduct(product: Product, preview: File, productDetail: ProductDetail): Observable<Object> {
         const fd = new FormData();
         fd.append("file", preview);
-        let json = new Blob([JSON.stringify(product)], {type: 'application/json'});
-        fd.append("product", json);
+        let jsonProduct = new Blob([JSON.stringify(product)], {type: 'application/json'});
+        let jsonProductDetail = new Blob([JSON.stringify(productDetail)], {type: 'application/json'});
+        fd.append("product", jsonProduct);
+        fd.append("productDetail", jsonProductDetail);
         return this.httpClient.post(this.baseUrl, fd);
     }
 

@@ -67,6 +67,10 @@ const routes: Routes = [
             product: (route: ActivatedRouteSnapshot) => {
                 const param = route.params["id"];
                 return inject(ProductService).getProductById(param);
+            },
+            productDetail: (route: ActivatedRouteSnapshot) => {
+                const param = route.params["id"];
+                return inject(ProductService).getProductDetailById(param);
             }
         }
     },

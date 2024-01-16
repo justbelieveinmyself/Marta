@@ -39,7 +39,7 @@ public class AuthService {
                 (authRequest.getUsername(), authRequest.getPassword()));
         User userDetails = userService.loadUserByUsername(authRequest.getUsername());
         String token = refreshTokenService.createRefreshToken(userDetails);
-        LoginResponseDto loginResponseDTO = new LoginResponseDto(token, userMapper.modelToDto(userDetails, fileHelper, productMapper));
+        LoginResponseDto loginResponseDTO = new LoginResponseDto(token, userMapper.modelToDto(userDetails, fileHelper));
         return ResponseEntity.ok(loginResponseDTO);
     }
 

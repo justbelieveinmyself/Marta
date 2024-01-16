@@ -6,7 +6,7 @@ import com.justbelieveinmyself.marta.domain.dto.ProductDto;
 import com.justbelieveinmyself.marta.domain.dto.ProductWithImageDto;
 import com.justbelieveinmyself.marta.domain.dto.QuestionDto;
 import com.justbelieveinmyself.marta.domain.dto.ReviewDto;
-import com.justbelieveinmyself.marta.domain.dto.auth.ProductDetailDto;
+import com.justbelieveinmyself.marta.domain.dto.ProductDetailDto;
 import com.justbelieveinmyself.marta.domain.entities.*;
 import com.justbelieveinmyself.marta.domain.enums.UploadDirectory;
 import com.justbelieveinmyself.marta.domain.mappers.ProductDetailMapper;
@@ -117,7 +117,6 @@ public class ProductService {
     }
 
     public ResponseEntity<ProductDto> createProduct(ProductDto productDto, MultipartFile previewImage, ProductDetailDto productDetailDto, User currentUser) {
-        //TODO: Fix not auto increment id!
         String imagePath = fileHelper.uploadFile(previewImage, UploadDirectory.PRODUCTS);
         Product product = productMapper.dtoToModel(productDto);
         product.setSeller(currentUser);
@@ -143,8 +142,6 @@ public class ProductService {
         Product savedProduct = productRepository.save(productFromDb);
         return ResponseEntity.ok(productMapper.modelToDto(savedProduct));
     }
-
-
 
     public ResponseEntity<ProductWithImageDto> getProduct(Product product) {
         Stream<Product> productStream = Stream.of(product);

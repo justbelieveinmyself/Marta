@@ -7,8 +7,6 @@ import java.util.Set;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode(exclude = {"favouriteProducts"})
-@ToString(exclude = {"favouriteProducts"})
 public class UserDto {
     private Long id;
     private String firstName;
@@ -25,5 +23,4 @@ public class UserDto {
     private String country;
     private Double balance;
     private String avatar;
-    private Set<ProductWithImageDto> favouriteProducts;
 }

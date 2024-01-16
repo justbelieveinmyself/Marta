@@ -42,6 +42,7 @@ public class User implements UserDetails {
     private String postalCode;
     private String country;
     private Double balance;
+    //TODO: Registration timestamp
     @ManyToMany
     @JoinTable(name = "product_cart", joinColumns = @JoinColumn(name = "customer_id"), inverseJoinColumns = @JoinColumn(name = "product_id"))
     private Set<Product> cartProducts;

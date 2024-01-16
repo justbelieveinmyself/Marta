@@ -9,6 +9,7 @@ import {DomSanitizer} from "@angular/platform-browser";
 import {Question} from "../../../models/question";
 import {UserService} from "../../../services/user.service";
 import {ProductInteractionService} from "../../../services/product-interaction.service";
+import {ProductDetail} from "../../../models/product-detail";
 
 @Component({
     selector: 'app-product-details',
@@ -28,7 +29,8 @@ export class ProductDetailsComponent implements OnInit {
         private productInteractionService: ProductInteractionService
     ) {}
 
-    product: ProductWithImage;
+    card: ProductWithImage;
+    productDetail: ProductDetail;
     reviews: Review[];
     questions: Question[];
     isReviews = true;
@@ -51,10 +53,11 @@ export class ProductDetailsComponent implements OnInit {
 
     ngOnInit(): void {
         this.activatedRoute.data.subscribe(data => {
-            this.product = data["product"];
-            this.totalPrice = this.product.product.price;
+            this.card = data["product"];
+            this.productDetail = data["productDetail"];
+            this.totalPrice = this.card.product.price;
         });
-        this.productService.getProductReviews(this.product.product.id).subscribe({
+        this.productService.getProductReviews(this.card.product.id).subscribe({
             next: reviews => {
                 this.reviews = reviews;
                 let sumRate = 0;
@@ -71,13 +74,13 @@ export class ProductDetailsComponent implements OnInit {
                 })
                 this.isNeedRightButtonForReviews = this.reviews.length > 2;
                 this.userService.getFavourites().subscribe(favourites => {
-                    this.isFavourite = favourites.filter(prod => prod.product.id == this.product.product.id).length != 0;
+                    this.isFavourite = favourites.filter(prod => prod.product.id == this.card.product.id).length != 0;
                 })
 
             },
             error: err => console.log(err)
         });
-        this.productService.getProductQuestions(this.product.product.id).subscribe({
+        this.productService.getProductQuestions(this.card.product.id).subscribe({
             next: questions => {
                 this.questions = questions.filter(question => question.answer != null);
                 this.isNeedRightButtonForQuestions = this.questions.length > 3; //TODO
@@ -88,7 +91,7 @@ export class ProductDetailsComponent implements OnInit {
     }
 
     addToCart() {
-        this.productService.addProductToCart(this.product.product).subscribe({
+        this.productService.addProductToCart(this.card.product).subscribe({
             next: result => console.log(123),
             error: err => console.log(err)
         });
@@ -97,14 +100,14 @@ export class ProductDetailsComponent implements OnInit {
     }
 
     addOrRemoveFavourite() {
-        this.productInteractionService.addOrRemoveFavourite(this.isFavourite, this.product.product.id)
+        this.productInteractionService.addOrRemoveFavourite(this.isFavourite, this.card.product.id)
         .subscribe(isFavourite => {
             this.isFavourite = isFavourite;
         });
     }
 
     saveReview() {
-        this.productInteractionService.saveReview(this.messageOfReview, this.currentRate, this.product.product.id, this.reviewPhotos)
+        this.productInteractionService.saveReview(this.messageOfReview, this.currentRate, this.card.product.id, this.reviewPhotos)
             .then(review => {
                 this.reviews.push(review);
         })
@@ -113,7 +116,7 @@ export class ProductDetailsComponent implements OnInit {
     saveQuestion() {
         const question = new Question();
         question.message = this.messageOfQuestion;
-        question.productId = this.product.product.id;
+        question.productId = this.card.product.id;
         this.productService.addQuestion(question).subscribe({
             next: question => console.log("added new unanswered question", question), //need to be answered for display
             error: err => console.log(err)
@@ -171,23 +174,23 @@ export class ProductDetailsComponent implements OnInit {
     }
 
     orderNow() {
-        this.productInteractionService.orderNow(this.product, this.countOfProductInOrder, this.isPaid).then(isOrdered => {
+        this.productInteractionService.orderNow(this.card, this.countOfProductInOrder, this.isPaid).then(isOrdered => {
             if(isOrdered) {
                 this.countOfProductInOrder = 1;
-                this.totalPrice = this.product.product.price;
+                this.totalPrice = this.card.product.price;
             }
         });
     }
 
     addNumberOfProduct() {
         this.countOfProductInOrder++;
-        this.totalPrice += this.product.product.price;
+        this.totalPrice += this.card.product.price;
     }
 
     removeNumberOfProduct() {
         if (this.countOfProductInOrder > 1) {
             this.countOfProductInOrder--;
-            this.totalPrice -= this.product.product.price;
+            this.totalPrice -= this.card.product.price;
         }
     }
 
@@ -196,7 +199,7 @@ export class ProductDetailsComponent implements OnInit {
     }
 
     goToLink(templateUrl: string) {
-        const formattedText = this.product.product.productName.replaceAll(" ", "%20");
+        const formattedText = this.card.product.productName.replaceAll(" ", "%20");
         let splitedTemplate = templateUrl.split("url=");
         window.open(splitedTemplate[0] + "url=" + window.location.href + (splitedTemplate[1] ? splitedTemplate[1] : "") + formattedText);
     }

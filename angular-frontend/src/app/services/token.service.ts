@@ -43,7 +43,6 @@ export class TokenService {
     }
 
     public setUser(user: LocalUser) {
-        console.log("set", user)
         window.sessionStorage.removeItem(USER_KEY);
         let json = JSON.stringify(user);
         window.sessionStorage.setItem(USER_KEY, this.encryptionService.encryptData(json));
@@ -54,7 +53,6 @@ export class TokenService {
             let encryptedUser = sessionStorage.getItem(USER_KEY) || '';
             if(encryptedUser){
                 this.user = JSON.parse(this.encryptionService.decryptData(encryptedUser));
-                this.user.favouriteProducts.map((product: ProductWithImage) => this.imageService.createImageInProduct(product));
             }else{
                 return null;
             }
