@@ -128,3 +128,7 @@ html {
 .no-text-decoration-line{
     text-decoration-line: none;
 }
+
+input.form-control {
+    background-color: #f0f2f5;
+}

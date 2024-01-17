@@ -16,6 +16,8 @@ export class LocalUser {
     postalCode: string;
     country: string;
     balance: number;
+    registeredAt: string;
+    ratingCount: number;
 
     constructor(roles: string[]) {
         this.roles = roles;

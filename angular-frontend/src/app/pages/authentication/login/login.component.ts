@@ -24,6 +24,7 @@ export class LoginComponent implements OnInit {
     socialUser: SocialUser = new SocialUser;
     isLogged: boolean = false;
     isLoginFail: boolean = false;
+    rememberMe: boolean = true;
     username: string;
     password: string;
     errorMessage: string;
@@ -34,6 +35,9 @@ export class LoginComponent implements OnInit {
             this.isLoginFail = false;
             this.router.navigate(['products']);
         }
+    }
+    test() {
+        console.log(this.rememberMe)
     }
 
     onLogin(): void {

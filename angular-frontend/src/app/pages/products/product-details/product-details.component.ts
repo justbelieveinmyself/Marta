@@ -55,6 +55,7 @@ export class ProductDetailsComponent implements OnInit {
         this.activatedRoute.data.subscribe(data => {
             this.card = data["product"];
             this.productDetail = data["productDetail"];
+            console.log(this.productDetail)
             this.totalPrice = this.card.product.price;
         });
         this.productService.getProductReviews(this.card.product.id).subscribe({

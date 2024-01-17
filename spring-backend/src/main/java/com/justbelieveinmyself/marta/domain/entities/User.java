@@ -4,9 +4,11 @@ import com.justbelieveinmyself.marta.domain.enums.Role;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.ZonedDateTime;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
@@ -42,7 +44,9 @@ public class User implements UserDetails {
     private String postalCode;
     private String country;
     private Double balance;
-    //TODO: Registration timestamp
+    @CreationTimestamp
+    private ZonedDateTime registeredAt;
+    private Long ratingCount;
     @ManyToMany
     @JoinTable(name = "product_cart", joinColumns = @JoinColumn(name = "customer_id"), inverseJoinColumns = @JoinColumn(name = "product_id"))
     private Set<Product> cartProducts;

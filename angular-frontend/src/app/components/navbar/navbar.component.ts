@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {Router} from '@angular/router';
 import {TokenService} from '../../services/token.service';
 import {LocalUser} from '../../models/local-user';

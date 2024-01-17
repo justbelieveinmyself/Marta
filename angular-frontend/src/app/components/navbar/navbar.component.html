@@ -1,4 +1,5 @@
-<nav *ngIf="isLogged" class="navbar navbar-expand-sm bg-dark navbar-dark" style="position: sticky; top: 0px; height: 30px">
+<ng-container *ngIf="isLogged; else notLogged">
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark" style="position: sticky; top: 0px; height: 30px">
     <div class="text-secondary mx-4" style="font-size: 15px;">
         <a type="button" routerLink="create-product" routerLinkActive="active" class="highlight-hover-white no-text-decoration-line">
             <i class="fa-solid fa-location-dot"></i>&nbsp;
@@ -13,12 +14,11 @@
     </a>
 </nav>
 <nav class="navbar navbar-expand-sm bg-dark navbar-dark mb-3" style="height: 90px; position: sticky; top: -5px; z-index: 100">
-
     <a class="navbar-brand ms-5" routerLink="products" routerLinkActive="active">
         <img src="../../../assets/logo.png" width="165" height="35" alt="logo with 'Marta'">
     </a>
     <app-search></app-search>
-    <ul class="navbar-nav ms-auto" *ngIf="isLogged">
+    <ul class="navbar-nav ms-auto">
         <li class="nav-item me-3" *ngIf="user.roles!.includes('ADMIN')">
             <a routerLink="adminPanel" routerLinkActive="active" class="nav-link"
                style="color: #E1E3E6 !important;">
@@ -55,6 +55,14 @@
             </a>
         </li>
     </ul>
-    <button *ngIf="!isLogged" class="btn btn-outline-success me-2" type="submit" routerLink="/login"><i class="fa-solid fa-right-to-bracket"></i> Log In</button>
-    <app-logout *ngIf="isLogged"></app-logout>
+    <app-logout></app-logout>
 </nav>
+</ng-container>
+<ng-template #notLogged>
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark mb-3" style="height: 65px; position: sticky; top: -5px; z-index: 100">
+        <a class="navbar-brand" style="margin-left: 50px" routerLink="products" routerLinkActive="active">
+            <img src="../../../assets/logo.png" height="40" alt="logo with 'Marta'">
+        </a>
+        <button class="btn btn-outline-success ms-auto me-2" type="submit" routerLink="/login"><i class="fa-solid fa-right-to-bracket"></i> Log In</button>
+    </nav>
+</ng-template>

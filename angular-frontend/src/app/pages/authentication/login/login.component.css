@@ -3,3 +3,9 @@ label{
     left: 3px;
     position: relative;
 }
+
+.card-title-login {
+    color: #212529;
+    text-align: center;
+    padding: 15px;
+}

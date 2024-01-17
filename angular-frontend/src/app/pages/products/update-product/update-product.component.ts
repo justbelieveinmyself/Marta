@@ -4,6 +4,7 @@ import {ProductService} from '../../../services/product.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {LocalUser} from 'src/app/models/local-user';
 import {TokenService} from 'src/app/services/token.service';
+import {Seller} from "../../../models/seller";
 
 @Component({
     selector: 'app-update-product',

@@ -27,7 +27,7 @@
         <div class="col">
             <table class="table table-borderless">
                 <tbody>
-                <tr>
+                <tr *ngIf="productDetail">
                     <td class="w-50"><span class="text-secondary">Country of manufacture</span></td>
                     <td>{{productDetail.manufacturer | titlecase}}</td>
                 </tr>
@@ -95,18 +95,17 @@
                 <div class="card-body" style="padding: 15px 10px 0 15px; height: auto">
                     <span style="font-size: 22px">4.8<i class="fa-solid fa-star"
                                                         style="color: #c9cc24;"> &nbsp;</i></span>
-                    <span class="ratings text-secondary">699 product ratings</span>
+                    <span class="ratings text-secondary">{{card.product.seller.ratingCount}} product ratings</span>
                     <hr style="margin-top: 8px; margin-bottom: 0">
                     <table class="table table-borderless">
                         <tbody>
-                        <tr>
+                        <tr *ngIf="productDetail">
                             <td class="w-50"><span class="text-secondary">Products sold</span></td>
                             <td style="text-align: right">{{productDetail.soldCount}}</td>
                         </tr>
                         <tr>
                             <td><span class="text-secondary">On Marta</span></td>
-                            <td style="text-align: right">2 years 4m </td>
-<!--                            TODO: registration timestamp-->
+                            <td style="text-align: right">{{card.product.seller.registeredAt | date: 'dd MMM YYYY, HH:mm'}}</td>
                         </tr>
                         </tbody>
                     </table>
@@ -119,10 +118,9 @@
         <div class="row">
             <div class="col">
                 <b>Additional information</b>
-<!--                TODO: other information if exists-->
                 <table class="table table-borderless">
                     <tbody>
-                    <tr>
+                    <tr *ngIf="productDetail">
                         <td class="w-35"><span class="text-secondary">Country of manufacture</span></td>
                         <td>{{productDetail.manufacturer | titlecase}}</td>
                     </tr>
@@ -130,18 +128,18 @@
                         <td><span class="text-secondary">Category</span></td>
                         <td>{{card.product.category | titlecase}}</td>
                     </tr>
-                    <tr>
+                    <tr *ngIf="productDetail">
                         <td><span class="text-secondary">Dimensions</span></td>
-                        <td>30sm*30sm*3mm</td>
+                        <td>{{productDetail.dimensions}}->30sm*30sm*3mm</td>
                     </tr>
-                    <tr>
+                    <tr *ngIf="productDetail">
                         <td><span class="text-secondary">Weight</span></td>
-                        <td>150g</td>
+                        <td>{{productDetail.weight}}</td>
                     </tr>
                     </tbody>
                 </table>
             </div>
-            <div class="col">
+            <div class="col" *ngIf="productDetail">
                 <b>Structure</b>
                 <p>
                     {{productDetail.structure}}
