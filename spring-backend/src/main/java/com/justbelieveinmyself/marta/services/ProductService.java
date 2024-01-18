@@ -1,27 +1,22 @@
 package com.justbelieveinmyself.marta.services;
 
 import com.justbelieveinmyself.marta.configs.beans.FileHelper;
+import com.justbelieveinmyself.marta.configs.beans.UserRightsValidator;
 import com.justbelieveinmyself.marta.domain.dto.ProductDto;
 import com.justbelieveinmyself.marta.domain.dto.ProductWithImageDto;
 import com.justbelieveinmyself.marta.domain.dto.QuestionDto;
 import com.justbelieveinmyself.marta.domain.dto.ReviewDto;
-import com.justbelieveinmyself.marta.domain.entities.Product;
-import com.justbelieveinmyself.marta.domain.entities.Question;
-import com.justbelieveinmyself.marta.domain.entities.Review;
-import com.justbelieveinmyself.marta.domain.entities.User;
-import com.justbelieveinmyself.marta.domain.enums.Role;
+import com.justbelieveinmyself.marta.domain.dto.ProductDetailDto;
+import com.justbelieveinmyself.marta.domain.entities.*;
 import com.justbelieveinmyself.marta.domain.enums.UploadDirectory;
+import com.justbelieveinmyself.marta.domain.mappers.ProductDetailMapper;
 import com.justbelieveinmyself.marta.domain.mappers.ProductMapper;
 import com.justbelieveinmyself.marta.domain.mappers.QuestionMapper;
 import com.justbelieveinmyself.marta.domain.mappers.ReviewMapper;
-import com.justbelieveinmyself.marta.exceptions.ForbiddenException;
 import com.justbelieveinmyself.marta.exceptions.NotFoundException;
 import com.justbelieveinmyself.marta.exceptions.ResponseError;
 import com.justbelieveinmyself.marta.exceptions.ResponseMessage;
-import com.justbelieveinmyself.marta.repositories.ProductRepository;
-import com.justbelieveinmyself.marta.repositories.QuestionRepository;
-import com.justbelieveinmyself.marta.repositories.ReviewRepository;
-import com.justbelieveinmyself.marta.repositories.UserRepository;
+import com.justbelieveinmyself.marta.repositories.*;
 import com.mysql.cj.util.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.*;
@@ -43,20 +38,26 @@ public class ProductService {
     private final ReviewRepository reviewRepository;
     private final QuestionRepository questionRepository;
     private final UserRepository userRepository;
+    private final ProductDetailRepository productDetailRepository;
     private final ProductMapper productMapper;
+    private final ProductDetailMapper productDetailMapper;
     private final QuestionMapper questionMapper;
     private final ReviewMapper reviewMapper;
     private final FileHelper fileHelper;
+    private final UserRightsValidator userRightsValidator;
 
-    public ProductService(ProductRepository productRepository, ReviewRepository reviewRepository, QuestionRepository questionRepository, UserRepository userRepository, ProductMapper productMapper, QuestionMapper questionMapper, ReviewMapper reviewMapper, FileHelper fileHelper) {
+    public ProductService(ProductRepository productRepository, ReviewRepository reviewRepository, QuestionRepository questionRepository, UserRepository userRepository, ProductDetailRepository productDetailRepository, ProductMapper productMapper, ProductDetailMapper productDetailMapper, QuestionMapper questionMapper, ReviewMapper reviewMapper, FileHelper fileHelper, UserRightsValidator userRightsValidator) {
         this.productRepository = productRepository;
         this.reviewRepository = reviewRepository;
         this.questionRepository = questionRepository;
         this.userRepository = userRepository;
+        this.productDetailRepository = productDetailRepository;
         this.productMapper = productMapper;
+        this.productDetailMapper = productDetailMapper;
         this.questionMapper = questionMapper;
         this.reviewMapper = reviewMapper;
         this.fileHelper = fileHelper;
+        this.userRightsValidator = userRightsValidator;
     }
 
     public ResponseEntity<Page<ProductWithImageDto>> getProductsAsPage(
@@ -115,45 +116,31 @@ public class ProductService {
                 PageRequest.of(0, Integer.MAX_VALUE);
     }
 
-    public ResponseEntity<ProductDto> createProduct(ProductDto productDto, MultipartFile previewImage, User currentUser) {
+    public ResponseEntity<ProductDto> createProduct(ProductDto productDto, MultipartFile previewImage, ProductDetailDto productDetailDto, User currentUser) {
         String imagePath = fileHelper.uploadFile(previewImage, UploadDirectory.PRODUCTS);
         Product product = productMapper.dtoToModel(productDto);
         product.setSeller(currentUser);
+        if(productDetailDto != null) {
+            ProductDetail productDetail = productDetailMapper.dtoToModel(productDetailDto, productRepository);
+            productDetail.setProduct(product);
+            product.setProductDetail(productDetail);
+        }
         product.setPreviewImg(imagePath);
         Product savedProduct = productRepository.save(product);
         return ResponseEntity.ok(productMapper.modelToDto(savedProduct));
     }
 
     public ResponseEntity<ResponseMessage> deleteProduct(Product product, User currentUser) {
-        validateRightsOrAdminRole(product, currentUser);
+        userRightsValidator.validateRightsOrAdminRole(product, currentUser);
         productRepository.delete(product);
         return ResponseEntity.ok(new ResponseMessage(200, "Successfully deleted!"));
     }
 
     public ResponseEntity<ProductDto> updateProduct(Product productFromDb, ProductDto productDto, User currentUser) {
-        validateRights(productDto, currentUser);
+        userRightsValidator.validateRights(productDto, currentUser);
         BeanUtils.copyProperties(productDto, productFromDb, "id", "seller");
         Product savedProduct = productRepository.save(productFromDb);
         return ResponseEntity.ok(productMapper.modelToDto(savedProduct));
-    }
-
-    private void validateRightsOrAdminRole(Product product, User currentUser) {
-        if (product.getSeller().getId().equals(currentUser.getId()) || currentUser.getRoles().contains(Role.ADMIN)) {
-            return;
-        }
-        throw new ForbiddenException("You don't have rights!");
-    }
-
-    private void validateRights(ProductDto productDto, User currentUser) {
-        if (!productDto.getSeller().getId().equals(currentUser.getId())) {
-            throw new ForbiddenException("You don't have rights!");
-        }
-    }
-
-    private void validateRights(Product product, User currentUser) {
-        if (!product.getSeller().getId().equals(currentUser.getId())) {
-            throw new ForbiddenException("You don't have rights!");
-        }
     }
 
     public ResponseEntity<ProductWithImageDto> getProduct(Product product) {
@@ -284,14 +271,14 @@ public class ProductService {
     }
 
     public ResponseEntity<ReviewDto> answerToReview(Review reviewFromDb, String answer, User authedUser) {
-        validateRights(reviewFromDb.getProduct(), authedUser);
+        userRightsValidator.validateRights(reviewFromDb.getProduct(), authedUser);
         reviewFromDb.setAnswer(answer);
         Review savedReview = reviewRepository.save(reviewFromDb);
         return ResponseEntity.ok(reviewMapper.modelToDto(savedReview, fileHelper));
     }
 
     public ResponseEntity<QuestionDto> answerToQuestion(Question questionFromDb, String answer, User authedUser) {
-        validateRights(questionFromDb.getProduct(), authedUser);
+        userRightsValidator.validateRights(questionFromDb.getProduct(), authedUser);
         questionFromDb.setAnswer(answer);
         Question savedQuestion = questionRepository.save(questionFromDb);
         return ResponseEntity.ok(questionMapper.modelToDto(savedQuestion));
@@ -301,5 +288,10 @@ public class ProductService {
         //no need to validate rights cause can be deleted only with authority "admin"
         questionRepository.delete(question);
         return ResponseEntity.ok(new ResponseMessage(HttpStatus.OK.value(), "Successfully deleted!"));
+    }
+
+    public ResponseEntity<ProductDetailDto> getProductDetail(Product product) {
+        ProductDetail productDetail = product.getProductDetail();
+        return ResponseEntity.ok(productDetailMapper.modelToDto(productDetail));
     }
 }

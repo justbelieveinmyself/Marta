@@ -1,0 +1,317 @@
+<b routerLinkActive="active" routerLink="../details" style="font-size: 15px; padding-left: 10px" type="button">
+    <i class="fa-solid fa-arrow-left fa-lg" ></i> Назад
+</b>
+<div id="sticky" style="background-color: white;">
+    <div class="w-100 mt-2" style="display: inline-flex;">
+        <div class="align-items-center w-75" style="display: inline-flex;">
+            <img
+                [src]="product.file"
+                width="1" height="1" alt="photo image" class="rounded-2 mx-3"
+                style="width: 60px; height: 75px; object-fit: cover; border: solid 1px black;"/>
+            <div>
+                <h6>{{product.product.seller.username | titlecase}}
+                    / {{product.product.productName | titlecase}}</h6>
+                <i class="fa-solid fa-star fa-xs" style="color: #c9cc24;"></i> 4.5 &nbsp;
+                <span class="text-secondary"><a class="ratings ratings-router-link" routerLink="../feedback"
+                                                routerLinkActive="active"
+                                                type="button">{{reviews? reviews.length:0}} ratings</a>
+            </span>
+            </div>
+            <div class="mx-auto" style="font-size: 18px">
+                <div class="vertical_line">
+                    <b>{{product.product.price | currency}}</b> <br>
+                    <span class="discount">$5535623.0</span>
+                </div>
+            </div>
+        </div>
+        <div class="w-25 my-3" style="text-align: center">
+            <button class="btn btn-outline-dark w-40 h-100 me-2" data-bs-toggle="modal" data-bs-target="#buyNowModal">Buy now</button>
+            <button (click)="addToCart()" class="btn btn-dark w-40 h-100 me-2">Add to cart</button>
+            <div class="toast-container position-fixed bottom-0 end-0 p-3">
+                <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="toast-header">
+                        <strong class="me-auto">Cart</strong>
+                        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                    <div class="toast-body">
+                        '{{product.product.productName}}' has added to cart!
+                    </div>
+                </div>
+            </div>
+            <a type="button" style="color: black" (click)="addOrRemoveFavourite()" [ngClass]="isFavourite? 'fa-solid' : 'fa-regular'" class="fa-regular fa-heart fa-xl"></a>
+        </div>
+    </div>
+</div>
+<div class="w-75">
+    <h4>
+        <ul class="nav">
+            <li class="nav-item">
+                <a class="nav-link" style="color: black !important;">Reviews
+                    <sup>{{reviews? reviews.length:0}}</sup>
+                </a>
+            </li>
+            <li class="nav-item ms-auto mt-auto">
+                <button class="nav-link ratings" data-bs-toggle="modal" data-bs-target="#rulesModal"
+                        style="color: rgb(108,117,125) !important; font-size: 17px; padding: 0">Publication Rules
+                </button>
+            </li>
+        </ul>
+    </h4>
+    <a type="button" class="fa-solid fa-circle-arrow-right fa-2xl" [hidden]="!isNeedRightButtonForPhotos"
+       (click)="rightScrollForPhotos()"
+       style="position: absolute; width: 30px; height: 30px; top: 270px; right: 375px; z-index: 100;"></a>
+    <a type="button" class="fa-solid fa-circle-arrow-left fa-2xl" [hidden]="!isNeedLeftButtonForPhotos"
+       (click)="leftScrollForPhotos()"
+       style="position: absolute; width: 30px; height: 30px; top: 270px; left: 50px; z-index: 100;"></a>
+    <div id="scrollPhotos"
+         style="position: relative;width: 100%; white-space: nowrap; display: flex; overflow-x: hidden; scroll-behavior: smooth">
+        <ng-container *ngFor="let review of reviews">
+            <img *ngFor="let photo of review.photos" [src]="photo"
+                 width="100px" height="115px" alt="photo image" class="rounded-1 me-1"
+                 style="object-fit: cover; padding: 0"/>
+        </ng-container>
+    </div>
+    <div class="mt-3" style="font-size: 17px; display: flex">
+        <span class="text-secondary me-4">Sort by:</span>
+        <a type="button" class="me-4" (click)="sortByDate()"><span [ngClass]="isNeedSortByDate?'sort-active':'sort-not-active'">Date</span>&nbsp;
+            <i *ngIf="isNeedSortByDate" class="fa-solid fa-sm" [ngClass]="sortByDateASC?'fa-arrow-up':'fa-arrow-down'" style="color: black"></i></a>
+        <a type="button" class="me-4" (click)="sortByRate()"><span [ngClass]="isNeedSortByRate?'sort-active':'sort-not-active'">Rate</span>&nbsp;
+            <i *ngIf="isNeedSortByRate" class="fa-solid fa-sm" [ngClass]="sortByRateASC?'fa-arrow-up':'fa-arrow-down'" style="color: black"></i></a>
+        <input class="form-check-input" type="checkbox" (change)="filterReviewsByWithPhotos($event)"
+               id="flexCheckChecked" >
+        <label class="form-check-label" for="flexCheckChecked">
+            &nbsp;With a photo <span class="text-secondary">{{countOfReviewsWithPhotos}}</span>
+        </label>
+        <button class="btn btn-outline-dark ms-auto" style="top: -5px; position: relative" data-bs-toggle="modal"
+                data-bs-target="#reviewWriteModal">Write a review
+        </button>
+    </div>
+    <div *ngFor="let review of filteredReviews; let i=index" class="my-4">
+        <hr>
+        <div style="display: inline-flex">
+            <img class="rounded-4 me-2" alt="image for review" style="width: 50px; height: 50px; object-fit: cover;"
+                 [ngSrc]="'https://eliaslealblog.files.wordpress.com/2014/03/user-200.png'" width="1" height="1"/>
+            <div>
+                <b>{{review.author.username | titlecase}}</b>
+                <div class="btn btn-outline-info ms-3" *ngIf="product.product.seller.username == currentUser.username"
+                     data-bs-toggle="modal" data-bs-target="#writeAnswerModal" (click)="reviewInAnswerToReview = review; console.log(reviewInAnswerToReview.answer); answerForReview = reviewInAnswerToReview.answer"
+                >Answer</div><br>
+                <span class="text-secondary"
+                      style="font-size: 16px">{{review.time | date: 'dd MMM YYYY, HH:mm'}}</span>
+            </div>
+
+        </div>
+        <span class="my-auto float-end">
+            <div style="font-size: 20px">
+                <i class="fa-solid fa-star" *ngFor="let stars of [].constructor(Math.round(review.rating))"
+                   style="color: #c9cc24;"></i>
+                <i class="fa-solid fa-star" *ngFor="let nostars of [].constructor(Math.round(5-review.rating))"
+                   style="color: #E1E3E6;"></i>
+                <i type="button" data-bs-toggle="modal" data-bs-target="#reviewReportModal" class="fa-regular fa-flag ms-3"></i>
+            </div>
+        </span>
+        <div style="padding-left: 58px; padding-top: 9px;">
+            <p>{{review.message}} </p>
+            <img *ngFor="let photo of review.photos" [src]="photo"
+                 width="100px" height="115px" alt="photo image" class="rounded-1 me-1"
+                 style="object-fit: cover; padding: 0"/>
+            <div *ngIf="review.answer" class="mt-3">
+                <a type="button" class="highlight-hover-black" (click)="isNeedOpenAnswer[i] = !isNeedOpenAnswer[i]">Brand Representative</a> <br>
+                <p class="mt-2 appearing" [ngClass]="isNeedOpenAnswer[i]?'appearing-active':''">
+                    {{review.answer}}
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- For modal with rules -->
+<div class="modal fade " id="rulesModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="min-width: 720px">
+        <div class="modal-content">
+            <div class="modal-header mt-2 mx-3">
+                <h1 class="modal-title fs-5"><b>Rules for processing reviews and questions</b></h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body mx-4 mb-3" style="font-size: 17px">
+                <p class="text-secondary">Reviews and questions should contain information only about the
+                    product. </p>
+                <p class="text-secondary">Reviews can be left only for the goods ordered and received by the buyer.
+                    The buyer can leave no more than one review for one product.
+                    You can attach up to 5 photos to the reviews. The product in the photo should be clearly
+                    visible. </p>
+
+                <p>The following reviews and questions are not allowed for publication: </p>
+                <ul class="dash">
+                    <li>Indicating the purchase of this product in other stores</li>
+                    <li>Containing any contact information (phone numbers, addresses, email, links to third-party
+                        sites)
+                    </li>
+                    <li>With profanity that offends the dignity of other customers or the store</li>
+                    <li>With an abundance of uppercase characters (capital letters)</li>
+                </ul>
+                Questions are published only after they have been answered.
+
+                We reserve the right to edit or not publish a review and a question that does not comply with the
+                established
+                rules!
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- For modal with report review -->
+<div class="modal fade" id="reviewReportModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="min-width: 300px">
+        <div class="modal-content">
+            <div class="modal-header mt-2 mx-3">
+                <h1 class="modal-title fs-5"><b>Why do you want to complain about the review?</b></h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body mx-4" style="font-size: 17px">
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadio1">
+                    <label class="form-check-label" for="flexRadio1">
+                        The review contains obscene, abusive language
+                    </label>
+                </div>
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadio2">
+                    <label class="form-check-label" for="flexRadio2">
+                        Registered, fictitious
+                    </label>
+                </div>
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadio3">
+                    <label class="form-check-label" for="flexRadio3">
+                        Spam
+                    </label>
+                </div>
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadio4">
+                    <label class="form-check-label" for="flexRadio4">
+                        Incorrect photo, video
+                    </label>
+                </div>
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadio5">
+                    <label class="form-check-label" for="flexRadio5">
+                        The review is not about the product
+                    </label>
+                </div>
+                <div class="mt-3 justify-content-center" style="display: flex">
+                    <button class="btn btn-outline-dark w-75" (click)="reportReview()">Report</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- For modal with buy product now -->
+<div class="modal fade" id="buyNowModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="min-width: 300px">
+        <div class="modal-content">
+            <div class="modal-header mt-2 mx-3">
+                <h1 class="modal-title fs-5"><b>Order: {{product.product.seller.username | titlecase}}/{{product.product.productName | titlecase}}</b></h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body mx-4" style="font-size: 19px">
+                <span *ngIf="!isPaid" style="font-size: 12px; position: absolute" class="text-secondary">We will write off the payment upon receipt </span> <br>
+                <input class="form-check-input" type="checkbox" [(ngModel)]="isPaid"
+                       id="flexCheck">
+                <label class="form-check-label" for="flexCheck">
+                    &nbsp;Pay now
+                </label>
+                <div style="font-size: 18px" class="mt-2">
+                    <i type="button" (click)="removeNumberOfProduct()"
+                       class="fa-solid fa-square-minus fa-xl"></i>
+                    {{countOfProductInOrder}}
+                    <i type="button" (click)="addNumberOfProduct()"
+                       class="fa-solid fa-square-plus fa-xl"></i>
+                </div>
+                <div class="name_card_main mt-2">
+                    Total: {{totalPrice| currency}}
+                </div>
+                <div class="mt-3 justify-content-center" style="display: flex">
+                    <button class="btn btn-outline-dark w-75" data-bs-dismiss="modal" (click)="orderNow()">Buy now</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- For modal with write review -->
+<div class="modal fade" id="reviewWriteModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" *ngIf="isReceivedProduct else cantLeaveReview"
+         style="min-width: 800px">
+        <div class="modal-content">
+            <div class="modal-header mt-2 mx-3">
+                <h1 class="modal-title fs-5"><b>Product Review «{{product.product.seller.username | titlecase}}
+                    / {{product.product.productName | titlecase}}»</b></h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body mx-4" style="font-size: 17px">
+                <p style="margin-bottom: 0">Rate the product</p>
+                <span style="font-size: 30px; font-weight: bold">
+            <a type="button" (click)="currentRate=currentRate-1" class="fa-solid fa-star"
+               *ngFor="let stars of [].constructor(Math.round(currentRate))"
+               style="color: #c9cc24;"></a>
+            <a type="button" (click)="currentRate=currentRate+1" class="fa-solid fa-star"
+               *ngFor="let nostars of [].constructor(Math.round(5-currentRate))"
+               style="color: #E1E3E6;"></a>
+          </span> <br>
+                <label class="mt-3 mb-1" style="font-weight: bold">Tell us about the product</label>
+                <textarea [(ngModel)]="messageOfReview" class="form-control w-100" style="height: 300px"
+                          type="text"> </textarea>
+                <label class="mt-3 mb-1" style="font-weight: bold">Load up to 5 photos</label>
+                <input type="file" (change)="onFileAdded($event)" class="form-control">
+                <div class="mt-3 justify-content-center" style="display: flex">
+                    <button class="btn btn-outline-dark w-75" (click)="saveReview()">Send</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #cantLeaveReview>
+    <div class="modal-dialog modal-dialog-centered" style="min-width: 500px">
+        <div class="modal-content">
+            <div class="modal-header mt-2 mx-3 ">
+                <h1 class="modal-title fs-5"><b>You can't leave a review</b></h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body mx-4 mb-3 text-secondary" style="font-size: 17px">
+                You can share your opinion about the product only after receiving it
+            </div>
+            <div class="modal-footer justify-content-center">
+                <button type="button" class="btn btn-info" data-bs-dismiss="modal">All rights, thanks</button>
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+<!-- For modal with write answer to review -->
+<div class="modal fade" id="writeAnswerModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="min-width: 800px">
+        <div class="modal-content" *ngIf="reviewInAnswerToReview">
+            <div class="modal-header mt-2 mx-3">
+                <h1 class="modal-title fs-5"><b>Answer to review of product «{{product.product.seller.username | titlecase}}
+                    / {{product.product.productName | titlecase}}»</b></h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body mx-4" style="font-size: 17px">
+                <p style="font-weight: bold">Author: {{reviewInAnswerToReview.author.username | titlecase}}</p>
+                <p>Message: {{reviewInAnswerToReview.message | titlecase}}</p>
+                <img *ngFor="let photo of reviewInAnswerToReview.photos" [src]="photo"
+                     width="100px" height="115px" alt="photo image" class="rounded-1 me-1"
+                     style="object-fit: cover; padding: 0"/>
+                <textarea [(ngModel)]="answerForReview" class="form-control w-100 mt-2" style="height: 200px"
+                          type="text"> </textarea>
+                <div class="mt-3 justify-content-center" style="display: flex">
+                    <button class="btn btn-outline-dark w-75"  data-bs-dismiss="modal" (click)="saveAnswerToReview()">Send</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

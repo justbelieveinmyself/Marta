@@ -1,0 +1,536 @@
+<div style="display: flex">
+    <span routerLinkActive="active" routerLink="../../" style="font-size: 18px;" type="button">
+        <i class="fa-solid fa-arrow-left fa-lg"></i>
+        <span class="text-secondary ms-2">Main / {{card.product.category}} / {{card.product.seller.username | titlecase}}</span>
+    </span>
+    <span class="ms-auto mt-2">
+        <i type="button" data-bs-toggle="modal" data-bs-target="#productReportModal" class="fa-regular fa-flag fa-xl"></i>
+        <i type="button" data-bs-toggle="modal" data-bs-target="#productShareModal" class="fa-regular fa-share-from-square fa-xl ms-3"></i>
+    </span>
+
+</div>
+<div class="mb-3">
+    <div style="display: flex">
+        <h3 style="word-break: break-all">{{card.product.seller.username | titlecase}}
+            / {{card.product.productName | titlecase}}</h3>
+    </div>
+    <p class="mb-2">
+        <i class="fa-solid fa-star" style="color: #c9cc24;"></i>{{(ratingOverall ? ratingOverall : 0) | number:'1.0-1'}}&nbsp;
+        <span class="text-secondary"><a class="ratings ratings-router-link" routerLink="../feedback"
+                                        routerLinkActive="active"
+                                        type="button">{{reviews ? reviews.length : 0}}
+            ratings</a> Art: {{this.card.product.productCode}}</span>
+    </p>
+    <div class="row align-items-start mb-3">
+        <img [src]="card.file" width="1" height="1" alt="photo image" class="col-1 rounded-4"
+             style="width: 400px; height: 500px; object-fit: cover; border: solid 3px black; padding: 0"/>
+        <div class="col">
+            <table class="table table-borderless">
+                <tbody>
+                <tr *ngIf="productDetail">
+                    <td class="w-50"><span class="text-secondary">Country of manufacture</span></td>
+                    <td>{{productDetail.manufacturer | titlecase}}</td>
+                </tr>
+                <tr>
+                    <td><span class="text-secondary">Category</span></td>
+                    <td>{{card.product.category | titlecase}}</td>
+                </tr>
+                </tbody>
+            </table>
+            <a routerLink="./" fragment="about" class="ms-2">All characteristics</a>
+        </div>
+        <div class="col-auto">
+            <div class="card card_with_shadow" style="height: auto; width: 400px; margin-left: auto;">
+                <div class="card-body">
+                    <h2 class="card-title">{{card.product.price | currency}}
+                        <span class="discount" style="font-size: 17px; margin-left: 8px;">700$</span>
+                        <a type="button" class="fa-regular fa-heart float-end"
+                           [ngClass]="isFavourite? 'fa-solid' : 'fa-regular'" style="color: black"
+                           (click)="addOrRemoveFavourite()"></a>
+                    </h2>
+                    <button (click)="addToCart()" class="btn btn-dark w-100 mb-2" style="justify-content: center;">Add
+                        to cart
+                    </button>
+                    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+                        <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                            <div class="toast-header">
+                                <strong class="me-auto">Cart</strong>
+                                <button type="button" class="btn-close" data-bs-dismiss="toast"
+                                        aria-label="Close"></button>
+                            </div>
+                            <div class="toast-body">
+                                '{{card.product.productName}}' has added to cart!
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn btn-outline-dark w-100" style="justify-content: center;" data-bs-toggle="modal"
+                            data-bs-target="#buyNowModal">Buy now
+                    </button>
+                </div>
+            </div>
+
+
+            <div class="card card_with_shadow mt-3" style="height: auto; width: 400px; margin-left: auto; ">
+                <div class="card-body row align-items-center">
+                    <div class="col">
+                        <i class="fa-solid fa-shop fa-2xl"></i>
+                    </div>
+                    <div class="col-10">
+                        <b class="col">{{card.product.seller.username | titlecase}}
+                            <a class="fa-solid fa-circle-info" type="button"
+                               [popover]="popoverHtml"
+                               placement="bottom" style="color: #6d7583;"></a>
+                        </b> <br>
+                        4.8<i class="fa-solid fa-star" style="color: #c9cc24;"> &nbsp;</i>
+                        <span class="text-secondary rotatable_mark" type="button" (mouseover)="isAppearing=true"
+                              (mouseout)="isAppearing=false"><span class="ratings">699 ratings</span> &nbsp;<i
+                            class="fa-solid fa-chevron-down rotatable"></i>
+            </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card card_with_shadow appearing mt-2" [style.opacity]="isAppearing? 1 : 0"
+                 style="height: auto; width: 400px; margin-left: auto; ">
+                <div class="card-body" style="padding: 15px 10px 0 15px; height: auto">
+                    <span style="font-size: 22px">4.8<i class="fa-solid fa-star"
+                                                        style="color: #c9cc24;"> &nbsp;</i></span>
+                    <span class="ratings text-secondary">{{card.product.seller.ratingCount}} product ratings</span>
+                    <hr style="margin-top: 8px; margin-bottom: 0">
+                    <table class="table table-borderless">
+                        <tbody>
+                        <tr *ngIf="productDetail">
+                            <td class="w-50"><span class="text-secondary">Products sold</span></td>
+                            <td style="text-align: right">{{productDetail.soldCount}}</td>
+                        </tr>
+                        <tr>
+                            <td><span class="text-secondary">On Marta</span></td>
+                            <td style="text-align: right">{{card.product.seller.registeredAt | date: 'dd MMM YYYY, HH:mm'}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div>
+        <h4><a id="about" style="display: flex">About the product</a></h4>
+        <div class="row">
+            <div class="col">
+                <b>Additional information</b>
+                <table class="table table-borderless">
+                    <tbody>
+                    <tr *ngIf="productDetail">
+                        <td class="w-35"><span class="text-secondary">Country of manufacture</span></td>
+                        <td>{{productDetail.manufacturer | titlecase}}</td>
+                    </tr>
+                    <tr>
+                        <td><span class="text-secondary">Category</span></td>
+                        <td>{{card.product.category | titlecase}}</td>
+                    </tr>
+                    <tr *ngIf="productDetail">
+                        <td><span class="text-secondary">Dimensions</span></td>
+                        <td>{{productDetail.dimensions}}->30sm*30sm*3mm</td>
+                    </tr>
+                    <tr *ngIf="productDetail">
+                        <td><span class="text-secondary">Weight</span></td>
+                        <td>{{productDetail.weight}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col" *ngIf="productDetail">
+                <b>Structure</b>
+                <p>
+                    {{productDetail.structure}}
+                </p>
+                <b>Description</b>
+                <p>
+                    {{productDetail.description}}
+                </p>
+            </div>
+        </div>
+        <span class="text-secondary">All information is based on the latest information from the manufacturer </span>
+    </div>
+    <div>
+        <h5>
+            <ul class="nav nav-underline">
+                <li class="nav-item">
+                    <button class="nav-link {{isReviews? 'active' : ''}}" (click)="isReviews=true">Reviews
+                        <sup>{{reviews ? reviews.length : 0}}</sup>
+                    </button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link {{isReviews? '' : 'active'}}" (click)="isReviews=false">Questions
+                        <sup>{{questions ? questions.length : 0}}</sup>
+                    </button>
+                </li>
+                <li class="nav-item ms-auto">
+                    <button class="nav-link" data-bs-toggle="modal" data-bs-target="#rulesModal"
+                            style="color: rgb(108,117,125) !important;">Publication Rules
+                    </button>
+                </li>
+            </ul>
+        </h5>
+        <div *ngIf="isReviews">
+            <div style="position: relative;;">
+      <span style="font-size: 25px; font-weight: bold" class="ms-3">
+        {{(ratingOverall ? ratingOverall : 0) | number:'1.0-1'}} <i class="fa-solid fa-star"
+                                                                    *ngFor="let stars of [].constructor(Math.round(ratingOverall? ratingOverall : 0))"
+                                                                    style="color: #c9cc24;"></i>
+        <i class="fa-solid fa-star"
+           *ngFor="let nostars of [].constructor(Math.round(5-(ratingOverall? ratingOverall : 0)))"
+           style="color: #E1E3E6"></i>
+      </span>
+                <sup class="text-secondary" style="font-size: 15px; font-weight: bold">
+                    &nbsp;{{reviews ? reviews.length : 0}} ratings</sup>
+                <button class="btn btn-outline-dark" style="position: absolute; right: 15px" data-bs-toggle="modal"
+                        data-bs-target="#reviewWriteModal">Write a review
+                </button>
+            </div>
+            <div style="position: relative" class="mt-2">
+                <a type="button" class="fa-solid fa-circle-arrow-right fa-2xl" [hidden]="!isNeedRightButtonForReviews"
+                   (click)="rightScrollForReviews()"
+                   style="position: absolute; width: 30px; height: 30px; top: 135px; right: 20px; z-index: 100;"></a>
+                <a type="button" class="fa-solid fa-circle-arrow-left fa-2xl" [hidden]="!isNeedLeftButtonForReviews"
+                   (click)="leftScrollForReviews()"
+                   style="position: absolute; width: 30px; height: 30px; top: 135px; left: 20px; z-index: 100;"></a>
+                <div id="scrollReviews"
+                     style="width: 100%; white-space: nowrap; display: flex; overflow: hidden; scroll-behavior: smooth">
+
+                    <div class="card card_with_shadow me-4" *ngFor="let review of reviews"
+                         style="height: 270px; width: 430px; min-width: 430px">
+                        <div class="card-body">
+                            <div style="padding-left: 5px;">
+            <span style="display: inline-flex"><img class="rounded-4 me-2" alt="image for review"
+                                                    style="width: 50px; height: 50px; object-fit: cover;"
+                                                    [ngSrc]="'https://eliaslealblog.files.wordpress.com/2014/03/user-200.png'"
+                                                    width="1" height="1"
+            />
+                {{review.author.username}} <br>
+                {{review.time | date: 'dd MMM YYYY, HH:mm'}}
+            </span>
+                                <div style="position: absolute; top: 25px; right: 20px">
+                                    {{review.rating}} <i class="fa-solid fa-star"
+                                                         *ngFor="let stars of [].constructor(Math.round(review.rating))"
+                                                         style="color: #c9cc24;"></i>
+                                    <i class="fa-solid fa-star"
+                                       *ngFor="let nostars of [].constructor(Math.round(5-review.rating))"
+                                       style="color: #E1E3E6;"></i>
+                                </div>
+                                <div style="white-space: pre-wrap;">
+                                    {{review.message}}
+                                </div>
+                                <div style="display: flex; ">
+                                    <div style="margin-right: 10px" *ngFor="let photo of review.photos">
+                                        <img alt="review photo" class="rounded-3"
+                                             style="width: 80px; height: 80px; object-fit: cover"
+                                             [src]="photo" width="80" height="80">
+                                    </div>
+                                </div>
+                            </div>
+                            <a type="button" style="bottom: 25px;right: 20px; position: absolute;"
+                               data-bs-toggle="modal"
+                               data-bs-target="#reviewReportModal">Report a review</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button class="btn btn-lg btn-outline-dark mt-3" routerLink="../feedback" routerLinkActive="active">View all
+                reviews</button>
+        </div>
+
+        <div *ngIf="!isReviews">
+            <textarea placeholder="Ask a question about product" [(ngModel)]="messageOfQuestion"
+                      class="form-control mb-2 down"
+                      (click)="isWriteQuestion=true"></textarea>
+            <div class="appearing" [ngClass]="isWriteQuestion?'appearing-active':''">
+                <button class="btn btn-outline-dark me-2" (click)="saveQuestion()">Ask a question</button>
+                <button class="btn btn-outline-danger" (click)="isWriteQuestion=false">Close</button>
+            </div>
+
+            <div style="position: relative" class="mt-2">
+                <a type="button" class="fa-solid fa-circle-arrow-right fa-2xl" [hidden]="!isNeedRightButtonForQuestions"
+                   (click)="rightScrollForQuestions()"
+                   style="position: absolute; width: 30px; height: 30px; top: 135px; right: 20px; z-index: 100;"></a>
+                <a type="button" class="fa-solid fa-circle-arrow-left fa-2xl" [hidden]="!isNeedLeftButtonForQuestions"
+                   (click)="leftScrollForQuestions()"
+                   style="position: absolute; width: 30px; height: 30px; top: 135px; left: 20px; z-index: 100;"></a>
+                <div id="scrollQuestions"
+                     style="width: 100%; white-space: nowrap; display: flex; overflow: hidden; scroll-behavior: smooth">
+
+                    <div class="card card_with_shadow me-3" *ngFor="let question of questions"
+                         style="height: 270px; width: 520px; min-width: 430px">
+                        <div class="card-body">
+                            <div style="padding-left: 12px; padding-top: 12px;">
+            <span style="display: inline-flex"><img class="rounded-4 me-2" alt="image for question"
+                                                    style="width: 50px; height: 50px; object-fit: cover;"
+                                                    src="https://eliaslealblog.files.wordpress.com/2014/03/user-200.png"/>
+                {{question.author.username}} <br>
+                {{question.time | date: 'dd MMM YYYY, HH:mm'}}
+            </span>
+                                <div class="mt-2" style="white-space: pre-wrap">
+                                    {{question.message}}
+                                </div>
+                                <div class="mt-2" style="white-space: pre-wrap;">
+                                    <b>✓ Brand Representative</b> <br>
+                                    {{question.answer}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button class="btn btn-lg btn-outline-dark mt-3" routerLink="../questions" routerLinkActive="active">View all
+                questions</button>
+        </div>
+    </div>
+</div>
+
+<!-- For popover -->
+<ng-template #popoverHtml>
+    <div style="width: 500px; line-height: 2">
+        IE Feodocev S. U.<br>
+        INN: 583712541296<br>
+        OGRNIP: 322583500017524<br>
+    </div>
+</ng-template>
+<!-- For modal with rules -->
+<div class="modal fade " id="rulesModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="min-width: 720px">
+        <div class="modal-content">
+            <div class="modal-header mt-2 mx-3">
+                <h1 class="modal-title fs-5"><b>Rules for processing reviews and questions</b></h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body mx-4 mb-3" style="font-size: 17px">
+                <p class="text-secondary">Reviews and questions should contain information only about the product. </p>
+                <p class="text-secondary">Reviews can be left only for the goods ordered and received by the buyer.
+                    The buyer can leave no more than one review for one product.
+                    You can attach up to 5 photos to the reviews. The product in the photo should be clearly
+                    visible. </p>
+
+                <p>The following reviews and questions are not allowed for publication: </p>
+                <ul class="dash">
+                    <li>Indicating the purchase of this product in other stores</li>
+                    <li>Containing any contact information (phone numbers, addresses, email, links to third-party
+                        sites)
+                    </li>
+                    <li>With profanity that offends the dignity of other customers or the store</li>
+                    <li>With an abundance of uppercase characters (capital letters)</li>
+                </ul>
+                Questions are published only after they have been answered.
+
+                We reserve the right to edit or not publish a review and a question that does not comply with the
+                established
+                rules!
+            </div>
+        </div>
+    </div>
+</div>
+<!-- For modal with write review -->
+<div class="modal fade" id="reviewWriteModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" *ngIf="isReceivedProduct else cantLeaveReview"
+         style="min-width: 800px">
+        <div class="modal-content">
+            <div class="modal-header mt-2 mx-3">
+                <h1 class="modal-title fs-5"><b>Product Review «{{card.product.seller.username | titlecase}}
+                    / {{card.product.productName | titlecase}}»</b></h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body mx-4" style="font-size: 17px">
+                <p style="margin-bottom: 0">Rate the product</p>
+                <span style="font-size: 30px; font-weight: bold">
+            <a type="button" (click)="currentRate=currentRate-1" class="fa-solid fa-star"
+               *ngFor="let stars of [].constructor(Math.round(currentRate))"
+               style="color: #c9cc24;"></a>
+            <a type="button" (click)="currentRate=currentRate+1" class="fa-solid fa-star"
+               *ngFor="let nostars of [].constructor(Math.round(5-currentRate))"
+               style="color: #E1E3E6;"></a>
+          </span> <br>
+                <label class="mt-3 mb-1" style="font-weight: bold">Tell us about the product</label>
+                <textarea [(ngModel)]="messageOfReview" class="form-control w-100" style="height: 300px"
+                          type="text"> </textarea>
+                <label class="mt-3 mb-1" style="font-weight: bold">Load up to 5 photos</label>
+                <input type="file" (change)="onFileAdded($event)" class="form-control">
+                <div class="mt-3 justify-content-center" style="display: flex">
+                    <button class="btn btn-outline-dark w-75" (click)="saveReview()">Send</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- For modal with report review -->
+<div class="modal fade" id="reviewReportModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="min-width: 300px">
+        <div class="modal-content">
+            <div class="modal-header mt-2 mx-3">
+                <h1 class="modal-title fs-5"><b>Why do you want to complain about the review?</b></h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body mx-4" style="font-size: 17px">
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadio1">
+                    <label class="form-check-label" for="flexRadio1">
+                        The review contains obscene, abusive language
+                    </label>
+                </div>
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadio2">
+                    <label class="form-check-label" for="flexRadio2">
+                        Registered, fictitious
+                    </label>
+                </div>
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadio3">
+                    <label class="form-check-label" for="flexRadio3">
+                        Spam
+                    </label>
+                </div>
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadio4">
+                    <label class="form-check-label" for="flexRadio4">
+                        Incorrect photo, video
+                    </label>
+                </div>
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadio5">
+                    <label class="form-check-label" for="flexRadio5">
+                        The review is not about the product
+                    </label>
+                </div>
+                <div class="mt-3 justify-content-center" style="display: flex">
+                    <button class="btn btn-outline-dark w-75" (click)="reportReview()">Report</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- For modal with report product -->
+<div class="modal fade" id="productReportModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="min-width: 300px">
+        <div class="modal-content">
+            <div class="modal-header mt-2 mx-3">
+                <h1 class="modal-title fs-5"><b>What's wrong with the product?</b></h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body mx-4" style="font-size: 17px">
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadio1R">
+                    <label class="form-check-label" for="flexRadio1R">
+                        Incorrect description/photo
+                    </label>
+                </div>
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadio2R">
+                    <label class="form-check-label" for="flexRadio2R">
+                        Counterfeit/forgery
+                    </label>
+                </div>
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadio3R">
+                    <label class="form-check-label" for="flexRadio3R">
+                        Fraud
+                    </label>
+                </div>
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadio4R">
+                    <label class="form-check-label" for="flexRadio4R">
+                        Fake product reviews
+                    </label>
+                </div>
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadio5R">
+                    <label class="form-check-label" for="flexRadio5R">
+                        Prohibited goods: alcohol, tobacco, medicines
+                    </label>
+                </div>
+                <div class="mt-3 justify-content-center" style="display: flex">
+                    <button class="btn btn-outline-dark w-75" (click)="reportReview()">Report</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- For modal with share product -->
+<div class="modal fade" id="productShareModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="min-width: 300px">
+        <div class="modal-content">
+            <div class="modal-body ms-4" style="font-size: 17px">
+                <div style="display: flex" class="mb-4">
+                    <h2><b>Share</b></h2>
+                    <button type="button" class="btn-close ms-auto" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="row-cols-2">
+                    <i (click)="goToLink('https://t.me/share/url?url=&text=')" class="col-2 fa-brands fa-telegram fa-2xl increase_size" style="color: #35ACE1" type="button"></i>
+                    <i (click)="goToLink('https://vk.com/share.php?url=&comment=')" class="col-2 fa-brands fa-vk fa-2xl increase_size" style="color: #5181B8" type="button"></i>
+                    <i (click)="goToLink('https://connect.ok.ru/offer?url=&title=')" class="col-2 fa-brands fa-square-odnoklassniki fa-2xl increase_size" style="color: #EF7D01" type="button"></i>
+                    <i (click)="goToLink('https://web.whatsapp.com/send?text=')" class="col-2 fa-brands fa-square-whatsapp fa-2xl increase_size" style="color: #25D366" type="button"></i>
+                </div>
+                <div class="justify-content-center" style="display: flex; margin-top: 40px">
+                    <button class="btn btn-outline-dark w-75" (click)="copyToClipboard()">
+                        Copy to clipboard
+                        <i class="fa-regular fa-copy fa-lg float-end" style="margin-top: 12px"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #cantLeaveReview>
+    <div class="modal-dialog modal-dialog-centered" style="min-width: 500px">
+        <div class="modal-content">
+            <div class="modal-header mt-2 mx-3 ">
+                <h1 class="modal-title fs-5"><b>You can't leave a review</b></h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body mx-4 mb-3 text-secondary" style="font-size: 17px">
+                You can share your opinion about the product only after receiving it
+            </div>
+            <div class="modal-footer justify-content-center">
+                <button type="button" class="btn btn-info" data-bs-dismiss="modal">All rights, thanks</button>
+            </div>
+        </div>
+    </div>
+</ng-template>
+<!-- For modal with buy product now -->
+<div class="modal fade" id="buyNowModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="min-width: 300px">
+        <div class="modal-content">
+            <div class="modal-header mt-2 mx-3">
+                <h1 class="modal-title fs-5"><b>Order: {{card.product.seller.username | titlecase}}
+                    / {{card.product.productName | titlecase}}</b></h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body mx-4" style="font-size: 19px">
+                <span *ngIf="!isPaid" style="font-size: 12px; position: absolute" class="text-secondary">We will write off the payment upon receipt </span>
+                <br>
+                <input class="form-check-input" type="checkbox" (change)="isPaid = !isPaid"
+                       id="flexCheck">
+                <label class="form-check-label" for="flexCheck">
+                    &nbsp;Pay now
+                </label>
+                <div style="font-size: 18px" class="mt-2">
+                    <i type="button" (click)="removeNumberOfProduct()"
+                       class="fa-solid fa-square-minus fa-xl"></i>
+                    {{countOfProductInOrder}}
+                    <i type="button" (click)="addNumberOfProduct()"
+                       class="fa-solid fa-square-plus fa-xl"></i>
+                </div>
+                <div class="name_card_main mt-2">
+                    Total: {{totalPrice| currency}}
+                </div>
+                <div class="mt-3 justify-content-center" style="display: flex">
+                    <button class="btn btn-outline-dark w-75" data-bs-dismiss="modal" (click)="orderNow()">Buy now
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

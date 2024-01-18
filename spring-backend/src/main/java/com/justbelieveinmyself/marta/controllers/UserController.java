@@ -1,6 +1,7 @@
 package com.justbelieveinmyself.marta.controllers;
 
 import com.justbelieveinmyself.marta.domain.annotations.CurrentUser;
+import com.justbelieveinmyself.marta.domain.dto.ProductWithImageDto;
 import com.justbelieveinmyself.marta.domain.dto.UserDto;
 import com.justbelieveinmyself.marta.domain.dto.UserNamesDto;
 import com.justbelieveinmyself.marta.domain.dto.auth.LoginResponseDto;
@@ -72,6 +73,22 @@ public class UserController {
             @CurrentUser User currentUser
     ) {
         return userService.getAvatar(user, currentUser);
+    }
+
+    @GetMapping("{sellerId}/products")
+    @Operation(summary = "Get products by sellerId", description = "Get products by sellerId")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Products successfully returned",
+                    content = @Content(mediaType = MediaType.APPLICATION_OCTET_STREAM_VALUE, array = @ArraySchema(arraySchema = @Schema(implementation = Byte.class)))),
+            @ApiResponse(responseCode = "403", description = "1. You don't have the rights! \n 2. File not found!",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,schema = @Schema(implementation = ResponseError.class)))
+    })
+    @Parameter(name = "sellerId", schema = @Schema(name = "sellerId", type = "integer"), in = ParameterIn.PATH)
+    public ResponseEntity<List<ProductWithImageDto>> getProducts(
+            @Parameter(hidden = true) @PathVariable("sellerId") User user,
+            @CurrentUser User currentUser
+    ) {
+        return userService.getProducts(user, currentUser);
     }
 
     @PutMapping(value = "{profileId}/avatar", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})

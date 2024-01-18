@@ -1,0 +1,14 @@
+<app-product-list [card]="products" [isOrders]="false" [isAdminPage]="true" [isNeedFavourites]="false"
+                  *ngIf="products && products.length > 0; else noActivity"></app-product-list>
+<ng-template #noActivity>
+    <div class="card card_with_shadow">
+        <div class="card-body mx-auto">
+            <div class="name_card my-3">No activity yet</div>
+            <div class="text-secondary my-3">User don't have any <br> products on our marketplace
+            </div>
+            <a type="button" routerLink="/adminPanel" routerLinkActive="active"
+               class="btn btn-outline-dark w-75 my-3 ms-4">Go Back</a>
+        </div>
+    </div>
+</ng-template>
+

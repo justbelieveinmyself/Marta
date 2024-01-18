@@ -13,7 +13,6 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
-@Builder
 public class OrderDto {
     private Long id;
     private Map<Long, Integer> productIdAndQuantity;

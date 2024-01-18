@@ -17,8 +17,8 @@ import java.util.Set;
 @NoArgsConstructor
 @Data
 @Builder
-@ToString(exclude = {"customers", "followers", "orderProduct"})
-@EqualsAndHashCode(exclude = {"customers", "followers", "orderProduct"})
+@ToString(exclude = {"customers", "followers", "orderProduct", "productDetail"})
+@EqualsAndHashCode(exclude = {"customers", "followers", "orderProduct", "productDetail"})
 public class Product {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -28,16 +28,12 @@ public class Product {
     private String productCode;
     private String category;
     private BigDecimal price;
-    private Long count;
-    @Lob @Column(length = 16777215)
-    private String description;
-    private String manufacturer;
+    @Column(name = "discount_percentage")
+    private Integer discountPercentage;
     @Column(name = "verified")
     private Boolean isVerified;
     @UpdateTimestamp
     private ZonedDateTime updatedAt;
-    @Lob @Column(length = 16777215)
-    private String structure;
     @ManyToOne(fetch = FetchType.EAGER) @JoinColumn(name = "seller_id")
     private User seller;
     @Column(name = "preview_image")
@@ -52,4 +48,6 @@ public class Product {
     private List<Review> reviews;
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Question> questions;
+    @OneToOne(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private ProductDetail productDetail;
 }

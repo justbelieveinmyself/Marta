@@ -76,7 +76,7 @@ class ProductServiceTest {
         when(productRepository.save(any())).thenReturn(mockProduct);
         when(fileHelper.uploadFile((MultipartFile) any(), any())).thenReturn("test-path.png");
 
-        ResponseEntity<ProductDto> productDtoAsResponseEntity = productService.createProduct(mockProductDto, new MockMultipartFile("test-file", "test".getBytes()), mockUser);
+        ResponseEntity<ProductDto> productDtoAsResponseEntity = productService.createProduct(mockProductDto, new MockMultipartFile("test-file", "test".getBytes()), null, mockUser);
 
         assertEquals("Test Name", productDtoAsResponseEntity.getBody().getProductName());
         assertEquals(1L, productDtoAsResponseEntity.getBody().getId());
@@ -104,14 +104,13 @@ class ProductServiceTest {
         User mockCurrentUser = User.builder().username("user").id(1L).email("test@mail.ru").build();
         SellerDto mockSellerDto = SellerDto.builder().username("user").id(1L).email("test@mail.ru").build();
         Product mockProduct = Product.builder().productName("Test Name").id(1L).build();
-        ProductDto mockProductDto = ProductDto.builder().productName("New name").id(2L).description("Some description").price(BigDecimal.valueOf(5)).seller(mockSellerDto).build();
+        ProductDto mockProductDto = ProductDto.builder().productName("New name").id(2L).price(BigDecimal.valueOf(5)).seller(mockSellerDto).build();
 
         when(productRepository.save(any())).thenAnswer(i -> i.getArguments()[0]);
 
         ResponseEntity<ProductDto> productDtoAsResponseEntity = productService.updateProduct(mockProduct, mockProductDto, mockCurrentUser);
 
         assertEquals("New name", productDtoAsResponseEntity.getBody().getProductName());
-        assertEquals("Some description", productDtoAsResponseEntity.getBody().getDescription());
         assertEquals(BigDecimal.valueOf(5), productDtoAsResponseEntity.getBody().getPrice());
         assertEquals(1L, productDtoAsResponseEntity.getBody().getId());
 
@@ -120,7 +119,7 @@ class ProductServiceTest {
 
     @Test
     void getProduct() {
-        Product mockProduct = Product.builder().productName("Test name").id(1L).description("test").previewImg("test.png").build();
+        Product mockProduct = Product.builder().productName("Test name").id(1L).previewImg("test.png").build();
 
         when(fileHelper.downloadFileAsByteArray(any(), any())).thenReturn("base64encodedimage".getBytes());
 
@@ -134,7 +133,7 @@ class ProductServiceTest {
 
     @Test
     void getListProductReviews() {
-        Product mockProduct = Product.builder().productName("Test name").id(1L).description("test").previewImg("test.png").build();
+        Product mockProduct = Product.builder().productName("Test name").id(1L).previewImg("test.png").build();
         List<String> mockImages = List.of("test.png", "test2.png");
         User mockUser = User.builder().id(1L).username("user").build();
         List<Review> mockReviews = List.of(

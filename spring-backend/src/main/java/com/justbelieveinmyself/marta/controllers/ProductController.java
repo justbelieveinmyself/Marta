@@ -4,6 +4,7 @@ import com.justbelieveinmyself.marta.domain.annotations.CurrentUser;
 import com.justbelieveinmyself.marta.domain.dto.ProductDto;
 import com.justbelieveinmyself.marta.domain.dto.ProductListRequest;
 import com.justbelieveinmyself.marta.domain.dto.ProductWithImageDto;
+import com.justbelieveinmyself.marta.domain.dto.ProductDetailDto;
 import com.justbelieveinmyself.marta.domain.entities.Product;
 import com.justbelieveinmyself.marta.domain.entities.User;
 import com.justbelieveinmyself.marta.exceptions.ResponseError;
@@ -64,11 +65,12 @@ public class ProductController {
                     content = @Content)
     })
     public ResponseEntity<ProductDto> createProduct(
-            @RequestPart("product") ProductDto productDto,
+            @RequestPart(value = "product") ProductDto productDto,
+            @RequestPart(value = "productDetail", required = false) ProductDetailDto productDetailDto,
             @RequestPart(value = "file", required = false) MultipartFile file,
             @CurrentUser User currentUser
     ) {
-        return productService.createProduct(productDto, file, currentUser);
+        return productService.createProduct(productDto, file, productDetailDto, currentUser);
     }
 
     @DeleteMapping("/{productId}")
@@ -101,6 +103,22 @@ public class ProductController {
             @PathVariable(value = "productId") Product product
     ) {
         return productService.getProduct(product);
+    }
+
+    @GetMapping("/detail/{productId}")
+    @Operation(summary = "Get product detail by productId",description = "Returns product-details of specified product Id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "ProductDetail successfully returned",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProductDto.class))),
+            @ApiResponse(responseCode = "403", description = "No such product!",
+                    content = @Content)
+    })
+    @Parameter(name = "productId", required = true, schema = @Schema(type = "integer", name = "productId"), in = ParameterIn.PATH)
+    public ResponseEntity<ProductDetailDto> getProductDetail(
+            @Parameter(hidden = true)
+            @PathVariable(value = "productId") Product product
+    ) {
+        return productService.getProductDetail(product);
     }
 
     @PutMapping("/{productId}")

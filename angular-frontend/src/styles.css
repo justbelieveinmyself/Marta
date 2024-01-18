@@ -112,10 +112,14 @@ body::-webkit-scrollbar-thumb:hover {
     color: #868695;
 }
 
+.sort-not-active:hover {
+    border-bottom: 2px dotted rgb(108, 117, 125);
+    color: black;
+}
+
 .sort-active {
     font-weight: bold;
     color: black;
-    border-bottom: 2px dotted rgb(108, 117, 125);
 }
 
 html {
@@ -123,4 +127,8 @@ html {
 }
 .no-text-decoration-line{
     text-decoration-line: none;
+}
+
+input.form-control {
+    background-color: #f0f2f5;
 }

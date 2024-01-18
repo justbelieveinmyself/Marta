@@ -3,33 +3,35 @@ import {BrowserModule} from '@angular/platform-browser';
 
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
-import {ProductListComponent} from './products/product-list/product-list.component';
+import {ProductListComponent} from './pages/products/product-list/product-list.component';
 import {HttpClientModule} from '@angular/common/http';
-import {CreateProductComponent} from './products/create-product/create-product.component';
+import {CreateProductComponent} from './pages/products/create-product/create-product.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {UpdateProductComponent} from './products/update-product/update-product.component';
-import {LoginComponent} from './auth/login/login.component'
+import {UpdateProductComponent} from './pages/products/update-product/update-product.component';
+import {LoginComponent} from './pages/authentication/login/login.component'
 import {SocialAuthServiceConfig, SocialLoginModule, VKLoginProvider} from '@abacritt/angularx-social-login';
-import {RegisterComponent} from './auth/register/register.component';
-import {NavbarComponent} from './navbar/navbar.component';
-import {requestInterceptorProvider} from './service/request-intercept.service';
-import {UserProfileComponent} from './user-profile/user-profile.component';
-import {UserDetailsComponent} from './user-details/user-details.component';
-import {UserDeliveryComponent} from './user-delivery/user-delivery.component';
-import {UserFavouritesComponent} from './user-favourites/user-favourites.component';
-import {LogoutComponent} from './auth/logout/logout.component';
-import {ProductDetailsComponent} from './products/product-details/product-details.component';
+import {RegisterComponent} from './pages/authentication/register/register.component';
+import {NavbarComponent} from './components/navbar/navbar.component';
+import {requestInterceptorProvider} from './services/request-intercept.service';
+import {UserProfileComponent} from './pages/users/user-profile/user-profile.component';
+import {UserDetailsComponent} from './pages/users/user-details/user-details.component';
+import {UserDeliveryComponent} from './pages/users/user-delivery/user-delivery.component';
+import {UserFavouritesComponent} from './pages/users/user-favourites/user-favourites.component';
+import {LogoutComponent} from './pages/authentication/logout/logout.component';
+import {ProductDetailsComponent} from './pages/products/product-details/product-details.component';
 import {PopoverModule} from "ngx-bootstrap/popover";
-import {ProductFeedbackComponent} from './products/product-feedback/product-feedback.component';
+import {ProductFeedbackComponent} from './pages/products/product-feedback/product-feedback.component';
 import {NgOptimizedImage} from "@angular/common";
-import {ProductQuestionsComponent} from './products/product-questions/product-questions.component';
-import {ProductCartComponent} from './products/product-cart/product-cart.component';
-import {MainPageComponent} from './main-page/main-page.component';
-import {AdminPageComponent} from './admin-page/admin-page.component';
-import {errorInterceptorProvider} from "./service/error-intercept.service";
-import { ActivityPageComponent } from './activity-page/activity-page.component';
+import {ProductQuestionsComponent} from './pages/products/product-questions/product-questions.component';
+import {ProductCartComponent} from './pages/products/product-cart/product-cart.component';
+import {MainPageComponent} from './pages/main-page/main-page.component';
+import {AdminPageComponent} from './pages/users/admin-page/admin-page.component';
+import {errorInterceptorProvider} from "./services/error-intercept.service";
+import { ActivityPageComponent } from './pages/users/activity-page/activity-page.component';
 import {TooltipModule} from "ngx-bootstrap/tooltip";
-import { SearchComponent } from './search/search.component';
+import { SearchComponent } from './components/search/search.component';
+import { PreloaderComponent } from './components/preloader/preloader.component';
+import { SellerPageComponent } from './pages/seller-page/seller-page.component';
 
 @NgModule({
   declarations: [
@@ -52,7 +54,9 @@ import { SearchComponent } from './search/search.component';
     MainPageComponent,
     AdminPageComponent,
     ActivityPageComponent,
-    SearchComponent
+    SearchComponent,
+    PreloaderComponent,
+    SellerPageComponent
   ],
     imports: [
         BrowserModule,

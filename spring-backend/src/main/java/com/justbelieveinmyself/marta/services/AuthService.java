@@ -39,7 +39,7 @@ public class AuthService {
                 (authRequest.getUsername(), authRequest.getPassword()));
         User userDetails = userService.loadUserByUsername(authRequest.getUsername());
         String token = refreshTokenService.createRefreshToken(userDetails);
-        LoginResponseDto loginResponseDTO = new LoginResponseDto(token, userMapper.modelToDto(userDetails, fileHelper, productMapper));
+        LoginResponseDto loginResponseDTO = new LoginResponseDto(token, userMapper.modelToDto(userDetails, fileHelper));
         return ResponseEntity.ok(loginResponseDTO);
     }
 
@@ -52,6 +52,6 @@ public class AuthService {
             throw new NotCreatedException("User with nickname already exists!");
         }
         User user = userService.createNewUser(registrationUserDto, file);
-        return ResponseEntity.ok(new SellerDto(user.getId(), user.getUsername(), user.getEmail()));
+        return ResponseEntity.ok(new SellerDto(user.getId(), user.getUsername(), user.getRegisteredAt(), user.getRatingCount()));
     }
 }

@@ -1,4 +1,5 @@
 <app-navbar></app-navbar>
 <div class="container">
-    <router-outlet></router-outlet>
+    <ng-template #loadingNow><app-preloader> </app-preloader> </ng-template>
+    <router-outlet *ngIf="!loading; else loadingNow"></router-outlet>
 </div>
