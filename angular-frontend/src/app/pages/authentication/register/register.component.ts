@@ -7,7 +7,7 @@ import {TokenService} from 'src/app/services/token.service';
 @Component({
     selector: 'app-register',
     templateUrl: './register.component.html',
-    styleUrls: ['./register.component.css']
+    styleUrls: ['./register.component.css', '../login/login.component.css']
 })
 export class RegisterComponent implements OnInit {
     constructor(
@@ -28,7 +28,7 @@ export class RegisterComponent implements OnInit {
     avatar!: File;
 
     errorMessage!: string;
-
+    countries: string[] = ["Russian Federation", "Ukraine", "Kazakhstan", "Belarus"];
     ngOnInit(): void {
         if (this.tokenService.getRefreshToken()) {
             this.isLogged = true;

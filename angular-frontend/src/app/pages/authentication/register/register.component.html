@@ -1,69 +1,181 @@
-<div *ngIf="!isLogged; else xd">
-
-    <div class="container w-50 justify-content-center mb-3">
-        <div class="card">
-          <div class="card-header">
-            <ul class="nav nav-tabs">
-              <li class="nav-item">
-                <a class="nav-link" routerLink="/login">Log In</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link active" routerLink="/register">Register</a>
-              </li>
-            </ul>
-          </div>
-          <div class="card-body">
-            <form class="form-group mx-auto w-75" #f="ngForm" (ngSubmit)="onRegister()" novalidate>
-              <div class="form-group my-3">
-                <label class="test" for="firstName">First Name</label>
-                <input type="text" class="form-control" name="firstname" placeholder="First Name" [(ngModel)]="firstName">
-              </div>
-              <div class="form-group my-3">
-                <label for="lastName">Last Name</label>
-                <input type="text" class="form-control" name="lastName" placeholder="Last Name" [(ngModel)]="lastName">
-              </div>
-              <div class="form-group my-3">
-                <label for="username">Username</label>
-                <input type="text" class="form-control" name="username" placeholder="Username" [(ngModel)]="username">
-              </div>
-              <div class="form-group my-3">
-                <label for="email">Email</label>
-                <input type="text" class="form-control" name="email" placeholder="Email" [(ngModel)]="email">
-              </div>
-              <div class="form-group my-3">
-                <label for="password">Password</label>
-                <input type="password" class="form-control" name="password" placeholder="Password" [(ngModel)]="password">
-              </div>
-              <div class="form-group my-3">
-                <label for="passwordConfirm">Confirm password</label>
-                <input type="password" class="form-control" name="passwordConfirm" placeholder="Password" [(ngModel)]="passwordConfirm">
-              </div>
-              <div class="form-group mb-3">
-                <label for="avatar" class="form-label">Upload user image</label>
-                <input type="file" (change)="onFileSelected($event)" class="form-control" name="avatar">
-              </div>
-              <div class="form-group text-center">
-                <button [disabled]="!f.valid"
-                  class="btn btn-outline-success btn-block btn-lg">Submit</button>
-              </div>
-            </form>
-            <div *ngIf="f.submitted && isRegisterFail" class="alert alert-danger mt-3">{{errorMessage}}</div>
-          </div>
-        </div>
-      </div>
-
-    <div class="col-md-4 mx-auto mb-3">
-        <div class="card">
-            <h5 class="card-header  text-center">Log in via the Social Network</h5>
+<!--
+<div *ngIf="!isLogged" class="main-container">
+    <div class="login-container">
+        <div class="card card_with_shadow">
             <div class="card-body">
-                <button class="btn btn-outline-primary btn-lg btn-block w-100">
-                    Log In via VK <i class="fa-brands fa-vk fa-xl"></i></button>
+                <h2 class="card-title-login">Welcome!</h2>
+                <form style="width: 75%" class="form-group mx-auto" #f="ngForm" novalidate>
+                    <div class="form-group my-4">
+                        <input type="text" class="form-control" name="username" placeholder="Username"
+                               [(ngModel)]="username">
+                    </div>
+                    <div class="form-group mt-4 mb-3">
+                        <input type="password" class="form-control" name="password" placeholder="Password"
+                               [(ngModel)]="password">
+                    </div>
+                    <input class="form-check-input" type="checkbox" id="rememberMe" checked>
+                    <label class="form-check-label ms-2" for="rememberMe">
+                        &nbsp;Save user
+                    </label>
+                    <div class="form-group text-center mt-4 mb-2 flex-center-column">
+                        <button [disabled]="!f.valid"
+                                class="btn btn-outline-success btn-block login-btn btn-lg btn-with-logo">
+                            <span>Go Shopping!</span>
+                            <i class="fa-solid fa-bag-shopping ms-auto"></i>
+                        </button>
+                    </div>
+
+                </form>
+                <div *ngIf="f.submitted"
+                     class="alert alert-danger mt-3 mb-0 text-center">{{ errorMessage }}
+                </div>
             </div>
         </div>
     </div>
+
+    <aside class="sidebox-container w-35">
+        <div class="card card_with_shadow" style="margin-bottom: 30px">
+            <div class="card-body text-center flex-center-column">
+                <button routerLink="/register" class="btn btn-outline-danger btn-lg btn-block my-3 btn-with-logo">
+                    <span>Sign Up</span>
+                    <i class="fa-solid fa-user-plus ms-auto"></i>
+                </button>
+                <h6>Haven't you managed to create <br> an account yet?</h6>
+            </div>
+        </div>
+        <div class="card card_with_shadow" style="margin-bottom: 30px">
+            <div class="card-body text-center flex-center-column">
+                <button class="btn btn-outline-primary btn-lg btn-block my-3 btn-with-logo">
+                    <span>Log In via VK</span>
+                    <i class="fa-brands fa-vk fa-xl ms-auto"></i>
+                </button>
+                <h6>Sign in via the Social Network</h6>
+            </div>
+        </div>
+    </aside>
+
 </div>
+-->
+<div *ngIf="!isLogged;" class="main-container">
+    <div class="card card_with_shadow">
+        <div class="card-body register-container">
+            <h2 class="card-title-login">Registration</h2>
+            <form class="register-form" #f="ngForm" (ngSubmit)="onRegister()" novalidate>
+                <div class="personal-data-input">
+                    <div class="form-group">
+                        <label for="firstname">Name</label>
+                        <input type="text" class="form-control" id="firstname" name="firstname"
+                               placeholder="Enter your name"
+                               [(ngModel)]="firstName">
+                    </div>
+                    <div class="form-group">
+                        <label for="surname">Surname</label>
+                        <input type="text" class="form-control" id="surname" name="lastName"
+                               placeholder="Enter your surname"
+                               [(ngModel)]="lastName">
+                    </div>
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" class="form-control" id="username" name="username"
+                               placeholder="Enter your username"
+                               [(ngModel)]="username">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email address</label>
+                        <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email"
+                               [(ngModel)]="email">
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" class="form-control" id="password" name="password"
+                               placeholder="Enter your password"
+                               [(ngModel)]="password">
+                    </div>
+                    <div class="form-group">
+                        <label for="passwordConfirm">Confirm Password</label>
+                        <input type="password" class="form-control" id="passwordConfirm" name="passwordConfirm"
+                               placeholder="Confirm your password"
+                               [(ngModel)]="passwordConfirm">
+                    </div>
+                    <div class="form-group">
+                        <label for="age">Date of Birth</label>
+                        <input type="date" class="form-control" id="age" name="age" placeholder="Enter your age"
+                               [(ngModel)]="passwordConfirm">
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="text" class="form-control" id="phone" name="phone" placeholder="Enter your number"
+                               [(ngModel)]="passwordConfirm">
+                    </div>
+                    <div class="form-group">
+                        <label for="avatar">Avatar</label>
+                        <input type="file" (change)="onFileSelected($event)" id="avatar" class="form-control"
+                               name="Upload your avatar">
+                    </div>
+                    <div>
+                        <h3 class="data-input-title">Gender</h3>
+                        <div class="gender-data-input">
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1"
+                                       value="option1">
+                                <label class="form-check-label" for="inlineRadio1">Male</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2"
+                                       value="option2">
+                                <label class="form-check-label" for="inlineRadio2">Female</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3"
+                                       value="option2">
+                                <label class="form-check-label" for="inlineRadio3">Prefer not to say</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-
-<ng-template #xd>
-    <div> You're already, autheroized</div>
-</ng-template>
+                <h3 class="data-input-title">Address</h3>
+                <div class="address-data-input">
+                    <div class="form-group mt-2 mb-4">
+                        <input type="text" class="form-control" name="address" placeholder="Enter your street address"
+                               [(ngModel)]="passwordConfirm">
+                    </div>
+                    <div class="form-group mb-4">
+                        <input type="text" class="form-control" name="address2"
+                               placeholder="Enter your street address line 2"
+                               [(ngModel)]="passwordConfirm">
+                    </div>
+                    <div class="personal-data-input">
+                        <div class="input-group">
+                            <label class="input-group-text" for="country">Country</label>
+                            <select id="country" class="form-select" name="country" formControlName="country">
+                                <option selected disabled>Choose...</option>
+                                <option *ngFor="let country of countries">{{ country }}</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="city" placeholder="Enter your city"
+                                   [(ngModel)]="passwordConfirm">
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="region" placeholder="Enter your region"
+                                   [(ngModel)]="passwordConfirm">
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="city" placeholder="Enter your postal code"
+                                   [(ngModel)]="passwordConfirm">
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <div class="form-group text-center flex-center-column">
+                <button [disabled]="!f.valid" class="btn btn-outline-danger btn-block btn-lg btn-with-logo">
+                    <span>Sign Up</span>
+                    <i class="fa-solid fa-user-plus ms-auto"></i>
+                </button>
+                <div>Already have an account?<a class="login-link" routerLink="/login" routerLinkActive="active">Sign in</a></div>
+            </div>
+            <div *ngIf="f.submitted && isRegisterFail" class="alert alert-danger mt-3">{{ errorMessage }}</div>
+        </div>
+    </div>
+</div>

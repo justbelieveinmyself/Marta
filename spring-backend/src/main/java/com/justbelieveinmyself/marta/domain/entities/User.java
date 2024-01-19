@@ -30,7 +30,7 @@ public class User implements UserDetails {
     private String username;
     private String password;
     private String email;
-    private Integer age;
+    private Integer age; // TODO: age is bad idea, need birthDate not age! :>
     private String gender;
     @Enumerated(EnumType.STRING) @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
@@ -39,10 +39,10 @@ public class User implements UserDetails {
     private List<Product> products;
     private String avatar;
     private String phone;
-    private String address;
-    private String city;
-    private String postalCode;
-    private String country;
+    private String address; //
+    private String city; // TODO: create another "Address" entity
+    private String postalCode; // add new field address2, region
+    private String country; //
     private Double balance;
     @CreationTimestamp
     private ZonedDateTime registeredAt;
