@@ -11,7 +11,7 @@
 <!--        TODO: add other fields from productdetail and product dtos-->
                     </div>
                     <div class="alert alert-danger" *ngIf="(productForm.get('productName').
-                    hasError('required') || productForm.get('productName').hasError('nullValidator')) && f.submitted">
+                    hasError('required')) && f.submitted">
                         Name is required.
                     </div>
                     <div class="input-group mb-3">
@@ -30,7 +30,7 @@
                                formControlName="description">
                     </div>
                     <div class="alert alert-danger" *ngIf="(productForm.get('description').
-                    hasError('required') || productForm.get('description').hasError('nullValidator')) && f.submitted">
+                    hasError('required')) && f.submitted">
                         Add a small description to your product!
                     </div>
                     <div class="input-group mb-3">
@@ -44,7 +44,7 @@
                                formControlName="manufacturer">
                     </div>
                     <div class="alert alert-danger" *ngIf="(productForm.get('manufacturer').
-                    hasError('required') || productForm.get('manufacturer').hasError('nullValidator')) && f.submitted">
+                    hasError('required')) && f.submitted">
                         Write the country of the manufacturer!
                     </div>
                     <div class="input-group mb-3">
@@ -55,7 +55,7 @@
                         </select>
                     </div>
                     <div class="alert alert-danger" *ngIf="(productForm.get('category').
-                    hasError('required') || productForm.get('category').hasError('nullValidator')) && f.submitted">
+                    hasError('required')) && f.submitted">
                         Select a category!
                     </div>
                     <div class="input-group mb-3">

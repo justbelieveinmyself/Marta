@@ -38,13 +38,13 @@ export class CreateProductComponent implements OnInit {
     ngOnInit() {
         this.user = this.tokenService.getUser();
         this.productForm = this.formBuilder.group({
-            productName: ['', [Validators.required, Validators.nullValidator]],
+            productName: ['', [Validators.required]],
             price: [null, [Validators.required, Validators.min(1)]],
             category: [null, Validators.required],
             discountPercentage: [null, [Validators.required]],
             description: ['', Validators.required],
             structure: [''],
-            manufacturer: ['', [Validators.required, Validators.nullValidator]],
+            manufacturer: ['', [Validators.required]],
             dimensions: [null, [Validators.required]],
             weight: [null, [Validators.required]],
             otherDetails: [null],
@@ -54,6 +54,11 @@ export class CreateProductComponent implements OnInit {
     }
 
     saveProduct() {
+
+        if(this.productForm.invalid){
+            return;
+        }
+
         this.product.productName = this.productForm.value.productName;
         this.product.price = this.productForm.value.price;
         this.product.category = this.productForm.value.category;
@@ -67,10 +72,6 @@ export class CreateProductComponent implements OnInit {
         this.productDetail.color = this.productForm.value.color;
         this.productDetail.material = this.productForm.value.material;
         this.product.isVerified = false;
-
-        if(this.productForm.invalid){
-            return;
-        }
         this.product.seller = this.user;
         this.productService.addProduct(this.product, this.previewImg, this.productDetail).subscribe(data => {
             console.log(data);
