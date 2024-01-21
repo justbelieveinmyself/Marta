@@ -20,11 +20,10 @@ export class OrderService {
     return this.httpClient.get<Order[]>(this.baseUrl).pipe(
         switchMap(orders => {
             const observables: Observable<ProductWithImage>[] = [];
-
+            console.log(orders) // TODO: fix empty orders
             orders.forEach(order => {
                 const productsAndQuantity: Map<ProductWithImage, number> = new Map();
                 const map: Map<string, number> = new Map(Object.entries(order.productIdAndQuantity));
-
                 if (map instanceof Map) {
                     map.forEach((value, key) => {
                         const numericKey: number = Number(key);

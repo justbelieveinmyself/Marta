@@ -20,8 +20,10 @@ public class UserDto {
     private String avatar;
     private String phone;
     private String address;
+    private String address2;
     private String city;
     private String postalCode;
+    private String region;
     private String country;
     private Double balance;
     private ZonedDateTime registeredAt;
