@@ -1,7 +1,7 @@
 <div style="display: flex">
     <span routerLinkActive="active" routerLink="../../" style="font-size: 18px;" type="button">
         <i class="fa-solid fa-arrow-left fa-lg"></i>
-        <span class="text-secondary ms-2">Main / {{card.product.category}} / {{card.product.seller.username | titlecase}}</span>
+        <span class="text-secondary ms-2">Main / {{card.product.category? card.product.category : "unknown"}} / {{card.product.seller.username | titlecase}}</span>
     </span>
     <span class="ms-auto mt-2">
         <i type="button" data-bs-toggle="modal" data-bs-target="#productReportModal" class="fa-regular fa-flag fa-xl"></i>
@@ -43,7 +43,7 @@
             <div class="card card_with_shadow" style="height: auto; width: 400px; margin-left: auto;">
                 <div class="card-body">
                     <h2 class="card-title">{{card.product.price | currency}}
-                        <span class="discount" style="font-size: 17px; margin-left: 8px;">700$</span>
+                        <span class="discount" style="font-size: 17px; margin-left: 8px;">{{card.product.discountPercentage}}%</span>
                         <a type="button" class="fa-regular fa-heart float-end"
                            [ngClass]="isFavourite? 'fa-solid' : 'fa-regular'" style="color: black"
                            (click)="addOrRemoveFavourite()"></a>

@@ -101,7 +101,7 @@ export class ProductDetailsComponent implements OnInit {
     }
 
     addOrRemoveFavourite() {
-        this.productInteractionService.addOrRemoveFavourite(this.isFavourite, this.card.product.id)
+        this.productInteractionService.toggleFavourite(this.isFavourite, this.card.product.id)
         .subscribe(isFavourite => {
             this.isFavourite = isFavourite;
         });

@@ -84,10 +84,10 @@ export class ProductListComponent {
         })
     }
 
-    addOrRemoveFavourite(item: ProductWithImage, index: number) {
+    toggleFavourite(item: ProductWithImage, index: number) {
         const isFavourite = this.isFavourite[index];
 
-        this.productInteractionService.addOrRemoveFavourite(isFavourite, item.product.id).subscribe(isFavourite => {
+        this.productInteractionService.toggleFavourite(isFavourite, item.product.id).subscribe(isFavourite => {
            this.isFavourite[index] = isFavourite;
         });
     }

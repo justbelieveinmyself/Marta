@@ -26,13 +26,15 @@
     -webkit-box-orient: vertical;
     overflow: hidden;
 }
+
 .hidden-text-2 {
     -webkit-line-clamp: 2;
     display: -webkit-box;
     -webkit-box-orient: vertical;
     overflow: hidden;
 }
-.hidden-text-2:hover, .hidden-text-1:hover{
+
+.hidden-text-2:hover, .hidden-text-1:hover {
     -webkit-line-clamp: initial;
 }
 
@@ -45,7 +47,13 @@
     display: none;
 }
 
-a{
+a {
     text-decoration-line: none;
     color: deepskyblue;
+}
+
+.list-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
 }

@@ -2,3 +2,24 @@ a {
     text-decoration-line: none;
     color: deepskyblue;
 }
+
+.main-container {
+    display: flex;
+}
+
+.filter-panel {
+    font-size: 17px;
+}
+
+.sort-panel {
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+}
+
+.card-sort {
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    padding: 15px;
+}
