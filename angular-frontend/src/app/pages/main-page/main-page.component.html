@@ -1,19 +1,25 @@
 <h4 style="font-weight: bold" *ngIf="pageDataService.searchWord != null">{{ pageDataService.searchWord + " " }}
     Found: {{ this.page ? this.page.totalElements : 0 }}</h4>
 <div class="main-container">
-    <aside class="filter-panel">
-        <input class="form-check-input" type="checkbox" (change)="this.getProducts(0)" id="withPhotoCheck"
-               [(ngModel)]="pageDataService.isFilteredByWithPhoto">
-        <label class="form-check-label me-3" for="withPhotoCheck">
-            &nbsp;With a photo
-        </label>
-        <input class="form-check-input" type="checkbox" (change)="this.getProducts(0)" id="verifiedCheck"
-               [(ngModel)]="pageDataService.isFilteredByVerified">
-        <label class="form-check-label me-3" for="verifiedCheck">
-            &nbsp;Verified
-        </label>
+    <aside class="filter-panel card_with_shadow card">
+        <div class="filter-block">
+            <input class="form-check-input" type="checkbox" (change)="this.getProducts(0)" id="withPhotoCheck"
+                   [(ngModel)]="pageDataService.isFilteredByWithPhoto">
+            <label class="form-check-label" for="withPhotoCheck">
+                &nbsp;With a photo
+            </label>
+        </div>
+        <div class="filter-block">
+            <input class="form-check-input" type="checkbox" (change)="this.getProducts(0)" id="verifiedCheck"
+                   [(ngModel)]="pageDataService.isFilteredByVerified">
+            <label class="form-check-label" for="verifiedCheck">
+                &nbsp;Verified
+            </label>
+        </div>
     </aside>
-    <div>
+
+    <div class="catalog-container">
+
         <div class="sort-panel">
             <div class="card card_with_shadow card-sort">
                 <span class="text-secondary me-4">Sort by:</span>
@@ -31,9 +37,14 @@
                 </a>
             </div>
         </div>
-            <app-product-list [card]="products" [isOrders]="false" [isNeedFavourites]="true"></app-product-list>
+
+        <app-product-list [card]="products" [isOrders]="false" [isNeedFavourites]="true"></app-product-list>
+
     </div>
+
 </div>
+
+
 <ng-container *ngIf="page && page.totalPages > 1">
     <nav aria-label="...">
         <ul class="pagination">

@@ -1,7 +1,7 @@
 <div class="list-container">
     <ng-container *ngIf="isOrders == true; else itemsOfCard">
         <ng-container *ngFor="let order of orders">
-            <div *ngFor="let item of order.productsAndQuantity | keyvalue;" class="me-4 mb-4">
+            <div *ngFor="let item of order.productsAndQuantity | keyvalue;">
                 <div class="card object-with-hidden-item" style="width: 18rem; height: 520px;">
                     <b [ngStyle]="order.isPaid? {'color':'green'}:{'color':'red'}"
                        style="position: absolute; top: 8px; right: 10px; font-size: 13px; background-color: white; border-radius: 20px 20px 20px 20px; padding: 3px 12px">{{ order.isPaid ? 'Paid' : 'Not Paid' }}</b>
@@ -38,7 +38,7 @@
         </ng-container>
     </ng-container>
     <ng-template #itemsOfCard>
-        <div *ngFor="let item of card; let i=index" class="me-4 mb-4">
+        <div *ngFor="let item of card; let i=index" class="catalog-item">
             <div class="card object-with-hidden-item" style="width: 18rem; height: 31rem">
                 <b [ngStyle]="item.product.isVerified? {'color':'green'}:{'color':'red'}"
                    style="position: absolute; top: 8px; right: 10px; font-size: 13px;">

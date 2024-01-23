@@ -5,10 +5,22 @@ a {
 
 .main-container {
     display: flex;
+    flex-direction: row;
+    justify-content: center;
 }
 
 .filter-panel {
     font-size: 17px;
+    width: 180px;
+    background-color: #FFFFFF;
+    margin-right: 20px;
+    padding: 15px;
+}
+
+.filter-block {
+    padding-bottom: 20px;
+    padding-top: 20px;
+    border-bottom: 1px solid #eaeaea;;
 }
 
 .sort-panel {
@@ -22,4 +34,22 @@ a {
     justify-content: center;
     flex-direction: row;
     padding: 15px;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.catalog-container {
+    width: calc(100% - 390px);
+}
+
+@media (max-width: 1399px) {
+    .catalog-container {
+        width: calc(100% - 520px);
+    }
+}
+
+@media (max-width: 1199px) {
+    .catalog-container {
+        width: calc(100% - 650px);
+    }
 }
