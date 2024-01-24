@@ -3,38 +3,35 @@
 <div class="main-container">
     <aside class="filter-panel card_with_shadow card">
         <div class="filter-block">
-            <input class="form-check-input" type="checkbox" (change)="this.getProducts(0)" id="withPhotoCheck"
+            <input class="form-check-input " type="checkbox" (change)="this.getProducts(0)" id="withPhotoCheck"
                    [(ngModel)]="pageDataService.isFilteredByWithPhoto">
-            <label class="form-check-label" for="withPhotoCheck">
-                &nbsp;With a photo
+            <label class="form-check-label ps-2" for="withPhotoCheck">
+                With a photo
             </label>
         </div>
         <div class="filter-block">
             <input class="form-check-input" type="checkbox" (change)="this.getProducts(0)" id="verifiedCheck"
                    [(ngModel)]="pageDataService.isFilteredByVerified">
-            <label class="form-check-label" for="verifiedCheck">
-                &nbsp;Verified
+            <label class="form-check-label ps-2" for="verifiedCheck">
+                Verified
             </label>
         </div>
     </aside>
 
     <div class="catalog-container">
-
-        <div class="sort-panel">
-            <div class="card card_with_shadow card-sort">
-                <span class="text-secondary me-4">Sort by:</span>
-                <a type="button" class="me-4" (click)="sortByDate()">
-                    <span [ngClass]="isNeedSortByDate?'sort-active':'sort-not-active'">Date</span>&nbsp;
-                    <i *ngIf="isNeedSortByDate" class="fa-solid fa-sm"
-                       [ngClass]="pageDataService.isSortASC?'fa-arrow-up':'fa-arrow-down'"
-                       style="color: black"></i>
+        <div class="sort-panel-wrap card card_with_shadow">
+            <div class="sort-panel popover-wrap">
+                <span class="sort-panel_label">Sorting:</span>
+                <a type="button" class="ui-link" (click)="sortByDate()">
+                    <span class="sort-panel__selected">Popular first</span>
+                    <span class="sort-panel__icon"></span>
                 </a>
-                <a type="button" class="me-4" (click)="sortByPrice()">
-                    <span [ngClass]="isNeedSortByPrice?'sort-active':'sort-not-active'">Price</span>&nbsp;
-                    <i *ngIf="isNeedSortByPrice" class="fa-solid fa-sm"
-                       [ngClass]="pageDataService.isSortASC?'fa-arrow-up':'fa-arrow-down'"
-                       style="color: black"></i>
-                </a>
+            </div>
+            <div class="sort-panel_view-mode">
+                <input type="radio" id="mode-tile" class="sort-panel_view-mode-input" value="tile" checked>
+                <i for="mode-tile" class="fa-solid fa-grip-vertical fa-xl sort-panel_view-mode-label sort-panel_view-mode-label_tile"></i>
+                <input type="radio" id="mode-simple" class="sort-panel_view-mode-input" value="simple">
+                <i for="mode-simple" class="fa-solid fa-list-ul fa-xl sort-panel_view-mode-label sort-panel_view-mode-label_simple"></i>
             </div>
         </div>
 

@@ -14,8 +14,6 @@
     width: 288px;
     z-index: 10;
     padding: 8px;
-    /*border-radius: 0 0 10px 10px;*/
-    /*outline: 1px solid #D2D2D2;*/
     box-shadow: rgba(0, 0, 0, 0.24) 0 3px 8px;
     transition: box-shadow 0.4s ease-in-out;
 }
@@ -56,7 +54,7 @@ a {
     display: grid;
     grid-gap: 20px;
     width: 100%;
-    grid-template-columns: repeat(auto-fill, minmax(246px, 288px));
+    grid-template-columns: repeat(auto-fit, minmax(265px, 1fr));
 }
 
 .catalog-item {

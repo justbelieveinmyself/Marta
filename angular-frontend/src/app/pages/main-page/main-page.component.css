@@ -4,29 +4,113 @@ a {
 }
 
 .main-container {
+    width: 100%;
     display: flex;
     flex-direction: row;
     justify-content: center;
 }
 
 .filter-panel {
-    font-size: 17px;
+    font-size: 16px;
     width: 180px;
     background-color: #FFFFFF;
     margin-right: 20px;
-    padding: 15px;
 }
 
 .filter-block {
-    padding-bottom: 20px;
-    padding-top: 20px;
-    border-bottom: 1px solid #eaeaea;;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    border-bottom: 1px solid #eaeaea;
+    padding-left: 10px;
 }
 
-.sort-panel {
+.sort-panel__icon {
+    display: inline-block;
+    font-size: 14px;
+    vertical-align: middle;
+}
+
+.sort-panel__icon:before {
+    speak: none;
+    display: inline-block;
+    font-family: i-icon!important;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: 400;
+    line-height: 1;
+    text-transform: none;
+}
+
+.sort-panel__icon:before {
+    content: "\e259";
+}
+
+.sort-panel_view-mode {
+    height: 19px;
+    margin: 0 -4px 0 auto;
+    order: 2;
+}
+
+.sort-panel_view-mode-input {
+    display: none;
+}
+
+.sort-panel_view-mode-label ~ .sort-panel_view-mode-label {
+    margin-left: 5px;
+}
+
+.sort-panel_view-mode-input:checked + .sort-panel_view-mode-label {
+    opacity: 1;
+}
+
+.sort-panel_view-mode-label {
+    cursor: pointer;
+    opacity: .5;
+    height: 16px;
+    width: 16px;
+}
+
+input {
+    line-height: normal;
+}
+
+input[type=radio] {
+    box-sizing: border-box;
+    padding: 0;
+}
+
+.sort-panel_label, .sort-panel__selected {
+    display: inline-block;
+    font-size: 14px;
+    vertical-align: middle;
+}
+
+.sort-panel_label {
+    margin-right: 5px;
+}
+
+.ui-link {
+    display: inline-block;
+    align-content: center;
+}
+
+.sort-panel__selected {
+    max-width: 150px;
+    overflow: hidden;
+    overflow-wrap: break-word;
+    text-overflow: ellipsis;
+    text-transform: lowercase;
+    white-space: nowrap;
+}
+
+.sort-panel-wrap {
     display: flex;
     justify-content: center;
+    align-items: center;
     flex-direction: row;
+    height: 54px;
+    font-size: 14px;
+    padding: 0 16px;
 }
 
 .card-sort {
@@ -35,21 +119,20 @@ a {
     flex-direction: row;
     padding: 15px;
     width: 100%;
-    margin-bottom: 20px;
 }
 
 .catalog-container {
-    width: calc(100% - 390px);
+    width: calc(100% - 0px);
 }
 
 @media (max-width: 1399px) {
-    .catalog-container {
-        width: calc(100% - 520px);
+    .sort-panel-wrap {
+        width: calc(100% - 35px);
     }
 }
 
 @media (max-width: 1199px) {
-    .catalog-container {
-        width: calc(100% - 650px);
+    .sort-panel-wrap {
+        width: calc(100% - 105px);
     }
 }
