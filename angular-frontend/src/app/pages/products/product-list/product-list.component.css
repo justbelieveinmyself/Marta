@@ -60,3 +60,15 @@ a {
 .catalog-item {
     width: fit-content;
 }
+
+@media (max-width: 1399px) {
+    .list-container {
+        grid-template-columns: 286px 286px 286px;
+    }
+}
+
+@media (max-width: 1199px) {
+    .list-container {
+        grid-template-columns: 286px 286px;
+    }
+}

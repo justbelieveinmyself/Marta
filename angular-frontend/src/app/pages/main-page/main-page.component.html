@@ -1,41 +1,110 @@
 <h4 style="font-weight: bold" *ngIf="pageDataService.searchWord != null">{{ pageDataService.searchWord + " " }}
-    Found: {{ this.page ? this.page.totalElements : 0 }}</h4>
+    Found: {{ page ? page.totalElements : 0 }}</h4>
 <div class="main-container">
     <aside class="filter-panel card_with_shadow card">
-        <div class="filter-block">
-            <input class="form-check-input " type="checkbox" (change)="this.getProducts(0)" id="withPhotoCheck"
+        <label class="filter-block p-3 highlight-hover">
+            <input class="form-check-input " type="checkbox" (change)="this.getProducts(0)"
                    [(ngModel)]="pageDataService.isFilteredByWithPhoto">
-            <label class="form-check-label ps-2" for="withPhotoCheck">
+            <span class="form-check-label ps-2">
                 With a photo
-            </label>
-        </div>
-        <div class="filter-block">
-            <input class="form-check-input" type="checkbox" (change)="this.getProducts(0)" id="verifiedCheck"
+            </span>
+        </label>
+        <label class="filter-block p-3 highlight-hover">
+            <input class="form-check-input" type="checkbox" (change)="this.getProducts(0)"
                    [(ngModel)]="pageDataService.isFilteredByVerified">
-            <label class="form-check-label ps-2" for="verifiedCheck">
+            <span class="form-check-label ps-2">
                 Verified
-            </label>
+            </span>
+        </label>
+        <label class="filter-block highlight-hover p-3">
+            <input class="form-check-input" type="checkbox">
+            <span class="form-check-label ps-2">
+                Top ratings
+            </span>
+        </label>
+        <div class="filter-block">
+            <a class="ui-link w-100 highlight-hover p-3" [ngClass]="isPriceCollapsed? '' : 'ui-collapse_link__in'" (click)="isPriceCollapsed = !isPriceCollapsed">
+                <i class="fa-solid filter-block__icon highlight-hover-blue" [ngClass]="isPriceCollapsed? 'fa-chevron-down' : 'fa-chevron-up'"></i>
+                <span class="form-check-label ps-2 highlight-hover-blue">
+                    Price
+                </span>
+            </a>
+            <div class="collapse__content" [ngClass]="isPriceCollapsed? '' : 'collapse__content_in'">
+                <div>
+                    <div class="input-small">
+                        <input class="form-control input-small__input" type="number" min="10" max="1000"
+                               placeholder="from 10">
+                    </div>
+                    <div class="input-small">
+                        <input class="form-control input-small__input" type="number" min="10" max="1000"
+                               placeholder="to 1000">
+                    </div>
+                    <div class="checkbox-group">
+                        <label class="checkbox-group__item highlight-hover p-2">
+                            <input class="form-check-input" type="checkbox">
+                            <span class="ms-1">
+                            Less than 100$
+                        </span>
+                        </label>
+                        <label class="checkbox-group__item highlight-hover p-2">
+                            <input class="form-check-input" type="checkbox">
+                            <span class="ms-1">
+                            101 - 200$
+                        </span>
+                        </label>
+                        <label class="checkbox-group__item highlight-hover p-2">
+                            <input class="form-check-input" type="checkbox">
+                            <span class="ms-1">
+                            201 - 300$
+                        </span>
+                        </label>
+                        <label class="checkbox-group__item highlight-hover p-2">
+                            <input class="form-check-input" type="checkbox">
+                            <span class="ms-1">
+                            301 - 400$
+                        </span>
+                        </label>
+                        <label class="checkbox-group__item highlight-hover p-2">
+                            <input class="form-check-input" type="checkbox">
+                            <span class="ms-1">
+                            401 - 500$
+                        </span>
+                        </label>
+                        <label class="checkbox-group__item highlight-hover p-2">
+                            <input class="form-check-input" type="checkbox">
+                            <span class="ms-1">
+                            More than 500$
+                        </span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="btn-block">
+            <button class="btn btn-info btn-block__btn-bold">Apply</button>
+            <button class="btn btn-light btn-block__btn">Reset</button>
         </div>
     </aside>
-
     <div class="catalog-container">
         <div class="sort-panel-wrap card card_with_shadow">
             <div class="sort-panel popover-wrap">
                 <span class="sort-panel_label">Sorting:</span>
-                <a type="button" class="ui-link" (click)="sortByDate()">
+                <a type="button" class="ui-link"> <!-- (click)="sortByDate()" -->
                     <span class="sort-panel__selected">Popular first</span>
-                    <span class="sort-panel__icon"></span>
+                    <i class="sort-panel__icon fa-solid fa-chevron-down fa-sm"></i>
                 </a>
             </div>
             <div class="sort-panel_view-mode">
-                <input type="radio" id="mode-tile" class="sort-panel_view-mode-input" value="tile" checked>
-                <i for="mode-tile" class="fa-solid fa-grip-vertical fa-xl sort-panel_view-mode-label sort-panel_view-mode-label_tile"></i>
-                <input type="radio" id="mode-simple" class="sort-panel_view-mode-input" value="simple">
-                <i for="mode-simple" class="fa-solid fa-list-ul fa-xl sort-panel_view-mode-label sort-panel_view-mode-label_simple"></i>
+                <input type="radio" id="mode-tile" [checked]="isItemsByGrid" name="view-mode" class="sort-panel_view-mode-input" value="tile">
+                <i for="mode-tile" (click)="isItemsByGrid = true"
+                   class="fa-solid fa-grip-vertical fa-xl sort-panel_view-mode-label sort-panel_view-mode-label_tile"></i>
+                <input type="radio" id="mode-simple" [checked]="!isItemsByGrid" name="view-mode" class="sort-panel_view-mode-input" value="simple">
+                <i for="mode-simple" (click)="isItemsByGrid = false"
+                   class="fa-solid fa-list-ul fa-xl sort-panel_view-mode-label sort-panel_view-mode-label_simple"></i>
             </div>
         </div>
 
-        <app-product-list [card]="products" [isOrders]="false" [isNeedFavourites]="true"></app-product-list>
+        <app-product-list [isItemsByGrid]="isItemsByGrid" [card]="products" [isOrders]="false" [isNeedFavourites]="true"></app-product-list>
 
     </div>
 

@@ -1,17 +1,17 @@
 .page-container {
-    margin-right: auto;
     margin-left: auto;
+    margin-right: auto;
 }
 
 @media (min-width: 576px) {
     .page-container {
-        max-width: 556px;
+        max-width: 596px;
     }
 }
 
 @media (min-width: 768px) {
     .page-container {
-        max-width: 748px;
+        max-width: 768px;
     }
 }
 

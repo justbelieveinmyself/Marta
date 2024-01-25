@@ -28,6 +28,7 @@ export class ProductListComponent {
     @Input() isAdminPage: boolean;
     @Input() isNeedFavourites: boolean;
     @Input() isCanEdit: boolean;
+    @Input() isItemsByGrid: boolean = true;
     productInToast: Product;
     contactSeller: Seller = new Seller();
     currentUser: LocalUser;

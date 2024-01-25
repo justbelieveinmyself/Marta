@@ -1,5 +1,5 @@
 <form class="d-flex" role="search">
-    <input class="form-control me-2" style="height: 50px; width: 400px" type="search" placeholder="Search" name="search" [(ngModel)]="searchWord" aria-label="Search">
+    <input class="form-control search-input" type="search" placeholder="Search" name="search" [(ngModel)]="searchWord" aria-label="Search">
     <button class="btn btn-outline-success" type="submit"
             routerLinkActive="active" routerLink="/products"
             [queryParams]="{search: searchWord, onlyVerified: pageDataService.isFilteredByVerified, isASC: pageDataService.isSortASC,
