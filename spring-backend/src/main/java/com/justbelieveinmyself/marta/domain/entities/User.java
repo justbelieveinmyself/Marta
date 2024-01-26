@@ -8,6 +8,8 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.Collection;
 import java.util.List;
@@ -18,7 +20,6 @@ import java.util.Set;
 @Table(name = "users")
 @Data
 @ToString(exclude = {"cartProducts", "favouriteProducts"})
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(exclude = {"cartProducts", "favouriteProducts"})
@@ -30,7 +31,7 @@ public class User implements UserDetails {
     private String username;
     private String password;
     private String email;
-    private ZonedDateTime birthDate;
+    private LocalDate birthDate;
     private String gender;
     @Enumerated(EnumType.STRING) @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
@@ -39,7 +40,7 @@ public class User implements UserDetails {
     private List<Product> products;
     private String avatar;
     private String phone;
-    private Double balance;
+    private BigDecimal balance;
     @CreationTimestamp
     private ZonedDateTime registeredAt;
     private Long ratingCount;

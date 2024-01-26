@@ -16,10 +16,11 @@ export class TokenService {
     loggedIn = new BehaviorSubject<boolean>(this.getRefreshToken() ? true : false)
 
     constructor(
-        private encryptionService: EncryptionService,
-        private imageService: ImageService
+        private encryptionService: EncryptionService
     ) {}
+
     private user: LocalUser;
+
     public setRefreshToken(refreshToken: string): void {
         window.localStorage.removeItem(REFRESH_TOKEN_KEY);
         window.localStorage.setItem(REFRESH_TOKEN_KEY, this.encryptionService.encryptData(refreshToken));
@@ -49,11 +50,11 @@ export class TokenService {
     }
 
     public getUser(): LocalUser {
-        if(this.user == null) {
+        if (this.user == null) {
             let encryptedUser = sessionStorage.getItem(USER_KEY) || '';
-            if(encryptedUser){
+            if (encryptedUser) {
                 this.user = JSON.parse(this.encryptionService.decryptData(encryptedUser));
-            }else{
+            } else {
                 return null;
             }
         }

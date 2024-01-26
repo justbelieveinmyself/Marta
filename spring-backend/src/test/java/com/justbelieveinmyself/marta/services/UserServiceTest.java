@@ -111,7 +111,7 @@ class UserServiceTest {
     }
 
     @Test
-    void createNewUser() {
+    void createNewUser_whenAddressNotNull() {
         RegisterDto registerDto = new RegisterDto("first", "last", "user", "123", "123", "test@mail.ru", "+79111003322", "L st.", "Las-Vegas", "42345", "USA");
 
         when(userRepository.save(any())).thenAnswer(i -> i.getArguments()[0]);

@@ -102,7 +102,7 @@ class ProductServiceTest {
     @Test
     void updateProduct() {
         User mockCurrentUser = User.builder().username("user").id(1L).email("test@mail.ru").build();
-        SellerDto mockSellerDto = SellerDto.builder().username("user").id(1L).email("test@mail.ru").build();
+        SellerDto mockSellerDto = SellerDto.builder().username("user").id(1L).build();
         Product mockProduct = Product.builder().productName("Test Name").id(1L).build();
         ProductDto mockProductDto = ProductDto.builder().productName("New name").id(2L).price(BigDecimal.valueOf(5)).seller(mockSellerDto).build();
 
@@ -156,7 +156,7 @@ class ProductServiceTest {
 
     @Test
     void createProductReview() {
-        SellerDto sellerDto = new SellerDto(1L, "user", "test@mail.ru");
+        SellerDto sellerDto = new SellerDto(1L, "user", ZonedDateTime.now(), 100L);
         ReviewDto mockReviewDto = new ReviewDto(1L, "test", "another", 4, ZonedDateTime.now(), null,1L,sellerDto);
         List<Review> mockReviews = new ArrayList<>();
         Product mockProduct = Product.builder().id(1L).reviews(mockReviews).build();
@@ -215,7 +215,7 @@ class ProductServiceTest {
     @Test
     void createProductQuestion() {
         User mockUser = User.builder().id(2L).username("user").build();
-        SellerDto sellerDto = new SellerDto(2L, "user", "test@mail.ru");
+        SellerDto sellerDto = new SellerDto(2L, "user", ZonedDateTime.now(), 100L);
         List<Question> questions = new ArrayList<>();
         Product mockProduct = Product.builder().id(1L).questions(questions).build();
         QuestionDto questionDto = new QuestionDto(ZonedDateTime.now(), sellerDto, "message", "answer", 1L);

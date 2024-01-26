@@ -4,6 +4,7 @@ import {RegisterUser} from 'src/app/models/register-user';
 import {AuthService} from 'src/app/services/auth.service';
 import {TokenService} from 'src/app/services/token.service';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {moment} from "ngx-bootstrap/chronos/testing/chain";
 
 @Component({
     selector: 'app-register',
@@ -52,7 +53,6 @@ export class RegisterComponent implements OnInit {
     }
 
     onRegister() {
-        console.log("test")
         console.log(this.registerForm.get('firstName').hasError('required'))
         if(this.registerForm.invalid) {
             return;

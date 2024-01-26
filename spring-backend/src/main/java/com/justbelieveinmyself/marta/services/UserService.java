@@ -14,7 +14,6 @@ import com.justbelieveinmyself.marta.domain.mappers.ProductMapper;
 import com.justbelieveinmyself.marta.domain.mappers.UserMapper;
 import com.justbelieveinmyself.marta.exceptions.ResponseMessage;
 import com.justbelieveinmyself.marta.repositories.UserRepository;
-import org.springframework.beans.BeanUtils;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -67,10 +66,7 @@ public class UserService implements UserDetailsService {
     }
 
     public User createNewUser(RegisterDto registrationUserDto, MultipartFile file) {
-        User user = new User();
-        BeanUtils.copyProperties(registrationUserDto, user, "passwordConfirm", "password");
-        user.setPassword(passwordEncoder.encode(registrationUserDto.getPassword()));
-        user.setRoles(Set.of(Role.USER));
+        User user = userMapper.dtoToModel(registrationUserDto, passwordEncoder);
         String path = fileHelper.uploadFile(file, UploadDirectory.AVATARS);
         user.setAvatar(path);
         return userRepository.save(user);
