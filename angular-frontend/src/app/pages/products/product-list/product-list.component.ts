@@ -28,6 +28,7 @@ export class ProductListComponent {
     @Input() isAdminPage: boolean;
     @Input() isNeedFavourites: boolean;
     @Input() isCanEdit: boolean;
+    @Input() isItemsByGrid: boolean = true;
     productInToast: Product;
     contactSeller: Seller = new Seller();
     currentUser: LocalUser;
@@ -84,10 +85,10 @@ export class ProductListComponent {
         })
     }
 
-    addOrRemoveFavourite(item: ProductWithImage, index: number) {
+    toggleFavourite(item: ProductWithImage, index: number) {
         const isFavourite = this.isFavourite[index];
 
-        this.productInteractionService.addOrRemoveFavourite(isFavourite, item.product.id).subscribe(isFavourite => {
+        this.productInteractionService.toggleFavourite(isFavourite, item.product.id).subscribe(isFavourite => {
            this.isFavourite[index] = isFavourite;
         });
     }

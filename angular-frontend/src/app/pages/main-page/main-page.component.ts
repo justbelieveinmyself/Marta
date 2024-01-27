@@ -28,6 +28,8 @@ export class MainPageComponent {
     page: Page<ProductWithImage>;
     isNeedSortByDate = false;
     isNeedSortByPrice = false;
+    isPriceCollapsed = true;
+    isItemsByGrid = true;
 
     ngOnInit(): void {
         this.user = this.tokenService.getUser();

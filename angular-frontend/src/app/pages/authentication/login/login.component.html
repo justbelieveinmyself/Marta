@@ -1,20 +1,9 @@
-<div *ngIf="!isLogged" style="display: flex; flex-direction: row; justify-content: space-evenly; align-items: center; min-height: 70vh">
-
-    <div style="width: 50%">
-        <div class="card">
-            <div class="card-header">
-                <ul class="nav nav-tabs">
-                    <li class="nav-item">
-                        <a class="nav-link active" routerLink="/login">Log In</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" routerLink="/register">Register</a>
-                    </li>
-                </ul>
-            </div>
+<div *ngIf="!isLogged" class="main-container">
+    <div class="login-container">
+        <div class="card card_with_shadow">
             <div class="card-body">
                 <h2 class="card-title-login">Welcome!</h2>
-                <form style="width: 75%" class="form-group mx-auto" #f="ngForm" (ngSubmit)="test()" novalidate>
+                <form style="width: 75%" class="form-group mx-auto" #f="ngForm" (ngSubmit)="onLogin()" novalidate>
                     <div class="form-group my-4">
                         <input type="text" class="form-control" name="username" placeholder="Username"
                                [(ngModel)]="username">
@@ -23,27 +12,44 @@
                         <input type="password" class="form-control" name="password" placeholder="Password"
                                [(ngModel)]="password">
                     </div>
-                    <input class="form-check-input" type="checkbox" id="rememberMe" [(ngModel)]="rememberMe" checked>
-                    <label class="form-check-label me-3" for="rememberMe">
+                    <input class="form-check-input" type="checkbox" id="rememberMe" name="rememberMe" [(ngModel)]="rememberMe" checked>
+                    <label class="form-check-label ms-2" for="rememberMe">
                         &nbsp;Save user
                     </label>
-                    <div class="form-group text-center mt-4">
-                        <button [disabled]="!f.valid" class="btn btn-outline-success btn-block btn-lg">Sign in</button>
+                    <div class="form-group text-center mt-4 mb-2 flex-center-column">
+                        <button [disabled]="!f.valid"  class="btn btn-outline-success btn-block login-btn btn-lg btn-with-logo">
+                            <span>Go Shopping!</span>
+                            <i class="fa-solid fa-bag-shopping ms-auto"></i>
+                        </button>
                     </div>
 
                 </form>
-                <div *ngIf="f.submitted && isLoginFail" class="alert alert-danger mt-3 mb-0 text-center">{{errorMessage}}</div>
+                <div *ngIf="f.submitted && isLoginFail"
+                     class="alert alert-danger mt-3 mb-0 text-center">{{ errorMessage }}
+                </div>
             </div>
         </div>
     </div>
 
-    <div>
-        <div class="card">
-            <h5 class="card-header text-center">Log in via the Social Network</h5>
-            <div class="card-body">
-                <button (click)="signInWithVK()" class="btn btn-outline-primary btn-lg btn-block w-100">
-                    Log In via VK <i class="fa-brands fa-vk fa-xl"></i></button>
+    <aside class="sidebox-container w-35">
+        <div class="card card_with_shadow" style="margin-bottom: 30px">
+            <div class="card-body text-center flex-center-column">
+                <button routerLink="/register" class="btn btn-outline-danger btn-lg btn-block my-3 btn-with-logo">
+                    <span>Sign Up</span>
+                    <i class="fa-solid fa-user-plus ms-auto"></i>
+                </button>
+                <h6>Haven't you managed to create <br> an account yet?</h6>
             </div>
         </div>
-    </div>
+        <div class="card card_with_shadow" style="margin-bottom: 30px">
+            <div class="card-body text-center flex-center-column">
+                <button class="btn btn-outline-primary btn-lg btn-block my-3 btn-with-logo">
+                    <span>Log In via VK</span>
+                    <i class="fa-brands fa-vk fa-xl ms-auto"></i>
+                </button>
+                <h6>Sign in via the Social Network</h6>
+            </div>
+        </div>
+    </aside>
+
 </div>

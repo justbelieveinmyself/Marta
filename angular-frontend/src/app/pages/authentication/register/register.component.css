@@ -1,5 +1,52 @@
-label{
-    padding-bottom: 5px;
-    left: 3px;
-    position: relative;
+label {
+    font-weight: 500;
+}
+
+.register-container {
+    width: 80vw;
+}
+
+.register-form {
+    padding: 20px;
+}
+
+.personal-data-input {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.7em;
+}
+
+.address-data-input {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.gender-data-input {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    margin-top: 15px;
+}
+
+.data-input-title {
+    font-weight: 500;
+    margin-top: 20px;
+}
+
+.main-container {
+    margin-bottom: 20px;
+}
+
+.btn-with-logo {
+    margin-block: 10px;
+    width: 40% !important;
+}
+
+a.login-link {
+    text-decoration: none;
+    margin-left: 10px;
+    font-weight: 500;
+    color: #198754;
 }

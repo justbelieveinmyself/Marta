@@ -36,9 +36,6 @@ export class LoginComponent implements OnInit {
             this.router.navigate(['products']);
         }
     }
-    test() {
-        console.log(this.rememberMe)
-    }
 
     onLogin(): void {
         const loginUser = new LoginUser(this.username, this.password);

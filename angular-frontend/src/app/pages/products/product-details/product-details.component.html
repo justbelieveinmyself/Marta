@@ -1,25 +1,29 @@
 <div style="display: flex">
     <span routerLinkActive="active" routerLink="../../" style="font-size: 18px;" type="button">
         <i class="fa-solid fa-arrow-left fa-lg"></i>
-        <span class="text-secondary ms-2">Main / {{card.product.category}} / {{card.product.seller.username | titlecase}}</span>
+        <span class="text-secondary ms-2">Main / {{ card.product.category ? card.product.category : "unknown" }}
+            / {{ card.product.seller.username | titlecase }}</span>
     </span>
     <span class="ms-auto mt-2">
-        <i type="button" data-bs-toggle="modal" data-bs-target="#productReportModal" class="fa-regular fa-flag fa-xl"></i>
-        <i type="button" data-bs-toggle="modal" data-bs-target="#productShareModal" class="fa-regular fa-share-from-square fa-xl ms-3"></i>
+        <i type="button" data-bs-toggle="modal" data-bs-target="#productReportModal"
+           class="fa-regular fa-flag fa-xl"></i>
+        <i type="button" data-bs-toggle="modal" data-bs-target="#productShareModal"
+           class="fa-regular fa-share-from-square fa-xl ms-3"></i>
     </span>
 
 </div>
 <div class="mb-3">
     <div style="display: flex">
-        <h3 style="word-break: break-all">{{card.product.seller.username | titlecase}}
-            / {{card.product.productName | titlecase}}</h3>
+        <h3 style="word-break: break-all">{{ card.product.seller.username | titlecase }}
+            / {{ card.product.productName | titlecase }}</h3>
     </div>
     <p class="mb-2">
-        <i class="fa-solid fa-star" style="color: #c9cc24;"></i>{{(ratingOverall ? ratingOverall : 0) | number:'1.0-1'}}&nbsp;
+        <i class="fa-solid fa-star"
+           style="color: #c9cc24;"></i>{{ (ratingOverall ? ratingOverall : 0) | number:'1.0-1' }}&nbsp;
         <span class="text-secondary"><a class="ratings ratings-router-link" routerLink="../feedback"
                                         routerLinkActive="active"
-                                        type="button">{{reviews ? reviews.length : 0}}
-            ratings</a> Art: {{this.card.product.productCode}}</span>
+                                        type="button">{{ reviews ? reviews.length : 0 }}
+            ratings</a> Art: {{ this.card.product.productCode }}</span>
     </p>
     <div class="row align-items-start mb-3">
         <img [src]="card.file" width="1" height="1" alt="photo image" class="col-1 rounded-4"
@@ -29,11 +33,11 @@
                 <tbody>
                 <tr *ngIf="productDetail">
                     <td class="w-50"><span class="text-secondary">Country of manufacture</span></td>
-                    <td>{{productDetail.manufacturer | titlecase}}</td>
+                    <td>{{ productDetail.manufacturer | titlecase }}</td>
                 </tr>
                 <tr>
                     <td><span class="text-secondary">Category</span></td>
-                    <td>{{card.product.category | titlecase}}</td>
+                    <td>{{ card.product.category | titlecase }}</td>
                 </tr>
                 </tbody>
             </table>
@@ -42,8 +46,9 @@
         <div class="col-auto">
             <div class="card card_with_shadow" style="height: auto; width: 400px; margin-left: auto;">
                 <div class="card-body">
-                    <h2 class="card-title">{{card.product.price | currency}}
-                        <span class="discount" style="font-size: 17px; margin-left: 8px;">700$</span>
+                    <h2 class="card-title">{{ card.product.price | currency }}
+                        <span class="discount"
+                              style="font-size: 17px; margin-left: 8px;">{{ card.product.discountPercentage }}%</span>
                         <a type="button" class="fa-regular fa-heart float-end"
                            [ngClass]="isFavourite? 'fa-solid' : 'fa-regular'" style="color: black"
                            (click)="addOrRemoveFavourite()"></a>
@@ -59,7 +64,7 @@
                                         aria-label="Close"></button>
                             </div>
                             <div class="toast-body">
-                                '{{card.product.productName}}' has added to cart!
+                                '{{ card.product.productName }}' has added to cart!
                             </div>
                         </div>
                     </div>
@@ -76,7 +81,7 @@
                         <i class="fa-solid fa-shop fa-2xl"></i>
                     </div>
                     <div class="col-10">
-                        <b class="col">{{card.product.seller.username | titlecase}}
+                        <b class="col">{{ card.product.seller.username | titlecase }}
                             <a class="fa-solid fa-circle-info" type="button"
                                [popover]="popoverHtml"
                                placement="bottom" style="color: #6d7583;"></a>
@@ -95,17 +100,17 @@
                 <div class="card-body" style="padding: 15px 10px 0 15px; height: auto">
                     <span style="font-size: 22px">4.8<i class="fa-solid fa-star"
                                                         style="color: #c9cc24;"> &nbsp;</i></span>
-                    <span class="ratings text-secondary">{{card.product.seller.ratingCount}} product ratings</span>
+                    <span class="ratings text-secondary">{{ card.product.seller.ratingCount }} product ratings</span>
                     <hr style="margin-top: 8px; margin-bottom: 0">
                     <table class="table table-borderless">
                         <tbody>
                         <tr *ngIf="productDetail">
                             <td class="w-50"><span class="text-secondary">Products sold</span></td>
-                            <td style="text-align: right">{{productDetail.soldCount}}</td>
+                            <td style="text-align: right">{{ productDetail.soldCount }}</td>
                         </tr>
                         <tr>
                             <td><span class="text-secondary">On Marta</span></td>
-                            <td style="text-align: right">{{card.product.seller.registeredAt | date: 'dd MMM YYYY, HH:mm'}}</td>
+                            <td style="text-align: right">{{ card.product.seller.registeredAt | date: 'dd MMM YYYY, HH:mm' }}</td>
                         </tr>
                         </tbody>
                     </table>
@@ -122,19 +127,19 @@
                     <tbody>
                     <tr *ngIf="productDetail">
                         <td class="w-35"><span class="text-secondary">Country of manufacture</span></td>
-                        <td>{{productDetail.manufacturer | titlecase}}</td>
+                        <td>{{ productDetail.manufacturer | titlecase }}</td>
                     </tr>
                     <tr>
                         <td><span class="text-secondary">Category</span></td>
-                        <td>{{card.product.category | titlecase}}</td>
+                        <td>{{ card.product.category | titlecase }}</td>
                     </tr>
                     <tr *ngIf="productDetail">
                         <td><span class="text-secondary">Dimensions</span></td>
-                        <td>{{productDetail.dimensions}}->30sm*30sm*3mm</td>
+                        <td>{{ productDetail.dimensions }}->30sm*30sm*3mm</td>
                     </tr>
                     <tr *ngIf="productDetail">
                         <td><span class="text-secondary">Weight</span></td>
-                        <td>{{productDetail.weight}}</td>
+                        <td>{{ productDetail.weight }}</td>
                     </tr>
                     </tbody>
                 </table>
@@ -142,11 +147,11 @@
             <div class="col" *ngIf="productDetail">
                 <b>Structure</b>
                 <p>
-                    {{productDetail.structure}}
+                    {{ productDetail.structure }}
                 </p>
                 <b>Description</b>
                 <p>
-                    {{productDetail.description}}
+                    {{ productDetail.description }}
                 </p>
             </div>
         </div>
@@ -157,12 +162,12 @@
             <ul class="nav nav-underline">
                 <li class="nav-item">
                     <button class="nav-link {{isReviews? 'active' : ''}}" (click)="isReviews=true">Reviews
-                        <sup>{{reviews ? reviews.length : 0}}</sup>
+                        <sup>{{ reviews ? reviews.length : 0 }}</sup>
                     </button>
                 </li>
                 <li class="nav-item">
                     <button class="nav-link {{isReviews? '' : 'active'}}" (click)="isReviews=false">Questions
-                        <sup>{{questions ? questions.length : 0}}</sup>
+                        <sup>{{ questions ? questions.length : 0 }}</sup>
                     </button>
                 </li>
                 <li class="nav-item ms-auto">
@@ -175,15 +180,15 @@
         <div *ngIf="isReviews">
             <div style="position: relative;;">
       <span style="font-size: 25px; font-weight: bold" class="ms-3">
-        {{(ratingOverall ? ratingOverall : 0) | number:'1.0-1'}} <i class="fa-solid fa-star"
-                                                                    *ngFor="let stars of [].constructor(Math.round(ratingOverall? ratingOverall : 0))"
-                                                                    style="color: #c9cc24;"></i>
+        {{ (ratingOverall ? ratingOverall : 0) | number:'1.0-1' }} <i class="fa-solid fa-star"
+                                                                      *ngFor="let stars of [].constructor(Math.round(ratingOverall? ratingOverall : 0))"
+                                                                      style="color: #c9cc24;"></i>
         <i class="fa-solid fa-star"
            *ngFor="let nostars of [].constructor(Math.round(5-(ratingOverall? ratingOverall : 0)))"
            style="color: #E1E3E6"></i>
       </span>
                 <sup class="text-secondary" style="font-size: 15px; font-weight: bold">
-                    &nbsp;{{reviews ? reviews.length : 0}} ratings</sup>
+                    &nbsp;{{ reviews ? reviews.length : 0 }} ratings</sup>
                 <button class="btn btn-outline-dark" style="position: absolute; right: 15px" data-bs-toggle="modal"
                         data-bs-target="#reviewWriteModal">Write a review
                 </button>
@@ -207,19 +212,19 @@
                                                     [ngSrc]="'https://eliaslealblog.files.wordpress.com/2014/03/user-200.png'"
                                                     width="1" height="1"
             />
-                {{review.author.username}} <br>
-                {{review.time | date: 'dd MMM YYYY, HH:mm'}}
+                {{ review.author.username }} <br>
+                {{ review.time | date: 'dd MMM YYYY, HH:mm' }}
             </span>
                                 <div style="position: absolute; top: 25px; right: 20px">
-                                    {{review.rating}} <i class="fa-solid fa-star"
-                                                         *ngFor="let stars of [].constructor(Math.round(review.rating))"
-                                                         style="color: #c9cc24;"></i>
+                                    {{ review.rating }} <i class="fa-solid fa-star"
+                                                           *ngFor="let stars of [].constructor(Math.round(review.rating))"
+                                                           style="color: #c9cc24;"></i>
                                     <i class="fa-solid fa-star"
                                        *ngFor="let nostars of [].constructor(Math.round(5-review.rating))"
                                        style="color: #E1E3E6;"></i>
                                 </div>
                                 <div style="white-space: pre-wrap;">
-                                    {{review.message}}
+                                    {{ review.message }}
                                 </div>
                                 <div style="display: flex; ">
                                     <div style="margin-right: 10px" *ngFor="let photo of review.photos">
@@ -238,7 +243,8 @@
             </div>
 
             <button class="btn btn-lg btn-outline-dark mt-3" routerLink="../feedback" routerLinkActive="active">View all
-                reviews</button>
+                reviews
+            </button>
         </div>
 
         <div *ngIf="!isReviews">
@@ -267,23 +273,25 @@
             <span style="display: inline-flex"><img class="rounded-4 me-2" alt="image for question"
                                                     style="width: 50px; height: 50px; object-fit: cover;"
                                                     src="https://eliaslealblog.files.wordpress.com/2014/03/user-200.png"/>
-                {{question.author.username}} <br>
-                {{question.time | date: 'dd MMM YYYY, HH:mm'}}
+                {{ question.author.username }} <br>
+                {{ question.time | date: 'dd MMM YYYY, HH:mm' }}
             </span>
                                 <div class="mt-2" style="white-space: pre-wrap">
-                                    {{question.message}}
+                                    {{ question.message }}
                                 </div>
                                 <div class="mt-2" style="white-space: pre-wrap;">
                                     <b>✓ Brand Representative</b> <br>
-                                    {{question.answer}}
+                                    {{ question.answer }}
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <button class="btn btn-lg btn-outline-dark mt-3" routerLink="../questions" routerLinkActive="active">View all
-                questions</button>
+            <button class="btn btn-lg btn-outline-dark mt-3" routerLink="../questions" routerLinkActive="active">View
+                all
+                questions
+            </button>
         </div>
     </div>
 </div>
@@ -335,8 +343,8 @@
          style="min-width: 800px">
         <div class="modal-content">
             <div class="modal-header mt-2 mx-3">
-                <h1 class="modal-title fs-5"><b>Product Review «{{card.product.seller.username | titlecase}}
-                    / {{card.product.productName | titlecase}}»</b></h1>
+                <h1 class="modal-title fs-5"><b>Product Review «{{ card.product.seller.username | titlecase }}
+                    / {{ card.product.productName | titlecase }}»</b></h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body mx-4" style="font-size: 17px">
@@ -466,10 +474,17 @@
                     <button type="button" class="btn-close ms-auto" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="row-cols-2">
-                    <i (click)="goToLink('https://t.me/share/url?url=&text=')" class="col-2 fa-brands fa-telegram fa-2xl increase_size" style="color: #35ACE1" type="button"></i>
-                    <i (click)="goToLink('https://vk.com/share.php?url=&comment=')" class="col-2 fa-brands fa-vk fa-2xl increase_size" style="color: #5181B8" type="button"></i>
-                    <i (click)="goToLink('https://connect.ok.ru/offer?url=&title=')" class="col-2 fa-brands fa-square-odnoklassniki fa-2xl increase_size" style="color: #EF7D01" type="button"></i>
-                    <i (click)="goToLink('https://web.whatsapp.com/send?text=')" class="col-2 fa-brands fa-square-whatsapp fa-2xl increase_size" style="color: #25D366" type="button"></i>
+                    <i (click)="goToLink('https://t.me/share/url?url=&text=')"
+                       class="col-2 fa-brands fa-telegram fa-2xl increase_size" style="color: #35ACE1"
+                       type="button"></i>
+                    <i (click)="goToLink('https://vk.com/share.php?url=&comment=')"
+                       class="col-2 fa-brands fa-vk fa-2xl increase_size" style="color: #5181B8" type="button"></i>
+                    <i (click)="goToLink('https://connect.ok.ru/offer?url=&title=')"
+                       class="col-2 fa-brands fa-square-odnoklassniki fa-2xl increase_size" style="color: #EF7D01"
+                       type="button"></i>
+                    <i (click)="goToLink('https://web.whatsapp.com/send?text=')"
+                       class="col-2 fa-brands fa-square-whatsapp fa-2xl increase_size" style="color: #25D366"
+                       type="button"></i>
                 </div>
                 <div class="justify-content-center" style="display: flex; margin-top: 40px">
                     <button class="btn btn-outline-dark w-75" (click)="copyToClipboard()">
@@ -503,8 +518,8 @@
     <div class="modal-dialog modal-dialog-centered" style="min-width: 300px">
         <div class="modal-content">
             <div class="modal-header mt-2 mx-3">
-                <h1 class="modal-title fs-5"><b>Order: {{card.product.seller.username | titlecase}}
-                    / {{card.product.productName | titlecase}}</b></h1>
+                <h1 class="modal-title fs-5"><b>Order: {{ card.product.seller.username | titlecase }}
+                    / {{ card.product.productName | titlecase }}</b></h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
@@ -519,12 +534,12 @@
                 <div style="font-size: 18px" class="mt-2">
                     <i type="button" (click)="removeNumberOfProduct()"
                        class="fa-solid fa-square-minus fa-xl"></i>
-                    {{countOfProductInOrder}}
+                    {{ countOfProductInOrder }}
                     <i type="button" (click)="addNumberOfProduct()"
                        class="fa-solid fa-square-plus fa-xl"></i>
                 </div>
                 <div class="name_card_main mt-2">
-                    Total: {{totalPrice| currency}}
+                    Total: {{ totalPrice| currency }}
                 </div>
                 <div class="mt-3 justify-content-center" style="display: flex">
                     <button class="btn btn-outline-dark w-75" data-bs-dismiss="modal" (click)="orderNow()">Buy now

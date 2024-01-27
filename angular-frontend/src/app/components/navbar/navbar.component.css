@@ -1,6 +1,12 @@
-
-@media (max-width: 1230px) {
+@media (max-width: 1107px) {
     .navbar-nav {
+        display: none;
+    }
+
+}
+
+@media (max-width: 1213px) {
+    .btn-logout {
         display: none;
     }
 

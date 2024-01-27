@@ -59,7 +59,7 @@ export class ProductInteractionService {
         });
     }
 
-    addOrRemoveFavourite(isFavourite: boolean, productId: number): Observable<boolean> {
+    toggleFavourite(isFavourite: boolean, productId: number): Observable<boolean> {
         if (isFavourite) {
             return this.productService.deleteProductFromFavourite(productId).pipe(
                 map(() => false)

@@ -61,7 +61,7 @@ class AuthServiceTest {
 
         ResponseEntity<SellerDto> test = authService.createNewUser(registerDto, new MockMultipartFile("test", "test".getBytes()));
         assertEquals("user", test.getBody().getUsername());
-        assertEquals("test@mail.ru", test.getBody().getEmail());
+        assertEquals(1L, test.getBody().getId());
     }
 
     @Test

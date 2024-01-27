@@ -19,6 +19,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.time.ZonedDateTime;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
@@ -43,7 +45,7 @@ class AuthControllerTest {
         RegisterDto registerDto = new RegisterDto("Dmitry", "Salenko", "user", "123", "123", "test@mail.ru", "+79788112224", "Kerm st. 12", "New York", "4242232", "USA");
 
 
-        when(authService.createNewUser(any(), any())).thenReturn(ResponseEntity.ok(new SellerDto(1L, "user", "test@mail.ru")));
+        when(authService.createNewUser(any(), any())).thenReturn(ResponseEntity.ok(new SellerDto(1L, "user", ZonedDateTime.now(), 100L)));
 
         ObjectMapper objectMapper = new ObjectMapper();
         String registerDtoJson = objectMapper.writeValueAsString(registerDto);
@@ -57,7 +59,7 @@ class AuthControllerTest {
                 )
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.username", Matchers.equalTo("user")))
-                .andExpect(jsonPath("$.email", Matchers.equalTo("test@mail.ru")));
+                .andExpect(jsonPath("$.ratingCount", Matchers.equalTo(100L)));
     }
 
 

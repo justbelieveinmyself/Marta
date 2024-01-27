@@ -1,69 +1,179 @@
-<div *ngIf="!isLogged; else xd">
+<div *ngIf="!isLogged;" class="main-container">
+    <div class="card card_with_shadow">
+        <div class="card-body register-container">
+            <h2 class="card-title-login">Registration</h2>
+            <form class="register-form" #f="ngForm" [formGroup]="registerForm" novalidate>
+                <div class="personal-data-input">
+                    <div class="form-group">
+                        <label for="firstName">Name</label>
+                        <input type="text" class="form-control" id="firstName" name="firstName"
+                               placeholder="Enter your name"
+                               formControlName="firstName">
+                        <div class="alert alert-danger" *ngIf="registerForm.get('firstName').hasError('required') && f.submitted">
+                            The Name should be.
+                        </div>
+                    </div>
 
-    <div class="container w-50 justify-content-center mb-3">
-        <div class="card">
-          <div class="card-header">
-            <ul class="nav nav-tabs">
-              <li class="nav-item">
-                <a class="nav-link" routerLink="/login">Log In</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link active" routerLink="/register">Register</a>
-              </li>
-            </ul>
-          </div>
-          <div class="card-body">
-            <form class="form-group mx-auto w-75" #f="ngForm" (ngSubmit)="onRegister()" novalidate>
-              <div class="form-group my-3">
-                <label class="test" for="firstName">First Name</label>
-                <input type="text" class="form-control" name="firstname" placeholder="First Name" [(ngModel)]="firstName">
-              </div>
-              <div class="form-group my-3">
-                <label for="lastName">Last Name</label>
-                <input type="text" class="form-control" name="lastName" placeholder="Last Name" [(ngModel)]="lastName">
-              </div>
-              <div class="form-group my-3">
-                <label for="username">Username</label>
-                <input type="text" class="form-control" name="username" placeholder="Username" [(ngModel)]="username">
-              </div>
-              <div class="form-group my-3">
-                <label for="email">Email</label>
-                <input type="text" class="form-control" name="email" placeholder="Email" [(ngModel)]="email">
-              </div>
-              <div class="form-group my-3">
-                <label for="password">Password</label>
-                <input type="password" class="form-control" name="password" placeholder="Password" [(ngModel)]="password">
-              </div>
-              <div class="form-group my-3">
-                <label for="passwordConfirm">Confirm password</label>
-                <input type="password" class="form-control" name="passwordConfirm" placeholder="Password" [(ngModel)]="passwordConfirm">
-              </div>
-              <div class="form-group mb-3">
-                <label for="avatar" class="form-label">Upload user image</label>
-                <input type="file" (change)="onFileSelected($event)" class="form-control" name="avatar">
-              </div>
-              <div class="form-group text-center">
-                <button [disabled]="!f.valid"
-                  class="btn btn-outline-success btn-block btn-lg">Submit</button>
-              </div>
+                    <div class="form-group">
+                        <label for="surname">Surname</label>
+                        <input type="text" class="form-control" id="surname" name="lastName"
+                               placeholder="Enter your surname"
+                               formControlName="lastName">
+                        <div class="alert alert-danger" *ngIf="registerForm.get('lastName').
+                    hasError('required') && f.submitted">
+                            The Surname should be.
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" class="form-control" id="username" name="username"
+                               placeholder="Enter your username"
+                               formControlName="username">
+                        <div class="alert alert-danger" *ngIf="registerForm.get('username').
+                    hasError('required') && f.submitted">
+                            The Username should be.
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email address</label>
+                        <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email"
+                               formControlName="email">
+                        <div class="alert alert-danger" *ngIf="registerForm.get('email').
+                    hasError('required') && f.submitted">
+                            The Email should be.
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" class="form-control" id="password" name="password"
+                               placeholder="Enter your password"
+                               formControlName="password">
+                        <div class="alert alert-danger" *ngIf="registerForm.get('password').
+                    hasError('required') && f.submitted">
+                            The Password should be.
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="passwordConfirm">Confirm Password</label>
+                        <input type="password" class="form-control" id="passwordConfirm" name="passwordConfirm"
+                               placeholder="Confirm your password"
+                               formControlName="passwordConfirm">
+                        <div class="alert alert-danger" *ngIf="registerForm.get('passwordConfirm').
+                    hasError('required') && f.submitted">
+                            The Password should be.
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="birthDate">Date of Birth</label>
+                        <input type="date" class="form-control" id="birthDate" name="birthDate" placeholder="Choose your date if birth"
+                               formControlName="birthDate">
+                        <div class="alert alert-danger" *ngIf="registerForm.get('birthDate').
+                    hasError('required') && f.submitted">
+                            The Date of Birth should be.
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="text" class="form-control" id="phone" name="phone" placeholder="Enter your number"
+                               formControlName="phone">
+                        <div class="alert alert-danger" *ngIf="registerForm.get('phone').
+                    hasError('required') && f.submitted">
+                            The Phone Number should be.
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="avatar">Avatar</label>
+                        <input type="file" (change)="onFileSelected($event)" id="avatar" class="form-control"
+                               name="Upload your avatar">
+                    </div>
+
+                </div>
+                <div>
+                    <h3 class="data-input-title">Gender</h3>
+                    <div class="gender-data-input">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="gender" id="inlineRadio1"
+                                   value="Male" formControlName="gender">
+                            <label class="form-check-label" for="inlineRadio1">Male</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="gender" id="inlineRadio2"
+                                   value="Female" formControlName="gender">
+                            <label class="form-check-label" for="inlineRadio2">Female</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="gender" id="inlineRadio3"
+                                   value="No" formControlName="gender">
+                            <label class="form-check-label" for="inlineRadio3">Prefer not to say</label>
+                        </div>
+                    </div>
+
+                </div>
+                <h3 class="data-input-title">Address</h3>
+                <div class="address-data-input">
+                    <div class="form-group mt-2 mb-4">
+                        <input type="text" class="form-control" name="address" placeholder="Enter your street address"
+                               formControlName="address">
+                    </div>
+                    <div class="alert alert-danger" *ngIf="registerForm.get('address').
+                    hasError('required') && f.submitted">
+                        The Address should be.
+                    </div>
+                    <div class="form-group mb-4">
+                        <input type="text" class="form-control" name="address2"
+                               placeholder="Enter your street address line 2"
+                               formControlName="address2">
+                    </div>
+                    <div class="personal-data-input">
+                        <div class="input-group">
+                            <label class="input-group-text" for="country">Country</label>
+                            <select id="country" class="form-select" name="country" formControlName="country">
+                                <option selected disabled>Choose...</option>
+                                <option *ngFor="let country of countries">{{ country }}</option>
+                            </select>
+                            <div class="alert alert-danger" *ngIf="registerForm.get('country').
+                    hasError('required') && f.submitted">
+                                The Country should be.
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="city" placeholder="Enter your city"
+                                   formControlName="city">
+                            <div class="alert alert-danger" *ngIf="registerForm.get('city').
+                    hasError('required') && f.submitted">
+                                The City should be.
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="region" placeholder="Enter your region"
+                                   formControlName="region">
+                            <div class="alert alert-danger" *ngIf="registerForm.get('region').
+                    hasError('required') && f.submitted">
+                                The Region should be.
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="postalCode" placeholder="Enter your postal code"
+                                   formControlName="postalCode">
+                            <div class="alert alert-danger" *ngIf="registerForm.get('postalCode').
+                    hasError('required') && f.submitted">
+                                The Postal Code should be.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group text-center flex-center-column">
+                        <button [disabled]="f.invalid && f.submitted" (click)="onRegister()"  class="btn btn-outline-danger btn-block btn-lg btn-with-logo">
+                            <span>Sign Up</span>
+                            <i class="fa-solid fa-user-plus ms-auto"></i>
+                        </button>
+                        <div>Already have an account?<a class="login-link" routerLink="/login" routerLinkActive="active">Sign in</a></div>
+                    </div>
+                    <div *ngIf="f.submitted && isRegisterFail" class="alert alert-danger mt-3">{{ errorMessage }}</div>
+                </div>
             </form>
-            <div *ngIf="f.submitted && isRegisterFail" class="alert alert-danger mt-3">{{errorMessage}}</div>
-          </div>
-        </div>
-      </div>
 
-    <div class="col-md-4 mx-auto mb-3">
-        <div class="card">
-            <h5 class="card-header  text-center">Log in via the Social Network</h5>
-            <div class="card-body">
-                <button class="btn btn-outline-primary btn-lg btn-block w-100">
-                    Log In via VK <i class="fa-brands fa-vk fa-xl"></i></button>
-            </div>
         </div>
     </div>
 </div>
-
-
-<ng-template #xd>
-    <div> You're already, autheroized</div>
-</ng-template>
