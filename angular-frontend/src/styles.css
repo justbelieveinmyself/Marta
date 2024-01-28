@@ -5,7 +5,6 @@ body {
 }
 
 .bluecolor {
-    text-decoration-line: none;
     color: deepskyblue;
 }
 
@@ -130,4 +129,12 @@ html {
 
 input.form-control {
     background-color: #f0f2f5;
+}
+
+a:visited {
+    color: inherit !important;
+}
+
+a {
+    text-decoration: none;
 }

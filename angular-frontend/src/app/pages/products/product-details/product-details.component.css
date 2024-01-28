@@ -13,7 +13,6 @@
 .rotatable_mark:hover .rotatable {
     transition: .4s;
     rotate: 180deg;
-
 }
 
 .appearing {
@@ -103,5 +102,4 @@ span.discount {
 
 a {
     text-decoration-line: none;
-    color: deepskyblue;
 }

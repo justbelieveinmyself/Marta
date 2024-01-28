@@ -23,21 +23,18 @@ export class ProductListComponent {
     ) {}
 
     @Input() card: ProductWithImage[];
-    @Input() orders: Order[];
-    @Input() isOrders: boolean;
     @Input() isAdminPage: boolean;
     @Input() isNeedFavourites: boolean;
     @Input() isCanEdit: boolean;
     @Input() isItemsByGrid: boolean = true;
     productInToast: Product;
-    contactSeller: Seller = new Seller();
     currentUser: LocalUser;
-    messageForSeller = "";
     isFavourite: boolean[];
 
     ngOnInit() {
         this.currentUser = this.tokenService.getUser();
     }
+
     ngOnChanges(){
         if(this.isNeedFavourites && this.card){
             this.getFavourites();
@@ -91,10 +88,5 @@ export class ProductListComponent {
         this.productInteractionService.toggleFavourite(isFavourite, item.product.id).subscribe(isFavourite => {
            this.isFavourite[index] = isFavourite;
         });
-    }
-
-
-    sendMessageToSeller() {
-
     }
 }

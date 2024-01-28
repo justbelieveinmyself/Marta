@@ -50,15 +50,11 @@ a {
     color: deepskyblue;
 }
 
-.grid-container {
+.list-container {
     display: grid;
     grid-gap: 20px;
     width: 100%;
     grid-template-columns: repeat(auto-fit, minmax(265px, 1fr));
-}
-
-.list-container {
-
 }
 
 .catalog-item {
@@ -66,13 +62,13 @@ a {
 }
 
 @media (max-width: 1399px) {
-    .grid-container {
+    .list-container {
         grid-template-columns: 286px 286px 286px;
     }
 }
 
 @media (max-width: 1199px) {
-    .grid-container {
+    .list-container {
         grid-template-columns: 286px 286px;
     }
 }
