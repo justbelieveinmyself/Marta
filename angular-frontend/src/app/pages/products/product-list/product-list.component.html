@@ -1,54 +1,48 @@
-<ng-container *ngIf="isItemsByGrid; else noGrid">
-    <div class="grid-container">
-        <div *ngFor="let item of card; let i=index" class="catalog-item">
-            <div class="card object-with-hidden-item" style="width: 18rem; height: 31rem">
-                <b [ngStyle]="item.product.isVerified? {'color':'green'}:{'color':'red'}"
-                   style="position: absolute; top: 8px; right: 10px; font-size: 13px;">
-                    <i class="fa-solid fa-2xl"
-                       tooltip="{{item.product.isVerified? 'Verified by the administrator':'Not yet verified by the administrator'}}"
-                       [ngClass]="item.product.isVerified? 'fa-check': 'fa-xmark'"></i>
-                </b>
-                <i routerLinkActive="active" [routerLink]="'/update-product/' + item.product.id" *ngIf="isCanEdit"
-                   class="fa-solid fa-pen-to-square fa-xl"
-                   style="position: absolute; top: 18px; left: 10px;cursor: pointer"></i>
-                <a *ngIf="isNeedFavourites" type="button" class="fa-regular fa-heart fa-xl"
-                   [ngClass]="isFavourite[i]? 'fa-solid' : 'fa-regular'"
-                   style="color: red; position: absolute; top: 16px; left: 10px;"
-                   (click)="toggleFavourite(item, i)"></a>
-                <img type="button" routerLink="/products/{{item.product.id}}/details" routerLinkActive="active"
-                     [src]="item.file" style="object-fit: cover;" height="381.86" class="card-img-top"
-                     alt="product image">
-                <div class="card-body" type="button" routerLink="/products/{{item.product.id}}/details"
-                     routerLinkActive="active">
-                    <h5 class="card-title">{{ item.product.price | currency }}
-                        <span style="text-decoration: line-through; font-size: 15px;
+<div [ngClass]="{'grid-container': isItemsByGrid, 'list-container': !isItemsByGrid}">
+    <div *ngFor="let item of card; let i=index" class="catalog-item">
+        <div class="card object-with-hidden-item" style="height: min-content;"
+             [ngStyle]="isItemsByGrid ? {'width':'18rem'} : {'width':'60rem'}">
+            <b [ngStyle]="item.product.isVerified? {'color':'green'}:{'color':'red'}"
+               style="position: absolute; top: 8px; right: 10px; font-size: 13px;">
+                <i class="fa-solid fa-2xl"
+                   tooltip="{{item.product.isVerified? 'Verified by the administrator':'Not yet verified by the administrator'}}"
+                   [ngClass]="item.product.isVerified? 'fa-check': 'fa-xmark'"></i>
+            </b>
+            <i routerLinkActive="active" [routerLink]="'/update-product/' + item.product.id" *ngIf="isCanEdit"
+               class="fa-solid fa-pen-to-square fa-xl"
+               style="position: absolute; top: 18px; left: 10px;cursor: pointer"></i>
+            <a *ngIf="isNeedFavourites" type="button" class="fa-regular fa-heart fa-xl"
+               [ngClass]="isFavourite[i]? 'fa-solid' : 'fa-regular'"
+               style="color: red; position: absolute; top: 16px; left: 10px;"
+               (click)="toggleFavourite(item, i)"></a>
+            <img type="button" routerLink="/products/{{item.product.id}}/details" routerLinkActive="active"
+                 [src]="item.file" style="object-fit: cover;" height="381.86" class="card-img-top"
+                 alt="product image">
+            <div class="card-body" type="button" routerLink="/products/{{item.product.id}}/details"
+                 routerLinkActive="active">
+                <h5 class="card-title">{{ item.product.price | currency }}
+                    <span style="text-decoration: line-through; font-size: 15px;
                     color: #868695; margin-left: 8px;">{{ item.product.discountPercentage }}%</span>
-                    </h5>
-                    <div class="hidden-text-2">
-                        <div class="card-text"
-                             style="word-break: break-all">{{ item.product.seller.username | titlecase }}
-                            / {{ item.product.productName | titlecase }}
-                        </div>
+                </h5>
+                <div class="hidden-text-2">
+                    <div class="card-text"
+                         style="word-break: break-all">{{ item.product.seller.username | titlecase }}
+                        / {{ item.product.productName | titlecase }}
                     </div>
                 </div>
-                <div class="card bottom-wrap hidden-item">
-                    <div class="btn btn-outline-dark me-2" (click)="addToCart(item.product)">Add to cart</div>
-                    <ng-container *ngIf="isAdminPage">
-                        <div *ngIf="!item.product.isVerified" (click)="verifyProduct(item.product, i)"
-                             class="btn btn-outline-success me-2">Verify
-                        </div>
-                        <div (click)="deleteProduct(item.product, i)" class="btn btn-outline-danger">Delete</div>
-                    </ng-container>
-                </div>
+            </div>
+            <div class="card bottom-wrap hidden-item">
+                <div class="btn btn-outline-dark me-2" (click)="addToCart(item.product)">Add to cart</div>
+                <ng-container *ngIf="isAdminPage">
+                    <div *ngIf="!item.product.isVerified" (click)="verifyProduct(item.product, i)"
+                         class="btn btn-outline-success me-2">Verify
+                    </div>
+                    <div (click)="deleteProduct(item.product, i)" class="btn btn-outline-danger">Delete</div>
+                </ng-container>
             </div>
         </div>
     </div>
-</ng-container>
-<ng-template #noGrid>
-    <div class="list-container">
-
-    </div>
-</ng-template>
+</div>
 <div class="toast-container position-fixed bottom-0 end-0 p-3">
     <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
         <div class="toast-header">

@@ -3,14 +3,14 @@
 <div class="main-container">
     <aside class="filter-panel card_with_shadow card">
         <label class="filter-block p-3 highlight-hover">
-            <input class="form-check-input " type="checkbox" (change)="this.getProducts(0)"
+            <input class="form-check-input " type="checkbox"
                    [(ngModel)]="pageDataService.isFilteredByWithPhoto">
             <span class="form-check-label ps-2">
                 With a photo
             </span>
         </label>
         <label class="filter-block p-3 highlight-hover">
-            <input class="form-check-input" type="checkbox" (change)="this.getProducts(0)"
+            <input class="form-check-input" type="checkbox"
                    [(ngModel)]="pageDataService.isFilteredByVerified">
             <span class="form-check-label ps-2">
                 Verified
@@ -23,8 +23,10 @@
             </span>
         </label>
         <div class="filter-block">
-            <a class="ui-link w-100 highlight-hover p-3" [ngClass]="isPriceCollapsed? '' : 'ui-collapse_link__in'" (click)="isPriceCollapsed = !isPriceCollapsed">
-                <i class="fa-solid filter-block__icon highlight-hover-blue" [ngClass]="isPriceCollapsed? 'fa-chevron-down' : 'fa-chevron-up'"></i>
+            <a class="ui-link w-100 highlight-hover p-3" [ngClass]="isPriceCollapsed? '' : 'ui-collapse_link__in'"
+               (click)="isPriceCollapsed = !isPriceCollapsed">
+                <i class="fa-solid filter-block__icon highlight-hover-blue"
+                   [ngClass]="isPriceCollapsed? 'fa-chevron-down' : 'fa-chevron-up'"></i>
                 <span class="form-check-label ps-2 highlight-hover-blue">
                     Price
                 </span>
@@ -81,8 +83,8 @@
             </div>
         </div>
         <div class="btn-block">
-            <button class="btn btn-info btn-block__btn-bold">Apply</button>
-            <button class="btn btn-light btn-block__btn">Reset</button>
+            <button class="btn btn-info btn-block__btn-bold" (click)="this.getProducts(0)">Apply</button>
+            <button class="btn btn-light btn-block__btn" (click)="resetPageData()">Reset</button>
         </div>
     </aside>
     <div class="catalog-container">
@@ -95,16 +97,19 @@
                 </a>
             </div>
             <div class="sort-panel_view-mode">
-                <input type="radio" id="mode-tile" [checked]="isItemsByGrid" name="view-mode" class="sort-panel_view-mode-input" value="tile">
+                <input type="radio" id="mode-tile" [checked]="isItemsByGrid" name="view-mode"
+                       class="sort-panel_view-mode-input" value="tile">
                 <i for="mode-tile" (click)="isItemsByGrid = true"
                    class="fa-solid fa-grip-vertical fa-xl sort-panel_view-mode-label sort-panel_view-mode-label_tile"></i>
-                <input type="radio" id="mode-simple" [checked]="!isItemsByGrid" name="view-mode" class="sort-panel_view-mode-input" value="simple">
+                <input type="radio" id="mode-simple" [checked]="!isItemsByGrid" name="view-mode"
+                       class="sort-panel_view-mode-input" value="simple">
                 <i for="mode-simple" (click)="isItemsByGrid = false"
                    class="fa-solid fa-list-ul fa-xl sort-panel_view-mode-label sort-panel_view-mode-label_simple"></i>
             </div>
         </div>
 
-        <app-product-list [isItemsByGrid]="isItemsByGrid" [card]="products" [isNeedFavourites]="true"></app-product-list>
+        <app-product-list [isItemsByGrid]="isItemsByGrid" [card]="products"
+                          [isNeedFavourites]="true"></app-product-list>
 
     </div>
 

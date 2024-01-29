@@ -209,32 +209,10 @@ input[type=radio] {
     width: 100%;
 }
 
-.catalog-container {
-    width: calc(100% - 0px);
-}
-
-@media (max-width: 1399px) {
-    .sort-panel-wrap {
-        width: calc(100% - 108px);
-    }
-}
-
-@media (max-width: 1199px) {
-    .sort-panel-wrap {
-        width: calc(100% - 210px);
-    }
-}
-
-@media (max-width: 991px) {
-    .sort-panel-wrap {
-        width: calc(100% - 10px);
-    }
-}
-
 @media (max-width: 767px) {
-    .sort-panel-wrap {
+/*    .sort-panel-wrap {
         width: calc(100% - 0px);
-    }
+    }*/
 
     .filter-panel {
         display: none;

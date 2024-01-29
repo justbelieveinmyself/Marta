@@ -82,4 +82,8 @@ export class MainPageComponent {
         this.isNeedSortByPrice = true;
     }
 
+    resetPageData() {
+        this.pageDataService.resetFilters();
+        this.getProducts(0);
+    }
 }

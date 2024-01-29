@@ -68,4 +68,9 @@ export class PageDataService {
     set searchWord(value: string) {
         this._searchWord = value;
     }
+
+    resetFilters() {
+        this._isFilteredByVerified = false;
+        this._isFilteredByWithPhoto = false;
+    }
 }
