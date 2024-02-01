@@ -1,32 +1,32 @@
-<div class="card card_with_shadow mb-4">
-        <ng-container *ngIf="orders.length > 0; else noOrders">
-            <div
-                style="display: flex; position: sticky; top: 1px; z-index: 5; background-color: #FFFFFF; padding: 10px; border: 1px solid black; border-radius: 10px 10px 10px 10px;"
-                class="my-3 mx-3">
-                <i class="fa-solid fa-location-dot fa-2xl mt-4 me-3"></i> Simferopol, Zalesskaya Street 81 <br>
-                The point of delivery. Daily: 10:00 - 21:00
-                <div class="ms-auto my-auto">
-                    <b class="me-2"
-                       style="background-color: #0DCCF3; border-radius: 20px 20px 20px 20px; padding: 4px 12px">12
-                        522</b>
-                    <span class="text-secondary">Receiving code</span>
-                </div>
+<div class="card card_with_shadow mb-4 main-container">
+    <ng-container *ngIf="orders.length > 0; else noOrders">
+        <div
+            class="delivery-panel">
+            <i class="fa-solid fa-location-dot fa-2xl mt-4 me-3"></i>
+            <p>
+                <span>Simferopol, Zalesskaya Street 81</span> <br>
+                <span>The point of delivery. Daily: 10:00 - 21:00</span>
+            </p>
+            <div class="ms-auto my-auto">
+                <span class="receiving-code">12 522</span>
+                <span class="text-secondary">Receiving code</span>
             </div>
-            <app-order-list [orders]="orders"></app-order-list>
-            <b class="ms-3" style="font-size: 20px">Total: <span
-                style="border-bottom: 2px dotted rgb(108, 117, 125); color: #212529;">{{ totalSum | currency }}</span></b>
-            <br>
-            <div class="ms-3 btn btn-outline-dark mt-3" style="font-size: 20px">To be paid: {{ totalSum | currency }}
+        </div>
+            <app-order-list [orders]="orders" style="width: 100%; margin-top: 8px"></app-order-list>
+        <span class="ms-3" style="font-size: 20px">Total: <span
+            style="border-bottom: 2px dotted rgb(108, 117, 125); color: #212529;">{{ totalSum | currency }}</span></span>
+        <div class="mx-auto btn btn-outline-dark mt-3 w-50 mb-2" style="font-size: 20px">To be
+            paid: {{ totalSum | currency }}
+        </div>
+    </ng-container>
+    <ng-template #noOrders>
+        <div class="card-body mx-auto">
+            <div class="name_card my-3">The orders are still empty</div>
+            <div class="text-secondary my-3">Take a look at the main page to select products <br> or find what you need
+                in the search
             </div>
-        </ng-container>
-        <ng-template #noOrders>
-                <div class="card-body mx-auto">
-                    <div class="name_card my-3">The orders are still empty</div>
-                    <div class="text-secondary my-3">Take a look at the main page to select products <br> or find what you need
-                        in the search
-                    </div>
-                    <a type="button" routerLink="/products" routerLinkActive="active"
-                       class="btn btn-outline-dark w-75 my-3 ms-4">Go to the main page</a>
-                </div>
-        </ng-template>
+            <a type="button" routerLink="/products" routerLinkActive="active"
+               class="btn btn-outline-dark w-75 my-3 ms-4">Go to the main page</a>
+        </div>
+    </ng-template>
 </div>
