@@ -12,10 +12,13 @@
                 <span class="text-secondary">Receiving code</span>
             </div>
         </div>
-            <app-order-list [orders]="orders" style="width: 100%; margin-top: 8px"></app-order-list>
-        <span class="ms-3" style="font-size: 20px">Total: <span
+            <h2 class="order-title">Ready to receive</h2>
+            <app-order-list [orders]="deliveredOrders" style="width: 100%; margin-top: 8px; padding-inline: 10px"></app-order-list>
+            <h2 class="order-title">On the way</h2>
+            <app-order-list [orders]="notDeliveredOrders" style="width: 100%; margin-top: 8px; padding-inline: 10px"></app-order-list>
+        <span style="font-size: 20px; align-self: start" class="ms-3 mb-1">Total: <span
             style="border-bottom: 2px dotted rgb(108, 117, 125); color: #212529;">{{ totalSum | currency }}</span></span>
-        <div class="mx-auto btn btn-outline-dark mt-3 w-50 mb-2" style="font-size: 20px">To be
+        <div class="btn btn-outline-dark w-50 mb-2" style="font-size: 20px">To be
             paid: {{ totalSum | currency }}
         </div>
     </ng-container>

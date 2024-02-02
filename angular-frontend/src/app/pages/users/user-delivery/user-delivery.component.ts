@@ -13,12 +13,18 @@ export class UserDeliveryComponent implements OnInit {
     ) {}
 
     orders: Order[];
+    deliveredOrders: Order[];
+    notDeliveredOrders: Order[];
     totalSum: number;
 
     ngOnInit(): void {
         this.activatedRoute.data.subscribe(data => {
             const orders: Order[] = data["orders"];
             this.orders = orders.sort((order, order2) => new Date(order.orderedAt).getTime() - new Date(order2.orderedAt).getTime())
+            this.deliveredOrders = orders.filter(order => order.status === "DELIVERED");
+            this.notDeliveredOrders = orders.filter(order => order.status !== "DELIVERED");
+            console.log(this.deliveredOrders)
+            console.log(this.notDeliveredOrders)
             this.totalSum = this.countTotalSum();
         })
     }

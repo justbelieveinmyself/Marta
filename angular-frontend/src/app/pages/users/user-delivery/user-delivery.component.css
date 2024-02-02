@@ -28,3 +28,8 @@ p {
     width: calc(100% - 16px);
     margin-top: 8px;
 }
+
+.order-title {
+    font-weight: bold;
+    margin: 0;
+}
