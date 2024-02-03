@@ -1,7 +1,7 @@
 <ng-container *ngIf="favouriteProducts && favouriteProducts.length > 0; else empty">
     <div class="main-container">
         <h2>Favourites</h2>
-        <app-product-list [card]="favouriteProducts" [isNeedFavourites]="false"></app-product-list>
+        <app-product-list [card]="favouriteProducts" [isNeedFavourites]="false" style="width: 100%"></app-product-list>
     </div>
 </ng-container>
 <ng-template #empty>

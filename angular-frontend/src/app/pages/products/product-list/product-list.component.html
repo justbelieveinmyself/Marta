@@ -1,7 +1,6 @@
 <div [ngClass]="{'grid-container': isItemsByGrid, 'list-container': !isItemsByGrid}">
     <div *ngFor="let item of card; let i=index" class="catalog-item">
-        <div class="card object-with-hidden-item" style="height: min-content;"
-             [ngStyle]="isItemsByGrid ? {'width':'18rem'} : {'width':'60rem'}">
+        <div class="card object-with-hidden-item" style="height: min-content; width: 100%">
             <b [ngStyle]="item.product.isVerified? {'color':'green'}:{'color':'red'}"
                style="position: absolute; top: 8px; right: 10px; font-size: 13px;">
                 <i class="fa-solid fa-2xl"
