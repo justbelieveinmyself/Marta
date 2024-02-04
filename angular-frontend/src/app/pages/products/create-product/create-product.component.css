@@ -1,0 +1,28 @@
+.main-container {
+    display: flex;
+    justify-content: center;
+}
+
+.create-product-container {
+    flex-grow: 2;
+}
+
+.right-panel-container {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    margin-left: 10px;
+}
+
+.right-panel-top {
+}
+
+.nav-link {
+    width: 100%;
+    border: 2px #6C757D solid;
+    border-radius: 10px;
+}
+
+li.nav-item + li.nav-item {
+    margin-top: 10px;
+}

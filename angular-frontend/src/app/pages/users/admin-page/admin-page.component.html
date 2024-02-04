@@ -1,40 +1,49 @@
-<table class="table table-hover">
-    <thead>
-    <tr>
-        <th scope="col">ID</th>
-        <th scope="col">First</th>
-        <th scope="col">Last</th>
-        <th scope="col">Username</th>
-        <th scope="col">Email</th>
-        <th scope="col">Balance</th>
-        <th scope="col">Age</th>
-        <th scope="col">Phone</th>
-        <th scope="col">Avatar</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr *ngFor="let user of users; let i=index">
-        <th scope="row">{{user.id}}</th>
-        <td>{{user.firstName? user.firstName : "---"}}</td>
-        <td>{{user.lastName? user.lastName: "---"}}</td>
-        <td>{{user.username? user.username: "---"}}</td>
-        <td>{{user.email? user.email: "---"}}</td>
-        <td>{{user.balance? (user.balance| currency): "---"}}</td>
-        <td>{{user.age? user.age: "---"}}</td>
-        <td>{{user.phone? user.phone: "---"}}</td>
-        <td>
-            <img [src]="user.avatar" alt="user avatar" height="200" width="200" style="object-fit: cover"/>
-        </td>
-        <div class="pb-5 text-center align-middle" style="outline: #DEDEDE solid 1px">
-            <div class="btn btn-success">Manage page</div> <br>
-            <div class="btn btn-warning mt-2" data-bs-toggle="modal" data-bs-target="#chooseRolesModal" (click)="indexItemInModal = i; newRoles = user.roles.slice(0)">Change roles</div> <br>
-            <div class="btn btn-info mt-2" routerLink="activity/{{user.id}}" routerLinkActive="active">Activity page</div> <br>
-            <div class="btn btn-danger mt-2" (click)="deleteUser(user)">Delete user</div>
-        </div>
-    </tr>
-    </tbody>
-</table>
-
+<div class="main-container">
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">First</th>
+            <th scope="col">Last</th>
+            <th scope="col">Username</th>
+            <th scope="col">Email</th>
+            <th scope="col">Balance</th>
+            <th scope="col">Age</th>
+            <th scope="col">Phone</th>
+            <th scope="col">Avatar</th>
+            <th scope="col">Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let user of users; let i=index">
+            <th scope="row">{{ user.id }}</th>
+            <td>{{ user.firstName ? user.firstName : "---" }}</td>
+            <td>{{ user.lastName ? user.lastName : "---" }}</td>
+            <td>{{ user.username ? user.username : "---" }}</td>
+            <td>{{ user.email ? user.email : "---" }}</td>
+            <td>{{ user.balance ? (user.balance| currency) : "---" }}</td>
+            <td>{{ user.age ? user.age : "---" }}</td>
+            <td>{{ user.phone ? user.phone : "---" }}</td>
+            <td>
+                <img [src]="user.avatar" alt="user avatar" height="200" width="200" style="object-fit: cover"/>
+            </td>
+            <div class="pb-5 text-center align-middle" style="outline: #DEDEDE solid 1px">
+                <div class="btn btn-success">Manage page</div>
+                <br>
+                <div class="btn btn-warning mt-2" data-bs-toggle="modal" data-bs-target="#chooseRolesModal"
+                     (click)="indexItemInModal = i; newRoles = user.roles.slice(0)">Change roles
+                </div>
+                <br>
+                <div class="btn btn-info mt-2" routerLink="activity/{{user.id}}" routerLinkActive="active">Activity
+                    page
+                </div>
+                <br>
+                <div class="btn btn-danger mt-2" (click)="deleteUser(user)">Delete user</div>
+            </div>
+        </tr>
+        </tbody>
+    </table>
+</div>
 
 <!-- For modal with choose role -->
 <div class="modal fade" id="chooseRolesModal" tabindex="-1" aria-hidden="true">
@@ -45,16 +54,20 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body mx-4" style="font-size: 19px">
-                <input class="form-check-input" [checked]="newRoles.includes('USER')" (change)="changeStateRole('USER')" type="checkbox" id="userFlexCheck">
+                <input class="form-check-input" [checked]="newRoles.includes('USER')" (change)="changeStateRole('USER')"
+                       type="checkbox" id="userFlexCheck">
                 <label class="form-check-label" for="userFlexCheck">
                     &nbsp;User
                 </label> <br>
-                <input class="form-check-input" [checked]="newRoles.includes('ADMIN')" (change)="changeStateRole('ADMIN')" type="checkbox" id="adminFlexCheck">
+                <input class="form-check-input" [checked]="newRoles.includes('ADMIN')"
+                       (change)="changeStateRole('ADMIN')" type="checkbox" id="adminFlexCheck">
                 <label class="form-check-label" for="adminFlexCheck">
                     &nbsp;Admin
                 </label>
                 <div class="mt-3 justify-content-center" style="display: flex">
-                    <button class="btn btn-outline-dark w-75" (click)="saveRolesChanges()" data-bs-dismiss="modal" aria-label="Close">Save</button>
+                    <button class="btn btn-outline-dark w-75" (click)="saveRolesChanges()" data-bs-dismiss="modal"
+                            aria-label="Close">Save
+                    </button>
                 </div>
             </div>
         </div>

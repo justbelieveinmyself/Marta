@@ -1,14 +1,15 @@
-<div class="container w-50 justify-content-center mb-3">
-    <div class="card">
-        <div class="card-body">
-            <div style="display: flex; justify-content: center; margin-bottom: 10px">
+<div class="main-container mb-3">
+    <div class="create-product-container">
+        <div class="card card_with_shadow">
+            <div class="card-body" style="display: flex; justify-content: center; margin-bottom: 10px">
                 <form (ngSubmit)="saveProduct()" #f="ngForm" [formGroup]="productForm">
                     <h2 style="display: flex; justify-content: center; font-weight: bold">Create Product</h2>
                     <div class="input-group my-3">
                         <label class="input-group-text" for="product_name">Name</label>
-                        <input type="text" class="form-control" id="product_name" name="product_name" placeholder="Name"
+                        <input type="text" class="form-control" id="product_name" name="product_name"
+                               placeholder="Name"
                                formControlName="productName">
-<!--        TODO: add other fields from productdetail and product dtos-->
+                        <!--        TODO: add other fields from productdetail and product dtos-->
                     </div>
                     <div class="alert alert-danger" *ngIf="(productForm.get('productName').
                     hasError('required')) && f.submitted">
@@ -26,7 +27,8 @@
 
                     <div class="input-group mb-3">
                         <label class="input-group-text" for="description">Description</label>
-                        <input type="text" class="form-control" id="description" name="description" placeholder="Description"
+                        <input type="text" class="form-control" id="description" name="description"
+                               placeholder="Description"
                                formControlName="description">
                     </div>
                     <div class="alert alert-danger" *ngIf="(productForm.get('description').
@@ -35,12 +37,14 @@
                     </div>
                     <div class="input-group mb-3">
                         <label class="input-group-text" for="structure">Structure</label>
-                        <input type="text" class="form-control" id="structure" name="structure" placeholder="Structure"
+                        <input type="text" class="form-control" id="structure" name="structure"
+                               placeholder="Structure"
                                formControlName="structure">
                     </div>
                     <div class="input-group mb-3">
                         <label class="input-group-text" for="manufacturer">Manufacturer</label>
-                        <input type="text" class="form-control" id="manufacturer" name="manufacturer" placeholder="Manufacturer"
+                        <input type="text" class="form-control" id="manufacturer" name="manufacturer"
+                               placeholder="Manufacturer"
                                formControlName="manufacturer">
                     </div>
                     <div class="alert alert-danger" *ngIf="(productForm.get('manufacturer').
@@ -51,7 +55,7 @@
                         <label class="input-group-text" for="category">Category</label>
                         <select id="category" class="form-select" name="category" formControlName="category">
                             <option selected disabled>Choose...</option>
-                            <option *ngFor="let category of categories">{{category}}</option>
+                            <option *ngFor="let category of categories">{{ category }}</option>
                         </select>
                     </div>
                     <div class="alert alert-danger" *ngIf="(productForm.get('category').
@@ -60,18 +64,29 @@
                     </div>
                     <div class="input-group mb-3">
                         <label class="input-group-text" for="image">Preview Image</label>
-                        <input type="file" class="form-control" (change)="onFileSelected($event)" name="image" id="image">
+                        <input type="file" class="form-control" (change)="onFileSelected($event)" name="image"
+                               id="image">
                     </div>
                     <div style="display: flex; justify-content: center">
-                        <button type="submit" class="btn btn-outline-success btn-lg" [disabled]="f.invalid && f.submitted">Submit</button>
+                        <button type="submit" class="btn btn-outline-success btn-lg"
+                                [disabled]="f.invalid && f.submitted">Submit
+                        </button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
-    <aside class="card">
-        xd
-<!--        TODO: create side bar for navigation-->
+    <aside class="right-panel-container">
+        <div class="card right-panel-top card_with_shadow">
+            <div class="card-body">
+                <nav>
+                    <ul class="nav flex-column">
+                        <li class="nav-item"><a class="nav-link" routerLink="/profile/my-products">My products</a></li>
+                        <li class="nav-item"><a class="nav-link" routerLink="/create-product">Create New One</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
     </aside>
 </div>
 
