@@ -14,7 +14,7 @@ import java.math.BigDecimal;
 import java.util.Base64;
 import java.util.Set;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", builder = @Builder(disableBuilder = true))
 public interface UserMapper {
     @Mapping(target = "avatar", ignore = true)
     @Mapping(target = "address", ignore = true)

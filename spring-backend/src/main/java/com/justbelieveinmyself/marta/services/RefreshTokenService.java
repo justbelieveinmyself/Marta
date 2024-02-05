@@ -27,8 +27,8 @@ public class RefreshTokenService {
         this.jwtUtils = jwtUtils;
     }
 
-    public String createRefreshToken(User user){
-        if(user.getRefreshToken() != null) {
+    public String createRefreshToken(User user) {
+        if (user.getRefreshToken() != null) {
             refreshTokenRepository.delete(user.getRefreshToken());
             user.setRefreshToken(null);
         }
@@ -40,19 +40,19 @@ public class RefreshTokenService {
         return refreshToken.getToken();
     }
 
-    public RefreshResponseDto refreshToken(RefreshRequestDto refreshRequestDto){
+    public RefreshResponseDto refreshToken(RefreshRequestDto refreshRequestDto) {
         var tokenOptional = refreshTokenRepository.findRefreshTokenByToken(refreshRequestDto.getRefreshToken());
-        if(tokenOptional.isEmpty()){
+        if (tokenOptional.isEmpty()) {
             throw new RefreshTokenException("Refresh token %s not found".formatted(refreshRequestDto.getRefreshToken()));
         }
         var token = tokenOptional.get();
-        if(isTokenExpired(token.getExpiration())){
+        if (isTokenExpired(token.getExpiration())) {
             refreshTokenRepository.delete(token);
             throw new RefreshTokenException("Refresh token %s is expired".formatted(refreshRequestDto.getRefreshToken()));
         }
         String jwt = jwtUtils.createAccessToken(token.getUser().getUsername());
         updateToken(token);
-        return RefreshResponseDto.of(token.getToken(), jwt);
+        return RefreshResponseDto.builder().refreshToken(token.getToken()).accessToken(jwt).build();
     }
 
     private void updateToken(RefreshToken token) {
@@ -60,7 +60,7 @@ public class RefreshTokenService {
         refreshTokenRepository.save(token);
     }
 
-    private boolean isTokenExpired(ZonedDateTime expirationTime){
+    private boolean isTokenExpired(ZonedDateTime expirationTime) {
         return expirationTime.isBefore(ZonedDateTime.now(ZoneId.systemDefault()));
     }
 }

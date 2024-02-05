@@ -2,6 +2,7 @@ package com.justbelieveinmyself.marta.domain.entities;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -12,6 +13,7 @@ import java.time.ZonedDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
+@Builder
 public class Question {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

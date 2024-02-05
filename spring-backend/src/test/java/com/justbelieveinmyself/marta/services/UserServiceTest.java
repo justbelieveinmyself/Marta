@@ -5,6 +5,7 @@ import com.justbelieveinmyself.marta.domain.dto.UserDto;
 import com.justbelieveinmyself.marta.domain.dto.UserNamesDto;
 import com.justbelieveinmyself.marta.domain.dto.auth.LoginResponseDto;
 import com.justbelieveinmyself.marta.domain.dto.auth.RegisterDto;
+import com.justbelieveinmyself.marta.domain.entities.Address;
 import com.justbelieveinmyself.marta.domain.entities.User;
 import com.justbelieveinmyself.marta.domain.enums.Role;
 import com.justbelieveinmyself.marta.domain.enums.UploadDirectory;
@@ -24,6 +25,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.net.MalformedURLException;
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -112,7 +114,7 @@ class UserServiceTest {
 
     @Test
     void createNewUser_whenAddressNotNull() {
-        RegisterDto registerDto = new RegisterDto("first", "last", "user", "123", "123", "test@mail.ru", "+79111003322", "L st.", "Las-Vegas", "42345", "USA");
+        RegisterDto registerDto = new RegisterDto("first", "last", "user", "123", "123", LocalDate.now(), "Male", "test@mail.ru", "+79111003322", "L st.", null, "Las-Vegas", "42345", "USA", "West");
 
         when(userRepository.save(any())).thenAnswer(i -> i.getArguments()[0]);
         when(fileHelper.uploadFile((MultipartFile) any(), any())).thenReturn("test.png");
@@ -124,10 +126,43 @@ class UserServiceTest {
         assertEquals("user", user.getUsername());
         assertEquals("test@mail.ru", user.getEmail());
         assertEquals("+79111003322", user.getPhone());
-        assertEquals("L st.", user.getAddress());
-        assertEquals("Las-Vegas", user.getCity());
-        assertEquals("42345", user.getPostalCode());
-        assertEquals("USA", user.getCountry());
+        Address address = user.getAddress();
+        assertEquals("L st.", address.getAddress());
+        assertNull(address.getAddress2());
+        assertEquals("Las-Vegas", address.getCity());
+        assertEquals("42345", address.getPostalCode());
+        assertEquals("USA", address.getCountry());
+        assertEquals("test.png", user.getAvatar());
+        assertEquals(1, user.getRoles().size());
+        assertTrue(user.getRoles().contains(Role.USER));
+        assertTrue(Objects.nonNull(user.getPassword()));
+
+        verify(userRepository, times(1)).save(any());
+        verify(fileHelper, times(1)).uploadFile((MultipartFile) any(), any());
+    }
+
+    @Test
+    void createNewUser_whenAddressIsNull() {
+        RegisterDto registerDto = RegisterDto.builder().firstName("first").lastName("last").username("user").password("123").passwordConfirm("123").gender("Male").email("test@mail.ru").phone("+79111003322").build();
+
+        when(userRepository.save(any())).thenAnswer(i -> i.getArguments()[0]);
+        when(fileHelper.uploadFile((MultipartFile) any(), any())).thenReturn("test.png");
+
+        User user = userService.createNewUser(registerDto, new MockMultipartFile("test.png", "test".getBytes()));
+
+        assertEquals("first", user.getFirstName());
+        assertEquals("last", user.getLastName());
+        assertEquals("user", user.getUsername());
+        assertEquals("test@mail.ru", user.getEmail());
+        assertEquals("+79111003322", user.getPhone());
+        Address address = user.getAddress();
+        assertNull(address.getAddress());
+        assertNull(address.getAddress2());
+        assertNull(address.getCity());
+        assertNull(address.getCountry());
+        assertNull(address.getRegion());
+        assertNull(address.getPostalCode());
+        assertEquals(user, address.getUser());
         assertEquals("test.png", user.getAvatar());
         assertEquals(1, user.getRoles().size());
         assertTrue(user.getRoles().contains(Role.USER));

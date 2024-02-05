@@ -13,7 +13,7 @@ import java.time.ZonedDateTime;
 import java.util.Base64;
 import java.util.List;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", builder = @Builder(disableBuilder = true))
 public interface ReviewMapper {
     @Mapping(target = "productId", ignore = true)
     ReviewDto modelToDto(Review review, @Context FileHelper fileHelper);

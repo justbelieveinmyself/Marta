@@ -64,7 +64,7 @@ public class AuthController {
             @ApiResponse(responseCode = "403", description = "Refresh token not valid or expired!",
                     content = @Content)
     })
-    public ResponseEntity<?> refreshToken(@RequestBody RefreshRequestDto refreshRequestDto){
+    public ResponseEntity<RefreshResponseDto> refreshToken(@RequestBody RefreshRequestDto refreshRequestDto){
         return ResponseEntity.ok(refreshTokenService.refreshToken(refreshRequestDto));
     }
 }

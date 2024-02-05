@@ -19,7 +19,8 @@ import java.util.Set;
 @Entity
 @Table(name = "users")
 @Data
-@ToString(exclude = {"cartProducts", "favouriteProducts"})
+@Builder
+@ToString(exclude = {"cartProducts", "favouriteProducts", "address"})
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(exclude = {"cartProducts", "favouriteProducts"})

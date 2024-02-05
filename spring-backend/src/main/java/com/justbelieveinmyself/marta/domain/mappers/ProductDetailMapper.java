@@ -8,7 +8,7 @@ import org.mapstruct.*;
 
 import java.util.Optional;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", builder = @Builder(disableBuilder = true))
 public interface ProductDetailMapper {
     @Mapping(target = "productId", ignore = true)
     ProductDetailDto modelToDto(ProductDetail productDetail);
