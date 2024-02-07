@@ -78,17 +78,16 @@ span.discount {
 }
 
 .highlight-hover-black:hover {
-    color: black;
+    color: black !important;
 }
 
 .highlight-hover-white {
-    color: #868695;
+    color: #868695 !important;
     transition: color 0.2s ease;
 }
 
 .highlight-hover-white:hover {
-    color: white;
-
+    color: #E1E3E6 !important;
 }
 
 .increase_size {
