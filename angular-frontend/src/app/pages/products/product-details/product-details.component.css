@@ -1,3 +1,11 @@
+.product-page__grid {
+    display: grid;
+}
+
+.product-page__preview {
+
+}
+
 .ratings {
     border-bottom: 2px dotted rgb(108, 117, 125);
 }
@@ -10,9 +18,22 @@
     transition: .4s;
 }
 
+.rotatable_mark {
+    cursor: pointer;
+}
+
 .rotatable_mark:hover .rotatable {
     transition: .4s;
     rotate: 180deg;
+}
+
+.display {
+    display: none;
+}
+
+.display-active {
+    position: absolute;
+    display: block;
 }
 
 .appearing {
