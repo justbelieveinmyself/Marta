@@ -123,3 +123,216 @@ span.discount {
 a {
     text-decoration-line: none;
 }
+
+.popup-product-details {
+    position: fixed;
+    height: 100%;
+    overflow: hidden;
+    right: 0;
+    top: 0;
+    border-radius: 0;
+    max-width: 520px;
+    display: block;
+    opacity: 1;
+    z-index: 301;
+}
+
+.popup {
+    width: calc(100% - 32px);
+    padding: 28px 40px 40px;
+    font-size: 16px;
+    line-height: 22px;
+    color: #868695;
+    min-width: 320px;
+    background-color: #fff;
+    box-shadow: 0 0 20px rgba(0, 0, 0, .2);
+}
+
+.popup-product-details.shown {
+    animation: .4s ease slideRight;
+}
+
+.overlay {
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background: #242424;
+    opacity: .3 !important;
+    position: fixed;
+}
+
+.overlay.initially-hidden {
+    display: none;
+}
+
+.shown + .overlay.initially-hidden {
+    display: block;
+}
+
+.popup-product-details .popup__close {
+    right: 26px;
+    top: 26px;
+}
+
+.popup .close,
+.popup .popup__close {
+    width: 40px;
+    height: 40px;
+    display: inline-block;
+    font-size: 0;
+    line-height: 1;
+    border: none;
+    background-color: transparent;
+    position: absolute;
+    z-index: 1;
+    cursor: pointer;
+}
+
+.popup .close::before,
+.popup .popup__close:before {
+    width: 2px;
+    height: 20px;
+}
+
+.popup .close::after,
+.popup .popup__close:after {
+    width: 20px;
+    height: 2px;
+}
+
+.popup .close::after,
+.popup .close::before,
+.popup .popup__close::after,
+.popup .popup__close::before {
+    transition: background .3s ease 0s;
+    background-color: #9d9da5;
+    content: '';
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.popup-product-details .popup__content {
+    display: flex;
+    flex-direction: column;
+    max-height: 100%;
+    height: 100%;
+}
+
+.popup-product-details .popup__title {
+    margin-bottom: 16px;
+    font-size: 18px;
+    line-height: 24px;
+    color: #242424;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.popup-product-details .product-details {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    overflow: auto;
+    padding-bottom: 20px;
+}
+
+.popup-product-details .product-params .product-params__table {
+    font-size: 14px;
+    line-height: 20px;
+    width: 100%;
+}
+
+.popup-product-details .product-params .product-params__caption {
+    font-weight: 600;
+    text-align: left;
+    margin-bottom: 4px;
+    color: #242424;
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+.popup-product-details .product-params .product-params__table th {
+    width: 50%;
+    color: #868695;
+    font-weight: 400;
+    text-align: left;
+    vertical-align: top;
+    padding: 4px 0;
+}
+
+.popup-product-details .product-params .product-params__cell-decor {
+    position: relative;
+    display: inline-block;
+    vertical-align: bottom;
+    width: 100%;
+}
+
+.popup-product-details .product-params .product-params__cell-decor::after {
+    content: "";
+    display: block;
+    width: 100%;
+    height: 20px;
+    position: absolute;
+    left: 0;
+    bottom: 5px;
+    border-bottom: 1px dashed #d3d4dd;
+}
+
+.popup-product-details .product-params .product-params__cell-decor span {
+    padding-right: 12px;
+    position: relative;
+    z-index: 1;
+    background-color: #fff;
+}
+
+.popup-product-details .product-params .product-params__table td {
+    width: 50%;
+    text-align: left;
+    vertical-align: bottom;
+    padding: 4px 0 4px 12px;
+    color: #242424;
+}
+
+@keyframes slideRight {
+    0% {
+        opacity: 0;
+        transform: translateX(110%);
+    }
+    100% {
+        transform: translateX(0);
+    }
+}
+
+@media (min-width: 1024px) {
+
+    .popup-product-details .popup__title {
+        font-size: 24px;
+        line-height: 32px;
+        margin-bottom: 20px;
+    }
+
+    .popup-product-details .product-details {
+        overflow-y: auto;
+        scrollbar-color: #d3d4dd transparent;
+        scrollbar-width: thin;
+        gap: 20px;
+        margin-right: -20px;
+        padding-right: 20px;
+    }
+
+    .popup-product-details .product-details::-webkit-scrollbar-thumb {
+        height: 30px;
+        background-color: #d3d4dd;
+        border-radius: 3px;
+    }
+
+    .popup-product-details .product-details::-webkit-scrollbar-track {
+        background-color: transparent;
+    }
+}

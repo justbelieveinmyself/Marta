@@ -124,45 +124,108 @@
     </div>
 </div>
 <div class="popup popup-product-details shown">
-    <h4><a id="about" style="display: flex">About the product</a></h4>
-    <div class="row">
-        <div class="col">
-            <b>Additional information</b>
-            <table class="table table-borderless">
-                <tbody>
-                <tr *ngIf="productDetail">
-                    <td class="w-35"><span class="text-secondary">Country of manufacture</span></td>
-                    <td>{{ productDetail.manufacturer | titlecase }}</td>
-                </tr>
-                <tr>
-                    <td><span class="text-secondary">Category</span></td>
-                    <td>{{ card.product.category | titlecase }}</td>
-                </tr>
-                <tr *ngIf="productDetail">
-                    <td><span class="text-secondary">Dimensions</span></td>
-                    <td>{{ productDetail.dimensions }}->30sm*30sm*3mm</td>
-                </tr>
-                <tr *ngIf="productDetail">
-                    <td><span class="text-secondary">Weight</span></td>
-                    <td>{{ productDetail.weight }}</td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-        <div class="col" *ngIf="productDetail">
-            <b>Structure</b>
-            <p>
-                {{ productDetail.structure }}
-            </p>
-            <b>Description</b>
-            <p>
-                {{ productDetail.description }}
-            </p>
+    <a href="#" class="j-close popup__close close"></a>
+    <div class="popup__content">
+        <h2 class="popup__title">Characteristics and description</h2>
+        <div class="product-details">
+            <div class="product-params">
+                <table class="product-params__table">
+                    <caption class="product-params__caption">Additional information</caption>
+                    <tbody>
+                    <tr class="product_params__row" *ngIf="productDetail">
+                        <th class="product-params__cell">
+                            <span class="product-params__cell-decor">
+                                <span>Country of manufacture</span>
+                            </span>
+                        </th>
+                        <td class="product-params__cell">
+                            <span>{{ productDetail.manufacturer | titlecase }}</span>
+                        </td>
+                    </tr>
+                    <tr class="product_params__row">
+                        <th class="product-params__cell">
+                            <span class="product-params__cell-decor">
+                                <span>Category</span>
+                            </span>
+                        </th>
+                        <td class="product-params__cell">
+                            <span>{{ card.product.category | titlecase }}</span>
+                        </td>
+                    </tr>
+                    <tr *ngIf="productDetail">
+                        <td><span class="text-secondary">Dimensions</span></td>
+                        <td>{{ productDetail.dimensions }}</td>
+                    </tr>
+                    <tr *ngIf="productDetail">
+                        <td><span class="text-secondary">Weight</span></td>
+                        <td>{{ productDetail.weight }}</td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <table *ngIf="productDetail" class="product-params__table">
+                    <caption class="product-params__caption">Dimensions</caption>
+                    <tbody>
+                    <tr class="product_params__row">
+                        <th class="product-params__cell">
+                            <span class="product-params__cell-decor">
+                                <span>Height of the item</span>
+                            </span>
+                        </th>
+                        <td class="product-params__cell">
+                            <span>{{ productDetail.dimensions.slice(0, 2) | titlecase }}</span>
+                        </td>
+                    </tr>
+                    <tr class="product_params__row">
+                        <th class="product-params__cell">
+                            <span class="product-params__cell-decor">
+                                <span>Width of the item</span>
+                            </span>
+                        </th>
+                        <td class="product-params__cell">
+                            <span>{{ productDetail.dimensions.slice(5, 7) | titlecase }}</span>
+                        </td>
+                    </tr>
+                    <tr class="product_params__row">
+                        <th class="product-params__cell">
+                            <span class="product-params__cell-decor">
+                                <span>Depth of the item</span>
+                            </span>
+                        </th>
+                        <td class="product-params__cell">
+                            <span>{{ productDetail.dimensions.slice(10, 12) | titlecase }}</span>
+                        </td>
+                    </tr>
+                    <tr class="product_params__row">
+                        <th class="product-params__cell">
+                            <span class="product-params__cell-decor">
+                                <span>Height of the item</span>
+                            </span>
+                        </th>
+                        <td class="product-params__cell">
+                            <span>{{ productDetail.weight }}</span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col" *ngIf="productDetail">
+                <b>Structure</b>
+                <p>
+                    {{ productDetail.structure }}
+                </p>
+                <b>Description</b>
+                <p>
+                    {{ productDetail.description }}
+                </p>
+            </div>
+            <span
+                class="text-secondary">All information is based on the latest information from the manufacturer </span>
         </div>
     </div>
-    <span
-        class="text-secondary">All information is based on the latest information from the manufacturer </span>
+
 </div>
+<div class="overlay initially-hidden" style="z-index: 300"></div>
 <div class="product-page__user-activity user-activity">
     <div class="user-activity__tabs">
         <ul class="nav nav-underline">
