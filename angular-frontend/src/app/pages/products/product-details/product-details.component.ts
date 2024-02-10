@@ -51,6 +51,8 @@ export class ProductDetailsComponent implements OnInit {
     totalPrice: number;
     isPaid = false;
 
+    shownPopup: boolean = false;
+
     ngOnInit(): void {
         this.activatedRoute.data.subscribe(data => {
             this.card = data["product"];

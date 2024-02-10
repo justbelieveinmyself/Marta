@@ -1,3 +1,4 @@
+<a (click)="shownPopup = true">test</a>
 <div style="display: flex">
     <span routerLinkActive="active" routerLink="../../" style="font-size: 18px;" type="button">
         <i class="fa-solid fa-arrow-left fa-lg"></i>
@@ -123,8 +124,8 @@
         </div>
     </div>
 </div>
-<div class="popup popup-product-details shown">
-    <a href="#" class="j-close popup__close close"></a>
+<div class="popup popup-product-details" [ngClass]="shownPopup? 'shown': ''" >
+    <a class="popup__close close" (click)="shownPopup = false"></a>
     <div class="popup__content">
         <h2 class="popup__title">Characteristics and description</h2>
         <div class="product-details">
@@ -142,6 +143,16 @@
                             <span>{{ productDetail.manufacturer | titlecase }}</span>
                         </td>
                     </tr>
+                    <tr class="product_params__row" *ngIf="productDetail">
+                        <th class="product-params__cell">
+                            <span class="product-params__cell-decor">
+                                <span>Structure</span>
+                            </span>
+                        </th>
+                        <td class="product-params__cell">
+                            <span>{{ productDetail.structure }}</span>
+                        </td>
+                    </tr>
                     <tr class="product_params__row">
                         <th class="product-params__cell">
                             <span class="product-params__cell-decor">
@@ -151,14 +162,6 @@
                         <td class="product-params__cell">
                             <span>{{ card.product.category | titlecase }}</span>
                         </td>
-                    </tr>
-                    <tr *ngIf="productDetail">
-                        <td><span class="text-secondary">Dimensions</span></td>
-                        <td>{{ productDetail.dimensions }}</td>
-                    </tr>
-                    <tr *ngIf="productDetail">
-                        <td><span class="text-secondary">Weight</span></td>
-                        <td>{{ productDetail.weight }}</td>
                     </tr>
                     </tbody>
                 </table>
@@ -209,18 +212,34 @@
                     </tbody>
                 </table>
             </div>
-            <div class="col" *ngIf="productDetail">
-                <b>Structure</b>
-                <p>
-                    {{ productDetail.structure }}
-                </p>
-                <b>Description</b>
-                <p>
-                    {{ productDetail.description }}
-                </p>
+            <section *ngIf="productDetail" class="product-details__description option">
+                <h3 class="option__header">Description</h3>
+                <p class="option__text">{{ productDetail.description }}</p>
+            </section>
+            <div class="description-error">
+                <p class="description-error__text">All information is based on the latest information from the
+                    manufacturer </p>
             </div>
-            <span
-                class="text-secondary">All information is based on the latest information from the manufacturer </span>
+        </div>
+        <div class="popup__footer mini-product">
+            <div class="mini-product__img hide-desktop">
+                <img [src]="card.file" alt="product img" width="27" height="36">
+            </div>
+            <div class="mini-product__group">
+                <p class="mini-product__price wallet-price">{{ card.product.price | currency }}</p>
+                <p class="mini-product__delivery">14 february</p>
+            </div>
+            <div class="mini-product__buttons">
+                <div class="order">
+                    <button class="order__btn-buy btn-base hide-mobile">Buy now</button>
+                    <button class="btn-main">
+                        <span class="hide-mobile">To cart</span>
+                        <span class="hide">Go to cart</span>
+                    </button>
+                    <a *ngIf="false" routerLink="/profile/cart" routerLinkActive="active" class="btn-base">Go to
+                        cart</a>
+                </div>
+            </div>
         </div>
     </div>
 

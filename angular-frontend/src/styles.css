@@ -141,3 +141,53 @@ a:visited {
 a {
     text-decoration: none;
 }
+
+.btn-base {
+    font-weight: 600;
+    letter-spacing: 0;
+    text-decoration: none;
+    text-align: center;
+    position: relative;
+    display: inline-block;
+    vertical-align: top;
+    border-radius: 12px;
+    cursor: pointer;
+    color: #212529;
+    font-size: 16px;
+    line-height: 22px;
+    padding: 8px 24px 10px;
+    background-color: rgba(93, 79, 103, 0.12);
+    border: 2px solid transparent;
+}
+
+.btn-main {
+    font-weight: 600;
+    letter-spacing: 0;
+    text-decoration: none;
+    text-align: center;
+    position: relative;
+    display: inline-block;
+    vertical-align: top;
+    border-radius: 12px;
+    cursor: pointer;
+    color: #fff;
+    font-size: 16px;
+    line-height: 22px;
+    padding: 8px 24px 10px;
+    background-color: #212529;
+    border: 2px solid transparent;
+}
+
+.btn-base:hover {
+    background-color: rgba(93, 79, 103, 0.16);
+    border-color: transparent;
+}
+
+.btn-main:hover {
+    background-color: rgba(33, 37, 41, .9);
+    border-color: transparent;
+}
+
+.btn-main.disabled, .btn-main.disabled:active, .btn-main.disabled:hover, .btn-main:disabled, .btn-main:disabled:active, .btn-main:disabled:hover {
+    cursor: default;
+}
