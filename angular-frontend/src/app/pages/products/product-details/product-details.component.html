@@ -1,4 +1,4 @@
-<a (click)="shownPopup = true">test</a>
+<a (click)="shownPopup = true; toggleOverflowBody()">test</a>
 <div style="display: flex">
     <span routerLinkActive="active" routerLink="../../" style="font-size: 18px;" type="button">
         <i class="fa-solid fa-arrow-left fa-lg"></i>
@@ -125,7 +125,7 @@
     </div>
 </div>
 <div class="popup popup-product-details" [ngClass]="shownPopup? 'shown': ''" >
-    <a class="popup__close close" (click)="shownPopup = false"></a>
+    <a class="popup__close close" (click)="shownPopup = false; toggleOverflowBody()"></a>
     <div class="popup__content">
         <h2 class="popup__title">Characteristics and description</h2>
         <div class="product-details">
@@ -231,7 +231,7 @@
             </div>
             <div class="mini-product__buttons">
                 <div class="order">
-                    <button class="order__btn-buy btn-base hide-mobile">Buy now</button>
+                    <button class="order__btn-buy btn-base hide-mobile me-1">Buy now</button>
                     <button class="btn-main">
                         <span class="hide-mobile">To cart</span>
                         <span class="hide">Go to cart</span>
@@ -244,7 +244,7 @@
     </div>
 
 </div>
-<div class="overlay initially-hidden" style="z-index: 300"></div>
+<div class="overlay initially-hidden" *ngIf="shownPopup" (click)="shownPopup = false;" style="z-index: 300"></div>
 <div class="product-page__user-activity user-activity">
     <div class="user-activity__tabs">
         <ul class="nav nav-underline">

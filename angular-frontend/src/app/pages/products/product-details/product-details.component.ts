@@ -104,16 +104,16 @@ export class ProductDetailsComponent implements OnInit {
 
     addOrRemoveFavourite() {
         this.productInteractionService.toggleFavourite(this.isFavourite, this.card.product.id)
-        .subscribe(isFavourite => {
-            this.isFavourite = isFavourite;
-        });
+            .subscribe(isFavourite => {
+                this.isFavourite = isFavourite;
+            });
     }
 
     saveReview() {
         this.productInteractionService.saveReview(this.messageOfReview, this.currentRate, this.card.product.id, this.reviewPhotos)
             .then(review => {
                 this.reviews.push(review);
-        })
+            })
     }
 
     saveQuestion() {
@@ -178,7 +178,7 @@ export class ProductDetailsComponent implements OnInit {
 
     orderNow() {
         this.productInteractionService.orderNow(this.card, this.countOfProductInOrder, this.isPaid).then(isOrdered => {
-            if(isOrdered) {
+            if (isOrdered) {
                 this.countOfProductInOrder = 1;
                 this.totalPrice = this.card.product.price;
             }
@@ -207,4 +207,11 @@ export class ProductDetailsComponent implements OnInit {
         window.open(splitedTemplate[0] + "url=" + window.location.href + (splitedTemplate[1] ? splitedTemplate[1] : "") + formattedText);
     }
 
+    toggleOverflowBody() {
+        if (this.shownPopup) {
+            document.body.classList.add("body--overflow")
+        } else {
+            document.body.classList.remove("body--overflow")
+        }
+    }
 }
