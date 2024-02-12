@@ -1,272 +1,295 @@
-<a (click)="shownPopup = true; toggleOverflowBody()">test</a>
-<div style="display: flex">
-    <span routerLinkActive="active" routerLink="../../" style="font-size: 18px;" type="button">
-        <i class="fa-solid fa-arrow-left fa-lg"></i>
-        <span class="text-secondary ms-2">Main / {{ card.product.category ? card.product.category : "unknown" }}
-            / {{ card.product.seller.username | titlecase }}</span>
-    </span>
-    <span class="ms-auto mt-2">
-        <i type="button" data-bs-toggle="modal" data-bs-target="#productReportModal"
-           class="fa-regular fa-flag fa-xl"></i>
-        <i type="button" data-bs-toggle="modal" data-bs-target="#productShareModal"
-           class="fa-regular fa-share-from-square fa-xl ms-3"></i>
-    </span>
-
-</div>
-<div class="product-page__grid">
-    <div class="product-page__preview">
-        <h3 style="word-break: break-all">{{ card.product.seller.username | titlecase }}
-            / {{ card.product.productName | titlecase }}</h3>
-        <p class="mb-2">
-            <i class="fa-solid fa-star"
-               style="color: #c9cc24;"></i>{{ (ratingOverall ? ratingOverall : 0) | number:'1.0-1' }}&nbsp;
-            <span class="text-secondary"><a class="ratings ratings-router-link" routerLink="../feedback"
-                                            routerLinkActive="active"
-                                            type="button">{{ reviews ? reviews.length : 0 }}
-                ratings</a> Art: {{ this.card.product.productCode }}</span>
-        </p>
+<div class="product-page">
+    <a (click)="shownPopup = true; toggleOverflowBody()">test</a>
+    <div class="product-page__top-wrap">
+        <div class="product-page__breadcrumbs breadcrumbs">
+            <button class="breadcrumbs__back" type="button">To Previous Page</button>
+            <div class="breadcrumbs__container">
+                <ul class="breadcrumbs__list">
+                    <li class="breadcrumbs__item">
+                        <a class="breadcrumbs__link" routerLinkActive="active" routerLink="/products">
+                            <span>Main</span>
+                        </a>
+                    </li>
+                    <li class="breadcrumbs__item">
+                        <a class="breadcrumbs__link" routerLinkActive="active"
+                           routerLink="/products/catalog/{{ card.product.category ? card.product.category : 'unknown' }}">
+                            <span>{{ card.product.category ? card.product.category : "unknown" }}</span>
+                        </a>
+                    </li>
+                    <li class="breadcrumbs__item">
+                        <a class="breadcrumbs__link" routerLinkActive="active"
+                           routerLink="/brands/{{ card.product.seller.username | lowercase }}">
+                            <span>{{ card.product.seller.username | titlecase }}</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="product-page__to-poned">
+            <button type="button"></button>
+        </div>
+        <div class="product-page__share">
+            <button class="btn-share" data-bs-toggle="modal" data-bs-target="#productShareModal" type="button"></button>
+        </div>
+        <div class="product-page__complaint-desktop hide-mobile">
+            <button class="btn-complaint" data-bs-toggle="modal" data-bs-target="#productReportModal"
+                    type="button"></button>
+        </div>
     </div>
-    <div class="product-page__preview">
-        <img [src]="card.file" width="1" height="1" alt="photo image" class="col-1 rounded-4"
-             style="width: 400px; height: 500px; object-fit: cover; border: solid 3px black; padding: 0"/>
-    </div>
-    <div class="product-page__options">
-        <table class="table table-borderless">
-            <tbody>
-            <tr *ngIf="productDetail">
-                <td class="w-50"><span class="text-secondary">Country of manufacture</span></td>
-                <td>{{ productDetail.manufacturer | titlecase }}</td>
-            </tr>
-            <tr>
-                <td><span class="text-secondary">Category</span></td>
-                <td>{{ card.product.category | titlecase }}</td>
-            </tr>
-            </tbody>
-        </table>
-        <a routerLink="./" fragment="about" class="ms-2">All characteristics</a>
-    </div>
-    <div class="product-page__aside">
-        <div class="card card_with_shadow" style="height: auto; width: 400px; margin-left: auto;">
-            <div class="card-body">
-                <h2 class="card-title">{{ card.product.price | currency }}
-                    <span class="discount"
-                          style="font-size: 17px; margin-left: 8px;">{{ card.product.discountPercentage }}
-                        %</span>
-                    <a type="button" class="fa-regular fa-heart float-end"
-                       [ngClass]="isFavourite? 'fa-solid' : 'fa-regular'" style="color: black"
-                       (click)="addOrRemoveFavourite()"></a>
-                </h2>
-                <button (click)="addToCart()" class="btn btn-dark w-100 mb-2" style="justify-content: center;">
-                    Add
-                    to cart
-                </button>
-                <div class="toast-container position-fixed bottom-0 end-0 p-3">
-                    <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-                        <div class="toast-header">
-                            <strong class="me-auto">Cart</strong>
-                            <button type="button" class="btn-close" data-bs-dismiss="toast"
-                                    aria-label="Close"></button>
-                        </div>
-                        <div class="toast-body">
-                            '{{ card.product.productName }}' has added to cart!
+    <div class="product-page__grid">
+        <div class="product-page__preview">
+            <h3 style="word-break: break-all">{{ card.product.seller.username | titlecase }}
+                / {{ card.product.productName | titlecase }}</h3>
+            <p class="mb-2">
+                <i class="fa-solid fa-star"
+                   style="color: #c9cc24;"></i>{{ (ratingOverall ? ratingOverall : 0) | number:'1.0-1' }}&nbsp;
+                <span class="text-secondary"><a class="ratings ratings-router-link" routerLink="../feedback"
+                                                routerLinkActive="active"
+                                                type="button">{{ reviews ? reviews.length : 0 }}
+                    ratings</a> Art: {{ this.card.product.productCode }}</span>
+            </p>
+        </div>
+        <div class="product-page__preview">
+            <img [src]="card.file" width="1" height="1" alt="photo image" class="col-1 rounded-4"
+                 style="width: 400px; height: 500px; object-fit: cover; border: solid 3px black; padding: 0"/>
+        </div>
+        <div class="product-page__options">
+            <table class="table table-borderless">
+                <tbody>
+                <tr *ngIf="productDetail">
+                    <td class="w-50"><span class="text-secondary">Country of manufacture</span></td>
+                    <td>{{ productDetail.manufacturer | titlecase }}</td>
+                </tr>
+                <tr>
+                    <td><span class="text-secondary">Category</span></td>
+                    <td>{{ card.product.category | titlecase }}</td>
+                </tr>
+                </tbody>
+            </table>
+            <a routerLink="./" fragment="about" class="ms-2">All characteristics</a>
+        </div>
+        <div class="product-page__aside">
+            <div class="card card_with_shadow" style="height: auto; width: 400px; margin-left: auto;">
+                <div class="card-body">
+                    <h2 class="card-title">{{ card.product.price | currency }}
+                        <span class="discount"
+                              style="font-size: 17px; margin-left: 8px;">{{ card.product.discountPercentage }}
+                            %</span>
+                        <a type="button" class="fa-regular fa-heart float-end"
+                           [ngClass]="isFavourite? 'fa-solid' : 'fa-regular'" style="color: black"
+                           (click)="addOrRemoveFavourite()"></a>
+                    </h2>
+                    <button (click)="addToCart()" class="btn btn-dark w-100 mb-2" style="justify-content: center;">
+                        Add
+                        to cart
+                    </button>
+                    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+                        <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                            <div class="toast-header">
+                                <strong class="me-auto">Cart</strong>
+                                <button type="button" class="btn-close" data-bs-dismiss="toast"
+                                        aria-label="Close"></button>
+                            </div>
+                            <div class="toast-body">
+                                '{{ card.product.productName }}' has added to cart!
+                            </div>
                         </div>
                     </div>
+                    <button class="btn btn-outline-dark w-100" style="justify-content: center;"
+                            data-bs-toggle="modal"
+                            data-bs-target="#buyNowModal">Buy now
+                    </button>
                 </div>
-                <button class="btn btn-outline-dark w-100" style="justify-content: center;"
-                        data-bs-toggle="modal"
-                        data-bs-target="#buyNowModal">Buy now
-                </button>
             </div>
-        </div>
 
 
-        <div class="card card_with_shadow mt-3" style="height: auto; width: 400px; margin-left: auto; ">
-            <div class="card-body row align-items-center">
-                <div class="col">
-                    <i class="fa-solid fa-shop fa-2xl"></i>
-                </div>
-                <div class="col-10">
-                    <b class="col">{{ card.product.seller.username | titlecase }}
-                        <a class="fa-solid fa-circle-info" type="button"
-                           [popover]="popoverHtml"
-                           placement="bottom" style="color: #6d7583;"></a>
-                    </b> <br>
-                    4.8<i class="fa-solid fa-star" style="color: #c9cc24;"> &nbsp;</i>
-                    <span class="text-secondary rotatable_mark" (mouseover)="isAppearing=true"
-                          (mouseout)="isAppearing=false"><span class="ratings">699 ratings</span> &nbsp;<i
-                        class="fa-solid fa-chevron-down rotatable"></i>
+            <div class="card card_with_shadow mt-3" style="height: auto; width: 400px; margin-left: auto; ">
+                <div class="card-body row align-items-center">
+                    <div class="col">
+                        <i class="fa-solid fa-shop fa-2xl"></i>
+                    </div>
+                    <div class="col-10">
+                        <b class="col">{{ card.product.seller.username | titlecase }}
+                            <a class="fa-solid fa-circle-info" type="button"
+                               [popover]="popoverHtml"
+                               placement="bottom" style="color: #6d7583;"></a>
+                        </b> <br>
+                        4.8<i class="fa-solid fa-star" style="color: #c9cc24;"> &nbsp;</i>
+                        <span class="text-secondary rotatable_mark" (mouseover)="isAppearing=true"
+                              (mouseout)="isAppearing=false"><span class="ratings">699 ratings</span> &nbsp;<i
+                            class="fa-solid fa-chevron-down rotatable"></i>
             </span>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div class="card card_with_shadow display mt-2" [ngClass]="isAppearing? 'display-active': ''"
-             style="height: auto; width: 400px; margin-left: auto; ">
-            <div class="card-body" style="padding: 15px 10px 0 15px; height: auto">
+            <div class="card card_with_shadow display mt-2" [ngClass]="isAppearing? 'display-active': ''"
+                 style="height: auto; width: 400px; margin-left: auto; ">
+                <div class="card-body" style="padding: 15px 10px 0 15px; height: auto">
                     <span style="font-size: 22px">4.8<i class="fa-solid fa-star"
                                                         style="color: #c9cc24;"> &nbsp;</i></span>
-                <span class="ratings text-secondary">{{ card.product.seller.ratingCount }}
-                    product ratings</span>
-                <hr style="margin-top: 8px; margin-bottom: 0">
-                <table class="table table-borderless">
-                    <tbody>
-                    <tr *ngIf="productDetail">
-                        <td class="w-50"><span class="text-secondary">Products sold</span></td>
-                        <td style="text-align: right">{{ productDetail.soldCount }}</td>
-                    </tr>
-                    <tr>
-                        <td><span class="text-secondary">On Marta</span></td>
-                        <td style="text-align: right">{{ card.product.seller.registeredAt | date: 'dd MMM YYYY, HH:mm' }}</td>
-                    </tr>
-                    </tbody>
-                </table>
+                    <span class="ratings text-secondary">{{ card.product.seller.ratingCount }}
+                        product ratings</span>
+                    <hr style="margin-top: 8px; margin-bottom: 0">
+                    <table class="table table-borderless">
+                        <tbody>
+                        <tr *ngIf="productDetail">
+                            <td class="w-50"><span class="text-secondary">Products sold</span></td>
+                            <td style="text-align: right">{{ productDetail.soldCount }}</td>
+                        </tr>
+                        <tr>
+                            <td><span class="text-secondary">On Marta</span></td>
+                            <td style="text-align: right">{{ card.product.seller.registeredAt | date: 'dd MMM YYYY, HH:mm' }}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
-</div>
-<div class="popup popup-product-details" [ngClass]="shownPopup? 'shown': ''" >
-    <a class="popup__close close" (click)="shownPopup = false; toggleOverflowBody()"></a>
-    <div class="popup__content">
-        <h2 class="popup__title">Characteristics and description</h2>
-        <div class="product-details">
-            <div class="product-params">
-                <table class="product-params__table">
-                    <caption class="product-params__caption">Additional information</caption>
-                    <tbody>
-                    <tr class="product_params__row" *ngIf="productDetail">
-                        <th class="product-params__cell">
+    <div class="popup popup-product-details" [ngClass]="shownPopup? 'shown': ''">
+        <a class="popup__close close" (click)="shownPopup = false; toggleOverflowBody()"></a>
+        <div class="popup__content">
+            <h2 class="popup__title">Characteristics and description</h2>
+            <div class="product-details">
+                <div class="product-params">
+                    <table class="product-params__table">
+                        <caption class="product-params__caption">Additional information</caption>
+                        <tbody>
+                        <tr class="product_params__row" *ngIf="productDetail">
+                            <th class="product-params__cell">
                             <span class="product-params__cell-decor">
                                 <span>Country of manufacture</span>
                             </span>
-                        </th>
-                        <td class="product-params__cell">
-                            <span>{{ productDetail.manufacturer | titlecase }}</span>
-                        </td>
-                    </tr>
-                    <tr class="product_params__row" *ngIf="productDetail">
-                        <th class="product-params__cell">
+                            </th>
+                            <td class="product-params__cell">
+                                <span>{{ productDetail.manufacturer | titlecase }}</span>
+                            </td>
+                        </tr>
+                        <tr class="product_params__row" *ngIf="productDetail">
+                            <th class="product-params__cell">
                             <span class="product-params__cell-decor">
                                 <span>Structure</span>
                             </span>
-                        </th>
-                        <td class="product-params__cell">
-                            <span>{{ productDetail.structure }}</span>
-                        </td>
-                    </tr>
-                    <tr class="product_params__row">
-                        <th class="product-params__cell">
+                            </th>
+                            <td class="product-params__cell">
+                                <span>{{ productDetail.structure }}</span>
+                            </td>
+                        </tr>
+                        <tr class="product_params__row">
+                            <th class="product-params__cell">
                             <span class="product-params__cell-decor">
                                 <span>Category</span>
                             </span>
-                        </th>
-                        <td class="product-params__cell">
-                            <span>{{ card.product.category | titlecase }}</span>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
+                            </th>
+                            <td class="product-params__cell">
+                                <span>{{ card.product.category | titlecase }}</span>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
 
-                <table *ngIf="productDetail" class="product-params__table">
-                    <caption class="product-params__caption">Dimensions</caption>
-                    <tbody>
-                    <tr class="product_params__row">
-                        <th class="product-params__cell">
+                    <table *ngIf="productDetail" class="product-params__table">
+                        <caption class="product-params__caption">Dimensions</caption>
+                        <tbody>
+                        <tr class="product_params__row">
+                            <th class="product-params__cell">
                             <span class="product-params__cell-decor">
                                 <span>Height of the item</span>
                             </span>
-                        </th>
-                        <td class="product-params__cell">
-                            <span>{{ productDetail.dimensions.slice(0, 2) | titlecase }}</span>
-                        </td>
-                    </tr>
-                    <tr class="product_params__row">
-                        <th class="product-params__cell">
+                            </th>
+                            <td class="product-params__cell">
+                                <span>{{ productDetail.dimensions.slice(0, 2) | titlecase }}</span>
+                            </td>
+                        </tr>
+                        <tr class="product_params__row">
+                            <th class="product-params__cell">
                             <span class="product-params__cell-decor">
                                 <span>Width of the item</span>
                             </span>
-                        </th>
-                        <td class="product-params__cell">
-                            <span>{{ productDetail.dimensions.slice(5, 7) | titlecase }}</span>
-                        </td>
-                    </tr>
-                    <tr class="product_params__row">
-                        <th class="product-params__cell">
+                            </th>
+                            <td class="product-params__cell">
+                                <span>{{ productDetail.dimensions.slice(5, 7) | titlecase }}</span>
+                            </td>
+                        </tr>
+                        <tr class="product_params__row">
+                            <th class="product-params__cell">
                             <span class="product-params__cell-decor">
                                 <span>Depth of the item</span>
                             </span>
-                        </th>
-                        <td class="product-params__cell">
-                            <span>{{ productDetail.dimensions.slice(10, 12) | titlecase }}</span>
-                        </td>
-                    </tr>
-                    <tr class="product_params__row">
-                        <th class="product-params__cell">
+                            </th>
+                            <td class="product-params__cell">
+                                <span>{{ productDetail.dimensions.slice(10, 12) | titlecase }}</span>
+                            </td>
+                        </tr>
+                        <tr class="product_params__row">
+                            <th class="product-params__cell">
                             <span class="product-params__cell-decor">
                                 <span>Height of the item</span>
                             </span>
-                        </th>
-                        <td class="product-params__cell">
-                            <span>{{ productDetail.weight }}</span>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
+                            </th>
+                            <td class="product-params__cell">
+                                <span>{{ productDetail.weight }}</span>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <section *ngIf="productDetail" class="product-details__description option">
+                    <h3 class="option__header">Description</h3>
+                    <p class="option__text">{{ productDetail.description }}</p>
+                </section>
+                <div class="description-error">
+                    <p class="description-error__text">All information is based on the latest information from the
+                        manufacturer </p>
+                </div>
             </div>
-            <section *ngIf="productDetail" class="product-details__description option">
-                <h3 class="option__header">Description</h3>
-                <p class="option__text">{{ productDetail.description }}</p>
-            </section>
-            <div class="description-error">
-                <p class="description-error__text">All information is based on the latest information from the
-                    manufacturer </p>
-            </div>
-        </div>
-        <div class="popup__footer mini-product">
-            <div class="mini-product__img hide-desktop">
-                <img [src]="card.file" alt="product img" width="27" height="36">
-            </div>
-            <div class="mini-product__group">
-                <p class="mini-product__price wallet-price">{{ card.product.price | currency }}</p>
-                <p class="mini-product__delivery">14 february</p>
-            </div>
-            <div class="mini-product__buttons">
-                <div class="order">
-                    <button class="order__btn-buy btn-base hide-mobile me-1">Buy now</button>
-                    <button class="btn-main">
-                        <span class="hide-mobile">To cart</span>
-                        <span class="hide">Go to cart</span>
-                    </button>
-                    <a *ngIf="false" routerLink="/profile/cart" routerLinkActive="active" class="btn-base">Go to
-                        cart</a>
+            <div class="popup__footer mini-product">
+                <div class="mini-product__img hide-desktop">
+                    <img [src]="card.file" alt="product img" width="27" height="36">
+                </div>
+                <div class="mini-product__group">
+                    <p class="mini-product__price wallet-price">{{ card.product.price | currency }}</p>
+                    <p class="mini-product__delivery">14 february</p>
+                </div>
+                <div class="mini-product__buttons">
+                    <div class="order">
+                        <button class="order__btn-buy btn-base hide-mobile me-1">Buy now</button>
+                        <button class="btn-main">
+                            <span class="hide-mobile">To cart</span>
+                            <span class="hide">Go to cart</span>
+                        </button>
+                        <a *ngIf="false" routerLink="/profile/cart" routerLinkActive="active" class="btn-base">Go to
+                            cart</a>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-</div>
-<div class="overlay initially-hidden" *ngIf="shownPopup" (click)="shownPopup = false;" style="z-index: 300"></div>
-<div class="product-page__user-activity user-activity">
-    <div class="user-activity__tabs">
-        <ul class="nav nav-underline">
-            <li class="nav-item">
-                <button class="nav-link {{isReviews? 'active' : ''}}" (click)="isReviews=true">Reviews
-                    <sup>{{ reviews ? reviews.length : 0 }}</sup>
-                </button>
-            </li>
-            <li class="nav-item">
-                <button class="nav-link {{isReviews? '' : 'active'}}" (click)="isReviews=false">Questions
-                    <sup>{{ questions ? questions.length : 0 }}</sup>
-                </button>
-            </li>
-            <li class="nav-item ms-auto">
-                <button class="nav-link" data-bs-toggle="modal" data-bs-target="#rulesModal"
-                        style="color: rgb(108,117,125) !important;">Publication Rules
-                </button>
-            </li>
-        </ul>
     </div>
-    <div *ngIf="isReviews">
-        <div style="position: relative;">
+    <div class="overlay initially-hidden" *ngIf="shownPopup" (click)="shownPopup = false;" style="z-index: 300"></div>
+    <div class="product-page__user-activity user-activity">
+        <div class="user-activity__tabs">
+            <ul class="nav nav-underline">
+                <li class="nav-item">
+                    <button class="nav-link {{isReviews? 'active' : ''}}" (click)="isReviews=true">Reviews
+                        <sup>{{ reviews ? reviews.length : 0 }}</sup>
+                    </button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link {{isReviews? '' : 'active'}}" (click)="isReviews=false">Questions
+                        <sup>{{ questions ? questions.length : 0 }}</sup>
+                    </button>
+                </li>
+                <li class="nav-item ms-auto">
+                    <button class="nav-link" data-bs-toggle="modal" data-bs-target="#rulesModal"
+                            style="color: rgb(108,117,125) !important;">Publication Rules
+                    </button>
+                </li>
+            </ul>
+        </div>
+        <div *ngIf="isReviews">
+            <div style="position: relative;">
       <span style="font-size: 25px; font-weight: bold" class="ms-3">
         {{ (ratingOverall ? ratingOverall : 0) | number:'1.0-1' }} <i class="fa-solid fa-star"
                                                                       *ngFor="let stars of [].constructor(Math.round(ratingOverall? ratingOverall : 0))"
@@ -275,27 +298,27 @@
            *ngFor="let nostars of [].constructor(Math.round(5-(ratingOverall? ratingOverall : 0)))"
            style="color: #E1E3E6"></i>
       </span>
-            <sup class="text-secondary" style="font-size: 15px; font-weight: bold">
-                &nbsp;{{ reviews ? reviews.length : 0 }} ratings</sup>
-            <button class="btn btn-outline-dark" style="position: absolute; right: 15px" data-bs-toggle="modal"
-                    data-bs-target="#reviewWriteModal">Write a review
-            </button>
-        </div>
-        <div style="position: relative" class="mt-2">
-            <a type="button" class="fa-solid fa-circle-arrow-right fa-2xl"
-               [hidden]="!isNeedRightButtonForReviews"
-               (click)="rightScrollForReviews()"
-               style="position: absolute; width: 30px; height: 30px; top: 135px; right: 20px; z-index: 100;"></a>
-            <a type="button" class="fa-solid fa-circle-arrow-left fa-2xl" [hidden]="!isNeedLeftButtonForReviews"
-               (click)="leftScrollForReviews()"
-               style="position: absolute; width: 30px; height: 30px; top: 135px; left: 20px; z-index: 100;"></a>
-            <div id="scrollReviews"
-                 style="width: 100%; white-space: nowrap; display: flex; overflow: hidden; scroll-behavior: smooth">
+                <sup class="text-secondary" style="font-size: 15px; font-weight: bold">
+                    &nbsp;{{ reviews ? reviews.length : 0 }} ratings</sup>
+                <button class="btn btn-outline-dark" style="position: absolute; right: 15px" data-bs-toggle="modal"
+                        data-bs-target="#reviewWriteModal">Write a review
+                </button>
+            </div>
+            <div style="position: relative" class="mt-2">
+                <a type="button" class="fa-solid fa-circle-arrow-right fa-2xl"
+                   [hidden]="!isNeedRightButtonForReviews"
+                   (click)="rightScrollForReviews()"
+                   style="position: absolute; width: 30px; height: 30px; top: 135px; right: 20px; z-index: 100;"></a>
+                <a type="button" class="fa-solid fa-circle-arrow-left fa-2xl" [hidden]="!isNeedLeftButtonForReviews"
+                   (click)="leftScrollForReviews()"
+                   style="position: absolute; width: 30px; height: 30px; top: 135px; left: 20px; z-index: 100;"></a>
+                <div id="scrollReviews"
+                     style="width: 100%; white-space: nowrap; display: flex; overflow: hidden; scroll-behavior: smooth">
 
-                <div class="card card_with_shadow me-4" *ngFor="let review of reviews"
-                     style="height: 270px; width: 430px; min-width: 430px">
-                    <div class="card-body">
-                        <div style="padding-left: 5px;">
+                    <div class="card card_with_shadow me-4" *ngFor="let review of reviews"
+                         style="height: 270px; width: 430px; min-width: 430px">
+                        <div class="card-body">
+                            <div style="padding-left: 5px;">
             <span style="display: inline-flex"><img class="rounded-4 me-2" alt="image for review"
                                                     style="width: 50px; height: 50px; object-fit: cover;"
                                                     [ngSrc]="'https://eliaslealblog.files.wordpress.com/2014/03/user-200.png'"
@@ -304,87 +327,88 @@
                 {{ review.author.username }} <br>
                 {{ review.time | date: 'dd MMM YYYY, HH:mm' }}
             </span>
-                            <div style="position: absolute; top: 25px; right: 20px">
-                                {{ review.rating }} <i class="fa-solid fa-star"
-                                                       *ngFor="let stars of [].constructor(Math.round(review.rating))"
-                                                       style="color: #c9cc24;"></i>
-                                <i class="fa-solid fa-star"
-                                   *ngFor="let nostars of [].constructor(Math.round(5-review.rating))"
-                                   style="color: #E1E3E6;"></i>
-                            </div>
-                            <div style="white-space: pre-wrap;">
-                                {{ review.message }}
-                            </div>
-                            <div style="display: flex; ">
-                                <div style="margin-right: 10px" *ngFor="let photo of review.photos">
-                                    <img alt="review photo" class="rounded-3"
-                                         style="width: 80px; height: 80px; object-fit: cover"
-                                         [src]="photo" width="80" height="80">
+                                <div style="position: absolute; top: 25px; right: 20px">
+                                    {{ review.rating }} <i class="fa-solid fa-star"
+                                                           *ngFor="let stars of [].constructor(Math.round(review.rating))"
+                                                           style="color: #c9cc24;"></i>
+                                    <i class="fa-solid fa-star"
+                                       *ngFor="let nostars of [].constructor(Math.round(5-review.rating))"
+                                       style="color: #E1E3E6;"></i>
+                                </div>
+                                <div style="white-space: pre-wrap;">
+                                    {{ review.message }}
+                                </div>
+                                <div style="display: flex; ">
+                                    <div style="margin-right: 10px" *ngFor="let photo of review.photos">
+                                        <img alt="review photo" class="rounded-3"
+                                             style="width: 80px; height: 80px; object-fit: cover"
+                                             [src]="photo" width="80" height="80">
+                                    </div>
                                 </div>
                             </div>
+                            <a type="button" style="bottom: 25px;right: 20px; position: absolute;"
+                               data-bs-toggle="modal"
+                               data-bs-target="#reviewReportModal">Report a review</a>
                         </div>
-                        <a type="button" style="bottom: 25px;right: 20px; position: absolute;"
-                           data-bs-toggle="modal"
-                           data-bs-target="#reviewReportModal">Report a review</a>
                     </div>
                 </div>
             </div>
+
+            <button class="btn btn-lg btn-outline-dark mt-3" routerLink="../feedback" routerLinkActive="active">View
+                all
+                reviews
+            </button>
         </div>
 
-        <button class="btn btn-lg btn-outline-dark mt-3" routerLink="../feedback" routerLinkActive="active">View
-            all
-            reviews
-        </button>
-    </div>
-
-    <div *ngIf="!isReviews">
+        <div *ngIf="!isReviews">
             <textarea placeholder="Ask a question about product" [(ngModel)]="messageOfQuestion"
                       class="form-control mb-2 down"
                       (click)="isWriteQuestion=true"></textarea>
-        <div class="appearing" [ngClass]="isWriteQuestion?'appearing-active':''">
-            <button class="btn btn-outline-dark me-2" (click)="saveQuestion()">Ask a question</button>
-            <button class="btn btn-outline-danger" (click)="isWriteQuestion=false">Close</button>
-        </div>
+            <div class="appearing" [ngClass]="isWriteQuestion?'appearing-active':''">
+                <button class="btn btn-outline-dark me-2" (click)="saveQuestion()">Ask a question</button>
+                <button class="btn btn-outline-danger" (click)="isWriteQuestion=false">Close</button>
+            </div>
 
-        <div style="position: relative" class="mt-2">
-            <a type="button" class="fa-solid fa-circle-arrow-right fa-2xl"
-               [hidden]="!isNeedRightButtonForQuestions"
-               (click)="rightScrollForQuestions()"
-               style="position: absolute; width: 30px; height: 30px; top: 135px; right: 20px; z-index: 100;"></a>
-            <a type="button" class="fa-solid fa-circle-arrow-left fa-2xl"
-               [hidden]="!isNeedLeftButtonForQuestions"
-               (click)="leftScrollForQuestions()"
-               style="position: absolute; width: 30px; height: 30px; top: 135px; left: 20px; z-index: 100;"></a>
-            <div id="scrollQuestions"
-                 style="width: 100%; white-space: nowrap; display: flex; overflow: hidden; scroll-behavior: smooth">
+            <div style="position: relative" class="mt-2">
+                <a type="button" class="fa-solid fa-circle-arrow-right fa-2xl"
+                   [hidden]="!isNeedRightButtonForQuestions"
+                   (click)="rightScrollForQuestions()"
+                   style="position: absolute; width: 30px; height: 30px; top: 135px; right: 20px; z-index: 100;"></a>
+                <a type="button" class="fa-solid fa-circle-arrow-left fa-2xl"
+                   [hidden]="!isNeedLeftButtonForQuestions"
+                   (click)="leftScrollForQuestions()"
+                   style="position: absolute; width: 30px; height: 30px; top: 135px; left: 20px; z-index: 100;"></a>
+                <div id="scrollQuestions"
+                     style="width: 100%; white-space: nowrap; display: flex; overflow: hidden; scroll-behavior: smooth">
 
-                <div class="card card_with_shadow me-3" *ngFor="let question of questions"
-                     style="height: 270px; width: 520px; min-width: 430px">
-                    <div class="card-body">
-                        <div style="padding-left: 12px; padding-top: 12px;">
+                    <div class="card card_with_shadow me-3" *ngFor="let question of questions"
+                         style="height: 270px; width: 520px; min-width: 430px">
+                        <div class="card-body">
+                            <div style="padding-left: 12px; padding-top: 12px;">
             <span style="display: inline-flex"><img class="rounded-4 me-2" alt="image for question"
                                                     style="width: 50px; height: 50px; object-fit: cover;"
                                                     src="https://eliaslealblog.files.wordpress.com/2014/03/user-200.png"/>
                 {{ question.author.username }} <br>
                 {{ question.time | date: 'dd MMM YYYY, HH:mm' }}
             </span>
-                            <div class="mt-2" style="white-space: pre-wrap">
-                                {{ question.message }}
-                            </div>
-                            <div class="mt-2" style="white-space: pre-wrap;">
-                                <b>✓ Brand Representative</b> <br>
-                                {{ question.answer }}
+                                <div class="mt-2" style="white-space: pre-wrap">
+                                    {{ question.message }}
+                                </div>
+                                <div class="mt-2" style="white-space: pre-wrap;">
+                                    <b>✓ Brand Representative</b> <br>
+                                    {{ question.answer }}
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+            <button class="btn btn-lg btn-outline-dark mt-3" routerLink="../questions" routerLinkActive="active">
+                View
+                all
+                questions
+            </button>
         </div>
-        <button class="btn btn-lg btn-outline-dark mt-3" routerLink="../questions" routerLinkActive="active">
-            View
-            all
-            questions
-        </button>
     </div>
 </div>
 <!-- For popover -->

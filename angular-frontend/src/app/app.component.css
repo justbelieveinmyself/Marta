@@ -3,6 +3,10 @@
     margin-right: auto;
 }
 
+.main {
+    position: relative;
+}
+
 @media (min-width: 576px) {
     .page-container {
         max-width: 596px;
@@ -18,6 +22,12 @@
 @media (min-width: 992px) {
     .page-container {
         max-width: 972px;
+    }
+}
+
+@media (min-width: 1024px) {
+    .main {
+        padding: 24px 0 48px;
     }
 }
 

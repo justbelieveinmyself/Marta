@@ -1,3 +1,114 @@
+/*
+grid:
+slider headers (author, title, rating and reviews count) aside
+slider options (article, all characteristics) aside
+slider about-goods (all goods from this category from this seller, all gods from this category, days to return good) aside
+
+*/
+
+.product-page__top-wrap {
+    display: flex;
+    align-items: center;
+}
+
+.product-page .product-page__breadcrumbs {
+    margin-right: auto;
+}
+
+.breadcrumbs {
+    display: flex;
+    align-items: baseline;
+}
+
+.breadcrumbs .breadcrumbs__back {
+    vertical-align: middle;
+    border: none;
+    background-color: transparent;
+    width: 28px;
+    min-height: 29px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    align-self: stretch;
+    flex-shrink: 0;
+    margin-right: 8px;
+    font-size: 0;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.breadcrumbs .breadcrumbs__back::before {
+    transform: rotate(270deg);
+    background-image: url("data:image/svg+xml,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20fill-rule%3D%22evenodd%22%20clip-rule%3D%22evenodd%22%20d%3D%22M7.361.238a.977.977%200%20011.278%200l7.097%206.377a.755.755%200%20010%201.147.977.977%200%2001-1.278%200L8%201.96%201.542%207.762a.977.977%200%2001-1.277%200%20.755.755%200%20010-1.147L7.36.238z%22%20fill%3D%22%23000%22%2F%3E%3Crect%20width%3D%222%22%20height%3D%2216%22%20rx%3D%221%22%20transform%3D%22matrix(-1%200%200%201%209%200)%22%20fill%3D%22%23000%22%2F%3E%3C%2Fsvg%3E");
+    content: "";
+    display: block;
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+}
+
+.breadcrumbs .breadcrumbs__container {
+    scrollbar-width: none;
+    overflow-x: auto;
+}
+
+.breadcrumbs .breadcrumbs__list {
+    font-size: 12px;
+    line-height: 16px;
+    color: #868695;
+    display: flex;
+}
+
+.breadcrumbs .breadcrumbs__item {
+    display: flex;
+    flex-shrink: 0;
+    margin-right: 12px;
+    padding: 4px 0;
+}
+
+.breadcrumbs .breadcrumbs__item:last-of-type::after {
+    display: none;
+}
+
+.breadcrumbs .breadcrumbs__link {
+    border-bottom: 1px solid;
+    font-size: 12px;
+    line-height: 16px;
+    text-decoration: none;
+    background-color: transparent;
+    cursor: pointer;
+    color: #868695;
+    border-color: transparent;
+}
+
+.product-page .product-page__to-poned {
+    flex-shrink: 0;
+}
+
+.product-page .product-page__to-poned button {
+    background-image: url("data:image/svg+xml,%3Csvg%20width%3D%2221%22%20height%3D%2219%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22m11.414%2018.164-.324-.38.324.38c2.228-1.895%204.45-3.836%206.115-5.719C19.144%2010.62%2020.5%208.563%2020.5%206.441%2020.5%203.066%2017.765.5%2014.368.5%2012.983.5%2011.61.96%2010.5%201.758A6.694%206.694%200%200%200%206.632.5C3.235.5.5%203.066.5%206.441c0%202.122%201.356%204.178%202.97%206.004%201.666%201.883%203.888%203.824%206.116%205.72a1.412%201.412%200%200%200%201.828%200ZM3.31%206.441c0-1.751%201.392-3.152%203.322-3.152%201.058%200%202.133.49%202.81%201.26a1.41%201.41%200%200%200%202.116%200c.677-.77%201.752-1.26%202.81-1.26%201.93%200%203.322%201.4%203.322%203.152%200%201.02-.706%202.394-2.272%204.164-1.306%201.476-3.029%203.034-4.918%204.66-1.89-1.626-3.612-3.184-4.918-4.66C4.016%208.835%203.31%207.46%203.31%206.44Z%22%20fill%3D%22%23000%22%20stroke%3D%22%23fff%22%20stroke-linejoin%3D%22round%22%2F%3E%3C%2Fsvg%3E");
+    background-repeat: no-repeat;
+    width: 40px;
+    height: 40px;
+    background-size: 22px;
+    background-position: center;
+    border: none;
+}
+
+.product-page .product-page__complaint-desktop button {
+    width: 24px;
+    height: 24px;
+    background-position: center;
+}
+
+.product-page .btn-complaint {
+    background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2220%22%20height%3D%2220%22%20fill%3D%22none%22%3E%3Cpath%20stroke%3D%22%23242424%22%20stroke-width%3D%221.8%22%20d%3D%22M.9%203C.9%201.84%201.84.9%203%20.9h14c1.16%200%202.1.94%202.1%202.1v11.273a2.1%202.1%200%200%201-2.1%202.1h-3.448a1.9%201.9%200%200%200-1.237.457l-2.198%201.884a.1.1%200%200%201-.135-.005l-1.78-1.78a1.9%201.9%200%200%200-1.343-.556H3a2.1%202.1%200%200%201-2.1-2.1V3Z%22%2F%3E%3Cpath%20fill%3D%22%23242424%22%20fill-rule%3D%22evenodd%22%20d%3D%22M10%2014a1%201%200%201%200%200-2%201%201%200%200%200%200%202ZM9%205a1%201%200%201%201%202%200v5a1%201%200%200%201-2%200V5Z%22%20clip-rule%3D%22evenodd%22%2F%3E%3C%2Fsvg%3E");
+    background-repeat: no-repeat;
+    background-size: 20px;
+}
+
 .product-page__grid {
     display: grid;
 }
@@ -340,6 +451,68 @@ table {
 
 @media (min-width: 1024px) {
 
+    .product-page__top-wrap {
+        margin-bottom: 24px;
+    }
+
+    .product-page .product-page__breadcrumbs {
+        width: calc(100% - 28px - 8px);
+    }
+
+    .breadcrumbs .breadcrumbs__container {
+        overflow-x: initial;
+    }
+
+    .breadcrumbs .breadcrumbs__list {
+        font-size: 14px;
+        line-height: 20px;
+        flex-wrap: wrap;
+    }
+
+    .breadcrumbs .breadcrumbs__item {
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        word-break: break-word;
+        max-width: 100%;
+        align-items: baseline;
+        margin-right: 8px;
+    }
+
+    .breadcrumbs .breadcrumbs__item::after {
+        content: "/";
+        color: #c8c8d1;
+        margin-left: 8px;
+    }
+
+    .breadcrumbs .breadcrumbs__link {
+        font-size: 14px;
+        line-height: 20px;
+    }
+
+    .product-page .product-page__to-poned button {
+        background-image: url(data:image/svg+xml,%3Csvg%20width%3D%2221%22%20height%3D%2219%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20fill-rule%3D%22evenodd%22%20clip-rule%3D%22evenodd%22%20d%3D%22M6.225%202C3.805%202%202%203.796%202%206.082c0%201.36.91%203.034%202.65%205.023%201.554%201.777%203.621%203.644%205.85%205.574%202.229-1.93%204.296-3.797%205.85-5.574C18.09%209.116%2019%207.443%2019%206.081%2019%203.796%2017.194%202%2014.775%202c-1.326%200-2.666.614-3.52%201.597a1%201%200%200%201-1.51%200C8.892%202.614%207.552%202%206.226%202ZM0%206.082C0%202.639%202.754%200%206.225%200c1.55%200%203.09.572%204.275%201.55A6.802%206.802%200%200%201%2014.775%200C18.245%200%2021%202.639%2021%206.082c0%202.149-1.37%204.31-3.145%206.34-1.81%202.07-4.238%204.215-6.703%206.336a1%201%200%200%201-1.304%200c-2.465-2.12-4.892-4.266-6.703-6.336C1.369%2010.392%200%208.23%200%206.082Z%22%20fill%3D%22%23313132%22%2F%3E%3C%2Fsvg%3E);
+        background-size: 21px;
+        background-position: 40% center;
+        width: 24px;
+        height: 24px;
+    }
+
+    .product-page .product-page__share {
+        margin-left: 8px;
+    }
+
+    .product-page .btn-share {
+        background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2218%22%20height%3D%2220%22%20fill%3D%22none%22%3E%3Cpath%20fill%3D%22%23242424%22%20fill-rule%3D%22evenodd%22%20d%3D%22M9.551%203.94a3.94%203.94%200%201%201%201.097%202.726l-2.949%201.74a3.938%203.938%200%200%201%200%202.355l2.948%201.74a3.94%203.94%200%201%201-.917%201.549l-2.948-1.74a3.94%203.94%200%201%201%200-5.453l2.948-1.74a3.938%203.938%200%200%201-.179-1.178Zm-3.739%206.678a.903.903%200%200%200-.064.107%202.14%202.14%200%201%201%200-2.284.912.912%200%200%200%20.064.108c.17.307.266.66.266%201.034%200%20.375-.096.728-.266%201.035Zm5.806%203.575a2.14%202.14%200%201%200%20.063-.107.866.866%200%200%201-.063.107Zm1.873-8.115c-.762%200-1.431-.398-1.81-.998a.972.972%200%200%200-.063-.105%202.14%202.14%200%201%201%201.872%201.104Z%22%20clip-rule%3D%22evenodd%22%2F%3E%3C%2Fsvg%3E");
+        background-repeat: no-repeat;
+        width: 24px;
+        height: 24px;
+        background-size: 17px auto;
+        background-position: 40% center;
+    }
+
+    .product-page .product-page__complaint-desktop {
+        margin-left: 8px;
+    }
 
     .popup-product-details {
         max-width: 520px;
