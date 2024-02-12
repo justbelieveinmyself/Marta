@@ -2,7 +2,7 @@
     <a (click)="shownPopup = true; toggleOverflowBody()">test</a>
     <div class="product-page__top-wrap">
         <div class="product-page__breadcrumbs breadcrumbs">
-            <button class="breadcrumbs__back" type="button">To Previous Page</button>
+            <button class="breadcrumbs__back" type="button" routerLink="/.." routerLinkActive="active">To Previous Page</button>
             <div class="breadcrumbs__container">
                 <ul class="breadcrumbs__list">
                     <li class="breadcrumbs__item">
@@ -26,7 +26,7 @@
             </div>
         </div>
         <div class="product-page__to-poned">
-            <button type="button"></button>
+            <button [ngClass]="isFavourite? 'active': ''" type="button" (click)="addOrRemoveFavourite()"></button>
         </div>
         <div class="product-page__share">
             <button class="btn-share" data-bs-toggle="modal" data-bs-target="#productShareModal" type="button"></button>
@@ -46,7 +46,7 @@
                 <span class="text-secondary"><a class="ratings ratings-router-link" routerLink="../feedback"
                                                 routerLinkActive="active"
                                                 type="button">{{ reviews ? reviews.length : 0 }}
-                    ratings</a> Art: {{ this.card.product.productCode }}</span>
+                    ratings</a> Art: {{ card.product.productCode }}</span>
             </p>
         </div>
         <div class="product-page__preview">

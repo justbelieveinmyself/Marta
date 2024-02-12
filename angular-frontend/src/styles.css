@@ -19,6 +19,11 @@ button, input {
     border: none;
 }
 
+button {
+    background-color: transparent;
+    cursor: pointer;
+}
+
 body {
     height: 100%;
     background-color: #F6F6F6;
@@ -156,10 +161,6 @@ html {
 
 input.form-control {
     background-color: #f0f2f5;
-}
-
-a:visited {
-    color: inherit !important;
 }
 
 a {
