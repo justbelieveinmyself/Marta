@@ -1,8 +1,9 @@
 <div class="product-page">
-    <a (click)="shownPopup = true; toggleOverflowBody()">test</a>
     <div class="product-page__top-wrap">
         <div class="product-page__breadcrumbs breadcrumbs">
-            <button class="breadcrumbs__back" type="button" routerLink="/.." routerLinkActive="active">To Previous Page</button>
+            <button class="breadcrumbs__back" type="button" routerLink="/.." routerLinkActive="active">
+                To Previous Page
+            </button>
             <div class="breadcrumbs__container">
                 <ul class="breadcrumbs__list">
                     <li class="breadcrumbs__item">
@@ -37,7 +38,7 @@
         </div>
     </div>
     <div class="product-page__grid">
-        <div class="product-page__preview">
+        <div class="product-page__header-wrap">
             <h3 style="word-break: break-all">{{ card.product.seller.username | titlecase }}
                 / {{ card.product.productName | titlecase }}</h3>
             <p class="mb-2">
@@ -49,61 +50,87 @@
                     ratings</a> Art: {{ card.product.productCode }}</span>
             </p>
         </div>
-        <div class="product-page__preview">
+        <div class="product-page__slider-wrap">
             <img [src]="card.file" width="1" height="1" alt="photo image" class="col-1 rounded-4"
                  style="width: 400px; height: 500px; object-fit: cover; border: solid 3px black; padding: 0"/>
         </div>
         <div class="product-page__options">
-            <table class="table table-borderless">
-                <tbody>
-                <tr *ngIf="productDetail">
-                    <td class="w-50"><span class="text-secondary">Country of manufacture</span></td>
-                    <td>{{ productDetail.manufacturer | titlecase }}</td>
-                </tr>
-                <tr>
-                    <td><span class="text-secondary">Category</span></td>
-                    <td>{{ card.product.category | titlecase }}</td>
-                </tr>
-                </tbody>
-            </table>
-            <a routerLink="./" fragment="about" class="ms-2">All characteristics</a>
+            <h2 class="section-header hide-desktop">About the product</h2>
+            <div class="product-params product-params--mini">
+                <table class="product-params__table">
+                    <tbody>
+                    <tr class="product-params__row">
+                        <th class="product-params__cell">
+                            <span class="product-params__cell-decor">
+                                <span>Article</span>
+                            </span>
+                        </th>
+                        <td class="product-params__cell product-params__cell--copy"
+                            (click)="copyToClipboard(card.product.productCode)">
+                            <span class="product-params__copy">{{ card.product.productCode }}</span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <button class="product-page__btn-detail" (click)="shownPopup = true; toggleOverflowBody()" type="button">All
+                characteristics and description
+            </button>
+        </div>
+        <div class="product-page__about-goods">
+            <div class="product-page__links hide-mobile">
+                <a class="product-page__link" routerLinkActive="active"
+                   routerLink="/brands">All {{ card.product.seller.username | titlecase }}`s products from category</a>
+                <a class="product-page__link" routerLinkActive="active"
+                   routerLink="/brands">All {{ card.product.seller.username | titlecase }}`s products from category</a>
+            </div>
+            <div class="product-page__advantages advantages">
+                <ul class="advantages__list">
+                    <li class="advantages__item advantages__item--refund">14 days for a refund</li>
+                </ul>
+            </div>
         </div>
         <div class="product-page__aside">
-            <div class="card card_with_shadow" style="height: auto; width: 400px; margin-left: auto;">
-                <div class="card-body">
-                    <h2 class="card-title">{{ card.product.price | currency }}
-                        <span class="discount"
-                              style="font-size: 17px; margin-left: 8px;">{{ card.product.discountPercentage }}
-                            %</span>
-                        <a type="button" class="fa-regular fa-heart float-end"
-                           [ngClass]="isFavourite? 'fa-solid' : 'fa-regular'" style="color: black"
-                           (click)="addOrRemoveFavourite()"></a>
-                    </h2>
-                    <button (click)="addToCart()" class="btn btn-dark w-100 mb-2" style="justify-content: center;">
-                        Add
-                        to cart
-                    </button>
-                    <div class="toast-container position-fixed bottom-0 end-0 p-3">
-                        <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-                            <div class="toast-header">
-                                <strong class="me-auto">Cart</strong>
-                                <button type="button" class="btn-close" data-bs-dismiss="toast"
-                                        aria-label="Close"></button>
-                            </div>
-                            <div class="toast-body">
-                                '{{ card.product.productName }}' has added to cart!
+            <div class="product-page__aside-sticky">
+                <div class="product-page__aside-container">
+                    <div class="product-page__price-block product-page__price-block--aside">
+                        <div class="price-block">
+                            <div class="price-block__content">
+                                <div class="price-block__price-group">
+                                    <p class="price-block__price-wrap">
+                                        <span class="price-block__price">
+                                            <span class="price-block__wallet-price">
+                                                {{ card.product.price|currency }}
+                                            </span>
+                                        </span>
+                                        <del class="price-block__old-price">
+                                            <span>$2 500</span>
+                                        </del>
+                                    </p>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <button class="btn btn-outline-dark w-100" style="justify-content: center;"
-                            data-bs-toggle="modal"
-                            data-bs-target="#buyNowModal">Buy now
-                    </button>
+                    <div class="product-page__order-buttons">
+                        <div class="order">
+                            <button class="order__btn-buy btn-base">Buy now</button>
+                            <button class="btn-main">
+                                <span class="hide-mobile">Add to cart</span>
+                                <span class="hide-desktop">To cart</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="product-page__delivery">
+
+                    </div>
+                    <div class="product-page__seller-wrap hide-mobile">
+
+                    </div>
                 </div>
             </div>
 
 
-            <div class="card card_with_shadow mt-3" style="height: auto; width: 400px; margin-left: auto; ">
+            <!--<div class="card card_with_shadow mt-3" style="height: auto; width: 400px; margin-left: auto; ">
                 <div class="card-body row align-items-center">
                     <div class="col">
                         <i class="fa-solid fa-shop fa-2xl"></i>
@@ -144,7 +171,7 @@
                         </tbody>
                     </table>
                 </div>
-            </div>
+            </div>-->
         </div>
     </div>
     <div class="popup popup-product-details" [ngClass]="shownPopup? 'shown': ''">
@@ -602,7 +629,7 @@
                        type="button"></i>
                 </div>
                 <div class="justify-content-center" style="display: flex; margin-top: 40px">
-                    <button class="btn btn-outline-dark w-75" (click)="copyToClipboard()">
+                    <button class="btn btn-outline-dark w-75" (click)="copyToClipboard(window.location.href)">
                         Copy to clipboard
                         <i class="fa-regular fa-copy fa-lg float-end" style="margin-top: 12px"></i>
                     </button>

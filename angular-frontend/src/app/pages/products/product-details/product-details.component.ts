@@ -197,8 +197,8 @@ export class ProductDetailsComponent implements OnInit {
         }
     }
 
-    copyToClipboard() {
-        navigator.clipboard.writeText(window.location.href);
+    copyToClipboard(text: string) {
+        navigator.clipboard.writeText(text);
     }
 
     goToLink(templateUrl: string) {
@@ -214,4 +214,6 @@ export class ProductDetailsComponent implements OnInit {
             document.body.classList.remove("body--overflow")
         }
     }
+
+    protected readonly window = window;
 }
