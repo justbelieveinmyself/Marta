@@ -127,13 +127,9 @@
 
 .product-page__grid {
     display: grid;
-    grid-template-areas:
-        "slider headers aside"
-        "slider options aside"
-        "slider about-goods aside";
-    /*    slider headers (author, title, rating and reviews count) aside
-    slider options (article, all characteristics) aside
-    slider about-goods (all goods from this category from this seller, all gods from this category, days to return good) aside*/
+    grid-template-columns: 100%;
+    grid-template-rows: auto;
+    grid-template-areas: "slider" "headers" "options" "about-goods" "aside";
 }
 
 .product-page .product-page__about-goods {
@@ -155,6 +151,78 @@
 
 .product-page .product-page__slider-wrap {
     grid-area: slider;
+    margin: -16px 0 12px;
+    position: relative;
+}
+
+.sw-slider-kt-mix {
+    position: relative;
+}
+
+.sw-slider-kt-mix .swiper-button-next.disabled,
+.sw-slider-kt-mix .swiper-button-prev.disabled {
+    opacity: 0;
+    pointer-events: none;
+    cursor: default;
+}
+
+.sw-slider-kt-mix .swiper-button-prev {
+    top: 16px;
+}
+
+.sw-slider-kt-mix .swiper-button-next,
+.sw-slider-kt-mix .swiper-button-prev {
+    vertical-align: middle;
+    font-size: 0;
+    line-height: 1;
+    background: #fff;
+    border-radius: 100%;
+    border: none;
+    box-shadow: 0 2px 16px rgba(0,0,0,.08);
+    cursor: pointer;
+    width: 44px;
+    height: 44px;
+    padding: 13px;
+    display: flex;
+    left: calc(50% - 22px);
+    margin: 0;
+    z-index: 10;
+    align-items: center;
+    justify-content: center;
+    color: #007aff;
+}
+
+.sw-slider-kt-mix .swiper-button-prev::before,
+.sw-slider-kt-mix .swiper-button-next::before {
+    background-image: url("data:image/svg+xml,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20fill-rule%3D%22evenodd%22%20clip-rule%3D%22evenodd%22%20d%3D%22M7.361.238a.977.977%200%20011.278%200l7.097%206.377a.755.755%200%20010%201.147.977.977%200%2001-1.278%200L8%201.96%201.542%207.762a.977.977%200%2001-1.277%200%20.755.755%200%20010-1.147L7.36.238z%22%20fill%3D%22%23000%22%2F%3E%3Crect%20width%3D%222%22%20height%3D%2216%22%20rx%3D%221%22%20transform%3D%22matrix(-1%200%200%201%209%200)%22%20fill%3D%22%23000%22%2F%3E%3C%2Fsvg%3E");
+    content: "";
+    display: block;
+    width: 18px;
+    height: 18px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+}
+
+.sw-slider-kt-mix .sw-slider-kt-mix__wrap {
+    position: relative;
+    height: 100%;
+}
+
+.sw-slider-kt-mix .swiper-container {
+    height: 100%;
+    user-select: none;
+    width: 100%;
+}
+
+.swiper-container {
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+    overflow: hidden;
+    list-style: none;
+    padding: 0;
+    z-index: 1;
 }
 
 .product-page .product-page__link {
@@ -679,10 +747,37 @@ table {
     }
 }
 
+@media (min-width: 576px) {
+
+    .product-page .product-page__slider-wrap {
+        margin: 0 0 12px;
+    }
+
+}
+
 @media (min-width: 1024px) {
 
     .product-page__top-wrap {
         margin-bottom: 24px;
+    }
+
+    .product-page .product-page__slider-wrap {
+        margin: 0;
+        padding-right: 20px;
+        align-self: stretch;
+    }
+
+    .product-page .product-page__sliders {
+        position: relative;
+        display: flex;
+        align-items: flex-start;
+    }
+
+    .product-page .product-page__main-slider {
+        width: 88px;
+        flex-shrink: 0;
+        margin-left: -2px;
+        margin-right: -2px;
     }
 
     .product-page .product-page__aside {
@@ -895,6 +990,24 @@ table {
 }
 
 @media (min-width: 1366px) {
+
+    .product-page__grid {
+        grid-template-areas:
+            "slider headers aside"
+            "slider options aside"
+            "slider about-goods aside";
+        grid-template-rows: auto auto auto auto 1fr;
+        grid-template-columns: 400px calc(100% - 400px - 368px) 368px;
+        align-items: flex-start;
+    }
+
+    .product-page .product-page__slider-wrap {
+        padding-right: 28px;
+    }
+
+    .sw-slider-kt-mix {
+        height: 672px;
+    }
 
     .product-page .product-page__aside {
         align-self: stretch;

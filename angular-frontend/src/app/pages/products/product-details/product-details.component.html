@@ -53,6 +53,53 @@
         <div class="product-page__slider-wrap">
             <img [src]="card.file" width="1" height="1" alt="photo image" class="col-1 rounded-4"
                  style="width: 400px; height: 500px; object-fit: cover; border: solid 3px black; padding: 0"/>
+            <div class="product-page__sliders">
+                <div class="product-page__main-slider">
+                    <div class="sw-slider-kt-mix">
+                        <button class="swiper-button-prev disabled" type="button">Previous slide</button>
+                        <div class="sw-slider-kt-mix__wrap">
+                            <div class="swiper-container swiper-container-initialized swiper-container-vertical">
+                                <ul class="swiper-wrapper">
+                                    <li class="swiper-slide slide swiper-slide-prev">
+                                        <div class="slide__content img-plug">
+                                            <img [src]="card.file" alt="View 1">
+                                        </div>
+                                    </li>
+                                    <li class="swiper-slide slide swiper-slide-active">
+
+                                    </li>
+                                    <li class="swiper-slide slide swiper-slide-next">
+
+                                    </li>
+                                    <li class="swiper-slide slide active">
+
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <button class="swiper-button-next" type="button">Next slide</button>
+                        <p class="swiper-pagination swiper-pagination-fraction">
+                            <span class="swiper-pagination-current">1</span>
+                            <span class="swiper-pagination-total">4</span>
+                        </p>
+                    </div>
+                </div>
+                <div class="product-page__mix-block">
+                    <div class="mix-block">
+                        <button class="mix-block__slider-btn mix-block__slider-btn--prev" type="button"></button>
+                        <div class="mix-block__photo-zoom photo-zoom">
+                            <div class="photo-zoom__img-plug img-plug">
+                                <div class="zoom-image-container">
+                                    <img [src]="card.file" alt="" class="photo-zoom__preview hide">
+                                    <canvas class="photo-zoom__preview"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <!--<div class="mix-block__video product-card-video"></div>-->
+                        <button class="mix-block__slider-btn mix-block__slider-btn--next" type="button"></button>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="product-page__options">
             <h2 class="section-header hide-desktop">About the product</h2>
