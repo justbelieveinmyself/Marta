@@ -39,45 +39,44 @@
     </div>
     <div class="product-page__grid">
         <div class="product-page__header-wrap">
-            <h3 style="word-break: break-all">{{ card.product.seller.username | titlecase }}
-                / {{ card.product.productName | titlecase }}</h3>
-            <p class="mb-2">
-                <i class="fa-solid fa-star"
-                   style="color: #c9cc24;"></i>{{ (ratingOverall ? ratingOverall : 0) | number:'1.0-1' }}&nbsp;
-                <span class="text-secondary"><a class="ratings ratings-router-link" routerLink="../feedback"
-                                                routerLinkActive="active"
-                                                type="button">{{ reviews ? reviews.length : 0 }}
-                    ratings</a> Art: {{ card.product.productCode }}</span>
-            </p>
+            <div class="product-page__header">
+                <a routerLinkActive="active" routerLink="/brands/{{card.product.seller.username | lowercase}}" class="product-page__header-brand">
+                    {{card.product.seller.username|titlecase}}
+                </a>
+                <h1 class="product-page__title">{{card.product.productName | titlecase}}</h1>
+            </div>
+            <div class="product-page__common-info">
+                <a routerLinkActive="active" routerLink="../feedback" class="product-review">
+                    <span class="product-review__rating address-rate-mini">
+                        {{ratingOverall? ratingOverall : 0}}
+                    </span>
+                    <span class="product-review__count-review">
+                        {{reviews? reviews.length : 0}} ratings
+                    </span>
+                </a>
+            </div>
         </div>
         <div class="product-page__slider-wrap">
-            <img [src]="card.file" width="1" height="1" alt="photo image" class="col-1 rounded-4"
-                 style="width: 400px; height: 500px; object-fit: cover; border: solid 3px black; padding: 0"/>
             <div class="product-page__sliders">
                 <div class="product-page__main-slider">
                     <div class="sw-slider-kt-mix">
-                        <button class="swiper-button-prev disabled" type="button">Previous slide</button>
+                        <button (click)="carousel.translatePosY=carousel.translatePosY+136" [ngClass]="carousel.translatePosY >= 0? 'disabled': ''" class="swiper-button-prev" type="button">Previous slide</button>
                         <div class="sw-slider-kt-mix__wrap">
                             <div class="swiper-container swiper-container-initialized swiper-container-vertical">
-                                <ul class="swiper-wrapper">
-                                    <li class="swiper-slide slide swiper-slide-prev">
+                                <ul class="swiper-wrapper" [ngStyle]="{'transform':'translate3d(0px, '+ carousel.translatePosY +'px, 0px)'}" style=" transition-duration: 300ms">
+                                    <li *ngFor="let item of carousel.items; let i = index"
+                                        class="swiper-slide slide"
+                                        [ngClass]="carousel.activeId === i? 'active': ''"
+                                        (mouseenter)="carousel.activeId = i; card.file = item"
+                                    >
                                         <div class="slide__content img-plug">
-                                            <img [src]="card.file" alt="View 1">
+                                            <img [src]="item" alt="View 1">
                                         </div>
-                                    </li>
-                                    <li class="swiper-slide slide swiper-slide-active">
-
-                                    </li>
-                                    <li class="swiper-slide slide swiper-slide-next">
-
-                                    </li>
-                                    <li class="swiper-slide slide active">
-
                                     </li>
                                 </ul>
                             </div>
                         </div>
-                        <button class="swiper-button-next" type="button">Next slide</button>
+                        <button (click)="carousel.translatePosY=carousel.translatePosY-136; test()" [ngClass]="this.carousel.translatePosY <= 700 - 136 * this.carousel.items.length? 'disabled': ''" class="swiper-button-next" type="button">Next slide</button>
                         <p class="swiper-pagination swiper-pagination-fraction">
                             <span class="swiper-pagination-current">1</span>
                             <span class="swiper-pagination-total">4</span>
@@ -86,17 +85,21 @@
                 </div>
                 <div class="product-page__mix-block">
                     <div class="mix-block">
-                        <button class="mix-block__slider-btn mix-block__slider-btn--prev" type="button"></button>
+                        <button (click)="carousel.previous()" class="mix-block__slider-btn mix-block__slider-btn--prev" type="button"></button>
                         <div class="mix-block__photo-zoom photo-zoom">
                             <div class="photo-zoom__img-plug img-plug">
                                 <div class="zoom-image-container">
-                                    <img [src]="card.file" alt="" class="photo-zoom__preview hide">
-                                    <canvas class="photo-zoom__preview"></canvas>
+                                    <lib-ngx-image-zoom
+                                        [thumbImage]="carousel.getActive()"
+                                        [fullImage]="carousel.getActive()"
+                                        [magnification]="1"
+                                        [altText]="'View 1'"
+                                    ></lib-ngx-image-zoom>
                                 </div>
                             </div>
                         </div>
                         <!--<div class="mix-block__video product-card-video"></div>-->
-                        <button class="mix-block__slider-btn mix-block__slider-btn--next" type="button"></button>
+                        <button (click)="carousel.next()" class="mix-block__slider-btn mix-block__slider-btn--next" type="button"></button>
                     </div>
                 </div>
             </div>
@@ -320,7 +323,7 @@
             </div>
             <div class="popup__footer mini-product">
                 <div class="mini-product__img hide-desktop">
-                    <img [src]="card.file" alt="product img" width="27" height="36">
+                    <img [src]="'/assets/ruby.png'" alt="product img" width="27" height="36">
                 </div>
                 <div class="mini-product__group">
                     <p class="mini-product__price wallet-price">{{ card.product.price | currency }}</p>

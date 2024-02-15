@@ -33,6 +33,7 @@ import { SearchComponent } from './components/search/search.component';
 import { PreloaderComponent } from './components/preloader/preloader.component';
 import { SellerPageComponent } from './pages/seller-page/seller-page.component';
 import { OrderListComponent } from './pages/products/order-list/order-list.component';
+import {NgxImageZoomModule} from "ngx-image-zoom";
 
 @NgModule({
   declarations: [
@@ -69,7 +70,8 @@ import { OrderListComponent } from './pages/products/order-list/order-list.compo
         SocialLoginModule,
         PopoverModule.forRoot(),
         NgOptimizedImage,
-        TooltipModule
+        TooltipModule,
+        NgxImageZoomModule
     ],
   providers: [
     {

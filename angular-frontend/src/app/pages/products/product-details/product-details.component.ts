@@ -10,6 +10,7 @@ import {Question} from "../../../models/question";
 import {UserService} from "../../../services/user.service";
 import {ProductInteractionService} from "../../../services/product-interaction.service";
 import {ProductDetail} from "../../../models/product-detail";
+import {Carousel} from "../../../models/carousel";
 
 @Component({
     selector: 'app-product-details',
@@ -29,6 +30,7 @@ export class ProductDetailsComponent implements OnInit {
         private productInteractionService: ProductInteractionService
     ) {}
 
+    carousel: Carousel = new Carousel(['/assets/ruby.png', '/assets/re.jpg', '/assets/haiku.png']);
     card: ProductWithImage;
     productDetail: ProductDetail;
     reviews: Review[];
@@ -216,4 +218,10 @@ export class ProductDetailsComponent implements OnInit {
     }
 
     protected readonly window = window;
+
+    test() {
+        console.log()
+        console.log(this.carousel.translatePosY)
+        console.log()
+    }
 }
