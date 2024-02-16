@@ -127,6 +127,24 @@
                 characteristics and description
             </button>
         </div>
+        <div class="product-page__price-block product-page__price-block-common">
+            <div class="price-block">
+                <div class="price-block__content">
+                    <div class="price-block__price-group">
+                        <p class="price-block__price-wrap">
+                                        <span class="price-block__price">
+                                            <span class="price-block__wallet-price">
+                                                {{ card.product.price|currency }}
+                                            </span>
+                                        </span>
+                            <del class="price-block__old-price">
+                                <span>$2 500</span>
+                            </del>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="product-page__about-goods">
             <div class="product-page__links hide-mobile">
                 <a class="product-page__link" routerLinkActive="active"
@@ -331,7 +349,7 @@
                 </div>
                 <div class="mini-product__buttons">
                     <div class="order">
-                        <button class="order__btn-buy btn-base hide-mobile me-1">Buy now</button>
+                        <button class="order__btn-buy btn-base hide-mobile">Buy now</button>
                         <button class="btn-main">
                             <span class="hide-mobile">To cart</span>
                             <span class="hide">Go to cart</span>

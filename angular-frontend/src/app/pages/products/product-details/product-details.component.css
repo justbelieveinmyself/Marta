@@ -136,6 +136,19 @@
     grid-area: about-goods;
 }
 
+.product-page .product-page__price-block-common {
+    grid-area: prices-block;
+}
+
+.product-page .product-page__price-block-wrap {
+    flex-grow: 1;
+    overflow: hidden;
+}
+
+.product-page .product-page__price-block-common .price-block {
+    margin-bottom: 12px;
+}
+
 .product-page .product-page__aside {
     grid-area: aside;
 }
@@ -634,7 +647,11 @@
     margin: 0 8px 0 0;
 }
 
-.product-page .order .btn-base {
+.mini-product__buttons .order {
+    justify-content: space-between;
+}
+
+.product-page__aside-container .order .btn-base {
     font-size: 14px;
     line-height: 20px;
     padding: 3px 16px 5px;
@@ -642,8 +659,8 @@
     padding-bottom: 7px;
 }
 
-.product-page .order .btn-base,
-.product-page .order .btn-main {
+.product-page__aside-container .order .btn-base,
+.product-page__aside-container .order .btn-main {
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
@@ -1000,6 +1017,22 @@ table {
 
 @media (min-width: 1024px) {
 
+    .product-page .product-page__grid {
+        grid-template-columns: 55.6% 1fr;
+            grid-template-areas:
+            "slider headers"
+            "slider prices-block"
+            "slider options"
+            "slider about-goods"
+            "slider aside";
+            grid-template-rows: auto auto auto auto 1fr;
+            align-items: flex-start;
+    }
+
+    .product-page .product-page__price-block-common .price-block {
+        margin-bottom: 20px;
+    }
+
     .product-page__top-wrap {
         margin-bottom: 24px;
     }
@@ -1108,6 +1141,8 @@ table {
         line-height: 20px;
         margin: 0 12px 8px 0;
         background-repeat: no-repeat;
+        background-position-y: 2px;
+        padding-left: 28px;
     }
 
     .product-page .product-page__options {
@@ -1135,28 +1170,28 @@ table {
         line-height: 36px;
     }
 
-    .product-page .product-page__order-buttons {
+    .product-page__aside-container .product-page__order-buttons {
         margin-bottom: 16px;
     }
 
-    .product-page .order {
+    .product-page__aside-container .order {
         flex-direction: column;
     }
 
-    .product-page .order .order__btn-buy {
+    .product-page__aside-container .order .order__btn-buy {
         margin: 12px 0 0 0;
         display: block;
         order: 2;
     }
 
-    .product-page .order .btn-base {
+    .product-page__aside-container .order .btn-base {
         font-size: 16px;
         padding: 11px 24px 13px;
         line-height: 1.1;
     }
 
-    .product-page .order .btn-base,
-    .product-page .order .btn-main {
+    .product-page__aside-container .order .btn-base,
+    .product-page__aside-container .order .btn-main {
         width: 100%;
     }
 
@@ -1282,11 +1317,7 @@ table {
         line-height: 24px;
     }
 
-    .popup-product-details .mini-product__buttons .btn-base {
-        padding-left: 20px;
-        padding-right: 20px;
-    }
-
+    .popup-product-details .mini-product__buttons .btn-base,
     .popup-product-details .mini-product__buttons .btn-main {
         padding-left: 20px;
         padding-right: 20px;
@@ -1295,6 +1326,15 @@ table {
     .popup-product-details .popup__close {
         right: 26px;
         top: 26px;
+    }
+
+}
+
+@media (min-width: 1024px) and (max-width: 1366px) {
+    .product-page .mix-block {
+        aspect-ratio: .75;
+        width: 100%;
+        height: 100%;
     }
 }
 
@@ -1305,9 +1345,13 @@ table {
             "slider headers aside"
             "slider options aside"
             "slider about-goods aside";
-        grid-template-rows: auto auto auto auto 1fr;
+        grid-template-rows: auto auto 1fr;
         grid-template-columns: 624px calc(100% - 624px - 368px) 368px;
         align-items: flex-start;
+    }
+
+    .product-page .product-page__price-block-common {
+        display: none;
     }
 
     .product-page .product-page__slider-wrap {
@@ -1354,4 +1398,11 @@ table {
         padding-left: 32px;
     }
 
+}
+
+@media (max-width: 1366px) {
+
+    .product-page .product-page__aside-container {
+        display: none;
+    }
 }

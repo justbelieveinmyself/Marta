@@ -5,40 +5,18 @@
 
 .main {
     position: relative;
+    flex: 1 0 auto;
+    padding: 16px 0 32px;
 }
 
-@media (min-width: 576px) {
-    .page-container {
-        max-width: 596px;
-    }
-}
-
-@media (min-width: 768px) {
-    .page-container {
-        max-width: 768px;
-    }
-}
-
-@media (min-width: 992px) {
-    .page-container {
-        max-width: 972px;
-    }
+.main__container {
+    max-width: 1504px;
+    padding: 0 32px;
+    margin: 0 auto;
 }
 
 @media (min-width: 1024px) {
     .main {
         padding: 24px 0 48px;
-    }
-}
-
-@media (min-width: 1200px) {
-    .page-container {
-        max-width: 1180px;
-    }
-}
-
-@media (min-width: 1400px) {
-    .page-container {
-        max-width: 1380px;
     }
 }
