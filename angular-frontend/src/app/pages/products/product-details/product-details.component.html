@@ -189,10 +189,59 @@
                         </div>
                     </div>
                     <div class="product-page__delivery">
-
+                        <div class="delivery">
+                            <p class="delivery__row delivery__row--title">
+                                <span class="delivery__title">
+                                    20 february
+                                </span>
+                                <span class="delivery__info">
+                                    <span class="delivery__word-storage">
+                                        warehouse
+                                    </span>
+                                    <span class="delivery__store">
+                                        Simferopol
+                                    </span>
+                                </span>
+                            </p>
+                        </div>
                     </div>
                     <div class="product-page__seller-wrap hide-mobile">
-
+                        <section class="seller-info">
+                            <div class="seller-info__content">
+                                <div class="seller-info__header">
+                                    <div class="seller-info__wrap">
+                                        <a routerLink="/brands/{{card.product.seller.username}}" routerLinkActive="active" class="seller-info__title seller-info__title--link">
+                                            <span class="seller-info__name">
+                                                {{card.product.seller.username | titlecase}}
+                                            </span>
+                                            <div class="seller-info__logo"></div>
+                                        </a>
+                                        <div class="seller-info__param">
+                                            <span class="address-rate-mini">
+                                                {{ratingOverall? ratingOverall : 0}}
+                                            </span>
+                                            <div class="seller-info__review seller-info__review--arrow">
+                                                <span class="seller-info__review-marks">
+                                                    {{card.product.seller.ratingCount}} ratings
+                                                </span>
+                                                <span class="hide-desktop"> on products</span>
+                                                <button class="seller-info__more hide-mobile" type="button"></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <ul class="seller-info__list hide-desktop">
+                                    <li class="seller-info__item seller-info__item--delivered swiper-slide">
+                                        <b class="seller-info__value">3000</b> <!-- TODO: count of product sold -->
+                                        <p class="seller-info__desc">products sold</p>
+                                    </li>
+                                    <li class="seller-info__item seller-info__item--time swiper-slide">
+                                        <b class="seller-info__value">{{card.product.seller.registeredAt}}</b> <!-- TODO: convert to count of year -->
+                                        <p class="seller-info__desc">on Marta</p>
+                                    </li>
+                                </ul>
+                            </div>
+                        </section>
                     </div>
                 </div>
             </div>
@@ -362,7 +411,7 @@
         </div>
 
     </div>
-    <div class="overlay initially-hidden" *ngIf="shownPopup" (click)="shownPopup = false;" style="z-index: 300"></div>
+    <div class="overlay initially-hidden" *ngIf="shownPopup" (click)="shownPopup = false; toggleOverflowBody()" style="z-index: 300"></div>
     <div class="product-page__user-activity user-activity">
         <div class="user-activity__tabs">
             <ul class="nav nav-underline">
