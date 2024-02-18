@@ -40,18 +40,19 @@
     <div class="product-page__grid">
         <div class="product-page__header-wrap">
             <div class="product-page__header">
-                <a routerLinkActive="active" routerLink="/brands/{{card.product.seller.username | lowercase}}" class="product-page__header-brand">
-                    {{card.product.seller.username|titlecase}}
+                <a routerLinkActive="active" routerLink="/brands/{{card.product.seller.username | lowercase}}"
+                   class="product-page__header-brand">
+                    {{ card.product.seller.username|titlecase }}
                 </a>
-                <h1 class="product-page__title">{{card.product.productName | titlecase}}</h1>
+                <h1 class="product-page__title">{{ card.product.productName | titlecase }}</h1>
             </div>
             <div class="product-page__common-info">
                 <a routerLinkActive="active" routerLink="../feedback" class="product-review">
                     <span class="product-review__rating address-rate-mini">
-                        {{ratingOverall? ratingOverall : 0}}
+                        {{ ratingOverall ? ratingOverall : 0 }}
                     </span>
                     <span class="product-review__count-review">
-                        {{reviews? reviews.length : 0}} ratings
+                        {{ reviews ? reviews.length : 0 }} ratings
                     </span>
                 </a>
             </div>
@@ -60,10 +61,15 @@
             <div class="product-page__sliders">
                 <div class="product-page__main-slider">
                     <div class="sw-slider-kt-mix">
-                        <button (click)="carousel.translatePosY=carousel.translatePosY+136" [ngClass]="carousel.translatePosY >= 0? 'disabled': ''" class="swiper-button-prev" type="button">Previous slide</button>
+                        <button (click)="carousel.translatePosY=carousel.translatePosY+136"
+                                [ngClass]="carousel.translatePosY >= 0? 'disabled': ''" class="swiper-button-prev"
+                                type="button">Previous slide
+                        </button>
                         <div class="sw-slider-kt-mix__wrap">
                             <div class="swiper-container swiper-container-initialized swiper-container-vertical">
-                                <ul class="swiper-wrapper" [ngStyle]="{'transform':'translate3d(0px, '+ carousel.translatePosY +'px, 0px)'}" style=" transition-duration: 300ms">
+                                <ul class="swiper-wrapper"
+                                    [ngStyle]="{'transform':'translate3d(0px, '+ carousel.translatePosY +'px, 0px)'}"
+                                    style=" transition-duration: 300ms">
                                     <li *ngFor="let item of carousel.items; let i = index"
                                         class="swiper-slide slide"
                                         [ngClass]="carousel.activeId === i? 'active': ''"
@@ -76,7 +82,10 @@
                                 </ul>
                             </div>
                         </div>
-                        <button (click)="carousel.translatePosY=carousel.translatePosY-136; test()" [ngClass]="this.carousel.translatePosY <= 700 - 136 * this.carousel.items.length? 'disabled': ''" class="swiper-button-next" type="button">Next slide</button>
+                        <button (click)="carousel.translatePosY=carousel.translatePosY-136;"
+                                [ngClass]="this.carousel.translatePosY <= 700 - 136 * this.carousel.items.length? 'disabled': ''"
+                                class="swiper-button-next" type="button">Next slide
+                        </button>
                         <p class="swiper-pagination swiper-pagination-fraction">
                             <span class="swiper-pagination-current">1</span>
                             <span class="swiper-pagination-total">4</span>
@@ -85,7 +94,8 @@
                 </div>
                 <div class="product-page__mix-block">
                     <div class="mix-block">
-                        <button (click)="carousel.previous()" class="mix-block__slider-btn mix-block__slider-btn--prev" type="button"></button>
+                        <button (click)="carousel.previous()" class="mix-block__slider-btn mix-block__slider-btn--prev"
+                                type="button"></button>
                         <div class="mix-block__photo-zoom photo-zoom">
                             <div class="photo-zoom__img-plug img-plug">
                                 <div class="zoom-image-container">
@@ -99,7 +109,8 @@
                             </div>
                         </div>
                         <!--<div class="mix-block__video product-card-video"></div>-->
-                        <button (click)="carousel.next()" class="mix-block__slider-btn mix-block__slider-btn--next" type="button"></button>
+                        <button (click)="carousel.next()" class="mix-block__slider-btn mix-block__slider-btn--next"
+                                type="button"></button>
                     </div>
                 </div>
             </div>
@@ -147,10 +158,16 @@
         </div>
         <div class="product-page__about-goods">
             <div class="product-page__links hide-mobile">
-                <a class="product-page__link" routerLinkActive="active"
-                   routerLink="/brands">All {{ card.product.seller.username | titlecase }}`s products from category</a>
-                <a class="product-page__link" routerLinkActive="active"
-                   routerLink="/brands">All {{ card.product.seller.username | titlecase }}`s products from category</a>
+                <p>
+                    <a class="product-page__link" routerLinkActive="active"
+                       routerLink="/brands">All {{ card.product.seller.username | titlecase }}`s products from
+                        category</a>
+                </p>
+                <p>
+                    <a class="product-page__link" routerLinkActive="active"
+                       routerLink="/brands">All {{ card.product.seller.username | titlecase }}`s products from
+                        category</a>
+                </p>
             </div>
             <div class="product-page__advantages advantages">
                 <ul class="advantages__list">
@@ -210,19 +227,21 @@
                             <div class="seller-info__content">
                                 <div class="seller-info__header">
                                     <div class="seller-info__wrap">
-                                        <a routerLink="/brands/{{card.product.seller.username}}" routerLinkActive="active" class="seller-info__title seller-info__title--link">
+                                        <a routerLink="/brands/{{card.product.seller.username}}"
+                                           routerLinkActive="active"
+                                           class="seller-info__title seller-info__title--link">
                                             <span class="seller-info__name">
-                                                {{card.product.seller.username | titlecase}}
+                                                {{ card.product.seller.username | titlecase }}
                                             </span>
                                             <div class="seller-info__logo"></div>
                                         </a>
                                         <div class="seller-info__param">
                                             <span class="address-rate-mini">
-                                                {{ratingOverall? ratingOverall : 0}}
+                                                {{ ratingOverall ? ratingOverall : 0 }}
                                             </span>
-                                            <div class="seller-info__review seller-info__review--arrow">
+                                            <div class="seller-info__review seller-info__review--arrow" (click)="toggleSellerTooltip($event)">
                                                 <span class="seller-info__review-marks">
-                                                    {{card.product.seller.ratingCount}} ratings
+                                                    {{ card.product.seller.ratingCount }} ratings
                                                 </span>
                                                 <span class="hide-desktop"> on products</span>
                                                 <button class="seller-info__more hide-mobile" type="button"></button>
@@ -236,7 +255,8 @@
                                         <p class="seller-info__desc">products sold</p>
                                     </li>
                                     <li class="seller-info__item seller-info__item--time swiper-slide">
-                                        <b class="seller-info__value">{{card.product.seller.registeredAt}}</b> <!-- TODO: convert to count of year -->
+                                        <b class="seller-info__value">{{ card.product.seller.registeredAt }}</b>
+                                        <!-- TODO: convert to count of year -->
                                         <p class="seller-info__desc">on Marta</p>
                                     </li>
                                 </ul>
@@ -265,30 +285,8 @@
             </span>
                     </div>
                 </div>
-            </div>
+            </div> -->
 
-            <div class="card card_with_shadow display mt-2" [ngClass]="isAppearing? 'display-active': ''"
-                 style="height: auto; width: 400px; margin-left: auto; ">
-                <div class="card-body" style="padding: 15px 10px 0 15px; height: auto">
-                    <span style="font-size: 22px">4.8<i class="fa-solid fa-star"
-                                                        style="color: #c9cc24;"> &nbsp;</i></span>
-                    <span class="ratings text-secondary">{{ card.product.seller.ratingCount }}
-                        product ratings</span>
-                    <hr style="margin-top: 8px; margin-bottom: 0">
-                    <table class="table table-borderless">
-                        <tbody>
-                        <tr *ngIf="productDetail">
-                            <td class="w-50"><span class="text-secondary">Products sold</span></td>
-                            <td style="text-align: right">{{ productDetail.soldCount }}</td>
-                        </tr>
-                        <tr>
-                            <td><span class="text-secondary">On Marta</span></td>
-                            <td style="text-align: right">{{ card.product.seller.registeredAt | date: 'dd MMM YYYY, HH:mm' }}</td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>-->
         </div>
     </div>
     <div class="popup popup-product-details" [ngClass]="shownPopup? 'shown': ''">
@@ -411,7 +409,8 @@
         </div>
 
     </div>
-    <div class="overlay initially-hidden" *ngIf="shownPopup" (click)="shownPopup = false; toggleOverflowBody()" style="z-index: 300"></div>
+    <div class="overlay initially-hidden" *ngIf="shownPopup" (click)="shownPopup = false; toggleOverflowBody()"
+         style="z-index: 300"></div>
     <div class="product-page__user-activity user-activity">
         <div class="user-activity__tabs">
             <ul class="nav nav-underline">
@@ -806,5 +805,47 @@
                 </div>
             </div>
         </div>
+    </div>
+</div>
+
+<div class="card card_with_shadow display mt-2" [ngClass]="isAppearing? 'display-active': ''"
+     style="height: auto; width: 400px; margin-left: auto; ">
+    <div class="card-body" style="padding: 15px 10px 0 15px; height: auto">
+                    <span style="font-size: 22px">4.8<i class="fa-solid fa-star"
+                                                        style="color: #c9cc24;"> &nbsp;</i></span>
+        <span class="ratings text-secondary">{{ card.product.seller.ratingCount }}
+            product ratings</span>
+        <hr style="margin-top: 8px; margin-bottom: 0">
+        <table class="table table-borderless">
+            <tbody>
+            <tr *ngIf="productDetail">
+                <td class="w-50"><span class="text-secondary">Products sold</span></td>
+                <td style="text-align: right">{{ productDetail.soldCount }}</td>
+            </tr>
+            <tr>
+                <td><span class="text-secondary">On Marta</span></td>
+                <td style="text-align: right">{{ card.product.seller.registeredAt | date: 'dd MMM YYYY, HH:mm' }}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="tooltip-s tooltip-seller-info tooltip--top" [ngStyle]="{'left': sellerTooltip.posX -200 +'px', 'top': sellerTooltip.posY+'px'}" style="z-index: 11111; display: inline-block; position: absolute;">
+    <div class="tooltip__content seller-params">
+        <p class="seller-params__header">
+            <span class="address-rate-mini">{{ratingOverall? ratingOverall : 0}}</span>
+            <span class="seller-params__review">{{card.product.seller.ratingCount}} ratings</span>
+        </p>
+        <ul class="seller-params__list">
+            <li class="seller-params__item">
+                <b class="seller-params__value">1000</b> <!-- TODO: products sold -->
+                <p class="seller-params__desc">Products sold</p>
+            </li>
+            <li class="seller-params__item">
+                <b class="seller-params__value">3 years</b> <!-- TODO: count of year -->
+                <p class="seller-params__desc">On Marta</p>
+            </li>
+        </ul>
     </div>
 </div>

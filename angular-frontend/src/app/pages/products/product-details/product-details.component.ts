@@ -30,7 +30,7 @@ export class ProductDetailsComponent implements OnInit {
         private productInteractionService: ProductInteractionService
     ) {}
 
-    carousel: Carousel = new Carousel(['/assets/ruby.png', '/assets/re.jpg', '/assets/haiku.png']);
+    carousel: Carousel = new Carousel(['/assets/ruby.png', '/assets/re.jpg', '/assets/haiku.png', '/assets/ruby.png', '/assets/re.jpg', '/assets/haiku.png', '/assets/ruby.png', '/assets/re.jpg', '/assets/haiku.png']);
     card: ProductWithImage;
     productDetail: ProductDetail;
     reviews: Review[];
@@ -54,6 +54,7 @@ export class ProductDetailsComponent implements OnInit {
     isPaid = false;
 
     shownPopup: boolean = false;
+    sellerTooltip: {shown: boolean, posX: number, posY: number} = {shown: false, posX: 0, posY: 0}
 
     ngOnInit(): void {
         this.activatedRoute.data.subscribe(data => {
@@ -219,9 +220,10 @@ export class ProductDetailsComponent implements OnInit {
 
     protected readonly window = window;
 
-    test() {
-        console.log()
-        console.log(this.carousel.translatePosY)
-        console.log()
+    toggleSellerTooltip(event: any) {
+        this.sellerTooltip.posX = event.clientX;
+        this.sellerTooltip.posY = event.clientY;
+        this.sellerTooltip.shown = true;
+        console.log(event)
     }
 }
