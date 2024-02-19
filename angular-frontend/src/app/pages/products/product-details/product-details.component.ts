@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {ProductService} from "../../../services/product.service";
 import {ActivatedRoute} from "@angular/router";
 import {ProductWithImage} from "../../../models/product-with-image";
@@ -30,7 +30,7 @@ export class ProductDetailsComponent implements OnInit {
         private productInteractionService: ProductInteractionService
     ) {}
 
-    carousel: Carousel = new Carousel(['/assets/ruby.png', '/assets/re.jpg', '/assets/haiku.png', '/assets/ruby.png', '/assets/re.jpg', '/assets/haiku.png', '/assets/ruby.png', '/assets/re.jpg', '/assets/haiku.png']);
+    carousel: Carousel;
     card: ProductWithImage;
     productDetail: ProductDetail;
     reviews: Review[];
@@ -55,11 +55,13 @@ export class ProductDetailsComponent implements OnInit {
 
     shownPopup: boolean = false;
     sellerTooltip: {shown: boolean, posX: number, posY: number} = {shown: false, posX: 0, posY: 0}
+    @ViewChild("asideContainer", {static: true}) asideContainer: ElementRef;
 
     ngOnInit(): void {
         this.activatedRoute.data.subscribe(data => {
             this.card = data["product"];
             this.productDetail = data["productDetail"];
+            this.carousel = new Carousel(this.productDetail.images);
             console.log(this.productDetail)
             this.totalPrice = this.card.product.price;
         });
@@ -221,9 +223,13 @@ export class ProductDetailsComponent implements OnInit {
     protected readonly window = window;
 
     toggleSellerTooltip(event: any) {
-        this.sellerTooltip.posX = event.clientX;
-        this.sellerTooltip.posY = event.clientY;
-        this.sellerTooltip.shown = true;
-        console.log(event)
+        if (this.sellerTooltip.shown) {
+            this.sellerTooltip.shown = false;
+        } else {
+            this.sellerTooltip.shown = true;
+            const rect = this.asideContainer.nativeElement.getBoundingClientRect();
+            this.sellerTooltip.posX = rect.left;
+            this.sellerTooltip.posY = event.pageY - rect.height;
+        }
     }
 }

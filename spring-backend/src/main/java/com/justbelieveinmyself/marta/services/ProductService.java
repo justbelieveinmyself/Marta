@@ -2,11 +2,7 @@ package com.justbelieveinmyself.marta.services;
 
 import com.justbelieveinmyself.marta.configs.beans.FileHelper;
 import com.justbelieveinmyself.marta.configs.beans.UserRightsValidator;
-import com.justbelieveinmyself.marta.domain.dto.ProductDto;
-import com.justbelieveinmyself.marta.domain.dto.ProductWithImageDto;
-import com.justbelieveinmyself.marta.domain.dto.QuestionDto;
-import com.justbelieveinmyself.marta.domain.dto.ReviewDto;
-import com.justbelieveinmyself.marta.domain.dto.ProductDetailDto;
+import com.justbelieveinmyself.marta.domain.dto.*;
 import com.justbelieveinmyself.marta.domain.entities.*;
 import com.justbelieveinmyself.marta.domain.enums.UploadDirectory;
 import com.justbelieveinmyself.marta.domain.mappers.ProductDetailMapper;
@@ -71,9 +67,23 @@ public class ProductService {
         Specification<Product> specification = createSpecification(filterPhotoNotNull, filterVerified, searchWord);
         Page<Product> products = productRepository.findAll(specification, pageable);
         List<ProductWithImageDto> productWithImageDtoList = products.stream()
-                .map(pro -> new ProductWithImageDto(productMapper.modelToDto(pro), Base64.getEncoder().encodeToString(
-                        fileHelper.downloadFileAsByteArray(pro.getPreviewImg(), UploadDirectory.PRODUCTS))))
+                .map(pro -> {
+
+                            String imageBase64 = null;
+                            if (pro.getProductDetail() != null) {
+                                List<ProductImage> images = pro.getProductDetail().getImages();
+                                if (!images.isEmpty()) {
+                                    ProductImage firstImage = images.get(0);
+                                    imageBase64 = Base64.getEncoder().encodeToString(
+                                            fileHelper.downloadFileAsByteArray(firstImage.getPath(), UploadDirectory.PRODUCTS)
+                                    );
+                                }
+                            }
+                            return new ProductWithImageDto(productMapper.modelToDto(pro), imageBase64);
+                        }
+                )
                 .toList();
+
         return ResponseEntity.ok(new PageImpl<>(productWithImageDtoList, pageable, products.getTotalElements()));
     }
 
@@ -116,16 +126,14 @@ public class ProductService {
                 PageRequest.of(0, Integer.MAX_VALUE);
     }
 
-    public ResponseEntity<ProductDto> createProduct(ProductDto productDto, MultipartFile previewImage, ProductDetailDto productDetailDto, User currentUser) {
-        String imagePath = fileHelper.uploadFile(previewImage, UploadDirectory.PRODUCTS);
+    public ResponseEntity<ProductDto> createProduct(ProductDto productDto, List<MultipartFile> images, ProductDetailDto productDetailDto, User currentUser) {
         Product product = productMapper.dtoToModel(productDto);
         product.setSeller(currentUser);
-        if(productDetailDto != null) {
-            ProductDetail productDetail = productDetailMapper.dtoToModel(productDetailDto, productRepository);
+        if (productDetailDto != null) {
+            ProductDetail productDetail = productDetailMapper.dtoToModel(productDetailDto, images, productRepository, fileHelper);
             productDetail.setProduct(product);
             product.setProductDetail(productDetail);
         }
-        product.setPreviewImg(imagePath);
         Product savedProduct = productRepository.save(product);
         return ResponseEntity.ok(productMapper.modelToDto(savedProduct));
     }
@@ -146,8 +154,21 @@ public class ProductService {
     public ResponseEntity<ProductWithImageDto> getProduct(Product product) {
         Stream<Product> productStream = Stream.of(product);
         ProductWithImageDto productWithImageDtoList = productStream
-                .map(pro -> new ProductWithImageDto(productMapper.modelToDto(pro), Base64.getEncoder().encodeToString(
-                        fileHelper.downloadFileAsByteArray(pro.getPreviewImg(), UploadDirectory.PRODUCTS)))).findAny().get();
+                .map(pro -> {
+
+                            String imageBase64 = null;
+                            if (pro.getProductDetail() != null) {
+                                List<ProductImage> images = pro.getProductDetail().getImages();
+                                if (!images.isEmpty()) {
+                                    ProductImage firstImage = images.get(0);
+                                    imageBase64 = Base64.getEncoder().encodeToString(
+                                            fileHelper.downloadFileAsByteArray(firstImage.getPath(), UploadDirectory.PRODUCTS)
+                                    );
+                                }
+                            }
+                            return new ProductWithImageDto(productMapper.modelToDto(pro), imageBase64);
+                        }
+                ).findAny().get();
         return ResponseEntity.ok(productWithImageDtoList);
     }
 
@@ -163,7 +184,7 @@ public class ProductService {
 
     public ResponseEntity<ReviewDto> createProductReview(ReviewDto reviewDto, User author, MultipartFile[] photos) {
         Optional<Product> productOpt = productRepository.findById(reviewDto.getProductId());
-        if(productOpt.isEmpty()){
+        if (productOpt.isEmpty()) {
             throw new NotFoundException("Product with [%s] doesn't exists".formatted(reviewDto.getProductId()));
         }
         Product product = productOpt.get();
@@ -187,7 +208,7 @@ public class ProductService {
 
     public ResponseEntity<QuestionDto> createProductQuestion(QuestionDto questionDto, User author) {
         Optional<Product> productOpt = productRepository.findById(questionDto.getProductId());
-        if(productOpt.isEmpty()){
+        if (productOpt.isEmpty()) {
             throw new NotFoundException("Product with [id] doesn't exists");
         }
         Product product = productOpt.get();
@@ -202,17 +223,30 @@ public class ProductService {
 
     public ResponseEntity<List<ProductWithImageDto>> getProductsFromCart(User user) {
         List<ProductWithImageDto> productDtos = user.getCartProducts().stream()
-                .map(pro -> new ProductWithImageDto(productMapper.modelToDto(pro), Base64.getEncoder().encodeToString(
-                        fileHelper.downloadFileAsByteArray(pro.getPreviewImg(), UploadDirectory.PRODUCTS))))
+                .map(pro -> {
+
+                            String imageBase64 = null;
+                            if (pro.getProductDetail() != null) {
+                                List<ProductImage> images = pro.getProductDetail().getImages();
+                                if (!images.isEmpty()) {
+                                    ProductImage firstImage = images.get(0);
+                                    imageBase64 = Base64.getEncoder().encodeToString(
+                                            fileHelper.downloadFileAsByteArray(firstImage.getPath(), UploadDirectory.PRODUCTS)
+                                    );
+                                }
+                            }
+                            return new ProductWithImageDto(productMapper.modelToDto(pro), imageBase64);
+                        }
+                )
                 .toList();
         return ResponseEntity.ok(productDtos);
     }
 
     public ResponseEntity<?> addProductToCart(Product product, User customer) {
-        if(customer.getCartProducts().add(product)){
+        if (customer.getCartProducts().add(product)) {
             userRepository.save(customer);
             return ResponseEntity.ok(productMapper.modelToDto(product));
-        }else{
+        } else {
             ResponseError responseError = new ResponseError(HttpStatus.FORBIDDEN, "Already added to cart!");
             return new ResponseEntity<>(responseError, HttpStatus.FORBIDDEN);
         }
@@ -226,20 +260,20 @@ public class ProductService {
     }
 
     public ResponseEntity<?> deleteProductFromCart(User customer, Product product) {
-        if(customer.getCartProducts().remove(product)){
+        if (customer.getCartProducts().remove(product)) {
             userRepository.save(customer);
             return ResponseEntity.ok(new ResponseMessage(200, "The product has been successfully removed from the shopping cart!"));
-        }else{
+        } else {
             ResponseError responseError = new ResponseError(HttpStatus.FORBIDDEN, "This product is not in the shopping cart!");
             return new ResponseEntity<>(responseError, HttpStatus.FORBIDDEN);
         }
     }
 
     public ResponseEntity<?> addProductToFavourites(Product product, User customer) {
-        if(customer.getFavouriteProducts().add(product)){
+        if (customer.getFavouriteProducts().add(product)) {
             userRepository.save(customer);
             return ResponseEntity.ok(productMapper.modelToDto(product));
-        }else{
+        } else {
             ResponseError responseError = new ResponseError(HttpStatus.FORBIDDEN, "Already added to favourites!");
             return new ResponseEntity<>(responseError, HttpStatus.FORBIDDEN);
         }
@@ -248,8 +282,21 @@ public class ProductService {
     public ResponseEntity<List<ProductWithImageDto>> getProductsFromFavourites(User user) {
         Set<Product> favouriteProducts = user.getFavouriteProducts();
         List<ProductWithImageDto> productDtos = favouriteProducts.stream()
-                .map(pro -> new ProductWithImageDto(productMapper.modelToDto(pro), Base64.getEncoder().encodeToString(
-                        fileHelper.downloadFileAsByteArray(pro.getPreviewImg(), UploadDirectory.PRODUCTS))))
+                .map(pro -> {
+
+                            String imageBase64 = null;
+                            if (pro.getProductDetail() != null) {
+                                List<ProductImage> images = pro.getProductDetail().getImages();
+                                if (!images.isEmpty()) {
+                                    ProductImage firstImage = images.get(0);
+                                    imageBase64 = Base64.getEncoder().encodeToString(
+                                            fileHelper.downloadFileAsByteArray(firstImage.getPath(), UploadDirectory.PRODUCTS)
+                                    );
+                                }
+                            }
+                            return new ProductWithImageDto(productMapper.modelToDto(pro), imageBase64);
+                        }
+                )
                 .toList();
         return ResponseEntity.ok(productDtos);
     }
@@ -292,6 +339,6 @@ public class ProductService {
 
     public ResponseEntity<ProductDetailDto> getProductDetail(Product product) {
         ProductDetail productDetail = product.getProductDetail();
-        return ResponseEntity.ok(productDetailMapper.modelToDto(productDetail));
+        return ResponseEntity.ok(productDetailMapper.modelToDto(productDetail, fileHelper));
     }
 }

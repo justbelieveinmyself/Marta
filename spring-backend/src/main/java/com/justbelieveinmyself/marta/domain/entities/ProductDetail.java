@@ -7,6 +7,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Schema(description = "Information about Product")
 @Table(name = "product_detail")
 @Entity
@@ -34,4 +37,6 @@ public class ProductDetail {
     private String otherDetails;
     @Column(name = "available")
     private Boolean isAvailable;
+    @OneToMany(mappedBy = "productDetail", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ProductImage> images = new ArrayList<>();
 }

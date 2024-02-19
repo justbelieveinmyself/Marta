@@ -2,6 +2,8 @@ package com.justbelieveinmyself.marta.domain.dto;
 
 import lombok.*;
 
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -19,4 +21,5 @@ public class ProductDetailDto {
     private String color;
     private String otherDetails;
     private Boolean isAvailable;
+    private List<String> images;
 }

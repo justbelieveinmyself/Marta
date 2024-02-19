@@ -176,8 +176,8 @@
             </div>
         </div>
         <div class="product-page__aside">
-            <div class="product-page__aside-sticky">
-                <div class="product-page__aside-container">
+            <div class="product-page__aside-sticky" >
+                <div class="product-page__aside-container" #asideContainer>
                     <div class="product-page__price-block product-page__price-block--aside">
                         <div class="price-block">
                             <div class="price-block__content">
@@ -239,7 +239,7 @@
                                             <span class="address-rate-mini">
                                                 {{ ratingOverall ? ratingOverall : 0 }}
                                             </span>
-                                            <div class="seller-info__review seller-info__review--arrow" (click)="toggleSellerTooltip($event)">
+                                            <div class="seller-info__review seller-info__review--arrow"  (mouseenter)="toggleSellerTooltip($event)" (mouseleave)="toggleSellerTooltip($event)">
                                                 <span class="seller-info__review-marks">
                                                     {{ card.product.seller.ratingCount }} ratings
                                                 </span>
@@ -831,7 +831,7 @@
     </div>
 </div>
 
-<div class="tooltip-s tooltip-seller-info tooltip--top" [ngStyle]="{'left': sellerTooltip.posX -200 +'px', 'top': sellerTooltip.posY+'px'}" style="z-index: 11111; display: inline-block; position: absolute;">
+<div class="tooltip-s tooltip-seller-info tooltip--top" [ngStyle]="{'left': sellerTooltip.posX +'px', 'top': sellerTooltip.posY+'px', 'display': sellerTooltip.shown? 'inline-block' : 'none' }" style="z-index: 11111; position: absolute;">
     <div class="tooltip__content seller-params">
         <p class="seller-params__header">
             <span class="address-rate-mini">{{ratingOverall? ratingOverall : 0}}</span>

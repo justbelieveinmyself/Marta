@@ -1,6 +1,6 @@
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
-import {Observable, tap} from 'rxjs';
+import {forkJoin, map, mergeMap, Observable, tap} from 'rxjs';
 import {Product} from '../models/product';
 import {ProductWithImage} from '../models/product-with-image';
 import {ImageService} from "./image.service";
@@ -44,8 +44,22 @@ export class ProductService {
     }
 
     getProductDetailById(id: number): Observable<ProductDetail> {
-        return this.httpClient.get<ProductDetail>(`${this.baseUrl}/detail/${id}`);
+        return this.httpClient.get<ProductDetail>(`${this.baseUrl}/detail/${id}`).pipe(
+            mergeMap(product => {
+                const imagePromises = product.images.map(img =>
+                    this.imageService.createUrlFromBase64(img)
+                );
+                return forkJoin(imagePromises).pipe(
+                    map(urls => {
+                        product.images = urls;
+                        return product;
+                    })
+                );
+            })
+        );
     }
+
+
 
     getProductReviews(productId: number): Observable<Review[]> {
         return this.httpClient.get<Review[]>(`${this.baseUrl}/reviews/` + productId);

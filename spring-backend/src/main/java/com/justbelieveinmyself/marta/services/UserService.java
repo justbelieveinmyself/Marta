@@ -7,6 +7,7 @@ import com.justbelieveinmyself.marta.domain.dto.UserDto;
 import com.justbelieveinmyself.marta.domain.dto.UserNamesDto;
 import com.justbelieveinmyself.marta.domain.dto.auth.LoginResponseDto;
 import com.justbelieveinmyself.marta.domain.dto.auth.RegisterDto;
+import com.justbelieveinmyself.marta.domain.entities.ProductImage;
 import com.justbelieveinmyself.marta.domain.entities.User;
 import com.justbelieveinmyself.marta.domain.enums.Role;
 import com.justbelieveinmyself.marta.domain.enums.UploadDirectory;
@@ -126,8 +127,17 @@ public class UserService implements UserDetailsService {
     public ResponseEntity<List<ProductWithImageDto>> getProducts(User user, User currentUser) {
         userRightsValidator.validateRights(user, currentUser);
         List<ProductWithImageDto> productDtos = user.getProducts().stream()
-                .map(pro -> new ProductWithImageDto(productMapper.modelToDto(pro), Base64.getEncoder().encodeToString(
-                        fileHelper.downloadFileAsByteArray(pro.getPreviewImg(), UploadDirectory.PRODUCTS))))
+                .map(pro -> {
+                    String imageBase64 = null;
+                    List<ProductImage> images = pro.getProductDetail().getImages();
+                    if (!images.isEmpty()) {
+                        ProductImage firstImage = images.get(0);
+                        imageBase64 = Base64.getEncoder().encodeToString(
+                                fileHelper.downloadFileAsByteArray(firstImage.getPath(), UploadDirectory.PRODUCTS)
+                        );
+                    }
+                    return new ProductWithImageDto(productMapper.modelToDto(pro), imageBase64);
+                })
                 .toList();
         return ResponseEntity.ok(productDtos);
     }

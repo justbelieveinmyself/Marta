@@ -67,10 +67,10 @@ public class ProductController {
     public ResponseEntity<ProductDto> createProduct(
             @RequestPart(value = "product") ProductDto productDto,
             @RequestPart(value = "productDetail", required = false) ProductDetailDto productDetailDto,
-            @RequestPart(value = "file", required = false) MultipartFile file,
+            @RequestPart(value = "file", required = false) List<MultipartFile> files,
             @CurrentUser User currentUser
     ) {
-        return productService.createProduct(productDto, file, productDetailDto, currentUser);
+        return productService.createProduct(productDto, files, productDetailDto, currentUser);
     }
 
     @DeleteMapping("/{productId}")
