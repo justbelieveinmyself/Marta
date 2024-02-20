@@ -1,6 +1,7 @@
 package com.justbelieveinmyself.marta.services;
 
 import com.justbelieveinmyself.marta.configs.beans.FileHelper;
+import com.justbelieveinmyself.marta.configs.beans.ProductHelper;
 import com.justbelieveinmyself.marta.configs.beans.UserRightsValidator;
 import com.justbelieveinmyself.marta.domain.dto.*;
 import com.justbelieveinmyself.marta.domain.entities.*;
@@ -13,7 +14,6 @@ import com.justbelieveinmyself.marta.exceptions.NotFoundException;
 import com.justbelieveinmyself.marta.exceptions.ResponseError;
 import com.justbelieveinmyself.marta.exceptions.ResponseMessage;
 import com.justbelieveinmyself.marta.repositories.*;
-import com.mysql.cj.util.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.*;
 import org.springframework.data.jpa.domain.Specification;
@@ -34,21 +34,22 @@ public class ProductService {
     private final ReviewRepository reviewRepository;
     private final QuestionRepository questionRepository;
     private final UserRepository userRepository;
-    private final ProductDetailRepository productDetailRepository;
+
     private final ProductMapper productMapper;
+    private final ProductHelper productHelper;
     private final ProductDetailMapper productDetailMapper;
     private final QuestionMapper questionMapper;
     private final ReviewMapper reviewMapper;
     private final FileHelper fileHelper;
     private final UserRightsValidator userRightsValidator;
 
-    public ProductService(ProductRepository productRepository, ReviewRepository reviewRepository, QuestionRepository questionRepository, UserRepository userRepository, ProductDetailRepository productDetailRepository, ProductMapper productMapper, ProductDetailMapper productDetailMapper, QuestionMapper questionMapper, ReviewMapper reviewMapper, FileHelper fileHelper, UserRightsValidator userRightsValidator) {
+    public ProductService(ProductRepository productRepository, ReviewRepository reviewRepository, QuestionRepository questionRepository, UserRepository userRepository, ProductDetailRepository productDetailRepository, ProductMapper productMapper, ProductHelper productHelper, ProductDetailMapper productDetailMapper, QuestionMapper questionMapper, ReviewMapper reviewMapper, FileHelper fileHelper, UserRightsValidator userRightsValidator) {
         this.productRepository = productRepository;
         this.reviewRepository = reviewRepository;
         this.questionRepository = questionRepository;
         this.userRepository = userRepository;
-        this.productDetailRepository = productDetailRepository;
         this.productMapper = productMapper;
+        this.productHelper = productHelper;
         this.productDetailMapper = productDetailMapper;
         this.questionMapper = questionMapper;
         this.reviewMapper = reviewMapper;
@@ -64,57 +65,13 @@ public class ProductService {
             String searchWord
     ) {
         Pageable pageable = createPageable(sortBy, isAsc, page, size, usePages);
-        Specification<Product> specification = createSpecification(filterPhotoNotNull, filterVerified, searchWord);
+        Specification<Product> specification = productHelper.createSpecification(filterPhotoNotNull, filterVerified, searchWord);
         Page<Product> products = productRepository.findAll(specification, pageable);
-        List<ProductWithImageDto> productWithImageDtoList = products.stream()
-                .map(pro -> {
-
-                            String imageBase64 = null;
-                            if (pro.getProductDetail() != null) {
-                                List<ProductImage> images = pro.getProductDetail().getImages();
-                                if (!images.isEmpty()) {
-                                    ProductImage firstImage = images.get(0);
-                                    imageBase64 = Base64.getEncoder().encodeToString(
-                                            fileHelper.downloadFileAsByteArray(firstImage.getPath(), UploadDirectory.PRODUCTS)
-                                    );
-                                }
-                            }
-                            return new ProductWithImageDto(productMapper.modelToDto(pro), imageBase64);
-                        }
-                )
-                .toList();
-
+        List<ProductWithImageDto> productWithImageDtoList = productHelper.createListOfProductsWithImageOfStream(products.stream());
         return ResponseEntity.ok(new PageImpl<>(productWithImageDtoList, pageable, products.getTotalElements()));
     }
 
-    private Specification<Product> createSpecification(Boolean filterPhotoNotNull, Boolean filterVerified, String searchWord) {
-        Specification<Product> specification = Specification.where(null);
-        if (filterPhotoNotNull) {
-            specification = specification.and((root, query, criteriaBuilder) ->
-                    criteriaBuilder.isNotNull(root.get("previewImg")));
-        }
 
-        if (filterVerified) {
-            specification = specification.and((root, query, criteriaBuilder) ->
-                    criteriaBuilder.isTrue(root.get("isVerified")));
-        }
-
-        if (!StringUtils.isEmptyOrWhitespaceOnly(searchWord)) {
-            specification = specification.and((root, query, criteriaBuilder) ->
-                    criteriaBuilder.or(
-                            criteriaBuilder.like(
-                                    criteriaBuilder.lower(root.get("productName")),
-                                    "%" + searchWord.toLowerCase() + "%"
-                            ),
-                            criteriaBuilder.like(
-                                    criteriaBuilder.lower(root.get("seller").get("username")),
-                                    "%" + searchWord.toLowerCase() + "%"
-                            )
-                    )
-            );
-        }
-        return specification;
-    }
 
     private Pageable createPageable(String sortBy, Boolean isAsc, Integer page, Integer size, Boolean usePages) {
         return usePages ?
@@ -153,22 +110,7 @@ public class ProductService {
 
     public ResponseEntity<ProductWithImageDto> getProduct(Product product) {
         Stream<Product> productStream = Stream.of(product);
-        ProductWithImageDto productWithImageDtoList = productStream
-                .map(pro -> {
-
-                            String imageBase64 = null;
-                            if (pro.getProductDetail() != null) {
-                                List<ProductImage> images = pro.getProductDetail().getImages();
-                                if (!images.isEmpty()) {
-                                    ProductImage firstImage = images.get(0);
-                                    imageBase64 = Base64.getEncoder().encodeToString(
-                                            fileHelper.downloadFileAsByteArray(firstImage.getPath(), UploadDirectory.PRODUCTS)
-                                    );
-                                }
-                            }
-                            return new ProductWithImageDto(productMapper.modelToDto(pro), imageBase64);
-                        }
-                ).findAny().get();
+        ProductWithImageDto productWithImageDtoList = productHelper.createListOfProductsWithImageOfStream(productStream).get(0);
         return ResponseEntity.ok(productWithImageDtoList);
     }
 
@@ -222,23 +164,7 @@ public class ProductService {
     }
 
     public ResponseEntity<List<ProductWithImageDto>> getProductsFromCart(User user) {
-        List<ProductWithImageDto> productDtos = user.getCartProducts().stream()
-                .map(pro -> {
-
-                            String imageBase64 = null;
-                            if (pro.getProductDetail() != null) {
-                                List<ProductImage> images = pro.getProductDetail().getImages();
-                                if (!images.isEmpty()) {
-                                    ProductImage firstImage = images.get(0);
-                                    imageBase64 = Base64.getEncoder().encodeToString(
-                                            fileHelper.downloadFileAsByteArray(firstImage.getPath(), UploadDirectory.PRODUCTS)
-                                    );
-                                }
-                            }
-                            return new ProductWithImageDto(productMapper.modelToDto(pro), imageBase64);
-                        }
-                )
-                .toList();
+        List<ProductWithImageDto> productDtos = productHelper.createListOfProductsWithImageOfStream(user.getCartProducts().stream());
         return ResponseEntity.ok(productDtos);
     }
 
@@ -281,25 +207,11 @@ public class ProductService {
 
     public ResponseEntity<List<ProductWithImageDto>> getProductsFromFavourites(User user) {
         Set<Product> favouriteProducts = user.getFavouriteProducts();
-        List<ProductWithImageDto> productDtos = favouriteProducts.stream()
-                .map(pro -> {
-
-                            String imageBase64 = null;
-                            if (pro.getProductDetail() != null) {
-                                List<ProductImage> images = pro.getProductDetail().getImages();
-                                if (!images.isEmpty()) {
-                                    ProductImage firstImage = images.get(0);
-                                    imageBase64 = Base64.getEncoder().encodeToString(
-                                            fileHelper.downloadFileAsByteArray(firstImage.getPath(), UploadDirectory.PRODUCTS)
-                                    );
-                                }
-                            }
-                            return new ProductWithImageDto(productMapper.modelToDto(pro), imageBase64);
-                        }
-                )
-                .toList();
+        List<ProductWithImageDto> productDtos = productHelper.createListOfProductsWithImageOfStream(favouriteProducts.stream());
         return ResponseEntity.ok(productDtos);
     }
+
+
 
     public ResponseEntity<?> deleteProductFromFavourites(User user, Product product) {
         if (user.getFavouriteProducts().remove(product)) {

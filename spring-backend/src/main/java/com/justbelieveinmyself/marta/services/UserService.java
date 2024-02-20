@@ -1,13 +1,13 @@
 package com.justbelieveinmyself.marta.services;
 
 import com.justbelieveinmyself.marta.configs.beans.FileHelper;
+import com.justbelieveinmyself.marta.configs.beans.ProductHelper;
 import com.justbelieveinmyself.marta.configs.beans.UserRightsValidator;
 import com.justbelieveinmyself.marta.domain.dto.ProductWithImageDto;
 import com.justbelieveinmyself.marta.domain.dto.UserDto;
 import com.justbelieveinmyself.marta.domain.dto.UserNamesDto;
 import com.justbelieveinmyself.marta.domain.dto.auth.LoginResponseDto;
 import com.justbelieveinmyself.marta.domain.dto.auth.RegisterDto;
-import com.justbelieveinmyself.marta.domain.entities.ProductImage;
 import com.justbelieveinmyself.marta.domain.entities.User;
 import com.justbelieveinmyself.marta.domain.enums.Role;
 import com.justbelieveinmyself.marta.domain.enums.UploadDirectory;
@@ -23,7 +23,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Base64;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -36,14 +35,15 @@ public class UserService implements UserDetailsService {
     private final FileHelper fileHelper;
     private final UserMapper userMapper;
     private final UserRightsValidator userRightsValidator;
-
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, ProductMapper productMapper, FileHelper fileHelper, UserMapper userMapper, UserRightsValidator userRightsValidator) {
+    private final ProductHelper productHelper;
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, ProductMapper productMapper, FileHelper fileHelper, UserMapper userMapper, UserRightsValidator userRightsValidator, ProductHelper productHelper) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.productMapper = productMapper;
         this.fileHelper = fileHelper;
         this.userMapper = userMapper;
         this.userRightsValidator = userRightsValidator;
+        this.productHelper = productHelper;
     }
 
     public User save(User user) {
@@ -126,19 +126,7 @@ public class UserService implements UserDetailsService {
 
     public ResponseEntity<List<ProductWithImageDto>> getProducts(User user, User currentUser) {
         userRightsValidator.validateRights(user, currentUser);
-        List<ProductWithImageDto> productDtos = user.getProducts().stream()
-                .map(pro -> {
-                    String imageBase64 = null;
-                    List<ProductImage> images = pro.getProductDetail().getImages();
-                    if (!images.isEmpty()) {
-                        ProductImage firstImage = images.get(0);
-                        imageBase64 = Base64.getEncoder().encodeToString(
-                                fileHelper.downloadFileAsByteArray(firstImage.getPath(), UploadDirectory.PRODUCTS)
-                        );
-                    }
-                    return new ProductWithImageDto(productMapper.modelToDto(pro), imageBase64);
-                })
-                .toList();
+        List<ProductWithImageDto> productDtos = productHelper.createListOfProductsWithImageOfStream(user.getProducts().stream());
         return ResponseEntity.ok(productDtos);
     }
 }
