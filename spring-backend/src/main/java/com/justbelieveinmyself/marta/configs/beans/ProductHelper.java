@@ -44,7 +44,7 @@ public class ProductHelper {
         Specification<Product> specification = Specification.where(null);
         if (filterPhotoNotNull) {
             specification = specification.and((root, query, criteriaBuilder) ->
-                    criteriaBuilder.isNotNull(root.get("previewImg")));
+                    criteriaBuilder.greaterThan(criteriaBuilder.size(root.get("productDetail").get("images")), 0));
         }
 
         if (filterVerified) {

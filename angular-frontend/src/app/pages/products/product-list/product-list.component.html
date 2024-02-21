@@ -1,5 +1,5 @@
 <div [ngClass]="{'grid-container': isItemsByGrid, 'list-container': !isItemsByGrid}">
-    <div *ngFor="let item of card; let i=index" class="catalog-item">
+    <!--<div *ngFor="let item of card; let i=index" class="catalog-item">
         <div class="card object-with-hidden-item" style="height: min-content; width: 100%">
             <b [ngStyle]="item.product.isVerified? {'color':'green'}:{'color':'red'}"
                style="position: absolute; top: 8px; right: 10px; font-size: 13px;">
@@ -40,7 +40,50 @@
                 </ng-container>
             </div>
         </div>
-    </div>
+    </div> -->
+    <ng-container *ngFor="let item of card; let i=index">
+    <article class="product product-card product-card--hoverable">
+        <div class="product-card__wrapper">
+            <a routerLink="/products/{{item.product.id}}/details" routerLinkActive="active" class="product-card__link"></a>
+            <div class="product-card__top-wrap">
+                <button class="product-card__heart"></button>
+                <div class="product-card__img-wrap">
+                    <img [src]="item.file" width="516" height="688" loading="lazy" [alt]="item.product.productName">
+                </div>
+                <button class="product-card__fast-view hide-mobile" type="button">Fast view</button>
+            </div>
+            <div class="product-card__middle-wrap">
+                <p class="product-card__price price">
+                    <span class="price__wrap">
+                        <ins class="price__lower-price wallet-price">{{item.product.price}}</ins>
+                        <del>400</del>
+                    </span>
+                </p>
+                <h2 class="product-card__brand-wrap">
+                    <span class="product-card__brand-container">
+                        <span class="product-card__brand">{{item.product.seller.username}}</span>
+                    </span>
+                    <span class="product-card__name">
+                        <span> / </span>
+                        {{item.product.productName}}
+                    </span>
+                </h2>
+            </div>
+            <div class="product-card__bottom-wrap">
+                <p class="product-card__rating-wrap">
+                    <span class="address-rate-mini">4.4</span>
+                    <span class="product-card__count">{{item.product.seller.ratingCount}} ratings</span>
+                </p>
+                <p class="product-card__order-wrap">
+                    <a href="" class="product-card__add-basket btn-main">
+                        <span class="btn-icon__white"></span>
+                        <span class="btn-text">24 february</span>
+                    </a>
+                </p>
+            </div>
+        </div>
+    </article>
+    </ng-container>
 </div>
 <div class="toast-container position-fixed bottom-0 end-0 p-3">
     <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">

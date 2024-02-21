@@ -288,6 +288,26 @@ a {
     transform: translate(-50%, -50%) rotate(45deg);
 }
 
+.address-rate-mini {
+    font-size: 14px;
+    line-height: 20px;
+    display: inline-flex;
+    align-items: center;
+    color: #242424;
+}
+
+.address-rate-mini::before {
+    content: "";
+    display: block;
+    width: 12px;
+    height: 12px;
+    margin-right: 4px;
+    background-image: url(data:image/svg+xml,%3Csvg%20width%3D%2226%22%20height%3D%2226%22%20fill%3D%22%23FCA95D%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20clip-rule%3D%22evenodd%22%20d%3D%22m13.568%201.395%203.052%207.577%207.816.704c.542.05.762.758.35%201.132l-5.927%205.386%201.776%208.012c.123.557-.452.995-.918.699l-6.716-4.248-6.717%204.248c-.467.294-1.04-.144-.918-.7l1.777-8.011-5.93-5.387c-.411-.374-.192-1.083.352-1.132L9.38%208.97l3.053-7.576a.605.605%200%200%201%201.135%200Z%22%20stroke%3D%22%23FCA95D%22%2F%3E%3C%2Fsvg%3E);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+}
+
 @media (min-width: 1024px) {
     .popup {
         width: calc(100% - 32px);
@@ -295,5 +315,11 @@ a {
         border-radius: 20px;
         position: absolute;
         max-width: 700px;
+    }
+}
+
+@media (max-width: 1023.98px) {
+    .hide-mobile {
+        display: none!important;
     }
 }
