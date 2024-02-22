@@ -1,12 +1,10 @@
 import {Component, Input} from '@angular/core';
 import {ProductWithImage} from 'src/app/models/product-with-image';
-import {Order} from "../../../models/order";
 import {ProductService} from "../../../services/product.service";
 import {Product} from "../../../models/product";
 import {TokenService} from "../../../services/token.service";
 import {LocalUser} from "../../../models/local-user";
 import {UserService} from "../../../services/user.service";
-import {Seller} from "../../../models/seller";
 import {ProductInteractionService} from "../../../services/product-interaction.service";
 
 @Component({
@@ -28,8 +26,10 @@ export class ProductListComponent {
     @Input() isCanEdit: boolean;
     @Input() isItemsByGrid: boolean = true;
     productInToast: Product;
+    productInPopup: ProductWithImage;
     currentUser: LocalUser;
     isFavourite: boolean[];
+    shownPopup: boolean = false;
 
     ngOnInit() {
         this.currentUser = this.tokenService.getUser();
@@ -88,5 +88,13 @@ export class ProductListComponent {
         this.productInteractionService.toggleFavourite(isFavourite, item.product.id).subscribe(isFavourite => {
            this.isFavourite[index] = isFavourite;
         });
+    }
+
+    toggleOverflowBody() {
+        if (this.shownPopup) {
+            document.body.classList.add("body--overflow")
+        } else {
+            document.body.classList.remove("body--overflow")
+        }
     }
 }

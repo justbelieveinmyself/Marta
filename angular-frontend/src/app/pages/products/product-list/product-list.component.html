@@ -1,71 +1,106 @@
-<div [ngClass]="{'grid-container': isItemsByGrid, 'list-container': !isItemsByGrid}">
-    <!--<div *ngFor="let item of card; let i=index" class="catalog-item">
-        <div class="card object-with-hidden-item" style="height: min-content; width: 100%">
-            <b [ngStyle]="item.product.isVerified? {'color':'green'}:{'color':'red'}"
-               style="position: absolute; top: 8px; right: 10px; font-size: 13px;">
-                <i class="fa-solid fa-2xl"
-                   tooltip="{{item.product.isVerified? 'Verified by the administrator':'Not yet verified by the administrator'}}"
-                   [ngClass]="item.product.isVerified? 'fa-check': 'fa-xmark'"></i>
-            </b>
-            <i routerLinkActive="active" [routerLink]="'/update-product/' + item.product.id" *ngIf="isCanEdit"
-               class="fa-solid fa-pen-to-square fa-xl"
-               style="position: absolute; top: 18px; left: 10px;cursor: pointer"></i>
-            <a *ngIf="isNeedFavourites" type="button" class="fa-regular fa-heart fa-xl"
-               [ngClass]="isFavourite[i]? 'fa-solid' : 'fa-regular'"
-               style="color: red; position: absolute; top: 16px; left: 10px;"
-               (click)="toggleFavourite(item, i)"></a>
-            <img type="button" routerLink="/products/{{item.product.id}}/details" routerLinkActive="active"
-                 [src]="item.file" style="object-fit: cover;" height="381.86" class="card-img-top"
-                 alt="product image">
-            <div class="card-body" type="button" routerLink="/products/{{item.product.id}}/details"
-                 routerLinkActive="active">
-                <h5 class="card-title">{{ item.product.price | currency }}
-                    <span style="text-decoration: line-through; font-size: 15px;
-                    color: #868695; margin-left: 8px;">{{ item.product.discountPercentage }}%</span>
-                </h5>
-                <div class="hidden-text-2">
-                    <div class="card-text"
-                         style="word-break: break-all">{{ item.product.seller.username | titlecase }}
-                        / {{ item.product.productName | titlecase }}
+<div class="overlay" *ngIf="shownPopup" (click)="shownPopup = false; toggleOverflowBody()" style="z-index: 300"></div>
+<div class="popup popup-product-show" *ngIf="shownPopup" style="z-index: 301; opacity: 1; display: block; top: 488px; left: 268px">
+    <a (click)="shownPopup = false; toggleOverflowBody()" class="popup__close"></a>
+    <div class="content">
+        <div class="product">
+            <div class="product__photo-wrap">
+
+            </div>
+            <div class="product__content">
+                <div class="product__header-wrap">
+                    <a class="product__header">
+                        <span class="product__brand-name">{{productInPopup.product.seller.username}}</span>
+                        <span>{{productInPopup.product.productName}}</span>
+                    </a>
+                    <div class="product__common-info">
+                        <a class="product-review">
+                            <span class="product-review__rating address-rate-mini">
+                                4.4 <!-- TODO: AVG rating -->
+                            </span>
+                            <span class="product-review__count-review">{{productInPopup.product.seller.ratingCount}} ratings</span>
+                        </a>
+                        <p class="product-article">
+                            <span>Art:</span>
+                            <span class="product-article__copy">
+                                {{productInPopup.product.productCode}}
+                            </span>
+                        </p>
+                        <button class="product__verified">
+                            <span class="product__verified-icon"></span>
+                            <span>Verified</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="product__info-wrap">
+                    <div>
+                        <div class="price-block">
+                            <div class="price-block__content">
+                                <div class="price-block__price-group">
+                                    <p class="price-block__price-wrap">
+                                        <span class="price-block__price">
+                                            <span class="price-block__wallet-price">
+                                                {{ productInPopup.product.price|currency }}
+                                            </span>
+                                        </span>
+                                        <del class="price-block__old-price">
+                                            <span>$2 500</span>
+                                        </del>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="product__order">
+                        <div class="order">
+                            <button class="order__btn-buy btn-base">Buy now</button>
+                            <button class="btn-main">
+                                <span class="hide-mobile">Add to cart</span>
+                                <span class="hide-desktop">To cart</span>
+                            </button>
+                        </div>
+                        <div class="order-to-poned hide-mobile btn-heart-black">
+
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="card bottom-wrap hidden-item">
-                <div class="btn btn-outline-dark me-2" (click)="addToCart(item.product)">Add to cart</div>
-                <ng-container *ngIf="isAdminPage">
-                    <div *ngIf="!item.product.isVerified" (click)="verifyProduct(item.product, i)"
-                         class="btn btn-outline-success me-2">Verify
-                    </div>
-                    <div (click)="deleteProduct(item.product, i)" class="btn btn-outline-danger">Delete</div>
-                </ng-container>
-            </div>
         </div>
-    </div> -->
-    <ng-container *ngFor="let item of card; let i=index">
+        <button class="popup__btn-prev" title="Previous article" type="button" style="display: block"></button>
+        <button class="popup__btn-next" title="Next article" type="button" style="display: block"></button>
+    </div>
+</div>
+<div [ngClass]="{'grid-container': isItemsByGrid, 'list-container': !isItemsByGrid}">
+    <!-- routerLinkActive="active" [routerLink]="'/update-product/' + item.product.id" *ngIf="isCanEdit"
+                <ng-container *ngIf="isAdminPage">
+                    *ngIf="!item.product.isVerified" (click)="verifyProduct(item.product, i)"
+                    (click)="deleteProduct(item.product, i)"
+                </ng-container> -->
+    <ng-container *ngFor="let item of card; let i = index">
     <article class="product product-card product-card--hoverable">
         <div class="product-card__wrapper">
             <a routerLink="/products/{{item.product.id}}/details" routerLinkActive="active" class="product-card__link"></a>
             <div class="product-card__top-wrap">
-                <button class="product-card__heart"></button>
+                <button class="product-card__heart" [ngClass]="isFavourite[i]? 'active':''" (click)="toggleFavourite(item, i)"></button>
+                <button class="product-card__verified" [ngClass]="item.product.isVerified? 'active':''"></button>
                 <div class="product-card__img-wrap">
                     <img [src]="item.file" width="516" height="688" loading="lazy" [alt]="item.product.productName">
                 </div>
-                <button class="product-card__fast-view hide-mobile" type="button">Fast view</button>
+                <button class="product-card__fast-view hide-mobile" type="button" (click)="shownPopup = true; toggleOverflowBody(); productInPopup = item">Quick view</button>
             </div>
             <div class="product-card__middle-wrap">
                 <p class="product-card__price price">
                     <span class="price__wrap">
-                        <ins class="price__lower-price wallet-price">{{item.product.price}}</ins>
+                        <ins class="price__lower-price wallet-price">{{item.product.price | currency}}</ins>
                         <del>400</del>
                     </span>
                 </p>
                 <h2 class="product-card__brand-wrap">
                     <span class="product-card__brand-container">
-                        <span class="product-card__brand">{{item.product.seller.username}}</span>
+                        <span class="product-card__brand">{{item.product.seller.username | titlecase}}</span>
                     </span>
                     <span class="product-card__name">
                         <span> / </span>
-                        {{item.product.productName}}
+                        {{item.product.productName | titlecase}}
                     </span>
                 </h2>
             </div>
@@ -75,7 +110,7 @@
                     <span class="product-card__count">{{item.product.seller.ratingCount}} ratings</span>
                 </p>
                 <p class="product-card__order-wrap">
-                    <a href="" class="product-card__add-basket btn-main">
+                    <a class="product-card__add-basket btn-main" (click)="addToCart(item.product)">
                         <span class="btn-icon__white"></span>
                         <span class="btn-text">24 february</span>
                     </a>
