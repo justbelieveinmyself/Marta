@@ -1737,10 +1737,6 @@ table {
         padding: 24px 40px;
     }
 
-    .hide-desktop {
-        display: none !important;
-    }
-
     .popup-product-details .mini-product__price {
         font-size: 18px;
         line-height: 24px;

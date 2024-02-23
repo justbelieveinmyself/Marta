@@ -6,6 +6,7 @@ import {TokenService} from "../../../services/token.service";
 import {LocalUser} from "../../../models/local-user";
 import {UserService} from "../../../services/user.service";
 import {ProductInteractionService} from "../../../services/product-interaction.service";
+import {Carousel} from "../../../models/carousel";
 
 @Component({
     selector: 'app-product-list',
@@ -27,10 +28,11 @@ export class ProductListComponent {
     @Input() isItemsByGrid: boolean = true;
     productInToast: Product;
     productInPopup: ProductWithImage;
+    productIndexInPopup: number;
     currentUser: LocalUser;
     isFavourite: boolean[];
     shownPopup: boolean = false;
-
+    carousel: Carousel<ProductWithImage>;
     ngOnInit() {
         this.currentUser = this.tokenService.getUser();
     }
@@ -38,6 +40,7 @@ export class ProductListComponent {
     ngOnChanges(){
         if(this.isNeedFavourites && this.card){
             this.getFavourites();
+            this.carousel = new Carousel<ProductWithImage>(this.card);
         }
     }
 
@@ -96,5 +99,10 @@ export class ProductListComponent {
         } else {
             document.body.classList.remove("body--overflow")
         }
+    }
+
+    orderNow() {
+        this.productInteractionService.orderNow(this.productInPopup, 1, false).then(isOrdered => {
+        });
     }
 }

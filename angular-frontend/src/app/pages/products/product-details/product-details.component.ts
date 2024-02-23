@@ -30,7 +30,7 @@ export class ProductDetailsComponent implements OnInit {
         private productInteractionService: ProductInteractionService
     ) {}
 
-    carousel: Carousel;
+    carousel: Carousel<string>;
     card: ProductWithImage;
     productDetail: ProductDetail;
     reviews: Review[];

@@ -1,10 +1,10 @@
 
-export class Carousel {
-    constructor(urls: string[]) {
+export class Carousel<T> {
+    constructor(urls: T[]) {
         this.items = urls;
     }
 
-    items: string[];
+    items: T[];
     activeId: number = 0;
     translatePosY: number = 0;
 
@@ -12,7 +12,7 @@ export class Carousel {
         this.activeId = id;
     }
 
-    getActive(): string {
+    getActive(): T {
         return this.items[this.activeId];
     }
 
@@ -26,6 +26,14 @@ export class Carousel {
         if (this.items.length > this.activeId + 1) {
             this.activeId ++;
         }
+    }
+
+    isLast(): boolean {
+        return this.items.length === this.activeId + 1;
+    }
+
+    isFirst(): boolean {
+        return this.activeId === 0;
     }
 
 }
