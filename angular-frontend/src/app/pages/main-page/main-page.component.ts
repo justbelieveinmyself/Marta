@@ -28,8 +28,9 @@ export class MainPageComponent {
     page: Page<ProductWithImage>;
     isNeedSortByDate = false;
     isNeedSortByPrice = false;
-    isPriceCollapsed = true;
     isItemsByGrid = true;
+
+    shownCategoryFilterBlock: boolean = false;
 
     ngOnInit(): void {
         this.user = this.tokenService.getUser();
@@ -85,5 +86,14 @@ export class MainPageComponent {
     resetPageData() {
         this.pageDataService.resetFilters();
         this.getProducts(0);
+    }
+
+    closeAllFilters(event: any) {
+
+        if(event.target.classList.contains("dropdown-filter__btn")) {
+            return;
+        }
+        this.shownCategoryFilterBlock = false;
+        console.log(event)
     }
 }

@@ -1,119 +1,77 @@
-<h4 style="font-weight: bold" *ngIf="pageDataService.searchWord != null">{{ pageDataService.searchWord + " " }}
-    Found: {{ page ? page.totalElements : 0 }}</h4>
-<div class="main-container">
-    <aside class="filter-panel card_with_shadow card">
-        <label class="filter-block p-3 highlight-hover">
-            <input class="form-check-input " type="checkbox"
-                   [(ngModel)]="pageDataService.isFilteredByWithPhoto">
-            <span class="form-check-label ps-2">
-                With a photo
-            </span>
-        </label>
-        <label class="filter-block p-3 highlight-hover">
-            <input class="form-check-input" type="checkbox"
-                   [(ngModel)]="pageDataService.isFilteredByVerified">
-            <span class="form-check-label ps-2">
-                Verified
-            </span>
-        </label>
-        <label class="filter-block highlight-hover p-3">
-            <input class="form-check-input" type="checkbox">
-            <span class="form-check-label ps-2">
-                Top ratings
-            </span>
-        </label>
-        <div class="filter-block">
-            <a class="ui-link w-100 highlight-hover p-3" [ngClass]="isPriceCollapsed? '' : 'ui-collapse_link__in'"
-               (click)="isPriceCollapsed = !isPriceCollapsed">
-                <i class="fa-solid filter-block__icon highlight-hover-blue"
-                   [ngClass]="isPriceCollapsed? 'fa-chevron-down' : 'fa-chevron-up'"></i>
-                <span class="form-check-label ps-2 highlight-hover-blue">
-                    Price
-                </span>
-            </a>
-            <div class="collapse__content" [ngClass]="isPriceCollapsed? '' : 'collapse__content_in'">
-                <div>
-                    <div class="input-small">
-                        <input class="form-control input-small__input" type="number" min="10" max="1000"
-                               placeholder="from 10">
-                    </div>
-                    <div class="input-small">
-                        <input class="form-control input-small__input" type="number" min="10" max="1000"
-                               placeholder="to 1000">
-                    </div>
-                    <div class="checkbox-group">
-                        <label class="checkbox-group__item highlight-hover p-2">
-                            <input class="form-check-input" type="checkbox">
-                            <span class="ms-1">
-                            Less than 100$
-                        </span>
-                        </label>
-                        <label class="checkbox-group__item highlight-hover p-2">
-                            <input class="form-check-input" type="checkbox">
-                            <span class="ms-1">
-                            101 - 200$
-                        </span>
-                        </label>
-                        <label class="checkbox-group__item highlight-hover p-2">
-                            <input class="form-check-input" type="checkbox">
-                            <span class="ms-1">
-                            201 - 300$
-                        </span>
-                        </label>
-                        <label class="checkbox-group__item highlight-hover p-2">
-                            <input class="form-check-input" type="checkbox">
-                            <span class="ms-1">
-                            301 - 400$
-                        </span>
-                        </label>
-                        <label class="checkbox-group__item highlight-hover p-2">
-                            <input class="form-check-input" type="checkbox">
-                            <span class="ms-1">
-                            401 - 500$
-                        </span>
-                        </label>
-                        <label class="checkbox-group__item highlight-hover p-2">
-                            <input class="form-check-input" type="checkbox">
-                            <span class="ms-1">
-                            More than 500$
-                        </span>
-                        </label>
+<div class="main-page" (click)="closeAllFilters($event)">
+    <ng-container *ngIf="pageDataService.searchWord">
+        <div class="main-page__searching-results">
+            <div class="searching-results__inner">
+                <h1 class="searching-results__title">{{ pageDataService.searchWord | titlecase }}</h1>
+                <span class="searching-results__count">{{ page.totalElements }} products found</span>
+            </div>
+        </div>
+        <div class="main-page__filters-block">
+            <div class="filters-block">
+                <div class="filters-block__wrap">
+                    <div class="filters-block__desktop hide-mobile">
+                        <div class="filters-block__dropdown">
+                            <div class="dropdown-filter" [ngClass]="shownCategoryFilterBlock? 'open':''">
+                                <button (click)="shownCategoryFilterBlock = !shownCategoryFilterBlock"
+                                    class="dropdown-filter__btn dropdown-filter__btn--burger">{{ pageDataService.searchWord }}
+                                </button>
+                                <div class="dropdown-filter__content dropdown-filter__content--menu">
+                                    <div class="filter-category">
+                                        <div class="filter-category__block">
+                                            <div class="filter-category__content">
+                                                <a class="filter-category__title filter-category__title--link">{{ pageDataService.searchWord }}</a>
+                                                <ul class="filter-category__list">
+                                                    <li class="filter-category__item">
+                                                        <a class="filter-category__link filter-category__link--subcategory">Category
+                                                            1</a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="dropdown-filter">
+                                <button class="dropdown-filter__btn dropdown-filter__btn--sorter">
+                                    By popularity
+                                </button>
+                                <div class="dropdown-filter__content">
+                                    <div class="filter">
+                                        <ul class="filter__list">
+                                            <li class="filter__item">
+                                                <div class="radio-with-text selected">
+                                                    <span class="radio-with-text__decor"></span>
+                                                    <span class="radio-with-text__text">
+                                                    By popularity
+                                                </span>
+                                                </div>
+                                            </li>
+                                            <li class="filter__item">
+                                                <div class="radio-with-text">
+                                                    <span class="radio-with-text__decor"></span>
+                                                    <span class="radio-with-text__text">
+                                                    By date
+                                                </span>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-sizes">
+                            <a class="card-sizes__btn card-sizes__btn--big"></a>
+                            <a class="card-sizes__btn card-sizes__btn--small"></a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="btn-block">
-            <button class="btn btn-info btn-block__btn-bold" (click)="this.getProducts(0)">Apply</button>
-            <button class="btn btn-light btn-block__btn" (click)="resetPageData()">Reset</button>
-        </div>
-    </aside>
-    <div class="catalog-container" style="width: 100%">
-        <div class="sort-panel-wrap card card_with_shadow">
-            <div class="sort-panel popover-wrap">
-                <span class="sort-panel_label">Sorting:</span>
-                <a type="button" class="ui-link"> <!-- (click)="sortByDate()" -->
-                    <span class="sort-panel__selected">Popular first</span>
-                    <i class="sort-panel__icon fa-solid fa-chevron-down fa-sm"></i>
-                </a>
-            </div>
-            <div class="sort-panel_view-mode">
-                <input type="radio" id="mode-tile" [checked]="isItemsByGrid" name="view-mode"
-                       class="sort-panel_view-mode-input" value="tile">
-                <i for="mode-tile" (click)="isItemsByGrid = true"
-                   class="fa-solid fa-grip-vertical fa-xl sort-panel_view-mode-label sort-panel_view-mode-label_tile"></i>
-                <input type="radio" id="mode-simple" [checked]="!isItemsByGrid" name="view-mode"
-                       class="sort-panel_view-mode-input" value="simple">
-                <i for="mode-simple" (click)="isItemsByGrid = false"
-                   class="fa-solid fa-list-ul fa-xl sort-panel_view-mode-label sort-panel_view-mode-label_simple"></i>
-            </div>
-        </div>
-
-        <app-product-list [isItemsByGrid]="isItemsByGrid" [card]="products"
-                          [isNeedFavourites]="true"></app-product-list>
-
-    </div>
-
+    </ng-container>
 </div>
+
+<app-product-list [isItemsByGrid]="isItemsByGrid" [card]="products"
+                  [isNeedFavourites]="true"></app-product-list>
 
 
 <ng-container *ngIf="page && page.totalPages > 1">

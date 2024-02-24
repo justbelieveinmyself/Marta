@@ -28,10 +28,10 @@ export class ProductListComponent {
     @Input() isItemsByGrid: boolean = true;
     productInToast: Product;
     productInPopup: ProductWithImage;
-    productIndexInPopup: number;
     currentUser: LocalUser;
     isFavourite: boolean[];
-    shownPopup: boolean = false;
+    shownQuickShowPopup: boolean = false;
+    shownVerifiedPopup: boolean = false;
     carousel: Carousel<ProductWithImage>;
     ngOnInit() {
         this.currentUser = this.tokenService.getUser();
@@ -51,7 +51,7 @@ export class ProductListComponent {
                 for (let i = 0; i < this.card.length; i++) {
                     const currentProduct = this.card[i].product;
                     this.isFavourite[i] = favourites.some(favourite => {
-                        return this.currentUser.id === favourite.product.seller.id && currentProduct.id === favourite.product.id;
+                        return currentProduct.id === favourite.product.id;
                     });
                 }
             }
@@ -94,7 +94,7 @@ export class ProductListComponent {
     }
 
     toggleOverflowBody() {
-        if (this.shownPopup) {
+        if (this.shownQuickShowPopup) {
             document.body.classList.add("body--overflow")
         } else {
             document.body.classList.remove("body--overflow")
@@ -104,5 +104,9 @@ export class ProductListComponent {
     orderNow() {
         this.productInteractionService.orderNow(this.productInPopup, 1, false).then(isOrdered => {
         });
+    }
+
+    copyToClipboard(text: string) {
+        navigator.clipboard.writeText(text);
     }
 }

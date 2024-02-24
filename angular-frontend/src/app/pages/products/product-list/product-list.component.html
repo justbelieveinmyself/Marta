@@ -1,7 +1,8 @@
-<div class="overlay" *ngIf="shownPopup" (click)="shownPopup = false; toggleOverflowBody()" style="z-index: 300"></div>
-<div class="popup popup-product-show" *ngIf="shownPopup"
-     style="z-index: 301; opacity: 1; display: block; left: 268px; top: 10px; position: fixed;">
-    <a (click)="shownPopup = false; toggleOverflowBody()" class="popup__close"></a>
+<div class="overlay" *ngIf="shownQuickShowPopup" (click)="shownQuickShowPopup = false; toggleOverflowBody()" style="z-index: 300"></div>
+<div class="overlay" *ngIf="shownVerifiedPopup" (click)="shownVerifiedPopup = false;" style="z-index: 600"></div>
+<div class="popup popup-product-show" *ngIf="shownQuickShowPopup"
+     style="z-index: 301; opacity: 1; display: block; left: 20%; top: 10px; position: fixed;">
+    <a (click)="shownQuickShowPopup = false; toggleOverflowBody()" class="popup__close"></a>
     <div class="content">
         <div class="product">
             <div class="product__photo-wrap">
@@ -14,24 +15,27 @@
             </div>
             <div class="product__content">
                 <div class="product__header-wrap">
-                    <a class="product__header">
+                    <a class="product__header" routerLink="/products/{{carousel.getActive().product.id}}/details"
+                       routerLinkActive="active">
                         <span
                             class="product__brand-name">{{ carousel.getActive().product.seller.username | titlecase }}</span>
                         <span> {{ carousel.getActive().product.productName | titlecase }}</span>
                     </a>
                     <div class="product__common-info">
-                        <a class="product-review">
+                        <a class="product-review" routerLink="/products/{{carousel.getActive().product.id}}/feedback"
+                           routerLinkActive="active">
                             <span class="product-review__rating address-rate-mini">
                                 4.4 <!-- TODO: AVG rating -->
                             </span>
-                            <span class="product-review__count-review">{{ carousel.getActive().product.seller.ratingCount }}
+                            <span
+                                class="product-review__count-review">{{ carousel.getActive().product.seller.ratingCount }}
                                 ratings</span>
                         </a>
-                        <p class="product-article">
-                            <span>Art:</span>
+                        <p class="product-article" (click)="copyToClipboard(carousel.getActive().product.productCode)">
+                            <span>Art: </span>
                             <span class="product-article__copy">{{ carousel.getActive().product.productCode }}</span>
                         </p>
-                        <button class="product__verified">
+                        <button class="product__verified" (click)="shownVerifiedPopup = true">
                             <span class="product__verified-icon"></span>
                             <span>Verified</span>
                         </button>
@@ -48,7 +52,7 @@
                                             </span>
                                         </span>
                                     <del class="price-block__old-price">
-                                        <span>$2 500</span>
+                                        <span>$2,500.00</span>
                                     </del>
                                 </p>
                             </div>
@@ -64,14 +68,30 @@
                         </div>
                         <button class="order-to-poned hide-mobile btn-heart-black"
                                 [ngClass]="isFavourite[carousel.activeId]? 'active': ''"
-                                (click)="toggleFavourite(carousel.getActive(), carousel.activeId)" type="button"></button>
+                                (click)="toggleFavourite(carousel.getActive(), carousel.activeId)"
+                                type="button"></button>
                     </div>
                 </div>
-                <a class="product__btn" style="display: block">More information about the product</a>
+                <a class="product__btn" style="display: block"
+                   routerLink="/products/{{carousel.getActive().product.id}}/details" routerLinkActive="active">More
+                    information about the product</a>
             </div>
         </div>
-        <button class="popup__btn-prev" [ngClass]="carousel.isFirst()? 'disabled': ''" (click)="carousel.previous()" title="Previous article" type="button" style="display: block"></button>
-        <button class="popup__btn-next" [ngClass]="carousel.isLast()? 'disabled': ''" (click)="carousel.next()" title="Next article" type="button" style="display: block"></button>
+        <button class="popup__btn-prev" [ngClass]="carousel.isFirst()? 'disabled': ''" (click)="carousel.previous()"
+                title="Previous article" type="button" style="display: block"></button>
+        <button class="popup__btn-next" [ngClass]="carousel.isLast()? 'disabled': ''" (click)="carousel.next()"
+                title="Next article" type="button" style="display: block"></button>
+    </div>
+</div>
+<div class="popup popup-verified-product" *ngIf="shownVerifiedPopup" style="z-index: 601; opacity: 1; display: block; left: 40%; top: 30%; position: fixed;">
+    <a (click)="shownVerifiedPopup = false;" class="popup__close"></a>
+    <div class="popup__content">
+        <div class="popup__picture"></div>
+        <div class="popup__main">
+            <h3 class="popup__title">Verified</h3>
+            <p class="popup__text">Our manager has checked this product</p>
+            <button class="popup__close-button btn-base" (click)="shownVerifiedPopup = false;">Fine</button>
+        </div>
     </div>
 </div>
 <div [ngClass]="{'grid-container': isItemsByGrid, 'list-container': !isItemsByGrid}">
@@ -93,7 +113,7 @@
                         <img [src]="item.file" width="516" height="688" loading="lazy" [alt]="item.product.productName">
                     </div>
                     <button class="product-card__fast-view hide-mobile" type="button"
-                            (click)="shownPopup = true; toggleOverflowBody(); carousel.setActive(i)">
+                            (click)="shownQuickShowPopup = true; toggleOverflowBody(); carousel.setActive(i)">
                         Quick view
                     </button>
                 </div>
