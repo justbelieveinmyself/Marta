@@ -32,6 +32,12 @@ button, input {
     border: none;
 }
 
+input, select, textarea {
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: inherit;
+}
+
 button {
     background-color: transparent;
     cursor: pointer;

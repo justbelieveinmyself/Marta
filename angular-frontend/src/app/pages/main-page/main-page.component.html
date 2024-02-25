@@ -12,7 +12,7 @@
                     <div class="filters-block__desktop hide-mobile">
                         <div class="filters-block__dropdown">
                             <div class="dropdown-filter" [ngClass]="shownCategoryFilterBlock? 'open':''">
-                                <button (click)="shownCategoryFilterBlock = !shownCategoryFilterBlock"
+                                <button (click)="shownCategoryFilterBlock = !shownCategoryFilterBlock; shownPriceFilterBlock = false; shownSortFilterBlock = false"
                                     class="dropdown-filter__btn dropdown-filter__btn--burger">{{ pageDataService.searchWord }}
                                 </button>
                                 <div class="dropdown-filter__content dropdown-filter__content--menu">
@@ -21,9 +21,8 @@
                                             <div class="filter-category__content">
                                                 <a class="filter-category__title filter-category__title--link">{{ pageDataService.searchWord }}</a>
                                                 <ul class="filter-category__list">
-                                                    <li class="filter-category__item">
-                                                        <a class="filter-category__link filter-category__link--subcategory">Category
-                                                            1</a>
+                                                    <li class="filter-category__item" *ngFor="let category of categories">
+                                                        <a class="filter-category__link filter-category__link--subcategory">{{category | titlecase}}</a>
                                                     </li>
                                                 </ul>
                                             </div>
@@ -31,8 +30,8 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="dropdown-filter">
-                                <button class="dropdown-filter__btn dropdown-filter__btn--sorter">
+                            <div class="dropdown-filter" [ngClass]="shownSortFilterBlock? 'open':''">
+                                <button class="dropdown-filter__btn dropdown-filter__btn--sorter" (click)="shownSortFilterBlock = !shownSortFilterBlock; shownPriceFilterBlock = false; shownCategoryFilterBlock = false">
                                     By popularity
                                 </button>
                                 <div class="dropdown-filter__content">
@@ -54,14 +53,60 @@
                                                 </span>
                                                 </div>
                                             </li>
+                                            <li class="filter__item">
+                                                <div class="radio-with-text">
+                                                    <span class="radio-with-text__decor"></span>
+                                                    <span class="radio-with-text__text">
+                                                    By price ascending
+                                                </span>
+                                                </div>
+                                            </li>
+                                            <li class="filter__item">
+                                                <div class="radio-with-text">
+                                                    <span class="radio-with-text__decor"></span>
+                                                    <span class="radio-with-text__text">
+                                                    By price descending
+                                                </span>
+                                                </div>
+                                            </li>
                                         </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="dropdown-filter" [ngClass]="shownPriceFilterBlock? 'open':''">
+                                <button class="dropdown-filter__btn" (click)="shownPriceFilterBlock = !shownPriceFilterBlock; shownSortFilterBlock = false; shownCategoryFilterBlock = false"
+                                >Price, $</button>
+                                <div class="dropdown-filter__content">
+                                    <div class="filter">
+                                        <div class="filter__price">
+                                            <div class="filter__price-item">
+                                                <h3 class="filter__price-title">From</h3>
+                                                <div class="filter__price-input-search input-search input-search--gray">
+                                                    <label>
+                                                        <input type="text" autocomplete="off" name="startN">
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="filter__price-item">
+                                                <h3 class="filter__price-title">To</h3>
+                                                <div class="filter__price-input-search input-search input-search--gray">
+                                                    <label>
+                                                        <input type="text" autocomplete="off" name="endN">
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="filter-btn">
+                                        <button class="filter-btn__minor btn-minor" type="button">Reset</button>
+                                        <button class="filter-btn__main btn-main" type="button">Done</button>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="card-sizes">
-                            <a class="card-sizes__btn card-sizes__btn--big"></a>
-                            <a class="card-sizes__btn card-sizes__btn--small"></a>
+                            <a class="card-sizes__btn card-sizes__btn--big" (click)="isItemsBig = true" [ngClass]="isItemsBig? 'active': ''"></a>
+                            <a class="card-sizes__btn card-sizes__btn--small" (click)="isItemsBig = false" [ngClass]="!isItemsBig? 'active': ''"></a>
                         </div>
                     </div>
                 </div>
@@ -70,7 +115,7 @@
     </ng-container>
 </div>
 
-<app-product-list [isItemsByGrid]="isItemsByGrid" [card]="products"
+<app-product-list [isItemsBig]="isItemsBig" [card]="products"
                   [isNeedFavourites]="true"></app-product-list>
 
 

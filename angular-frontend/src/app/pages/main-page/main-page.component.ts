@@ -8,6 +8,7 @@ import {Page} from "../../models/page";
 import {ActivatedRoute, ParamMap} from "@angular/router";
 import {map} from "rxjs";
 import {PageDataService} from "../../services/page-data.service";
+import {fakeAsync} from "@angular/core/testing";
 
 @Component({
     selector: 'app-main-page',
@@ -28,10 +29,26 @@ export class MainPageComponent {
     page: Page<ProductWithImage>;
     isNeedSortByDate = false;
     isNeedSortByPrice = false;
-    isItemsByGrid = true;
+    isItemsBig = true;
 
     shownCategoryFilterBlock: boolean = false;
+    shownSortFilterBlock: boolean = false;
+    shownPriceFilterBlock: boolean = false;
 
+    filterCategory: string;
+    filterSortBy: string;
+    filterPriceFrom: number = 0;
+    filterPriceTo: number = 0;
+
+    categories: string[] =
+        ["Women's clothing", "Men's clothing", "Children's clothing", "Outerwear",
+            "Footwear", "Sporting goods", "Accessories", "Cosmetics and perfumes",
+            "Household Goods", "Electronics", "Children's goods and toys",
+            "Beauty and health products", "Bags and accessories", "Watch", "Jewelry",
+            "Gourmet products", "Books and audiobooks", "Sports nutrition",
+            "Automotive products", "Furniture and household goods",
+            "Tools and automotive supplies", "Pet Supplies"
+        ]; //TODO: get from localstorage or from serv and save to localstorage
     ngOnInit(): void {
         this.user = this.tokenService.getUser();
         if(!this.user){
@@ -90,10 +107,11 @@ export class MainPageComponent {
 
     closeAllFilters(event: any) {
 
-        if(event.target.classList.contains("dropdown-filter__btn")) {
+        if(event.target.classList.contains("dropdown-filter__btn") || event.target.localName === "input") {
             return;
         }
         this.shownCategoryFilterBlock = false;
-        console.log(event)
+        this.shownSortFilterBlock = false;
+        this.shownPriceFilterBlock = false;
     }
 }
