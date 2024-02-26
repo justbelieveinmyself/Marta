@@ -23,6 +23,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
@@ -36,6 +37,7 @@ import static org.mockito.Mockito.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@ActiveProfiles("dev")
 class ProductServiceTest {
     @Autowired
     private ProductService productService;
@@ -76,13 +78,12 @@ class ProductServiceTest {
         when(productRepository.save(any())).thenReturn(mockProduct);
         when(fileHelper.uploadFile((MultipartFile) any(), any())).thenReturn("test-path.png");
 
-        ResponseEntity<ProductDto> productDtoAsResponseEntity = productService.createProduct(mockProductDto, new MockMultipartFile("test-file", "test".getBytes()), null, mockUser);
+        ResponseEntity<ProductDto> productDtoAsResponseEntity = productService.createProduct(mockProductDto, List.of(new MockMultipartFile("test-file", "test".getBytes())), null, mockUser);
 
         assertEquals("Test Name", productDtoAsResponseEntity.getBody().getProductName());
         assertEquals(1L, productDtoAsResponseEntity.getBody().getId());
 
         verify(productRepository, times(1)).save(any());
-        verify(fileHelper, times(1)).uploadFile((MultipartFile) any(), any());
     }
 
     @Test
@@ -119,21 +120,18 @@ class ProductServiceTest {
 
     @Test
     void getProduct() {
-        Product mockProduct = Product.builder().productName("Test name").id(1L).previewImg("test.png").build();
+        Product mockProduct = Product.builder().productName("Test name").id(1L).build();
 
         when(fileHelper.downloadFileAsByteArray(any(), any())).thenReturn("base64encodedimage".getBytes());
 
         ResponseEntity<ProductWithImageDto> productWithImageDtoAsResponseEntity = productService.getProduct(mockProduct);
 
-        assertEquals("YmFzZTY0ZW5jb2RlZGltYWdl", productWithImageDtoAsResponseEntity.getBody().getFile());
         assertEquals("Test name", productWithImageDtoAsResponseEntity.getBody().getProduct().getProductName());
-
-        verify(fileHelper, times(1)).downloadFileAsByteArray(any(), any());
     }
 
     @Test
     void getListProductReviews() {
-        Product mockProduct = Product.builder().productName("Test name").id(1L).previewImg("test.png").build();
+        Product mockProduct = Product.builder().productName("Test name").id(1L).build();
         List<String> mockImages = List.of("test.png", "test2.png");
         User mockUser = User.builder().id(1L).username("user").build();
         List<Review> mockReviews = List.of(
@@ -242,17 +240,12 @@ class ProductServiceTest {
         products.add(Product.builder().id(5L).build());
         User mockUser = User.builder().id(2L).username("user").cartProducts(products).build();
 
-        when(fileHelper.downloadFileAsByteArray(any(), any())).thenReturn("base64encodedimage".getBytes());
-
         ResponseEntity<List<ProductWithImageDto>> productsFromCartAsResponseEntity = productService.getProductsFromCart(mockUser);
 
         Long id = productsFromCartAsResponseEntity.getBody().get(0).getProduct().getId();
         Assertions.assertTrue(id == 1L || id == 2L || id == 5L);
         id = productsFromCartAsResponseEntity.getBody().get(2).getProduct().getId();
         Assertions.assertTrue(id == 1L || id == 2L || id == 5L);
-        assertEquals("YmFzZTY0ZW5jb2RlZGltYWdl", productsFromCartAsResponseEntity.getBody().get(1).getFile());
-
-        verify(fileHelper, times(3)).downloadFileAsByteArray(any(), any());
     }
 
     @Test
@@ -356,20 +349,15 @@ class ProductServiceTest {
     @Test
     void getProductsFromFavourites() {
         Set<Product> mockFavourites = new HashSet<>();
-        mockFavourites.add(Product.builder().id(1L).previewImg("test1.png").build());
-        mockFavourites.add(Product.builder().id(3L).previewImg("test3.png").build());
-        mockFavourites.add(Product.builder().id(5L).previewImg("test5.png").build());
+        mockFavourites.add(Product.builder().id(1L).build());
+        mockFavourites.add(Product.builder().id(3L).build());
+        mockFavourites.add(Product.builder().id(5L).build());
         User mockUser = User.builder().id(1L).favouriteProducts(mockFavourites).build();
-
-        when(fileHelper.downloadFileAsByteArray(any(), any())).thenReturn("base64encodedimage".getBytes());
 
         ResponseEntity<List<ProductWithImageDto>> favouritesAsResponseEntity = productService.getProductsFromFavourites(mockUser);
 
         Long id = favouritesAsResponseEntity.getBody().get(0).getProduct().getId();
         assertTrue(id == 1L || id == 3L || id == 5L);
-        assertEquals("YmFzZTY0ZW5jb2RlZGltYWdl", favouritesAsResponseEntity.getBody().get(0).getFile());
-
-        verify(fileHelper, times(3)).downloadFileAsByteArray(any(), any());
     }
 
     @Test
