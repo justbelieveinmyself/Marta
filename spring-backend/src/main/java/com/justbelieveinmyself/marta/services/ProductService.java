@@ -58,29 +58,28 @@ public class ProductService {
     }
 
     public ResponseEntity<Page<ProductWithImageDto>> getProductsAsPage(
-            String sortBy, Boolean isAsc,
-            Integer page, Integer size,
+            String sortBy,
+            Boolean isAsc,
+            Integer page,
+            Integer size,
             Boolean usePages,
-            Boolean filterVerified, Boolean filterPhotoNotNull,
+            Boolean filterVerified,
+            Boolean filterPhotoNotNull,
             String searchWord
     ) {
-        Pageable pageable = createPageable(sortBy, isAsc, page, size, usePages);
-        Specification<Product> specification = productHelper.createSpecification(filterPhotoNotNull, filterVerified, searchWord);
-        Page<Product> products = productRepository.findAll(specification, pageable);
+        if (usePages) {
+            Pageable pageable = PageRequest.of(page, size);
+            Specification<Product> specification = productHelper.createSpecification(sortBy, isAsc, filterPhotoNotNull, filterVerified, searchWord);
+            Page<Product> products = productRepository.findAll(specification, pageable);
+            List<ProductWithImageDto> productWithImageDtoList = productHelper.createListOfProductsWithImageOfStream(products.stream());
+
+            return ResponseEntity.ok(new PageImpl<>(productWithImageDtoList, pageable, products.getTotalElements()));
+        }
+        Pageable pageRequest = PageRequest.of(0, Integer.MAX_VALUE);
+        Page<Product> products = productRepository.findAll(pageRequest);
         List<ProductWithImageDto> productWithImageDtoList = productHelper.createListOfProductsWithImageOfStream(products.stream());
-        return ResponseEntity.ok(new PageImpl<>(productWithImageDtoList, pageable, products.getTotalElements()));
-    }
 
-
-
-    private Pageable createPageable(String sortBy, Boolean isAsc, Integer page, Integer size, Boolean usePages) {
-        return usePages ?
-                (sortBy != null ?
-                        (isAsc ?
-                                PageRequest.of(page, size, Sort.by(sortBy).ascending()) :
-                                PageRequest.of(page, size, Sort.by(sortBy).descending()))
-                        : PageRequest.of(page, size)) :
-                PageRequest.of(0, Integer.MAX_VALUE);
+        return ResponseEntity.ok(new PageImpl<>(productWithImageDtoList, pageRequest, products.getTotalElements()));
     }
 
     public ResponseEntity<ProductDto> createProduct(ProductDto productDto, List<MultipartFile> images, ProductDetailDto productDetailDto, User currentUser) {

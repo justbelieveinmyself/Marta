@@ -36,36 +36,12 @@
                                 </button>
                                 <div class="dropdown-filter__content">
                                     <div class="filter">
-                                        <ul class="filter__list">
-                                            <li class="filter__item">
-                                                <div class="radio-with-text selected">
+                                        <ul class="filter__list" >
+                                            <li class="filter__item" *ngFor="let item of sortOption; let i = index">
+                                                <div class="radio-with-text" [ngClass]="i == activeSortByFilterIndex ?'selected':''" (click)="sortBy(i)">
                                                     <span class="radio-with-text__decor"></span>
                                                     <span class="radio-with-text__text">
-                                                    By popularity
-                                                </span>
-                                                </div>
-                                            </li>
-                                            <li class="filter__item">
-                                                <div class="radio-with-text">
-                                                    <span class="radio-with-text__decor"></span>
-                                                    <span class="radio-with-text__text">
-                                                    By date
-                                                </span>
-                                                </div>
-                                            </li>
-                                            <li class="filter__item">
-                                                <div class="radio-with-text">
-                                                    <span class="radio-with-text__decor"></span>
-                                                    <span class="radio-with-text__text">
-                                                    By price ascending
-                                                </span>
-                                                </div>
-                                            </li>
-                                            <li class="filter__item">
-                                                <div class="radio-with-text">
-                                                    <span class="radio-with-text__decor"></span>
-                                                    <span class="radio-with-text__text">
-                                                    By price descending
+                                                    {{item.display}}
                                                 </span>
                                                 </div>
                                             </li>

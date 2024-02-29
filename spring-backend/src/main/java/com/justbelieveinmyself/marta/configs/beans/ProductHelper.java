@@ -40,12 +40,29 @@ public class ProductHelper {
                 .toList();
     }
 
-    public Specification<Product> createSpecification(Boolean filterPhotoNotNull, Boolean filterVerified, String searchWord) {
+    public Specification<Product> createSpecification(
+            String sortBy,
+            Boolean isAsc,
+            Boolean filterPhotoNotNull,
+            Boolean filterVerified,
+            String searchWord
+    ) {
         Specification<Product> specification = Specification.where(null);
         if (filterPhotoNotNull) {
             specification = specification.and((root, query, criteriaBuilder) ->
                     criteriaBuilder.greaterThan(criteriaBuilder.size(root.get("productDetail").get("images")), 0));
         }
+
+//        if (filterPopularity) {
+//            specification = specification.and((root, query, criteriaBuilder) -> {
+//                Subquery<Double> subquery = query.subquery(Double.class);
+//                Root<Review> reviewRoot = subquery.from(Review.class);
+//                subquery.select(criteriaBuilder.avg(reviewRoot.get("rating")))
+//                        .where(criteriaBuilder.equal(reviewRoot.get("product"), root));
+//
+//                return criteriaBuilder.greaterThanOrEqualTo(subquery.getSelection().as(Double.class), 4.5);
+//            });
+//        }
 
         if (filterVerified) {
             specification = specification.and((root, query, criteriaBuilder) ->
@@ -68,4 +85,5 @@ public class ProductHelper {
         }
         return specification;
     }
+
 }

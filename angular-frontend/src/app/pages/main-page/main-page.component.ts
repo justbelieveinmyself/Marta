@@ -8,7 +8,6 @@ import {Page} from "../../models/page";
 import {ActivatedRoute, ParamMap} from "@angular/router";
 import {map} from "rxjs";
 import {PageDataService} from "../../services/page-data.service";
-import {fakeAsync} from "@angular/core/testing";
 
 @Component({
     selector: 'app-main-page',
@@ -27,16 +26,21 @@ export class MainPageComponent {
     user: LocalUser;
     products: ProductWithImage[];
     page: Page<ProductWithImage>;
-    isNeedSortByDate = false;
-    isNeedSortByPrice = false;
+
     isItemsBig = true;
 
     shownCategoryFilterBlock: boolean = false;
     shownSortFilterBlock: boolean = false;
     shownPriceFilterBlock: boolean = false;
 
+    sortOption = [
+        {display: "By popularity", value: "popularity", isASC: false}, //TODO
+        {display: "By date", value: "updatedAt", isASC: true},
+        {display: "By price ascending", value: "price", isASC: true},
+        {display: "By price ascending", value: "price", isASC: false}
+    ]
+    activeSortByFilterIndex: number = 0;
     filterCategory: string;
-    filterSortBy: string;
     filterPriceFrom: number = 0;
     filterPriceTo: number = 0;
 
@@ -84,34 +88,24 @@ export class MainPageComponent {
 
     protected readonly Array = Array;
 
-    sortByDate() {
-        this.pageDataService.sortBy = "updatedAt";
-        this.pageDataService.isSortASC = !this.pageDataService.isSortASC;
-        this.getProducts(0);
-        this.isNeedSortByPrice = false;
-        this.isNeedSortByDate = true;
-    }
-
-    sortByPrice() {
-        this.pageDataService.sortBy = "price";
-        this.pageDataService.isSortASC = !this.pageDataService.isSortASC;
-        this.getProducts(0);
-        this.isNeedSortByDate = false;
-        this.isNeedSortByPrice = true;
-    }
-
     resetPageData() {
         this.pageDataService.resetFilters();
         this.getProducts(0);
     }
 
     closeAllFilters(event: any) {
-
         if(event.target.classList.contains("dropdown-filter__btn") || event.target.localName === "input") {
             return;
         }
         this.shownCategoryFilterBlock = false;
         this.shownSortFilterBlock = false;
         this.shownPriceFilterBlock = false;
+    }
+
+    sortBy(index: number) {
+        this.activeSortByFilterIndex = index;
+        this.pageDataService.sortBy = this.sortOption.at(index).value;
+        this.pageDataService.isSortASC = this.sortOption.at(index).isASC;
+        this.getProducts(0);
     }
 }

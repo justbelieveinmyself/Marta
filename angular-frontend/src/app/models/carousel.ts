@@ -1,7 +1,7 @@
 
 export class Carousel<T> {
-    constructor(urls: T[]) {
-        this.items = urls;
+    constructor(items: T[]) {
+        this.items = items;
     }
 
     items: T[];

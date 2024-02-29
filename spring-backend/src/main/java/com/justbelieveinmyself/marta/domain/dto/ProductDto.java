@@ -14,6 +14,7 @@ public class ProductDto {
     private Long id;
     private String productName;
     private String productCode;
+    private Double averageRate;
     private String category;
     private BigDecimal price;
     private Integer discountPercentage;
