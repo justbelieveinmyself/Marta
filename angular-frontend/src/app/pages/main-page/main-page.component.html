@@ -32,7 +32,7 @@
                             </div>
                             <div class="dropdown-filter" [ngClass]="shownSortFilterBlock? 'open':''">
                                 <button class="dropdown-filter__btn dropdown-filter__btn--sorter" (click)="shownSortFilterBlock = !shownSortFilterBlock; shownPriceFilterBlock = false; shownCategoryFilterBlock = false">
-                                    By popularity
+                                    {{sortOption.at(activeSortByFilterIndex).display}}
                                 </button>
                                 <div class="dropdown-filter__content">
                                     <div class="filter">

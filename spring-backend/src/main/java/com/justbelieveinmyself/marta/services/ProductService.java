@@ -15,7 +15,10 @@ import com.justbelieveinmyself.marta.exceptions.ResponseError;
 import com.justbelieveinmyself.marta.exceptions.ResponseMessage;
 import com.justbelieveinmyself.marta.repositories.*;
 import org.springframework.beans.BeanUtils;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -58,28 +61,21 @@ public class ProductService {
     }
 
     public ResponseEntity<Page<ProductWithImageDto>> getProductsAsPage(
-            String sortBy,
+            String sortOption,
             Boolean isAsc,
             Integer page,
             Integer size,
-            Boolean usePages,
             Boolean filterVerified,
             Boolean filterPhotoNotNull,
             String searchWord
     ) {
-        if (usePages) {
-            Pageable pageable = PageRequest.of(page, size);
-            Specification<Product> specification = productHelper.createSpecification(sortBy, isAsc, filterPhotoNotNull, filterVerified, searchWord);
-            Page<Product> products = productRepository.findAll(specification, pageable);
-            List<ProductWithImageDto> productWithImageDtoList = productHelper.createListOfProductsWithImageOfStream(products.stream());
-
-            return ResponseEntity.ok(new PageImpl<>(productWithImageDtoList, pageable, products.getTotalElements()));
-        }
-        Pageable pageRequest = PageRequest.of(0, Integer.MAX_VALUE);
-        Page<Product> products = productRepository.findAll(pageRequest);
+        sortOption = productHelper.validateSortOption(sortOption);
+        Pageable pageable = PageRequest.of(page, size);
+        Specification<Product> specification = productHelper.createSpecification(sortOption, isAsc, filterPhotoNotNull, filterVerified, searchWord);
+        Page<Product> products = productRepository.findAll(specification, pageable);
         List<ProductWithImageDto> productWithImageDtoList = productHelper.createListOfProductsWithImageOfStream(products.stream());
 
-        return ResponseEntity.ok(new PageImpl<>(productWithImageDtoList, pageRequest, products.getTotalElements()));
+        return ResponseEntity.ok(new PageImpl<>(productWithImageDtoList, pageable, products.getTotalElements()));
     }
 
     public ResponseEntity<ProductDto> createProduct(ProductDto productDto, List<MultipartFile> images, ProductDetailDto productDetailDto, User currentUser) {
@@ -211,7 +207,6 @@ public class ProductService {
     }
 
 
-
     public ResponseEntity<?> deleteProductFromFavourites(User user, Product product) {
         if (user.getFavouriteProducts().remove(product)) {
             userRepository.save(user);
@@ -251,5 +246,16 @@ public class ProductService {
     public ResponseEntity<ProductDetailDto> getProductDetail(Product product) {
         ProductDetail productDetail = product.getProductDetail();
         return ResponseEntity.ok(productDetailMapper.modelToDto(productDetail, fileHelper));
+    }
+
+    public ResponseEntity<List<ProductWithImageDto>> getProductsAsList(Long sellerId) {
+        Optional<User> userOpt = userRepository.findById(sellerId);
+        if (userOpt.isPresent()) {
+            User user = userOpt.get();
+            List<ProductWithImageDto> productDtos = productHelper.createListOfProductsWithImageOfStream(user.getProducts().stream());
+            return ResponseEntity.ok(productDtos);
+        }
+        List<ProductWithImageDto> productDtos = productHelper.createListOfProductsWithImageOfStream(productRepository.findAll().stream());
+        return ResponseEntity.ok(productDtos);
     }
 }

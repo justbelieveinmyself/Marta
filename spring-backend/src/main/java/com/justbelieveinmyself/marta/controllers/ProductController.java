@@ -1,10 +1,9 @@
 package com.justbelieveinmyself.marta.controllers;
 
 import com.justbelieveinmyself.marta.domain.annotations.CurrentUser;
-import com.justbelieveinmyself.marta.domain.dto.ProductDto;
-import com.justbelieveinmyself.marta.domain.dto.ProductListRequest;
-import com.justbelieveinmyself.marta.domain.dto.ProductWithImageDto;
 import com.justbelieveinmyself.marta.domain.dto.ProductDetailDto;
+import com.justbelieveinmyself.marta.domain.dto.ProductDto;
+import com.justbelieveinmyself.marta.domain.dto.ProductWithImageDto;
 import com.justbelieveinmyself.marta.domain.entities.Product;
 import com.justbelieveinmyself.marta.domain.entities.User;
 import com.justbelieveinmyself.marta.exceptions.ResponseError;
@@ -37,23 +36,38 @@ public class ProductController {
         this.productService = productService;
     }
 
-    @GetMapping
-    @Operation(summary = "Get page of all products", description = "Use this to get products. By default sort by id with pages")
+    @GetMapping("/page")
+    @Operation(summary = "Get page of products", description = "Use this to get products. By default sort by popularity")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProductWithImageDto.class)))
     })
-    public ResponseEntity<Page<ProductWithImageDto>> getListProducts(ProductListRequest productListRequest) {
+    public ResponseEntity<Page<ProductWithImageDto>> getProductsAsPage(
+            @RequestParam(name = "sortOption", required = false, defaultValue = "POPULARITY") String sortOption,
+            @RequestParam(name = "isAsc", required = false, defaultValue = "false") Boolean isAsc,
+            @RequestParam(name = "page", required = false, defaultValue = "0") Integer page,
+            @RequestParam(name = "size", required = false, defaultValue = "12") Integer size,
+            @RequestParam(name = "filterVerified", required = false, defaultValue = "false") Boolean filterVerified,
+            @RequestParam(name = "filterPhotoNotNull", required = false, defaultValue = "false") Boolean filterPhotoNotNull,
+            @RequestParam(name = "searchWord", required = false) String searchWord
+    ) {
         return productService.getProductsAsPage(
-                productListRequest.getSortBy(),
-                productListRequest.getIsAsc(),
-                productListRequest.getPage(),
-                productListRequest.getSize(),
-                productListRequest.getUsePages(),
-                productListRequest.getFilterVerified(),
-                productListRequest.getFilterPhotoNotNull(),
-                productListRequest.getSearchWord()
+                sortOption,
+                isAsc, page, size, filterVerified,
+                filterPhotoNotNull, searchWord
         );
+    }
+
+    @GetMapping("/list")
+    @Operation(summary = "Get list of all or only specified seller's products", description = "Use this to get products")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Success",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProductWithImageDto.class)))
+    })
+    public ResponseEntity<List<ProductWithImageDto>> getProductsList(
+            @RequestParam(required = false) Long sellerId
+    ) {
+        return productService.getProductsAsList(sellerId);
     }
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)

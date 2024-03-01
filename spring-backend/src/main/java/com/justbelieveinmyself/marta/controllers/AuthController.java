@@ -56,7 +56,7 @@ public class AuthController {
         return authService.createAuthToken(loginRequestDto);
     }
 
-    @PostMapping("/refresh")
+    @PostMapping("/refresh") //TODO: return time of expire
     @Operation(summary = "Tokens", description = "Use this to get access token")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Refresh token valid and not expired",

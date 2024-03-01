@@ -34,7 +34,7 @@ export class MainPageComponent {
     shownPriceFilterBlock: boolean = false;
 
     sortOption = [
-        {display: "By popularity", value: "popularity", isASC: false}, //TODO
+        {display: "By popularity", value: "popularity", isASC: false},
         {display: "By date", value: "updatedAt", isASC: true},
         {display: "By price ascending", value: "price", isASC: true},
         {display: "By price ascending", value: "price", isASC: false}
@@ -71,6 +71,7 @@ export class MainPageComponent {
         this.activatedRoute.data.subscribe(data => {
             this.page = data['productsPage'];
             this.products = this.page.content;
+            console.log(this.page.content)
         });
     }
 
@@ -78,7 +79,7 @@ export class MainPageComponent {
         if(page != null) {
             this.pageDataService.pageNumber = page;
         }
-        this.productService.getProductList(this.pageDataService.pageNumber, this.pageDataService.sizeOfPage, true, this.pageDataService.sortBy, this.pageDataService.isSortASC, this.pageDataService.isFilteredByWithPhoto, this.pageDataService.isFilteredByVerified, this.pageDataService.searchWord).subscribe({
+        this.productService.getProductPages(this.pageDataService.pageNumber, this.pageDataService.sizeOfPage, this.pageDataService.sortBy, this.pageDataService.isSortASC, this.pageDataService.isFilteredByWithPhoto, this.pageDataService.isFilteredByVerified, this.pageDataService.searchWord).subscribe({
             next: data => {
                 this.products = data.content;
                 this.page = data;

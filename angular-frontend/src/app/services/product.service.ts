@@ -22,25 +22,32 @@ export class ProductService {
         private imageService: ImageService
     ) {}
 
-    getProductList(
-        page: number, size: number, usePages?: boolean, sortBy?: string, isAsc?: boolean,
-        isFilteredByWithPhoto?: boolean, isFilteredByVerified?: boolean, searchWord?: string
-    ) : Observable<Page<ProductWithImage>>
-    {
-        return this.httpClient.get<Page<ProductWithImage>>(this.baseUrl + "?page=" + page+"&size=" + size
-            + (usePages != null?"&usePages="+usePages+(sortBy? "&sortBy="+sortBy+"&isAsc="+isAsc:"") : "")
-            + (isFilteredByVerified != null? "&filterPhotoNotNull="+isFilteredByWithPhoto : "")
-            + (isFilteredByWithPhoto != null? "&filterVerified="+isFilteredByVerified: "")
-            + (searchWord != null? "&searchWord="+searchWord: "")
-        ).pipe(
-            tap(page => page.content.map(product =>
+    getProductPages(
+        page: number, size: number, sortBy: string, isAsc: boolean,
+        isFilteredByWithPhoto: boolean, isFilteredByVerified: boolean, searchWord: string
+    ): Observable<Page<ProductWithImage>> {
+        if (!searchWord) {
+            searchWord = "";
+        }
+        let url = `${this.baseUrl}/page?page=${page}&size=${size}&sortBy=${sortBy}&isAsc=${isAsc}&filterPhotoNotNull=${isFilteredByWithPhoto}&filterVerified=${isFilteredByVerified}&searchWord=${searchWord}`;
+
+        return this.httpClient.get<Page<ProductWithImage>>(url).pipe(
+            tap(page => page.content.forEach(product =>
+                this.imageService.createImageInProduct(product)))
+        );
+    }
+
+    getProductList(sellerId: number): Observable<ProductWithImage[]> {
+        return this.httpClient.get<ProductWithImage[]>(this.baseUrl + sellerId).pipe(
+            tap(productWithImage => productWithImage.forEach(product =>
                 this.imageService.createImageInProduct(product)))
         );
     }
 
     getProductById(id: number): Observable<ProductWithImage> {
-        return this.httpClient.get<ProductWithImage>(`${this.baseUrl}/${id}`)
-            .pipe(tap(product => this.imageService.createImageInProduct(product)));
+        return this.httpClient.get<ProductWithImage>(`${this.baseUrl}/${id}`).pipe(
+            tap(product => this.imageService.createImageInProduct(product))
+        );
     }
 
     getProductDetailById(id: number): Observable<ProductDetail> {
@@ -59,16 +66,14 @@ export class ProductService {
         );
     }
 
-
-
     getProductReviews(productId: number): Observable<Review[]> {
         return this.httpClient.get<Review[]>(`${this.baseUrl}/reviews/` + productId);
     }
 
     getProductsFromCart(): Observable<ProductWithImage[]> {
         return this.httpClient.get<ProductWithImage[]>(`${this.baseUrl}/cart`).pipe(tap(products =>
-            products.map(
-                product => this.imageService.createImageInProduct(product))
+                products.map(
+                    product => this.imageService.createImageInProduct(product))
             )
         );
     }
@@ -87,20 +92,20 @@ export class ProductService {
         return this.httpClient.post(this.baseUrl, fd);
     }
 
-    createOrder(productAndQuantity : Map<ProductWithImage, number>, isPaid: boolean): Observable<Order> {
-        const productIdAndQuantity: {[id: string]: number} = {};
-        productAndQuantity.forEach((value, key) => productIdAndQuantity[key.product.id.toString()]=value);
+    createOrder(productAndQuantity: Map<ProductWithImage, number>, isPaid: boolean): Observable<Order> {
+        const productIdAndQuantity: { [id: string]: number } = {};
+        productAndQuantity.forEach((value, key) => productIdAndQuantity[key.product.id.toString()] = value);
         const order = new Order();
         order.productIdAndQuantity = productIdAndQuantity;
         order.isPaid = isPaid;
         return this.httpClient.post<Order>(`http://localhost:8080/api/v1/orders`, order);
     }
 
-    addProductToCart(product: Product): Observable<Product>{
+    addProductToCart(product: Product): Observable<Product> {
         return this.httpClient.post<Product>(`${this.baseUrl}/cart/` + product.id, null);
     }
 
-    addProductToFavourite(productId: number){
+    addProductToFavourite(productId: number) {
         return this.httpClient.post<Product>(`${this.baseUrl}/favourite/` + productId, null);
     }
 
@@ -116,7 +121,7 @@ export class ProductService {
         return this.httpClient.post<Review>(`${this.baseUrl}/reviews`, fd);
     }
 
-    addQuestion(question : Question) : Observable<Question>{
+    addQuestion(question: Question): Observable<Question> {
         return this.httpClient.post<Question>(`${this.baseUrl}/questions`, question);
     }
 
@@ -125,11 +130,11 @@ export class ProductService {
     }
 
     updateAnswerToReview(reviewId: number, answer: string): Observable<Review> {
-        return this.httpClient.put<Review>(this.baseUrl + "/reviews/"+reviewId, answer);
+        return this.httpClient.put<Review>(this.baseUrl + "/reviews/" + reviewId, answer);
     }
 
-    verifyProduct(id: number): Observable<Object>{
-        return this.httpClient.put(this.baseUrl + "/verify/"+id, null);
+    verifyProduct(id: number): Observable<Object> {
+        return this.httpClient.put(this.baseUrl + "/verify/" + id, null);
     }
 
     deleteProduct(id: number): Observable<Object> {
@@ -144,7 +149,7 @@ export class ProductService {
         return this.httpClient.delete(`${this.baseUrl}/cart/${product.id}`);
     }
 
-    deleteProductFromFavourite(productId: number): Observable<Object>{
+    deleteProductFromFavourite(productId: number): Observable<Object> {
         return this.httpClient.delete(`${this.baseUrl}/favourite/` + productId)
     }
 

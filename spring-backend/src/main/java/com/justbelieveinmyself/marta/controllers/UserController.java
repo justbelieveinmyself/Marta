@@ -9,7 +9,6 @@ import com.justbelieveinmyself.marta.domain.entities.User;
 import com.justbelieveinmyself.marta.domain.enums.Role;
 import com.justbelieveinmyself.marta.exceptions.ResponseError;
 import com.justbelieveinmyself.marta.exceptions.ResponseMessage;
-import com.justbelieveinmyself.marta.repositories.UserRepository;
 import com.justbelieveinmyself.marta.services.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -35,11 +34,8 @@ import java.util.Set;
 @Tag(name = "User", description = "The User API")
 public class UserController {
     private final UserService userService;
-    private final UserRepository userRepository;
-
-    public UserController(UserService userService, UserRepository userRepository) {
+    public UserController(UserService userService) {
         this.userService = userService;
-        this.userRepository = userRepository;
     }
 
     @PutMapping("{profileId}/email")
