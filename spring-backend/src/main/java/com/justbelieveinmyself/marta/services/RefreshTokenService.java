@@ -1,5 +1,6 @@
 package com.justbelieveinmyself.marta.services;
 
+import com.justbelieveinmyself.marta.domain.dto.auth.AccessToken;
 import com.justbelieveinmyself.marta.domain.dto.auth.RefreshRequestDto;
 import com.justbelieveinmyself.marta.domain.dto.auth.RefreshResponseDto;
 import com.justbelieveinmyself.marta.domain.entities.RefreshToken;
@@ -41,18 +42,21 @@ public class RefreshTokenService {
     }
 
     public RefreshResponseDto refreshToken(RefreshRequestDto refreshRequestDto) {
-        var tokenOptional = refreshTokenRepository.findRefreshTokenByToken(refreshRequestDto.getRefreshToken());
-        if (tokenOptional.isEmpty()) {
-            throw new RefreshTokenException("Refresh token %s not found".formatted(refreshRequestDto.getRefreshToken()));
-        }
-        var token = tokenOptional.get();
+        RefreshToken token = refreshTokenRepository.findRefreshTokenByToken(refreshRequestDto.getRefreshToken())
+                .orElseThrow(() -> new RefreshTokenException("Refresh token %s not found".formatted(refreshRequestDto.getRefreshToken())));
         if (isTokenExpired(token.getExpiration())) {
             refreshTokenRepository.delete(token);
             throw new RefreshTokenException("Refresh token %s is expired".formatted(refreshRequestDto.getRefreshToken()));
         }
-        String jwt = jwtUtils.createAccessToken(token.getUser().getUsername());
+        AccessToken jwt = jwtUtils.createAccessToken(token.getUser().getUsername());
         updateToken(token);
-        return RefreshResponseDto.builder().refreshToken(token.getToken()).accessToken(jwt).build();
+
+        return RefreshResponseDto.builder()
+                .refreshToken(token.getToken())
+                .accessToken(jwt.getToken())
+                .accessTokenExpiration(jwt.getExpiration())
+                .refreshTokenExpiration(token.getExpiration().toInstant())
+                .build();
     }
 
     private void updateToken(RefreshToken token) {

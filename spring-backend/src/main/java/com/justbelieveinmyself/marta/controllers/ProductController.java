@@ -67,7 +67,10 @@ public class ProductController {
     public ResponseEntity<List<ProductWithImageDto>> getProductsList(
             @RequestParam(required = false) Long sellerId
     ) {
-        return productService.getProductsAsList(sellerId);
+        if (sellerId != null) {
+            return productService.getProductsBySellerId(sellerId);
+        }
+        return productService.getAllProducts();
     }
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)

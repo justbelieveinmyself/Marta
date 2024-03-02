@@ -27,7 +27,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Base64;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
 
@@ -37,7 +36,6 @@ public class ProductService {
     private final ReviewRepository reviewRepository;
     private final QuestionRepository questionRepository;
     private final UserRepository userRepository;
-
     private final ProductMapper productMapper;
     private final ProductHelper productHelper;
     private final ProductDetailMapper productDetailMapper;
@@ -120,11 +118,7 @@ public class ProductService {
     }
 
     public ResponseEntity<ReviewDto> createProductReview(ReviewDto reviewDto, User author, MultipartFile[] photos) {
-        Optional<Product> productOpt = productRepository.findById(reviewDto.getProductId());
-        if (productOpt.isEmpty()) {
-            throw new NotFoundException("Product with [%s] doesn't exists".formatted(reviewDto.getProductId()));
-        }
-        Product product = productOpt.get();
+        Product product = productRepository.findById(reviewDto.getProductId()).orElseThrow(() -> new NotFoundException("Product not found with ID: " + reviewDto.getProductId()));
         Review review = reviewMapper.dtoToModel(reviewDto, product, author, photos, fileHelper);
         Review savedReview = reviewRepository.save(review);
         product.getReviews().add(savedReview);
@@ -144,11 +138,7 @@ public class ProductService {
     }
 
     public ResponseEntity<QuestionDto> createProductQuestion(QuestionDto questionDto, User author) {
-        Optional<Product> productOpt = productRepository.findById(questionDto.getProductId());
-        if (productOpt.isEmpty()) {
-            throw new NotFoundException("Product with [id] doesn't exists");
-        }
-        Product product = productOpt.get();
+        Product product = productRepository.findById(questionDto.getProductId()).orElseThrow(() -> new NotFoundException("Product not found with ID: " + questionDto.getProductId()));
         Question question = questionMapper.dtoToModel(questionDto, productRepository);
         question.setAuthor(author);
         Question savedQuestion = questionRepository.save(question);
@@ -248,14 +238,14 @@ public class ProductService {
         return ResponseEntity.ok(productDetailMapper.modelToDto(productDetail, fileHelper));
     }
 
-    public ResponseEntity<List<ProductWithImageDto>> getProductsAsList(Long sellerId) {
-        Optional<User> userOpt = userRepository.findById(sellerId);
-        if (userOpt.isPresent()) {
-            User user = userOpt.get();
-            List<ProductWithImageDto> productDtos = productHelper.createListOfProductsWithImageOfStream(user.getProducts().stream());
-            return ResponseEntity.ok(productDtos);
-        }
+    public ResponseEntity<List<ProductWithImageDto>> getAllProducts() {
         List<ProductWithImageDto> productDtos = productHelper.createListOfProductsWithImageOfStream(productRepository.findAll().stream());
+        return ResponseEntity.ok(productDtos);
+    }
+
+    public ResponseEntity<List<ProductWithImageDto>> getProductsBySellerId(Long sellerId) {
+        User user = userRepository.findById(sellerId).orElseThrow(() -> new NotFoundException("User not found with ID: " + sellerId));
+        List<ProductWithImageDto> productDtos = productHelper.createListOfProductsWithImageOfStream(user.getProducts().stream());
         return ResponseEntity.ok(productDtos);
     }
 }

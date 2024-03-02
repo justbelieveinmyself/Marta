@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.Instant;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -12,7 +14,6 @@ import lombok.NoArgsConstructor;
 public class RefreshResponseDto {
     private String refreshToken;
     private String accessToken;
-    public static RefreshResponseDto of(String refreshToken, String accessToken){
-        return new RefreshResponseDto(refreshToken, accessToken);
-    }
+    private Instant refreshTokenExpiration;
+    private Instant accessTokenExpiration;
 }

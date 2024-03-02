@@ -19,6 +19,7 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
 
@@ -87,7 +88,7 @@ class AuthControllerTest {
     @Test
     void refreshToken() {
         RefreshRequestDto refreshRequestDto = new RefreshRequestDto("mytoken");
-        RefreshResponseDto refreshResponseDto = new RefreshResponseDto("mytoken", "accesstoken");
+        RefreshResponseDto refreshResponseDto = new RefreshResponseDto("mytoken", "accesstoken", Instant.now(), Instant.now());
         when(refreshTokenService.refreshToken(any())).thenReturn(refreshResponseDto);
 
         RefreshResponseDto refreshResponseDtoTest = refreshTokenService.refreshToken(refreshRequestDto);

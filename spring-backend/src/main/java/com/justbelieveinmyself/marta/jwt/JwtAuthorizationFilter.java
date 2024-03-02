@@ -2,6 +2,7 @@ package com.justbelieveinmyself.marta.jwt;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.justbelieveinmyself.marta.services.UserService;
 import jakarta.servlet.FilterChain;
@@ -21,7 +22,8 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
     private static final String TOKEN_PREFIX = "Bearer ";
     private final UserService userDetailsService;
     private final String secret;
-    public JwtAuthorizationFilter(AuthenticationManager authenticationManager, UserService userDetailsService, String secret){
+
+    public JwtAuthorizationFilter(AuthenticationManager authenticationManager, UserService userDetailsService, String secret) {
         super(authenticationManager);
         this.userDetailsService = userDetailsService;
         this.secret = secret;
@@ -30,7 +32,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
         UsernamePasswordAuthenticationToken auth = getAuthentication(request);
-        if(auth == null){
+        if (auth == null) {
             chain.doFilter(request, response);
             return;
         }
@@ -51,8 +53,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
             if (username == null) return null;
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
             return new UsernamePasswordAuthenticationToken(userDetails.getUsername(), null, userDetails.getAuthorities());
-        }
-        catch (TokenExpiredException ex){
+        } catch (TokenExpiredException | JWTDecodeException ex) {
             return null;
         }
     }
