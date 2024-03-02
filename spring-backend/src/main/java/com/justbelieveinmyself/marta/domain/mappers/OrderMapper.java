@@ -3,15 +3,12 @@ package com.justbelieveinmyself.marta.domain.mappers;
 import com.justbelieveinmyself.marta.domain.dto.OrderDto;
 import com.justbelieveinmyself.marta.domain.entities.Order;
 import com.justbelieveinmyself.marta.domain.entities.OrderProduct;
-import org.mapstruct.AfterMapping;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.MappingTarget;
+import org.mapstruct.*;
 
 import java.util.Map;
 import java.util.stream.Collectors;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", builder = @Builder(disableBuilder = true))
 public interface OrderMapper {
     @Mapping(target = "productIdAndQuantity", ignore = true)
     OrderDto modelToDto(Order order);

@@ -2,6 +2,7 @@ package com.justbelieveinmyself.marta.configs.beans;
 
 import com.justbelieveinmyself.marta.domain.enums.UploadDirectory;
 import com.justbelieveinmyself.marta.exceptions.NotCreatedException;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -17,16 +18,22 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
+
+@Log4j2
 public class FileHelper {
     @Value("${upload.path}")
     private String uploadPath;
 
     public String uploadFile(MultipartFile file, UploadDirectory to) {
-        try{
-            if (file != null && !Objects.requireNonNull(file.getOriginalFilename()).isEmpty()) {
+        try {
+            if (!Objects.requireNonNull(file.getOriginalFilename()).isEmpty()) {
                 File uploadDir = new File(uploadPath);
                 if (!uploadDir.exists()) {
                     uploadDir.mkdir();
+                    for (UploadDirectory value : UploadDirectory.values()) {
+                        File dir = new File(uploadPath + "/" + value.getPath());
+                        dir.mkdir();
+                    }
                 }
                 String uuidFile = UUID.randomUUID().toString();
                 String filename = uuidFile + "." + file.getOriginalFilename();
@@ -34,7 +41,7 @@ public class FileHelper {
                 return filename;
             }
             return null;
-        }catch (IOException e) {
+        } catch (IOException e) {
             throw new NotCreatedException("Cannot upload image!");
         }
     }
@@ -55,8 +62,7 @@ public class FileHelper {
             httpHeaders.add(HttpHeaders.CONTENT_DISPOSITION, "attachment;File-Name=" + resource.getFilename());
             return ResponseEntity.ok().contentType(MediaType.parseMediaType(Files.probeContentType(resource.getFile().toPath())))
                     .headers(httpHeaders).body(resource);
-        }
-        catch (IOException exception){
+        } catch (IOException exception) {
             return null;
         }
     }
@@ -69,8 +75,7 @@ public class FileHelper {
                 throw new IOException("File not found");
             }
             return new UrlResource(filePath.toUri());
-        }
-        catch (IOException e){
+        } catch (IOException e) {
             return null;
         }
     }
@@ -82,12 +87,11 @@ public class FileHelper {
                 throw new FileNotFoundException("File not found");
             }
             Resource resource = new UrlResource(filePath.toUri());
-            if(!resource.exists()) {
+            if (!resource.exists()) {
                 throw new FileNotFoundException("File not found");
             }
             return resource.getContentAsByteArray();
-        }
-        catch (IOException exception){
+        } catch (IOException exception) {
             return "".getBytes();
         }
     }

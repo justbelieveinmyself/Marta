@@ -37,7 +37,7 @@ const routes: Routes = [
                 pageDataService.isFilteredByWithPhoto = route.queryParams['onlyWithPhoto'] === 'true';
                 pageDataService.isFilteredByVerified = route.queryParams['onlyVerified'] === 'true';
                 pageDataService.searchWord = route.queryParams['search'];
-                return inject(ProductService).getProductList(pageDataService.pageNumber, pageDataService.sizeOfPage, true, pageDataService.sortBy, pageDataService.isSortASC, pageDataService.isFilteredByWithPhoto, pageDataService.isFilteredByVerified, pageDataService.searchWord);
+                return inject(ProductService).getProductPages(pageDataService.pageNumber, pageDataService.sizeOfPage, pageDataService.sortBy, pageDataService.isSortASC, pageDataService.isFilteredByWithPhoto, pageDataService.isFilteredByVerified, pageDataService.searchWord);
             }
         }
     },
@@ -57,7 +57,7 @@ const routes: Routes = [
                 return inject(UserService).getUserCurrentOrById(param);
             },
             products: (route: ActivatedRouteSnapshot) => {
-                return inject(ProductService).getProductList(0, 1, false);
+                return inject(ProductService).getProductList(route.params["id"]);
             }
         }
     },

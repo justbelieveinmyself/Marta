@@ -1,6 +1,7 @@
 package com.justbelieveinmyself.marta.services;
 
 import com.justbelieveinmyself.marta.configs.beans.FileHelper;
+import com.justbelieveinmyself.marta.configs.beans.ProductHelper;
 import com.justbelieveinmyself.marta.configs.beans.UserRightsValidator;
 import com.justbelieveinmyself.marta.domain.dto.ProductWithImageDto;
 import com.justbelieveinmyself.marta.domain.dto.UserDto;
@@ -22,7 +23,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Base64;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -35,14 +35,15 @@ public class UserService implements UserDetailsService {
     private final FileHelper fileHelper;
     private final UserMapper userMapper;
     private final UserRightsValidator userRightsValidator;
-
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, ProductMapper productMapper, FileHelper fileHelper, UserMapper userMapper, UserRightsValidator userRightsValidator) {
+    private final ProductHelper productHelper;
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, ProductMapper productMapper, FileHelper fileHelper, UserMapper userMapper, UserRightsValidator userRightsValidator, ProductHelper productHelper) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.productMapper = productMapper;
         this.fileHelper = fileHelper;
         this.userMapper = userMapper;
         this.userRightsValidator = userRightsValidator;
+        this.productHelper = productHelper;
     }
 
     public User save(User user) {
@@ -125,10 +126,7 @@ public class UserService implements UserDetailsService {
 
     public ResponseEntity<List<ProductWithImageDto>> getProducts(User user, User currentUser) {
         userRightsValidator.validateRights(user, currentUser);
-        List<ProductWithImageDto> productDtos = user.getProducts().stream()
-                .map(pro -> new ProductWithImageDto(productMapper.modelToDto(pro), Base64.getEncoder().encodeToString(
-                        fileHelper.downloadFileAsByteArray(pro.getPreviewImg(), UploadDirectory.PRODUCTS))))
-                .toList();
+        List<ProductWithImageDto> productDtos = productHelper.createListOfProductsWithImageOfStream(user.getProducts().stream());
         return ResponseEntity.ok(productDtos);
     }
 }

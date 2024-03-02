@@ -16,7 +16,8 @@ import java.io.IOException;
 
 @Component
 public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
-    @Autowired @Lazy
+    @Autowired
+    @Lazy
     private JwtAuthorizationFilter jwtAuthorizationFilter;
 
     @Override
@@ -24,11 +25,11 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
         response.setContentType("application/json");
         String errorMessage = "";
         HttpStatus httpStatus = null;
-        if(jwtAuthorizationFilter.getAuthentication(request) != null){
+        if (jwtAuthorizationFilter.getAuthentication(request) != null) {
             errorMessage = "Bad request!";
             httpStatus = HttpStatus.BAD_REQUEST;
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-        }else{
+        } else {
             errorMessage = "Bad access token!";
             httpStatus = HttpStatus.UNAUTHORIZED;
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);

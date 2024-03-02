@@ -3,8 +3,12 @@ package com.justbelieveinmyself.marta.domain.entities;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Schema(description = "Information about Product")
 @Table(name = "product_detail")
@@ -12,6 +16,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
+@Builder
 public class ProductDetail {
     @Id
     private Long id;
@@ -32,4 +37,6 @@ public class ProductDetail {
     private String otherDetails;
     @Column(name = "available")
     private Boolean isAvailable;
+    @OneToMany(mappedBy = "productDetail", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ProductImage> images = new ArrayList<>();
 }

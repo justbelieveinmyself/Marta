@@ -11,8 +11,7 @@ export class LogoutComponent {
     constructor(
         private router: Router,
         private tokenService: TokenService
-    ) {
-    }
+    ) {}
 
     logOut() {
         this.tokenService.logOut();

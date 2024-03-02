@@ -1,0 +1,35 @@
+p {
+    margin: 0;
+}
+
+.receiving-code {
+    background-color: #0DCCF3;
+    border-radius: 20px 20px 20px 20px;
+    padding: 4px 12px;
+    font-weight: bold;
+    margin-right: 8px;
+}
+
+.main-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.delivery-panel {
+    display: flex;
+    position: sticky;
+    top: 1px;
+    z-index: 5;
+    background-color: #FFFFFF;
+    padding: 10px;
+    border: 1px solid black;
+    border-radius: 10px 10px 10px 10px;
+    width: calc(100% - 16px);
+    margin-top: 8px;
+}
+
+.order-title {
+    font-weight: bold;
+    margin: 0;
+}

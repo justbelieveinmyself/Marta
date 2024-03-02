@@ -1,13 +1,12 @@
 import {Component, Input} from '@angular/core';
 import {ProductWithImage} from 'src/app/models/product-with-image';
-import {Order} from "../../../models/order";
 import {ProductService} from "../../../services/product.service";
 import {Product} from "../../../models/product";
 import {TokenService} from "../../../services/token.service";
 import {LocalUser} from "../../../models/local-user";
 import {UserService} from "../../../services/user.service";
-import {Seller} from "../../../models/seller";
 import {ProductInteractionService} from "../../../services/product-interaction.service";
+import {Carousel} from "../../../models/carousel";
 
 @Component({
     selector: 'app-product-list',
@@ -23,24 +22,25 @@ export class ProductListComponent {
     ) {}
 
     @Input() card: ProductWithImage[];
-    @Input() orders: Order[];
-    @Input() isOrders: boolean;
     @Input() isAdminPage: boolean;
     @Input() isNeedFavourites: boolean;
     @Input() isCanEdit: boolean;
-    @Input() isItemsByGrid: boolean = true;
+    @Input() isItemsBig: boolean = true;
     productInToast: Product;
-    contactSeller: Seller = new Seller();
+    productInPopup: ProductWithImage;
     currentUser: LocalUser;
-    messageForSeller = "";
     isFavourite: boolean[];
-
+    shownQuickShowPopup: boolean = false;
+    shownVerifiedPopup: boolean = false;
+    carousel: Carousel<ProductWithImage>;
     ngOnInit() {
         this.currentUser = this.tokenService.getUser();
     }
+
     ngOnChanges(){
         if(this.isNeedFavourites && this.card){
             this.getFavourites();
+            this.carousel = new Carousel<ProductWithImage>(this.card);
         }
     }
 
@@ -51,7 +51,7 @@ export class ProductListComponent {
                 for (let i = 0; i < this.card.length; i++) {
                     const currentProduct = this.card[i].product;
                     this.isFavourite[i] = favourites.some(favourite => {
-                        return this.currentUser.id === favourite.product.seller.id && currentProduct.id === favourite.product.id;
+                        return currentProduct.id === favourite.product.id;
                     });
                 }
             }
@@ -93,8 +93,20 @@ export class ProductListComponent {
         });
     }
 
+    toggleOverflowBody() {
+        if (this.shownQuickShowPopup) {
+            document.body.classList.add("body--overflow")
+        } else {
+            document.body.classList.remove("body--overflow")
+        }
+    }
 
-    sendMessageToSeller() {
+    orderNow() {
+        this.productInteractionService.orderNow(this.productInPopup, 1, false).then(isOrdered => {
+        });
+    }
 
+    copyToClipboard(text: string) {
+        navigator.clipboard.writeText(text);
     }
 }

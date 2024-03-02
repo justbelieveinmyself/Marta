@@ -5,11 +5,11 @@ import {Injectable} from '@angular/core';
 })
 export class PageDataService {
 
-    private _pageNumber: number;
-    private _sizeOfPage: number;
-    private _isSortASC: boolean;
-    private _isFilteredByWithPhoto: boolean;
-    private _isFilteredByVerified: boolean;
+    private _pageNumber: number = 0;
+    private _sizeOfPage: number = 12;
+    private _isSortASC: boolean = false;
+    private _isFilteredByWithPhoto: boolean = false;
+    private _isFilteredByVerified: boolean = false;
     private _sortBy: string;
     private _searchWord: string;
 
@@ -67,5 +67,10 @@ export class PageDataService {
 
     set searchWord(value: string) {
         this._searchWord = value;
+    }
+
+    resetFilters() {
+        this._isFilteredByVerified = false;
+        this._isFilteredByWithPhoto = false;
     }
 }

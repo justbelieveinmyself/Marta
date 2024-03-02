@@ -1,86 +1,154 @@
-<div class="list-container">
-    <ng-container *ngIf="isOrders == true; else itemsOfCard">
-        <ng-container *ngFor="let order of orders">
-            <div *ngFor="let item of order.productsAndQuantity | keyvalue;">
-                <div class="card object-with-hidden-item" style="width: 18rem; height: 520px;">
-                    <b [ngStyle]="order.isPaid? {'color':'green'}:{'color':'red'}"
-                       style="position: absolute; top: 8px; right: 10px; font-size: 13px; background-color: white; border-radius: 20px 20px 20px 20px; padding: 3px 12px">{{ order.isPaid ? 'Paid' : 'Not Paid' }}</b>
-                    <b style="color: #4CCAF2; position: absolute; top: 8px; left: 10px; font-size: 13px; background-color: white; border-radius: 20px 20px 20px 20px; padding: 3px 12px">{{ item.value }}</b>
-                    <a routerLink="/products/{{item.key.product.id}}/details" routerLinkActive="active">
-                        <img [src]="item.key.file" style="object-fit: cover;" height="381.86" width="286.4"
-                             class="card-img-top"
-                             alt="product image">
+<div class="overlay" *ngIf="shownQuickShowPopup" (click)="shownQuickShowPopup = false; toggleOverflowBody()" style="z-index: 300"></div>
+<div class="overlay" *ngIf="shownVerifiedPopup" (click)="shownVerifiedPopup = false;" style="z-index: 600"></div>
+<div class="popup popup-product-show" *ngIf="shownQuickShowPopup"
+     style="z-index: 301; opacity: 1; display: block; left: 20%; top: 10px; position: fixed;">
+    <a (click)="shownQuickShowPopup = false; toggleOverflowBody()" class="popup__close"></a>
+    <div class="content">
+        <div class="product">
+            <div class="product__photo-wrap">
+                <lib-ngx-image-zoom class="product__photo"
+                                    [thumbImage]="carousel.getActive().file"
+                                    [fullImage]="carousel.getActive().file"
+                                    [magnification]="1"
+                                    [altText]="'View 1'"
+                ></lib-ngx-image-zoom>
+            </div>
+            <div class="product__content">
+                <div class="product__header-wrap">
+                    <a class="product__header" routerLink="/products/{{carousel.getActive().product.id}}/details"
+                       routerLinkActive="active">
+                        <span
+                            class="product__brand-name">{{ carousel.getActive().product.seller.username | titlecase }}</span>
+                        <span> {{ carousel.getActive().product.productName | titlecase }}</span>
                     </a>
-                    <div class="card-body">
-                        <h5 class="card-title">{{ item.key.product.price | currency }}
-                            <span style="text-decoration: line-through; font-size: 15px;
-                    color: #868695; margin-left: 8px;">{{ item.key.product.discountPercentage }}%</span>
-                        </h5>
-                        <div class="hidden-text-1">
-                            <div class="card-text"
-                                 style="word-break: break-all">{{ item.key.product.seller.username | titlecase }}
-                                / {{ item.key.product.productName | titlecase }}
+                    <div class="product__common-info">
+                        <a class="product-review" routerLink="/products/{{carousel.getActive().product.id}}/feedback"
+                           routerLinkActive="active">
+                            <span class="product-review__rating address-rate-mini">
+                                4.4 <!-- TODO: AVG rating -->
+                            </span>
+                            <span
+                                class="product-review__count-review">{{ carousel.getActive().product.seller.ratingCount }}
+                                ratings</span>
+                        </a>
+                        <p class="product-article" (click)="copyToClipboard(carousel.getActive().product.productCode)">
+                            <span>Art: </span>
+                            <span class="product-article__copy">{{ carousel.getActive().product.productCode }}</span>
+                        </p>
+                        <button class="product__verified" (click)="shownVerifiedPopup = true">
+                            <span class="product__verified-icon"></span>
+                            <span>Verified</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="product__info-wrap">
+                    <div class="price-block">
+                        <div class="price-block__content">
+                            <div class="price-block__price-group">
+                                <p class="price-block__price-wrap">
+                                        <span class="price-block__price">
+                                            <span class="price-block__wallet-price">
+                                                {{ carousel.getActive().product.price|currency }}
+                                            </span>
+                                        </span>
+                                    <del class="price-block__old-price">
+                                        <span>$2,500.00</span>
+                                    </del>
+                                </p>
                             </div>
                         </div>
-                        <div class="card bottom-wrap hidden-item ">
-                            <span type="button" data-bs-toggle="modal" data-bs-target="#contactSellerModal"
-                                  (click)="contactSeller = item.key.product.seller"
-                                  style="border-bottom: 2px dotted rgb(108, 117, 125); color: #868695; font-size: 14px">Contact the seller</span>
+                    </div>
+                    <div class="product__order">
+                        <div class="order">
+                            <button class="order__btn-buy btn-base" (click)="orderNow()">Buy now</button>
+                            <button class="btn-main" (click)="addToCart(productInPopup.product)">
+                                <span class="hide-mobile">Add to cart</span>
+                                <span class="hide-desktop">To cart</span>
+                            </button>
                         </div>
-                        <div>
-                            <span class="text-info">{{ order.status.replace("_", " ") | titlecase }}</span> <br>
-                            <span
-                                class="text-secondary">Order date: {{ order.orderedAt | date: 'dd MMM YYYY, HH:mm' }}</span>
-                        </div>
+                        <button class="order-to-poned hide-mobile btn-heart-black"
+                                [ngClass]="isFavourite[carousel.activeId]? 'active': ''"
+                                (click)="toggleFavourite(carousel.getActive(), carousel.activeId)"
+                                type="button"></button>
                     </div>
                 </div>
-            </div>
-        </ng-container>
-    </ng-container>
-    <ng-template #itemsOfCard>
-        <div *ngFor="let item of card; let i=index" class="catalog-item">
-            <div class="card object-with-hidden-item" style="width: 18rem; height: 31rem">
-                <b [ngStyle]="item.product.isVerified? {'color':'green'}:{'color':'red'}"
-                   style="position: absolute; top: 8px; right: 10px; font-size: 13px;">
-                    <i class="fa-solid fa-2xl"
-                       tooltip="{{item.product.isVerified? 'Verified by the administrator':'Not yet verified by the administrator'}}"
-                       [ngClass]="item.product.isVerified? 'fa-check': 'fa-xmark'"></i>
-                </b>
-                <i routerLinkActive="active" [routerLink]="'/update-product/' + item.product.id" *ngIf="isCanEdit"
-                   class="fa-solid fa-pen-to-square fa-xl"
-                   style="position: absolute; top: 18px; left: 10px;cursor: pointer"></i>
-                <a *ngIf="isNeedFavourites" type="button" class="fa-regular fa-heart fa-xl"
-                   [ngClass]="isFavourite[i]? 'fa-solid' : 'fa-regular'"
-                   style="color: red; position: absolute; top: 16px; left: 10px;"
-                   (click)="toggleFavourite(item, i)"></a>
-                <img type="button" routerLink="/products/{{item.product.id}}/details" routerLinkActive="active"
-                     [src]="item.file" style="object-fit: cover;" height="381.86" class="card-img-top"
-                     alt="product image">
-                <div class="card-body" type="button" routerLink="/products/{{item.product.id}}/details"
-                     routerLinkActive="active">
-                    <h5 class="card-title">{{ item.product.price | currency }}
-                        <span style="text-decoration: line-through; font-size: 15px;
-                    color: #868695; margin-left: 8px;">{{ item.product.discountPercentage }}%</span>
-                    </h5>
-                    <div class="hidden-text-2">
-                        <div class="card-text"
-                             style="word-break: break-all">{{ item.product.seller.username | titlecase }}
-                            / {{ item.product.productName | titlecase }}
-                        </div>
-                    </div>
-                </div>
-                <div class="card bottom-wrap hidden-item">
-                    <div class="btn btn-outline-dark me-2" (click)="addToCart(item.product)">Add to cart</div>
-                    <ng-container *ngIf="isAdminPage">
-                        <div *ngIf="!item.product.isVerified" (click)="verifyProduct(item.product, i)"
-                             class="btn btn-outline-success me-2">Verify
-                        </div>
-                        <div (click)="deleteProduct(item.product, i)" class="btn btn-outline-danger">Delete</div>
-                    </ng-container>
-                </div>
+                <a class="product__btn" style="display: block"
+                   routerLink="/products/{{carousel.getActive().product.id}}/details" routerLinkActive="active">More
+                    information about the product</a>
             </div>
         </div>
-    </ng-template>
+        <button class="popup__btn-prev" [ngClass]="carousel.isFirst()? 'disabled': ''" (click)="carousel.previous()"
+                title="Previous article" type="button" style="display: block"></button>
+        <button class="popup__btn-next" [ngClass]="carousel.isLast()? 'disabled': ''" (click)="carousel.next()"
+                title="Next article" type="button" style="display: block"></button>
+    </div>
+</div>
+<div class="popup popup-verified-product" *ngIf="shownVerifiedPopup" style="z-index: 601; opacity: 1; display: block; left: 40%; top: 30%; position: fixed;">
+    <a (click)="shownVerifiedPopup = false;" class="popup__close"></a>
+    <div class="popup__content">
+        <div class="popup__picture"></div>
+        <div class="popup__main">
+            <h3 class="popup__title">Verified</h3>
+            <p class="popup__text">Our manager has checked this product</p>
+            <button class="popup__close-button btn-base" (click)="shownVerifiedPopup = false;">Fine</button>
+        </div>
+    </div>
+</div>
+<div [ngClass]="{'grid-container': isItemsBig, 'list-container': !isItemsBig}">
+    <!-- routerLinkActive="active" [routerLink]="'/update-product/' + item.product.id" *ngIf="isCanEdit"
+                <ng-container *ngIf="isAdminPage">
+                    *ngIf="!item.product.isVerified" (click)="verifyProduct(item.product, i)"
+                    (click)="deleteProduct(item.product, i)"
+                </ng-container> -->
+    <ng-container *ngFor="let item of card; let i = index">
+        <article class="product product-card product-card--hoverable">
+            <div class="product-card__wrapper">
+                <a routerLink="/products/{{item.product.id}}/details" routerLinkActive="active"
+                   class="product-card__link"></a>
+                <div class="product-card__top-wrap">
+                    <button class="product-card__heart" [ngClass]="isFavourite[i]? 'active':''"
+                            (click)="toggleFavourite(item, i)"></button>
+                    <button class="product-card__verified" [ngClass]="item.product.isVerified? 'active':''"></button>
+                    <div class="product-card__img-wrap">
+                        <img [src]="item.file" width="516" height="688" loading="lazy" [alt]="item.product.productName">
+                    </div>
+                    <button class="product-card__fast-view hide-mobile" type="button"
+                            (click)="shownQuickShowPopup = true; toggleOverflowBody(); carousel.setActive(i)">
+                        Quick view
+                    </button>
+                </div>
+                <div class="product-card__middle-wrap">
+                    <p class="product-card__price price">
+                    <span class="price__wrap">
+                        <ins class="price__lower-price wallet-price">{{ item.product.price | currency }}</ins>
+                        <del>400</del>
+                    </span>
+                    </p>
+                    <h2 class="product-card__brand-wrap">
+                    <span class="product-card__brand-container">
+                        <span class="product-card__brand">{{ item.product.seller.username | titlecase }}</span>
+                    </span>
+                        <span class="product-card__name">
+                        <span> / </span>
+                            {{ item.product.productName | titlecase }}
+                    </span>
+                    </h2>
+                </div>
+                <div class="product-card__bottom-wrap">
+                    <p class="product-card__rating-wrap">
+                        <span class="address-rate-mini">{{item.product.averageRate}}</span>
+                        <span class="product-card__count">{{ item.product.seller.ratingCount }} ratings</span>
+                    </p>
+                    <p class="product-card__order-wrap">
+                        <a class="product-card__add-basket btn-main" (click)="addToCart(item.product)">
+                            <span class="btn-icon__white"></span>
+                            <span class="btn-text">24 february</span>
+                        </a>
+                    </p>
+                </div>
+            </div>
+        </article>
+    </ng-container>
 </div>
 <div class="toast-container position-fixed bottom-0 end-0 p-3">
     <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
@@ -97,24 +165,4 @@
         </div>
     </div>
 </div>
-<!-- For modal with contact seller -->
-<div class="modal fade" id="contactSellerModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" style="min-width: 300px">
-        <div class="modal-content">
-            <div class="modal-header mt-2 mx-3">
-                <h1 class="modal-title fs-5"><b>Write a message to Seller</b></h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body mx-4" style="font-size: 19px">
-                <p style="font-weight: bold">Seller: {{ contactSeller.username | titlecase }}</p>
-                <textarea [(ngModel)]="messageForSeller" class="form-control w-100 mt-2" style="height: 200px"
-                          type="text"> </textarea>
-                <div class="mt-3 justify-content-center" style="display: flex">
-                    <button class="btn btn-outline-dark w-75" data-bs-dismiss="modal" (click)="sendMessageToSeller()">
-                        Send
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+

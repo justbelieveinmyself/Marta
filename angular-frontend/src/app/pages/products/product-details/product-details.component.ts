@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {ProductService} from "../../../services/product.service";
 import {ActivatedRoute} from "@angular/router";
 import {ProductWithImage} from "../../../models/product-with-image";
@@ -10,6 +10,7 @@ import {Question} from "../../../models/question";
 import {UserService} from "../../../services/user.service";
 import {ProductInteractionService} from "../../../services/product-interaction.service";
 import {ProductDetail} from "../../../models/product-detail";
+import {Carousel} from "../../../models/carousel";
 
 @Component({
     selector: 'app-product-details',
@@ -29,6 +30,7 @@ export class ProductDetailsComponent implements OnInit {
         private productInteractionService: ProductInteractionService
     ) {}
 
+    carousel: Carousel<string>;
     card: ProductWithImage;
     productDetail: ProductDetail;
     reviews: Review[];
@@ -51,10 +53,15 @@ export class ProductDetailsComponent implements OnInit {
     totalPrice: number;
     isPaid = false;
 
+    shownPopup: boolean = false;
+    sellerTooltip: {shown: boolean, posX: number, posY: number} = {shown: false, posX: 0, posY: 0}
+    @ViewChild("asideContainer", {static: true}) asideContainer: ElementRef;
+
     ngOnInit(): void {
         this.activatedRoute.data.subscribe(data => {
             this.card = data["product"];
             this.productDetail = data["productDetail"];
+            this.carousel = new Carousel(this.productDetail.images);
             console.log(this.productDetail)
             this.totalPrice = this.card.product.price;
         });
@@ -102,16 +109,16 @@ export class ProductDetailsComponent implements OnInit {
 
     addOrRemoveFavourite() {
         this.productInteractionService.toggleFavourite(this.isFavourite, this.card.product.id)
-        .subscribe(isFavourite => {
-            this.isFavourite = isFavourite;
-        });
+            .subscribe(isFavourite => {
+                this.isFavourite = isFavourite;
+            });
     }
 
     saveReview() {
         this.productInteractionService.saveReview(this.messageOfReview, this.currentRate, this.card.product.id, this.reviewPhotos)
             .then(review => {
                 this.reviews.push(review);
-        })
+            })
     }
 
     saveQuestion() {
@@ -176,7 +183,7 @@ export class ProductDetailsComponent implements OnInit {
 
     orderNow() {
         this.productInteractionService.orderNow(this.card, this.countOfProductInOrder, this.isPaid).then(isOrdered => {
-            if(isOrdered) {
+            if (isOrdered) {
                 this.countOfProductInOrder = 1;
                 this.totalPrice = this.card.product.price;
             }
@@ -195,8 +202,8 @@ export class ProductDetailsComponent implements OnInit {
         }
     }
 
-    copyToClipboard() {
-        navigator.clipboard.writeText(window.location.href);
+    copyToClipboard(text: string) {
+        navigator.clipboard.writeText(text);
     }
 
     goToLink(templateUrl: string) {
@@ -205,4 +212,24 @@ export class ProductDetailsComponent implements OnInit {
         window.open(splitedTemplate[0] + "url=" + window.location.href + (splitedTemplate[1] ? splitedTemplate[1] : "") + formattedText);
     }
 
+    toggleOverflowBody() {
+        if (this.shownPopup) {
+            document.body.classList.add("body--overflow")
+        } else {
+            document.body.classList.remove("body--overflow")
+        }
+    }
+
+    protected readonly window = window;
+
+    toggleSellerTooltip(event: any) {
+        if (this.sellerTooltip.shown) {
+            this.sellerTooltip.shown = false;
+        } else {
+            this.sellerTooltip.shown = true;
+            const rect = this.asideContainer.nativeElement.getBoundingClientRect();
+            this.sellerTooltip.posX = rect.left;
+            this.sellerTooltip.posY = event.pageY - rect.height;
+        }
+    }
 }

@@ -32,6 +32,8 @@ import {TooltipModule} from "ngx-bootstrap/tooltip";
 import { SearchComponent } from './components/search/search.component';
 import { PreloaderComponent } from './components/preloader/preloader.component';
 import { SellerPageComponent } from './pages/seller-page/seller-page.component';
+import { OrderListComponent } from './pages/products/order-list/order-list.component';
+import {NgxImageZoomModule} from "ngx-image-zoom";
 
 @NgModule({
   declarations: [
@@ -56,7 +58,8 @@ import { SellerPageComponent } from './pages/seller-page/seller-page.component';
     ActivityPageComponent,
     SearchComponent,
     PreloaderComponent,
-    SellerPageComponent
+    SellerPageComponent,
+    OrderListComponent
   ],
     imports: [
         BrowserModule,
@@ -67,7 +70,8 @@ import { SellerPageComponent } from './pages/seller-page/seller-page.component';
         SocialLoginModule,
         PopoverModule.forRoot(),
         NgOptimizedImage,
-        TooltipModule
+        TooltipModule,
+        NgxImageZoomModule
     ],
   providers: [
     {

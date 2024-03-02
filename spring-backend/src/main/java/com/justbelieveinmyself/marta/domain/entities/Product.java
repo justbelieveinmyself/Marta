@@ -36,8 +36,6 @@ public class Product {
     private ZonedDateTime updatedAt;
     @ManyToOne(fetch = FetchType.EAGER) @JoinColumn(name = "seller_id")
     private User seller;
-    @Column(name = "preview_image")
-    private String previewImg;
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private Set<OrderProduct> orderProduct;
     @ManyToMany(mappedBy = "cartProducts")

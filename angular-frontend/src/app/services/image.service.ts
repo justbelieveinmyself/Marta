@@ -2,6 +2,7 @@ import {Injectable, SecurityContext} from '@angular/core';
 import {DomSanitizer} from '@angular/platform-browser';
 import {ProductWithImage} from "../models/product-with-image";
 import {LocalUser} from "../models/local-user";
+import {ProductDetail} from "../models/product-detail";
 
 @Injectable({
     providedIn: 'root'

@@ -27,7 +27,7 @@ export class CreateProductComponent implements OnInit {
             "Gourmet products", "Books and audiobooks", "Sports nutrition",
             "Automotive products", "Furniture and household goods",
             "Tools and automotive supplies", "Pet Supplies"
-        ];
+        ]; //TODO: get from localstorage or from serv and save to localstorage
     constructor(
         private productService: ProductService,
         private router: Router,
@@ -74,7 +74,6 @@ export class CreateProductComponent implements OnInit {
         this.product.isVerified = false;
         this.product.seller = this.user;
         this.productService.addProduct(this.product, this.previewImg, this.productDetail).subscribe(data => {
-            console.log(data);
             this.redirectToProductList();
         });
     }

@@ -16,6 +16,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 
 import java.time.ZonedDateTime;
@@ -28,6 +29,7 @@ import static org.mockito.Mockito.when;
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@ActiveProfiles("dev")
 @TestPropertySource(properties = {"jwt.refreshToken.expiration=50m"})
 class AuthServiceTest {
 
@@ -55,7 +57,7 @@ class AuthServiceTest {
     @Test
     void createNewUser_shouldCreateNewUser_whenValidRegisterDtoAndUserNotExists() {
         User mockUser = User.builder().id(1L).username("user").email("test@mail.ru").build();
-        RegisterDto registerDto = new RegisterDto("Dmitry","Salenko",  "user", "123", "123", "test@mail.ru", "+79788112224", "Kerm st. 12", "New York", "4242232", "USA");
+        RegisterDto registerDto = RegisterDto.builder().firstName("Dmitry").lastName("Salenko").username("user").password("123").passwordConfirm("123").build();
 
         when(userService.createNewUser(any(), any())).thenReturn(mockUser);
 
@@ -67,7 +69,7 @@ class AuthServiceTest {
     @Test
     void createNewUser_shouldThrowException_whenInvalidRegisterDto() {
         User mockUser = User.builder().id(1L).username("user").email("test@mail.ru").build();
-        RegisterDto registerDto = new RegisterDto("Dmitry","Salenko",  "user", "321", "123", "test@mail.ru", "+79788112224", "Kerm st. 12", "New York", "4242232", "USA");
+        RegisterDto registerDto = RegisterDto.builder().firstName("Dmitry").lastName("Salenko").username("user").password("321").passwordConfirm("123").build();
 
         when(userService.createNewUser(any(), any())).thenReturn(mockUser);
 
@@ -79,7 +81,7 @@ class AuthServiceTest {
     @Test
     void createNewUser_shouldThrowException_whenUserExists() {
         User mockUser = User.builder().id(1L).username("user").email("test@mail.ru").build();
-        RegisterDto registerDto = new RegisterDto("Dmitry","Salenko",  "user", "321", "123", "test@mail.ru", "+79788112224", "Kerm st. 12", "New York", "4242232", "USA");
+        RegisterDto registerDto = RegisterDto.builder().firstName("Dmitry").lastName("Salenko").username("user").password("123").passwordConfirm("123").build();
 
         when(userService.findByUsername("user")).thenReturn(mockUser);
 

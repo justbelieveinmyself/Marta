@@ -1,5 +1,5 @@
 <ng-container *ngIf="isLogged; else notLogged">
-<nav class="navbar navbar-expand-sm bg-dark navbar-dark" style="position: sticky; top: 0px; height: 30px">
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark" style="position: sticky; top: 0; height: 30px">
     <div class="text-secondary mx-4" style="font-size: 15px;">
         <a type="button" routerLink="create-product" routerLinkActive="active" class="highlight-hover-white no-text-decoration-line">
             <i class="fa-solid fa-location-dot"></i>&nbsp;
@@ -9,59 +9,62 @@
             <span>Sell at Marta!</span>
         </a>
     </div>
-    <a class="ms-auto text-white" style="margin-right: 20px" type="button" routerLink="profile" routerLinkActive="active">
+    <a class="ms-auto highlight-hover-white" style="margin-right: 20px" type="button" routerLink="profile" routerLinkActive="active">
         {{(user.balance? user.balance : 0) | currency }} <i class="fa-solid fa-hand-holding-dollar"></i>
     </a>
 </nav>
-<nav class="navbar navbar-expand-sm bg-dark navbar-dark mb-3" style="height: 90px; position: sticky; top: -5px; z-index: 100">
-    <a class="navbar-brand ms-5" routerLink="products" routerLinkActive="active">
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark" style="height: 90px;z-index: 100">
+    <a class="navbar-brand ms-4" routerLink="products" routerLinkActive="active">
         <img src="../../../assets/logo.png" width="165" height="35" alt="logo with 'Marta'">
     </a>
-    <app-search></app-search>
-    <ul class="navbar-nav ms-auto">
-        <li class="nav-item me-3" *ngIf="user.roles!.includes('ADMIN')">
+    <app-search style="width: 100%"></app-search>
+    <ul class="navbar-items ms-auto">
+        <li class="navbar-item" *ngIf="user.roles!.includes('ADMIN')">
             <a routerLink="adminPanel" routerLinkActive="active" class="nav-link"
                style="color: #E1E3E6 !important;">
-                <i class="fa-solid fa-lock fa-xl" style="padding: 15px 0 0 10px; display: block;"></i> <br>
+                <i class="fa-solid fa-lock fa-xl" style="padding-top: 15px; display: block;"></i> <br>
                 <span class="text-secondary">Panel</span>
             </a>
         </li>
-        <li class="nav-item me-3">
+        <li class="navbar-item">
             <a routerLink="profile/favourites" routerLinkActive="active" class="nav-link"
-               style="color: #E1E3E6 !important;;">
-                <i class="fa-solid fa-heart fa-xl" style="padding: 15px 0 0 24px; display: block;"></i> <br>
+               style="color: #E1E3E6 !important;">
+                <i class="fa-solid fa-heart fa-xl" style="padding-top: 15px; display: block;"></i><br>
                 <span class="text-secondary">Favourites</span>
             </a>
         </li>
-        <li class="nav-item me-3">
+        <li class="navbar-item">
             <a routerLink="profile/delivery" routerLinkActive="active" class="nav-link"
                style="color: #E1E3E6 !important;">
-                <i class="fa-solid fa-box-open fa-xl" style="padding: 15px 0 0 14px; display: block;"></i> <br>
+                <i class="fa-solid fa-box-open fa-xl" style="padding-top: 15px; display: block;"></i> <br>
                 <span class="text-secondary">Delivery</span>
             </a>
         </li>
-        <li class="nav-item me-3">
+        <li class="navbar-item">
             <a routerLink="profile" routerLinkActive="active" class="nav-link"
-               style="color: #E1E3E6 !important;;">
-                <i class="fa-solid fa-user fa-xl" style="padding: 15px 0 0 12px; display: block;"></i> <br>
+               style="color: #E1E3E6 !important;">
+                <i class="fa-solid fa-user fa-xl" style="padding-top: 15px; display: block;"></i> <br>
                 <span class="text-secondary">Profile</span>
             </a>
         </li>
-        <li class="nav-item me-3">
+        <li class="navbar-item">
             <a routerLink="profile/cart" routerLinkActive="active" class="nav-link"
-               style="color: #E1E3E6 !important;;">
-                <i class="fa-solid fa-cart-shopping fa-xl" style="padding: 15px 0 0 0; display: block;"></i> <br>
+               style="color: #E1E3E6 !important;">
+                <i class="fa-solid fa-cart-shopping fa-xl" style="padding-top: 15px; display: block;"></i> <br>
                 <span class="text-secondary">Cart</span>
             </a>
         </li>
+        <li>
+            <app-logout class="btn-logout" style="width: 100px"></app-logout>
+        </li>
     </ul>
-    <app-logout class="ms-auto me-2 btn-logout"></app-logout>
+
 </nav>
 </ng-container>
 <ng-template #notLogged>
     <nav class="navbar navbar-expand-sm bg-dark navbar-dark mb-3" style="height: 65px; position: sticky; top: -5px; z-index: 100">
         <a class="navbar-brand" style="margin-left: 50px" routerLink="products" routerLinkActive="active">
-            <img src="../../../assets/logo.png" height="40" alt="logo with 'Marta'">
+            <img src="../../../assets/logo.png" style="height: 40px" alt="logo with 'Marta'">
         </a>
         <button class="btn btn-outline-success ms-auto me-2" type="submit" routerLink="/login"><i class="fa-solid fa-right-to-bracket"></i> Log In</button>
     </nav>

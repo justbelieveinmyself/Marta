@@ -10,4 +10,5 @@ export class ProductDetail {
     color: string;
     otherDetails: string;
     isAvailable: boolean;
+    images: string[];
 }

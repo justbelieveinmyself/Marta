@@ -7,7 +7,7 @@ import org.mapstruct.*;
 
 import java.time.ZonedDateTime;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", builder = @Builder(disableBuilder = true))
 public interface QuestionMapper {
     @Mapping(target = "productId", ignore = true)
     QuestionDto modelToDto(Question question);

@@ -75,8 +75,8 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="phone">Phone Number</label>
-                        <input type="text" class="form-control" id="phone" name="phone" placeholder="Enter your number"
+                        <label for="phone" >Phone Number</label>
+                        <input type="tel" class="form-control" id="phone" name="phone" placeholder="Enter your number"
                                formControlName="phone">
                         <div class="alert alert-danger" *ngIf="registerForm.get('phone').
                     hasError('required') && f.submitted">
