@@ -15,6 +15,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,12 +25,9 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "api/v1/products/cart")
 @Tag(name = "Product Cart", description = "The Product-Cart API")
+@RequiredArgsConstructor
 public class ProductCartController {
     private final ProductService productService;
-
-    public ProductCartController(ProductService productService) {
-        this.productService = productService;
-    }
 
     @GetMapping
     @Operation(summary = "Get products from personal cart", description = "Use this to get product from his cart")

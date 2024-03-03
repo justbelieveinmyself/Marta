@@ -40,8 +40,7 @@ class AuthControllerTest {
     @MockBean
     private RefreshTokenService refreshTokenService;
 
-    AuthControllerTest() {
-    }
+    AuthControllerTest() {}
 
     @Test
     void register_ReturnsValidResponseEntity() throws Exception {

@@ -7,6 +7,7 @@ import com.justbelieveinmyself.marta.domain.entities.User;
 import com.justbelieveinmyself.marta.services.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.BufferedReader;
@@ -23,14 +24,9 @@ import java.util.Map;
         name = "OAuth",
         description = "The OAuth API"
 )
-
+@RequiredArgsConstructor
 public class OAuthController {
     private final UserService userService;
-
-    public OAuthController(UserService userService) {
-        this.userService = userService;
-    }
-
     @PostMapping
     @Operation(description = "OAuth vkontakte login", deprecated = true)
     public User vk(@RequestBody OAuthTokenDto OAuthTokenDto) throws IOException {

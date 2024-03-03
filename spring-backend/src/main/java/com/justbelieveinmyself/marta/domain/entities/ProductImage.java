@@ -17,6 +17,7 @@ import lombok.NoArgsConstructor;
 public class ProductImage {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(nullable = false)
     private String path;
     @ManyToOne
     @JoinColumn(name = "product_id")

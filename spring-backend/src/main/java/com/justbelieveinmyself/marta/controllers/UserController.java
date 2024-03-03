@@ -19,6 +19,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -32,11 +33,9 @@ import java.util.Set;
 @RestController
 @RequestMapping("api/v1/profiles")
 @Tag(name = "User", description = "The User API")
+@RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
-    public UserController(UserService userService) {
-        this.userService = userService;
-    }
 
     @PutMapping("{profileId}/email")
     @Operation(summary = "Update email", description = "Use this to update email for user")
@@ -48,10 +47,10 @@ public class UserController {
     })
     @Parameter(name = "profileId", schema = @Schema(name = "profileId", type = "integer"), in = ParameterIn.PATH)
     public ResponseEntity<LoginResponseDto> updateEmail(
-            @Parameter(hidden = true) @PathVariable("profileId")User user,
+            @Parameter(hidden = true) @PathVariable("profileId") User user,
             @RequestBody String email,
             @CurrentUser User currentUser
-            ){
+    ) {
         return userService.updateEmail(user, email, currentUser);
     }
 
@@ -61,7 +60,7 @@ public class UserController {
             @ApiResponse(responseCode = "200", description = "File found and delivered",
                     content = @Content(mediaType = MediaType.APPLICATION_OCTET_STREAM_VALUE, array = @ArraySchema(arraySchema = @Schema(implementation = Byte.class)))),
             @ApiResponse(responseCode = "403", description = "1. You don't have the rights! \n 2. File not found!",
-                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,schema = @Schema(implementation = ResponseError.class)))
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ResponseError.class)))
     })
     @Parameter(name = "profileId", schema = @Schema(name = "profileId", type = "integer"), in = ParameterIn.PATH)
     public ResponseEntity<UrlResource> getAvatar(
@@ -77,7 +76,7 @@ public class UserController {
             @ApiResponse(responseCode = "200", description = "Products successfully returned",
                     content = @Content(mediaType = MediaType.APPLICATION_OCTET_STREAM_VALUE, array = @ArraySchema(arraySchema = @Schema(implementation = Byte.class)))),
             @ApiResponse(responseCode = "403", description = "1. You don't have the rights! \n 2. File not found!",
-                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,schema = @Schema(implementation = ResponseError.class)))
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ResponseError.class)))
     })
     @Parameter(name = "sellerId", schema = @Schema(name = "sellerId", type = "integer"), in = ParameterIn.PATH)
     public ResponseEntity<List<ProductWithImageDto>> getProducts(
@@ -93,14 +92,14 @@ public class UserController {
             @ApiResponse(responseCode = "201", description = "Avatar updated and saved",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ResponseMessage.class))),
             @ApiResponse(responseCode = "403", description = "1. You don't have the rights! \n 2. Cannot update avatar!!",
-                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,schema = @Schema(implementation = ResponseError.class)))
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ResponseError.class)))
     })
     @Parameter(name = "profileId", schema = @Schema(name = "profileId", type = "integer"), in = ParameterIn.PATH)
     public ResponseEntity<ResponseMessage> updateAvatar(
             @Parameter(hidden = true) @PathVariable("profileId") User user,
             @RequestParam("file") MultipartFile file,
             @CurrentUser User currentUser
-    ){
+    ) {
         return this.userService.updateAvatar(user, file, currentUser);
     }
 
@@ -115,8 +114,8 @@ public class UserController {
     public ResponseEntity<UserDto> getUserInfo(
             @CurrentUser User authedUser,
             @PathVariable(name = "profileId", required = false) User userFromDb
-    ){
-        if(userFromDb != null){
+    ) {
+        if (userFromDb != null) {
             return userService.getUser(userFromDb);
         }
         return userService.getUser(authedUser);
@@ -158,14 +157,14 @@ public class UserController {
             @ApiResponse(responseCode = "200", description = "Gender  updated and saved",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = UserDto.class))),
             @ApiResponse(responseCode = "403", description = "You don't have the rights!",
-                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,schema = @Schema(implementation = ResponseError.class)))
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ResponseError.class)))
     })
     @Parameter(name = "profileId", schema = @Schema(name = "profileId", type = "integer"), in = ParameterIn.PATH)
     public ResponseEntity<UserDto> updateGender(
             @Parameter(hidden = true) @PathVariable("profileId") User user,
             @RequestBody String gender,
             @CurrentUser User authedUser
-    ){
+    ) {
         return userService.updateGender(user, gender, authedUser);
     }
 
@@ -176,13 +175,13 @@ public class UserController {
             @ApiResponse(responseCode = "200", description = "Roles updated and saved",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = UserDto.class))),
             @ApiResponse(responseCode = "403", description = "You don't have the rights!",
-                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,schema = @Schema(implementation = ResponseError.class)))
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ResponseError.class)))
     })
     @Parameter(name = "profileId", schema = @Schema(name = "profileId", type = "integer"), in = ParameterIn.PATH)
     public ResponseEntity<UserDto> updateRoles(
             @Parameter(hidden = true) @PathVariable("profileId") User user,
             @RequestBody Set<Role> roles
-    ){
+    ) {
         return userService.updateRoles(user, roles);
     }
 
@@ -192,14 +191,14 @@ public class UserController {
             @ApiResponse(responseCode = "200", description = "Name and surname updated and saved",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = UserDto.class))),
             @ApiResponse(responseCode = "403", description = "You don't have the rights!",
-                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,schema = @Schema(implementation = ResponseError.class)))
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ResponseError.class)))
     })
     @Parameter(name = "profileId", schema = @Schema(name = "profileId", type = "integer"), in = ParameterIn.PATH)
     public ResponseEntity<UserDto> updateNameAndSurname(
             @Parameter(hidden = true) @PathVariable("profileId") User user,
             @RequestBody UserNamesDto userNamesDto,
             @CurrentUser User authedUser
-    ){
+    ) {
         return userService.updateNameAndSurname(user, userNamesDto, authedUser);
     }
 }

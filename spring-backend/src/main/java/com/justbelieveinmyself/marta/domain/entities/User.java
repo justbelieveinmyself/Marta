@@ -27,12 +27,18 @@ import java.util.Set;
 public class User implements UserDetails {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(nullable = false)
     private String firstName;
+    @Column(nullable = false)
     private String lastName;
+    @Column(nullable = false)
     private String username;
+    @Column(nullable = false)
     private String password;
+    @Column(nullable = false)
     private String email;
     private LocalDate birthDate;
+    @Column(nullable = false)
     private String gender;
     @Enumerated(EnumType.STRING) @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
@@ -40,7 +46,9 @@ public class User implements UserDetails {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "seller")
     private List<Product> products;
     private String avatar;
+    @Column(nullable = false)
     private String phone;
+    @Column(nullable = false)
     private BigDecimal balance;
     @CreationTimestamp
     private ZonedDateTime registeredAt;

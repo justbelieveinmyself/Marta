@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.ZonedDateTime;
 import java.util.List;
@@ -20,6 +21,7 @@ import java.util.List;
 public class Review {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(nullable = false)
     private String message;
     private String answer;
     @Min(1) @Max(5) @Column(nullable = false)
@@ -27,7 +29,8 @@ public class Review {
     @ManyToOne(fetch = FetchType.EAGER) @JoinColumn(name = "author_id", nullable = false)
     private User author;
     @Column(nullable = false)
-    private ZonedDateTime time;
+    @CreationTimestamp
+    private ZonedDateTime createdAt;
     @ElementCollection @CollectionTable(name = "product_reviews_photo", joinColumns = @JoinColumn(name = "review_id"))
     private List<String> photos;
     @ManyToOne(fetch = FetchType.EAGER) @JoinColumn(name = "product_id", nullable = false)

@@ -15,10 +15,15 @@ public class Address {
     private Long id;
     @MapsId @OneToOne
     private User user;
+    @Column(nullable = false)
     private String address;
     private String address2;
+    @Column(nullable = false)
     private String city;
+    @Column(nullable = false)
     private String postalCode;
+    @Column(nullable = false)
     private String country;
+    @Column(nullable = false)
     private String region;
 }

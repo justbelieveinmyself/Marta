@@ -18,7 +18,9 @@ public class RefreshToken {
     private Long id;
     @Builder.Default
     private String uuid = UUID.randomUUID().toString();
+    @Column(nullable = false)
     private String token;
+    @Column(nullable = false)
     private ZonedDateTime expiration;
     @OneToOne
     @JoinColumn(nullable = false, name = "user_id")

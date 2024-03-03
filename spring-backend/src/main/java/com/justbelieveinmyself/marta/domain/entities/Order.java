@@ -23,8 +23,10 @@ public class Order {
     private Set<OrderProduct> orderProduct;
     @CreationTimestamp
     private ZonedDateTime orderedAt;
+    @Column(nullable = false)
     private Boolean isPaid;
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private DeliveryStatus status;
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(nullable = false, name = "customer_id")

@@ -22,19 +22,21 @@ import java.util.Set;
 public class Product {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "product_name")
+    @Column(name = "product_name", nullable = false)
     private String productName;
-    @Column(name = "product_code")
+    @Column(name = "product_code", nullable = false)
     private String productCode;
+    @Column(nullable = false)
     private String category;
+    @Column(nullable = false)
     private BigDecimal price;
-    @Column(name = "discount_percentage")
-    private Integer discountPercentage;
-    @Column(name = "verified")
+    @Column(name = "discount_price")
+    private Integer discountedPrice;
+    @Column(name = "is_verified", nullable = false)
     private Boolean isVerified;
     @UpdateTimestamp
     private ZonedDateTime updatedAt;
-    @ManyToOne(fetch = FetchType.EAGER) @JoinColumn(name = "seller_id")
+    @ManyToOne(fetch = FetchType.EAGER) @JoinColumn(name = "seller_id", nullable = false)
     private User seller;
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private Set<OrderProduct> orderProduct;

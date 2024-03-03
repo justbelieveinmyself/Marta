@@ -16,5 +16,6 @@ public class OrderProduct {
     private Order order;
     @Id @ManyToOne @JoinColumn
     private Product product;
+    @Column(nullable = false)
     private Integer quantity;
 }

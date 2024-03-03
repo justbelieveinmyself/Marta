@@ -17,6 +17,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -28,12 +29,9 @@ import java.util.List;
 @RestController
 @RequestMapping("api/v1/products")
 @Tag(name = "Product Feedback", description = "The Product-Feedback API")
+@RequiredArgsConstructor
 public class ProductFeedbackController {
     private final ProductService productService;
-
-    public ProductFeedbackController(ProductService productService) {
-        this.productService = productService;
-    }
 
     @GetMapping("reviews/{productId}")
     @Operation(summary = "Get list of product reviews by productId", description = "Use this to get all reviews of specified product")

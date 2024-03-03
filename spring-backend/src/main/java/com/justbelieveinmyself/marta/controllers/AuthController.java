@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,14 +21,10 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 @RequestMapping("api/v1/auth")
 @Tag(name = "Auth", description = "The Auth API")
+@RequiredArgsConstructor
 public class AuthController {
     private final AuthService authService;
     private final RefreshTokenService refreshTokenService;
-
-    public AuthController(AuthService authService, RefreshTokenService refreshTokenService) {
-        this.authService = authService;
-        this.refreshTokenService = refreshTokenService;
-    }
 
     @PostMapping(value = "/register", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     @Operation(summary = "Register", description = "Use this to create user")
