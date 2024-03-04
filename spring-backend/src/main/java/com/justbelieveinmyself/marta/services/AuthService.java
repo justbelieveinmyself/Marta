@@ -12,6 +12,8 @@ import com.justbelieveinmyself.marta.exceptions.NotCreatedException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.multipart.MultipartFile;
@@ -37,6 +39,7 @@ public class AuthService {
     public ResponseEntity<LoginResponseDto> createAuthToken(@RequestBody LoginRequestDto authRequest) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken
                 (authRequest.getUsername(), authRequest.getPassword()));
+        SecurityContext context = SecurityContextHolder.getContext();
         User userDetails = userService.loadUserByUsername(authRequest.getUsername());
         String token = refreshTokenService.createRefreshToken(userDetails);
         LoginResponseDto loginResponseDTO = new LoginResponseDto(token, userMapper.modelToDto(userDetails, fileHelper));

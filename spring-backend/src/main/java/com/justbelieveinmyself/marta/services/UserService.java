@@ -36,7 +36,16 @@ public class UserService implements UserDetailsService {
     private final UserMapper userMapper;
     private final UserRightsValidator userRightsValidator;
     private final ProductHelper productHelper;
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, ProductMapper productMapper, FileHelper fileHelper, UserMapper userMapper, UserRightsValidator userRightsValidator, ProductHelper productHelper) {
+
+    public UserService(
+            UserRepository userRepository,
+            PasswordEncoder passwordEncoder,
+            ProductMapper productMapper,
+            FileHelper fileHelper,
+            UserMapper userMapper,
+            UserRightsValidator userRightsValidator,
+            ProductHelper productHelper
+    ) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.productMapper = productMapper;
@@ -55,10 +64,12 @@ public class UserService implements UserDetailsService {
         userRepository.delete(user);
         return ResponseEntity.ok(new ResponseMessage(200, "User successfully deleted!"));
     }
+
     @Override
     public User loadUserByUsername(String username) throws UsernameNotFoundException {
         User userFromDb = userRepository.findByUsername(username);
-        if(Objects.isNull(userFromDb)) throw new UsernameNotFoundException(String.format("User with " + username + " not found!"));
+        if (Objects.isNull(userFromDb))
+            throw new UsernameNotFoundException(String.format("User with " + username + " not found!"));
         return userFromDb;
     }
 

@@ -19,7 +19,7 @@ public class ExceptionsHandler {
     }
 
     @ExceptionHandler(value = BadCredentialsException.class)
-    public ResponseEntity<ResponseError> handleUnauthorizedExceptions(BadCredentialsException e){
+    public ResponseEntity<ResponseError> handleBadCredentialsException(BadCredentialsException e){
         ResponseError responseError = new ResponseError(HttpStatus.UNAUTHORIZED, e.getMessage());
         return new ResponseEntity<>(responseError, HttpStatus.UNAUTHORIZED);
     }

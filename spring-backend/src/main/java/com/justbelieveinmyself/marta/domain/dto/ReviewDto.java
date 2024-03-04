@@ -32,7 +32,7 @@ public class ReviewDto {
         BeanUtils.copyProperties(review, reviewDto, "product", "author");
         reviewDto.setProductId(review.getProduct().getId());
         reviewDto.setAuthor(SellerDto.of(review.getAuthor()));
-        reviewDto.setTime(review.getTime());
+        reviewDto.setTime(review.getCreatedAt());
         return reviewDto;
     }
 }

@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -35,9 +36,9 @@ public class AuthController {
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ResponseError.class)))
     })
     public ResponseEntity<SellerDto> register(
-            @RequestPart("regUser") RegisterDto registerDTO,
-            @Parameter(description = "Avatar") @RequestPart(name = "file",required = false) MultipartFile file
-    ){
+            @Valid @RequestPart("regUser") RegisterDto registerDTO,
+            @Parameter(description = "Avatar") @RequestPart(name = "file", required = false) MultipartFile file
+    ) {
         return authService.createNewUser(registerDTO, file);
     }
 
@@ -49,7 +50,7 @@ public class AuthController {
             @ApiResponse(responseCode = "401", description = "Bad credentials!",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ResponseError.class)))
     })
-    public ResponseEntity<LoginResponseDto> login(@RequestBody LoginRequestDto loginRequestDto){
+    public ResponseEntity<LoginResponseDto> login(@Valid @RequestBody LoginRequestDto loginRequestDto) {
         return authService.createAuthToken(loginRequestDto);
     }
 
@@ -61,7 +62,7 @@ public class AuthController {
             @ApiResponse(responseCode = "403", description = "Refresh token not valid or expired!",
                     content = @Content)
     })
-    public ResponseEntity<RefreshResponseDto> refreshToken(@RequestBody RefreshRequestDto refreshRequestDto){
+    public ResponseEntity<RefreshResponseDto> refreshToken(@RequestBody RefreshRequestDto refreshRequestDto) {
         return ResponseEntity.ok(refreshTokenService.refreshToken(refreshRequestDto));
     }
 }

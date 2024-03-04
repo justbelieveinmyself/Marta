@@ -9,24 +9,27 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
+@Component
 public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
     private static final String TOKEN_PREFIX = "Bearer ";
     private final UserService userDetailsService;
-    private final String secret;
+    @Value("${jwt.secret}")
+    private String secret;
 
-    public JwtAuthorizationFilter(AuthenticationManager authenticationManager, UserService userDetailsService, String secret) {
+    public JwtAuthorizationFilter(AuthenticationManager authenticationManager, UserService userDetailsService) {
         super(authenticationManager);
         this.userDetailsService = userDetailsService;
-        this.secret = secret;
     }
 
     @Override
@@ -50,7 +53,9 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
                     .build()
                     .verify(token.replace(TOKEN_PREFIX, ""))
                     .getSubject();
-            if (username == null) return null;
+            if (username == null) {
+                return null;
+            }
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
             return new UsernamePasswordAuthenticationToken(userDetails.getUsername(), null, userDetails.getAuthorities());
         } catch (TokenExpiredException | JWTDecodeException ex) {

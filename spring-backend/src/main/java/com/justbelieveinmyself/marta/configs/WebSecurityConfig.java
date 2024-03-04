@@ -1,9 +1,7 @@
 package com.justbelieveinmyself.marta.configs;
 
-import com.justbelieveinmyself.marta.jwt.JsonObjectAuthenticationFilter;
 import com.justbelieveinmyself.marta.jwt.JwtAuthenticationEntryPoint;
 import com.justbelieveinmyself.marta.jwt.JwtAuthorizationFilter;
-import com.justbelieveinmyself.marta.services.UserService;
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Contact;
@@ -11,17 +9,17 @@ import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
@@ -41,59 +39,33 @@ public class WebSecurityConfig {
             AntPathRequestMatcher.antMatcher("/v3/api-docs/**")
     };
 
-    @Value("${jwt.secret}")
-    private String secret;
-    private final UserService userService;
-    private final PasswordEncoder passwordEncoder;
-    private final AuthenticationConfiguration authenticationConfiguration;
-    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
-
-    public WebSecurityConfig(UserService userService, PasswordEncoder passwordEncoder, AuthenticationConfiguration authenticationConfiguration, JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint) {
-        this.userService = userService;
-        this.passwordEncoder = passwordEncoder;
-        this.authenticationConfiguration = authenticationConfiguration;
-        this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
-    }
-
     @Bean
-    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .authorizeHttpRequests(auth ->
-                        auth.requestMatchers(whiteList).permitAll()
-                                .anyRequest().authenticated())
+    SecurityFilterChain securityFilterChain(
+            HttpSecurity http,
+            UserDetailsService userDetailsService,
+            JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint,
+            JwtAuthorizationFilter jwtAuthorizationFilter
+//            JsonObjectAuthenticationFilter jsonObjectAuthenticationFilter
+    ) throws Exception {
+        http.authorizeHttpRequests(auth -> auth.requestMatchers(whiteList).permitAll()
+                        .anyRequest().authenticated())
                 .csrf(AbstractHttpConfigurer::disable)
-                .userDetailsService(userService)
+                .userDetailsService(userDetailsService)
                 .cors(c -> corsFilter())
-                .addFilterBefore(authenticationFilter(), JsonObjectAuthenticationFilter.class)
-                .addFilterBefore(jwtAuthorizationFilter(), JwtAuthorizationFilter.class)
+//                .addFilterBefore(jsonObjectAuthenticationFilter, JsonObjectAuthenticationFilter.class)
+                .addFilterBefore(jwtAuthorizationFilter, JwtAuthorizationFilter.class)
                 .exceptionHandling(h -> h.authenticationEntryPoint(jwtAuthenticationEntryPoint))
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         return http.build();
     }
 
     @Bean
-    public JwtAuthorizationFilter jwtAuthorizationFilter() throws Exception {
-        return new JwtAuthorizationFilter(authenticationManager(authenticationConfiguration), userService, secret);
-    }
-
-    @Bean
-    public JsonObjectAuthenticationFilter authenticationFilter() throws Exception {
-        JsonObjectAuthenticationFilter filter = new JsonObjectAuthenticationFilter();
-        filter.setAuthenticationManager(authenticationManager(authenticationConfiguration));
-        return filter;
-    }
-
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
-        return authenticationConfiguration.getAuthenticationManager();
-    }
-
-    @Bean
-    public DaoAuthenticationProvider daoAuthenticationProvider() {
+    public AuthenticationManager authenticationManager(PasswordEncoder passwordEncoder, UserDetailsService userDetailsService) {
         DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
         daoAuthenticationProvider.setPasswordEncoder(passwordEncoder);
-        daoAuthenticationProvider.setUserDetailsService(userService);
-        return daoAuthenticationProvider;
+        daoAuthenticationProvider.setUserDetailsService(userDetailsService);
+        return new ProviderManager(daoAuthenticationProvider);
     }
 
     @Bean
@@ -107,7 +79,6 @@ public class WebSecurityConfig {
         source.registerCorsConfiguration("/**", config);
         return new CorsFilter(source);
     }
-
 
     @Bean
     public SecurityScheme createAPIKeyScheme() {
@@ -125,7 +96,7 @@ public class WebSecurityConfig {
                 .info(new Info().title("MARTA REST API")
                         .description("Marta Spring.")
                         .version("1.0").contact(new Contact().name("Karpenko Vadim")
-                                .email( "seakme.vadim11@mail.ru").url("https://mail.ru"))
+                                .email("seakme.vadim11@mail.ru").url("https://mail.ru"))
                         .license(new License().name("License of API")
                                 .url("#")));
     }

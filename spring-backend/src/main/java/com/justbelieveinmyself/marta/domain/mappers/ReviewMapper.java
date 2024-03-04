@@ -19,7 +19,7 @@ public interface ReviewMapper {
     ReviewDto modelToDto(Review review, @Context FileHelper fileHelper);
 
     @Mapping(target = "product", ignore = true)
-    @Mapping(target = "time", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "id", ignore = true)
     Review dtoToModel(ReviewDto reviewDto, Product product, User author, MultipartFile[] photos, @Context FileHelper fileHelper);
 
@@ -37,7 +37,7 @@ public interface ReviewMapper {
     default void dtoToModel(@MappingTarget Review target, ReviewDto reviewDto, Product product, User author,
                             MultipartFile[] photos, @Context FileHelper fileHelper) {
         target.setProduct(product);
-        target.setTime(ZonedDateTime.now());
+        target.setCreatedAt(ZonedDateTime.now());
         target.setAuthor(author);
         if (photos != null) {
             List<String> uploadPaths = fileHelper.uploadFile(photos, UploadDirectory.REVIEWS);

@@ -12,7 +12,7 @@ public interface QuestionMapper {
     @Mapping(target = "productId", ignore = true)
     QuestionDto modelToDto(Question question);
     @Mapping(target = "product", ignore = true)
-    @Mapping(target = "time", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "author", ignore = true)
     Question dtoToModel(QuestionDto questionDto, @Context ProductRepository productRepository);
     @AfterMapping
@@ -22,6 +22,6 @@ public interface QuestionMapper {
     @AfterMapping
     default void dtoToModel(@MappingTarget Question target, QuestionDto questionDto, @Context ProductRepository productRepository){
         target.setProduct(productRepository.findById(questionDto.getProductId()).get());
-        target.setTime(ZonedDateTime.now());
+        target.setCreatedAt(ZonedDateTime.now());
     }
 }

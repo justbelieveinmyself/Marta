@@ -41,9 +41,9 @@ public interface UserMapper {
 
     @AfterMapping
     default void dtoToModel(@MappingTarget User target, RegisterDto registerDto, @Context PasswordEncoder passwordEncoder){
-        Address address = new Address(target.getId(), target, registerDto.getAddress(), registerDto.getAddress2(), registerDto.getCity(), registerDto.getPostalCode(), registerDto.getCountry(), registerDto.getRegion());
-        target.setPassword(passwordEncoder.encode(registerDto.getPassword()));
+        Address address = new Address(null, target, registerDto.getAddress(), registerDto.getAddress2(), registerDto.getCity(), registerDto.getPostalCode(), registerDto.getCountry(), registerDto.getRegion());
         target.setAddress(address);
+        target.setPassword(passwordEncoder.encode(registerDto.getPassword()));
         target.setRoles(Set.of(Role.USER));
         target.setBalance(BigDecimal.valueOf(0));
         target.setRatingCount(0L);

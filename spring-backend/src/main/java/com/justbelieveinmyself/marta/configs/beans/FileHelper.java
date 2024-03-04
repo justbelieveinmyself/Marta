@@ -26,7 +26,7 @@ public class FileHelper {
 
     public String uploadFile(MultipartFile file, UploadDirectory to) {
         try {
-            if (!Objects.requireNonNull(file.getOriginalFilename()).isEmpty()) {
+            if (file != null && !file.isEmpty()) {
                 File uploadDir = new File(uploadPath);
                 if (!uploadDir.exists()) {
                     uploadDir.mkdir();

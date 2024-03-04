@@ -20,10 +20,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("api/v1/oauth")
 @CrossOrigin
-@Tag(
-        name = "OAuth",
-        description = "The OAuth API"
-)
+@Tag(name = "OAuth", description = "The OAuth API")
 @RequiredArgsConstructor
 public class OAuthController {
     private final UserService userService;

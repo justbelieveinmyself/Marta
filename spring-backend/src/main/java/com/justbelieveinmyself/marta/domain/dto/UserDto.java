@@ -23,7 +23,6 @@ public class UserDto {
     private LocalDate birthDate;
     private String gender;
     private Set<Role> roles;
-    private String avatar;
     private String phone;
     private String address;
     private String address2;
@@ -33,4 +32,5 @@ public class UserDto {
     private String country;
     private BigDecimal balance;
     private ZonedDateTime registeredAt;
+    private String avatar;
 }

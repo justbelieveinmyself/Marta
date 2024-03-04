@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.ZonedDateTime;
-import java.util.UUID;
 
 @Entity
 @Table(name = "refresh_tokens")
@@ -16,8 +15,6 @@ import java.util.UUID;
 public class RefreshToken {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Builder.Default
-    private String uuid = UUID.randomUUID().toString();
     @Column(nullable = false)
     private String token;
     @Column(nullable = false)
